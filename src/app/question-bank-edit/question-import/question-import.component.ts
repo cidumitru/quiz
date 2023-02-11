@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { QuestionBankService } from "../../services/question-bank.service";
 import { ActivatedRoute } from "@angular/router";
