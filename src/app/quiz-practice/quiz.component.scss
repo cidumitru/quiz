@@ -1,0 +1,17 @@
+.invalid {
+  color: red;
+}
+
+.stats {
+  text-align: center;
+  height: 15rem;
+  margin-top: 5rem;
+
+  .correct {
+    color: green;
+  }
+
+  .incorrect {
+    color: red;
+  }
+}

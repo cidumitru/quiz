@@ -1,0 +1,14 @@
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+.mat-row:hover {
+  background-color: #8ce1a7;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+}

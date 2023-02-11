@@ -1,0 +1,28 @@
+<h1>{{(quiz$ | async)?.name}}
+  <button mat-mini-fab color="primary" routerLink="../edit">
+    <mat-icon>edit</mat-icon>
+  </button>
+</h1>
+<mat-card *ngFor="let challenge of questions; let i = index" style="margin-bottom: 1rem;">
+  <mat-card-header>
+    <mat-card-title [ngClass]="{invalid: !$any(formArr.controls[i]).valid}">
+      {{challenge.question}}
+      <mat-icon *ngIf="!challenge.rightAnswer" color="warn" matTooltip="No answer provided">info</mat-icon>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-radio-group [formControl]="$any(formArr.controls[i])">
+      <mat-radio-button *ngFor="let option of challenge.answers"
+                        [color]="$any(formArr.controls[i]).valid ? 'primary' : 'warn'"
+                        [value]="option.id">{{option.text}}</mat-radio-button>
+    </mat-radio-group>
+  </mat-card-content>
+</mat-card>
+
+<div class="stats" style="text-align: center;height: 15rem; margin-top: 5rem">
+  <div>
+    <span style="font-size: 7rem"><span>{{stats.total}}</span> / <span class="correct">{{stats.correct}}</span> / <span
+      class="incorrect">{{stats.incorrect}}</span></span>
+  </div>
+  <button (click)="retry()" color="accent" mat-raised-button style="margin-top: 2rem">TRY AGAIN</button>
+</div>

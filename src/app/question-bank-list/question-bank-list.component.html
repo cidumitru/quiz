@@ -1,0 +1,56 @@
+<div class="toolbar">
+  <div>
+    <button (click)="uploadQuestionBank()" mat-raised-button style="margin-right: 1rem">Import question bank
+      <mat-icon>upload</mat-icon>
+    </button>
+    <button (click)="newQuestionBank()" color="primary" mat-raised-button>New question bank
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>
+
+<table [dataSource]="quiz.questionBankArr$" class="mat-elevation-z8" mat-table style="width:100%; margin-top: 2rem">
+
+  <ng-container matColumnDef="id">
+    <th *matHeaderCellDef mat-header-cell> Id.</th>
+    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th *matHeaderCellDef mat-header-cell> Name</th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="updatedAt">
+    <th *matHeaderCellDef mat-header-cell> Edited</th>
+    <td *matCellDef="let element" mat-cell> {{element.editedAt ?? "No updates"}} </td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="challenges">
+    <th *matHeaderCellDef mat-header-cell> Questions</th>
+    <td *matCellDef="let element" mat-cell> {{element.questions.length}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th *matHeaderCellDef mat-header-cell style="text-align: right"> Actions</th>
+    <td *matCellDef="let element" mat-cell width="15%">
+      <div class="actions">
+        <button mat-mini-fab routerLink="{{element.id}}">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button #downloadButton
+                (click)="downloadQuestionBank(element.id);preventDefault($event);downloadButton.disabled = true"
+                color="primary" mat-mini-fab>
+          <mat-icon>download</mat-icon>
+        </button>
+        <button (click)="deleteQuiz(element.id);preventDefault($event)" color="warn" mat-mini-fab>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['name', 'challenges', 'updatedAt', 'actions']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name', 'challenges', 'updatedAt', 'actions'];" routerLink="{{row.id}}/practice"></tr>
+</table>

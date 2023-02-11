@@ -1,0 +1,17 @@
+<cdk-virtual-scroll-viewport itemSize="100" style="height: 70vh">
+  <mat-card *cdkVirtualFor="let question of (quiz$ | async)?.questions" style="margin-bottom: 1rem;">
+    <mat-card-header>
+      <mat-card-title>
+        {{question.question}}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-radio-group (change)="setCorrectAnswer(question.id, $event)">
+        <mat-radio-button *ngFor="let option of question.answers"
+                          [checked]="option.correct"
+                          [value]="option.id"
+                          matTooltip="Mark as correct">{{option.text}}</mat-radio-button>
+      </mat-radio-group>
+    </mat-card-content>
+  </mat-card>
+</cdk-virtual-scroll-viewport>
