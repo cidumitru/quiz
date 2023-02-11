@@ -46,7 +46,7 @@ export class QuestionBankListComponent {
 
   downloadQuestionBank(id: string): void {
     const targetQuestionBank = this.quiz.questionBanks[id];
-    return exportFromJSON({ data: targetQuestionBank, fileName: targetQuestionBank.name, exportType: "json" });
+    return exportFromJSON({ data: targetQuestionBank, fileName: `${targetQuestionBank.name} - ${targetQuestionBank.questions.length} Questions`, exportType: "json" });
   }
 
   async uploadQuestionBank(): Promise<void> {
