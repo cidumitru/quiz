@@ -1,7 +1,7 @@
 <div class="toolbar">
   <div>
     <button (click)="uploadQuestionBank()" mat-raised-button style="margin-right: 1rem">Import question bank
-      <mat-icon>upload</mat-icon>
+      <mat-icon>upload_file</mat-icon>
     </button>
     <button (click)="newQuestionBank()" color="primary" mat-raised-button>New question bank
       <mat-icon>add</mat-icon>
@@ -34,22 +34,12 @@
 
   <ng-container matColumnDef="actions">
     <th *matHeaderCellDef mat-header-cell style="text-align: right"> Actions</th>
-    <td *matCellDef="let element" mat-cell width="15%">
+    <td *matCellDef="let element" mat-cell width="35%">
       <div class="actions">
-        <button mat-mini-fab color="primary" matTooltip="Practice" routerLink="{{element.id}}/practice">
-          <mat-icon>school</mat-icon>
-        </button>
-        <button mat-mini-fab matTooltip="Edit question bank" routerLink="{{element.id}}">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button #downloadButton
-                (click)="downloadQuestionBank(element.id);preventDefault($event);downloadButton.disabled = true"
-                color="primary" mat-mini-fab>
-          <mat-icon>download</mat-icon>
-        </button>
-        <button (click)="deleteQuiz(element.id);preventDefault($event)" color="warn" mat-mini-fab>
-          <mat-icon>delete</mat-icon>
-        </button>
+        <button mat-flat-button color="primary" routerLink="{{element.id}}/practice"><mat-icon>school</mat-icon>Practice</button>
+        <button mat-flat-button color="accent" routerLink="{{element.id}}"><mat-icon>edit</mat-icon>Edit</button>
+        <button mat-flat-button style="color: white; background-color: #46a35e;" #downloadButton (click)="downloadQuestionBank(element.id);preventDefault($event);downloadButton.disabled = true"><mat-icon>download</mat-icon>Download</button>
+        <button mat-flat-button color="warn" (click)="deleteQuiz(element.id);preventDefault($event)"><mat-icon>delete</mat-icon>Delete</button>
       </div>
     </td>
   </ng-container>

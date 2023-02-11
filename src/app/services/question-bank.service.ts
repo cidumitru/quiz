@@ -3,7 +3,7 @@ import { BehaviorSubject, map, Observable, skip } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { omit, values } from "lodash";
 import * as localForage from "localforage";
-import { IAnswer, IQuestionBank } from "./question-bank.models";
+import {IAnswer, IQuestionBank, QuestionType} from "./question-bank.models";
 
 export interface IQuestionCreate {
   question: string;
@@ -65,7 +65,7 @@ export class QuestionBankService {
   addQuestion(questionBankId: string, question: IQuestionCreate | IQuestionCreate[]): void {
     const questions = (Array.isArray(question) ? question : [question]).map((question) => ({
       id: uuidv4(),
-      type: "text",
+      type: QuestionType.MultipleChoice,
       question: question.question,
       answers: question.answers.map((answer) => ({ id: uuidv4(), text: answer.text }))
     }));

@@ -23,3 +23,7 @@ export const questionBankScheme = z.object({
 export type IAnswer = z.infer<typeof answerScheme>;
 export type IQuestion = z.infer<typeof questionScheme>;
 export type IQuestionBank = z.infer<typeof questionBankScheme>;
+
+export enum QuestionType {
+  MultipleChoice = "MultipleChoice"
+}

@@ -1,3 +1,4 @@
+<h1 *ngIf="(quiz$ | async)?.questions?.length === 0">No questions added</h1>
 <cdk-virtual-scroll-viewport itemSize="100" style="height: 70vh">
   <mat-card *cdkVirtualFor="let question of (quiz$ | async)?.questions" style="margin-bottom: 1rem;">
     <mat-card-header>
