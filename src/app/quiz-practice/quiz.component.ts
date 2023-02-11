@@ -60,7 +60,7 @@ export class QuizComponent {
 
   retry() {
     this.router.navigate(['']).then(() => {
-      this.router.navigate(['list', this.id, 'practice']);
+      this.router.navigate([this.id, 'practice']);
       window.scrollTo(0, 0);
     });
   }
