@@ -27,7 +27,7 @@ export class QuestionBankService {
 
   async init() {
     const quizzes = await localForage.getItem("questionBanks");
-    this._questionBanks.next(JSON.parse(quizzes as string));
+    this._questionBanks.next(JSON.parse(quizzes as string) || {});
     this._questionBanks.pipe(skip(1)).subscribe(() => localForage.setItem("questionBanks", JSON.stringify(this.questionBanks)));
   }
 
