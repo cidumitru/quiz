@@ -7,11 +7,6 @@ import { QuestionBankEditModule } from "./question-bank-edit/question-bank-edit.
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "list",
-    pathMatch: "full"
-  },
-  {
-    path: "list",
     component: QuestionBankListComponent
   },
   {
