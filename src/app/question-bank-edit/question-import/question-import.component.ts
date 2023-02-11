@@ -7,6 +7,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatRadioModule } from "@angular/material/radio";
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
+import {debounceTime, map, shareReplay} from "rxjs";
+import {IQuestion} from "../../services/question-bank.models";
 
 @Component({
   selector: 'app-question-import',
@@ -27,19 +29,23 @@ export class QuestionImportComponent {
   public id: string;
   public control = new FormControl("");
 
+  public questions$ = this.control.valueChanges.pipe(
+      debounceTime(500),
+      map(() => {
+        const questions = this.control.value?.replace(/\n/g, " ").split(/(?=\b\d{1,2}\b\.)/);
+        this.parsedQuestions = questions?.map(question => new QuestionModel(question));
+        return this.parsedQuestions;
+      }),
+      shareReplay(1)
+  )
   constructor(private quiz: QuestionBankService, private activatedRoute: ActivatedRoute) {
     this.id = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
   }
 
-  // Note: Do not repeat this at home
-  public get value(): QuestionModel[] | undefined {
-
-    const questions = this.control.value?.replace(/\n/g, " ").split(/(?=\b\d{1,2}\b\.)/);
-    return questions?.map(question => new QuestionModel(question))
-  }
+  private parsedQuestions: QuestionModel[] | undefined = [];
 
   import() {
-    const dto = this.value?.map(question => ({
+    const dto = this.parsedQuestions?.map(question => ({
       question: question.question,
       answers: question.options.map(option => ({ text: option }))
     }));
