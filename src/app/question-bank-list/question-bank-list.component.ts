@@ -12,23 +12,25 @@ import { MatCardModule } from "@angular/material/card";
 import { MatRadioModule } from "@angular/material/radio";
 import { CommonModule } from "@angular/common";
 import { questionBankScheme } from "../services/question-bank.models";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-quiz-list',
   templateUrl: './question-bank-list.component.html',
   styleUrls: ['./question-bank-list.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTableModule,
-    MatCardModule,
-    MatRadioModule,
-    MatSnackBarModule,
-    RouterModule
-  ]
+    imports: [
+        CommonModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTableModule,
+        MatCardModule,
+        MatRadioModule,
+        MatSnackBarModule,
+        RouterModule,
+        MatTooltipModule
+    ]
 })
 export class QuestionBankListComponent {
   constructor(public quiz: QuestionBankService, private router: Router, private snackbar: MatSnackBar) {

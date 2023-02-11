@@ -36,7 +36,10 @@
     <th *matHeaderCellDef mat-header-cell style="text-align: right"> Actions</th>
     <td *matCellDef="let element" mat-cell width="15%">
       <div class="actions">
-        <button mat-mini-fab routerLink="{{element.id}}">
+        <button mat-mini-fab color="primary" matTooltip="Practice" routerLink="{{element.id}}/practice">
+          <mat-icon>school</mat-icon>
+        </button>
+        <button mat-mini-fab matTooltip="Edit question bank" routerLink="{{element.id}}">
           <mat-icon>edit</mat-icon>
         </button>
         <button #downloadButton
@@ -52,5 +55,5 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="['name', 'challenges', 'updatedAt', 'actions']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['name', 'challenges', 'updatedAt', 'actions'];" routerLink="{{row.id}}/practice"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name', 'challenges', 'updatedAt', 'actions'];"></tr>
 </table>

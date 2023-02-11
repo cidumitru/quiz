@@ -1,7 +1,5 @@
-<h1>{{(quiz$ | async)?.name}}
-  <button mat-mini-fab color="primary" routerLink="../edit">
-    <mat-icon>edit</mat-icon>
-  </button>
+<h1>
+  Practice test from question bank: <strong style="cursor: pointer" routerLink="../questions">{{(quiz$ | async)?.name}}</strong>
 </h1>
 <mat-card *ngFor="let challenge of questions; let i = index" style="margin-bottom: 1rem;">
   <mat-card-header>
