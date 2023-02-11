@@ -36,7 +36,7 @@ export class QuestionBankListComponent {
 
   newQuestionBank(): void {
     const newQuizId = this.quiz.create();
-    this.router.navigate(["list", newQuizId]).then()
+    this.router.navigate([newQuizId]).then()
   }
 
   deleteQuiz(id: string): void {

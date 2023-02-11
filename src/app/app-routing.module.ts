@@ -10,12 +10,12 @@ const routes: Routes = [
     component: QuestionBankListComponent
   },
   {
-    path: "list/:id/practice",
-    component: QuizComponent
+    path: ":id",
+    loadChildren: () => import("./question-bank-edit/question-bank-edit.module").then(m => QuestionBankEditModule)
   },
   {
-    path: "list/:id",
-    loadChildren: () => import("./question-bank-edit/question-bank-edit.module").then(m => QuestionBankEditModule)
+    path: ":id/practice",
+    component: QuizComponent
   }
 ];
 
