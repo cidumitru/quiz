@@ -13,6 +13,8 @@ import { MatRadioModule } from "@angular/material/radio";
 import { CommonModule } from "@angular/common";
 import { questionBankScheme } from "../services/question-bank.models";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
+import {map} from "rxjs";
 
 @Component({
   selector: 'app-quiz-list',
@@ -33,21 +35,24 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     ]
 })
 export class QuestionBankListComponent {
-  constructor(public quiz: QuestionBankService, private router: Router, private snackbar: MatSnackBar) {
+
+    public quizzes$ = this.quiz.quizzesArr$.pipe(map(quizzes => quizzes.map(quiz => new QuizViewModel(quiz))));
+
+  constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService) {
   }
 
   newQuestionBank(): void {
-    const newQuizId = this.quiz.create();
+    const newQuizId = this.questionBank.create();
     this.router.navigate([newQuizId]).then()
   }
 
   deleteQuiz(id: string): void {
     const result = confirm(`Are you sure?`);
-    if (result.valueOf()) this.quiz.delete(id);
+    if (result.valueOf()) this.questionBank.delete(id);
   }
 
   downloadQuestionBank(id: string): void {
-    const targetQuestionBank = this.quiz.questionBanks[id];
+    const targetQuestionBank = this.questionBank.questionBanks[id];
     return exportFromJSON({ data: targetQuestionBank, fileName: `${targetQuestionBank.name} - ${targetQuestionBank.questions.length} Questions`, exportType: "json" });
   }
 
@@ -66,7 +71,7 @@ export class QuestionBankListComponent {
       const obj = JSON.parse(content ?? "");
       const parsed = await questionBankScheme.safeParseAsync(obj);
 
-      if (parsed.success) this.quiz.insertQuestionBank(parsed.data);
+      if (parsed.success) this.questionBank.insertQuestionBank(parsed.data);
       else this.snackbar.open("Invalid file", "Close", { duration: 5000 });
 
       input.remove();
@@ -74,8 +79,28 @@ export class QuestionBankListComponent {
 
     input.click();
   }
+}
 
-  preventDefault($event: MouseEvent) {
-    $event.preventDefault();
-  }
+export class QuizViewModel {
+    id: string;
+    questionBankId: string;
+    questions: IAnsweredQuestion[];
+    correctAnswers: number;
+    startedAt: Date;
+    finishedAt?: Date;
+
+    duration: string;
+
+    constructor(quiz: IQuiz) {
+        this.id = quiz.id;
+        this.questionBankId = quiz.questionBankId;
+        this.questions = quiz.questions;
+        this.startedAt = new Date(quiz.startedAt);
+        this.finishedAt = quiz.finishedAt ? new Date(quiz.finishedAt) : undefined;
+        this.duration = this.finishedAt
+            ? `${Math.round((this.finishedAt.getTime() - this.startedAt.getTime()) / 1000)}s`
+            : Math.round((Date.now() - this.startedAt.getTime()) / 1000) > 600 ? 'Abandoned' : 'In progress';
+
+        this.correctAnswers = this.questions.filter(q => q.answers.find(a => a.correct)?.id === q.answer?.id).length;
+    }
 }

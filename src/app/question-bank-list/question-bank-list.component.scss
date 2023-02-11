@@ -1,6 +1,7 @@
 .toolbar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
 }
 .mat-row:hover {
   background-color: #8ce1a7;

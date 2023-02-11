@@ -9,6 +9,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { QuestionBankService } from "./services/question-bank.service";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {QuizService} from "./services/quiz.service";
 
 @NgModule({
   declarations: [
@@ -26,8 +27,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: (quiz: QuestionBankService) => () => quiz.init(),
-      deps: [QuestionBankService],
+      useFactory: (questionBank: QuestionBankService, quiz: QuizService) => () => Promise.all([questionBank.init(), quiz.init()]),
+      deps: [QuestionBankService, QuizService],
       multi: true
     },
     QuestionBankService

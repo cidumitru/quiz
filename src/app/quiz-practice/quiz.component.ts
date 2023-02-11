@@ -1,81 +1,109 @@
-import { Component } from '@angular/core';
-import { Observable, startWith } from "rxjs";
-import { QuestionBankService } from "../services/question-bank.service";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { sampleSize } from 'lodash';
-import { IAnswer, IQuestion, IQuestionBank } from "../services/question-bank.models";
-import { CommonModule } from "@angular/common";
-import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatIconModule } from "@angular/material/icon";
-import { MatButtonModule } from "@angular/material/button";
-import { MatTableModule } from "@angular/material/table";
-import { MatCardModule } from "@angular/material/card";
-import { MatRadioModule } from "@angular/material/radio";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { FormArray, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
-import { MatTooltipModule } from "@angular/material/tooltip";
+import {Component} from '@angular/core';
+import {Observable, startWith} from "rxjs";
+import {QuestionBankService} from "../services/question-bank.service";
+import {ActivatedRoute, Router, RouterModule} from "@angular/router";
+import {entries, keyBy, map, mapValues, sampleSize} from 'lodash';
+import {IAnswer, IQuestion, IQuestionBank} from "../services/question-bank.models";
+import {CommonModule} from "@angular/common";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
+import {MatTableModule} from "@angular/material/table";
+import {MatCardModule} from "@angular/material/card";
+import {MatRadioModule} from "@angular/material/radio";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {IQuiz, QuizService} from "../services/quiz.service";
 
 @Component({
-  selector: 'app-quiz-practice',
-  templateUrl: './quiz.component.html',
-  styleUrls: ['./quiz.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTableModule,
-    MatCardModule,
-    MatRadioModule,
-    MatSnackBarModule,
-    RouterModule,
-    ReactiveFormsModule,
-    MatTooltipModule
-  ]
+    selector: 'app-questionBank-practice',
+    templateUrl: './quiz.component.html',
+    styleUrls: ['./quiz.component.scss'],
+    standalone: true,
+    imports: [
+        CommonModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTableModule,
+        MatCardModule,
+        MatRadioModule,
+        MatSnackBarModule,
+        RouterModule,
+        ReactiveFormsModule,
+        MatTooltipModule
+    ]
 })
 export class QuizComponent {
-  id: string;
-  public quiz$: Observable<IQuestionBank>;
-  public questions: QuestionViewModel[];
-  public formArr: FormArray;
-  public stats: { total: number, correct: number, incorrect: number } = { total: 0, correct: 0, incorrect: 0 };
+    public questionBank: IQuestionBank;
+    public quiz: QuizModel;
+    public formGroup: FormGroup;
+    public created = new Date();
+    public stats: { total: number, correct: number, incorrect: number } = {total: 0, correct: 0, incorrect: 0};
 
-  constructor(private activatedRoute: ActivatedRoute, private quiz: QuestionBankService, private router: Router) {
-    this.id = this.activatedRoute.snapshot.paramMap.get("id")!;
-    this.questions = sampleSize(this.quiz.questionBanks[this.id].questions, 20).map(q => new QuestionViewModel(q));
+    public get hasFinished() {
+        return this.stats.correct + this.stats.incorrect === this.stats.total;
+    }
 
-    this.quiz$ = this.quiz.watchQuestionBank(this.id);
+    constructor(private activatedRoute: ActivatedRoute, private questionBankService: QuestionBankService, private router: Router, private quizService: QuizService) {
 
-    this.formArr = new FormArray(this.questions.map(q => new FormControl('', q.rightAnswer ? [Validators.pattern(q.rightAnswer.id)] : [])));
+        this.questionBank = questionBankService.questionBanks[this.activatedRoute.snapshot.paramMap.get("id")!];
 
-    this.formArr.valueChanges
-        .pipe(startWith(this.formArr.value))
-        .subscribe((value) => {
-          this.stats.total = this.formArr.controls.length;
-          this.stats.correct = this.formArr.controls.filter(c => c.valid && c.dirty).length;
-          this.stats.incorrect = this.formArr.controls.filter(c => !c.valid && c.dirty).length;
-        })
-  }
+        this.quiz = new QuizModel(this.quizService.startQuiz({questionsCount: 25, questionBankId: this.questionBank.id}));
 
-  retry() {
-    this.router.navigate(['']).then(() => {
-      this.router.navigate([this.id, 'practice']);
-      window.scrollTo(0, 0);
-    });
-  }
+        this.formGroup = new FormGroup<{[questionId: string]: FormControl<string>}>(
+            mapValues(keyBy(this.quiz.questions, 'id'),
+                (q: QuestionViewModel) =>
+                    new FormControl('', {validators: q.rightAnswer ? [Validators.pattern(q.rightAnswer.id)] : [], nonNullable: true})
+            )
+        )
+
+        this.formGroup.valueChanges
+            .pipe(startWith(this.formGroup.value))
+            .subscribe((value) => {
+                this.stats.total = this.quiz.questions.length;
+                this.stats.correct = Object.values(this.formGroup.controls).filter(c => c.valid && c.dirty).length;
+                this.stats.incorrect = Object.values(this.formGroup.controls).filter(c => c.invalid && c.dirty).length;
+
+                if (this.hasFinished) this.quizService.finishQuiz(this.quiz.id, entries(value).map(([questionId, answerId]) => ({questionId, answerId: answerId as string})));
+            })
+    }
+
+    retry() {
+        this.router.navigate(['']).then(() => {
+            this.router.navigate([this.questionBank.id, 'practice']);
+            window.scrollTo(0, 0);
+        });
+    }
 }
 
-export class QuestionViewModel implements IQuestion {
-  public id: string;
-  public question: string;
-  public answers: IAnswer[];
-  public rightAnswer?: IAnswer;
+export class QuizModel {
+    questions: QuestionViewModel[];
+    finishedAt?: Date;
+    id: string;
+    questionBankId: string;
+    startedAt: Date;
 
-  constructor(dto: IQuestion) {
-    this.id = dto.id;
-    this.question = dto.question;
-    this.answers = dto.answers;
-    this.rightAnswer = dto.answers?.find(a => a.correct) ?? undefined;
-  }
+    constructor(public quiz: IQuiz) {
+        this.id = quiz.id;
+        this.questionBankId = quiz.questionBankId;
+        this.startedAt = quiz.startedAt;
+        this.finishedAt = quiz.finishedAt;
+        this.questions = quiz.questions.map(q => new QuestionViewModel(q));
+    }
+}
+
+export class QuestionViewModel {
+    public id: string;
+    public question: string;
+    public answers: IAnswer[];
+    public rightAnswer?: IAnswer;
+
+    constructor(public model: IQuestion) {
+        this.id = model.id;
+        this.question = model.question;
+        this.answers = model.answers;
+        this.rightAnswer = model.answers?.find(a => a.correct) ?? undefined;
+    }
 }

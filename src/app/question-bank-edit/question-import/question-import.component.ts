@@ -9,6 +9,7 @@ import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import {debounceTime, map, shareReplay} from "rxjs";
 import {IQuestion} from "../../services/question-bank.models";
+import {isEmpty} from "lodash";
 
 @Component({
   selector: 'app-question-import',
@@ -32,6 +33,8 @@ export class QuestionImportComponent {
   public questions$ = this.control.valueChanges.pipe(
       debounceTime(500),
       map(() => {
+        if (isEmpty(this.control.value)) return [];
+
         const questions = this.control.value?.replace(/\n/g, " ").split(/(?=\b\d{1,2}\b\.)/);
         this.parsedQuestions = questions?.map(question => new QuestionModel(question));
         return this.parsedQuestions;
