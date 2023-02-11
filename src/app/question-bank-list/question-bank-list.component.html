@@ -12,23 +12,23 @@
 <table [dataSource]="quiz.questionBankArr$" class="mat-elevation-z8" mat-table style="width:100%; margin-top: 2rem">
 
   <ng-container matColumnDef="id">
-    <th *matHeaderCellDef mat-header-cell> Id.</th>
+    <th *matHeaderCellDef mat-header-cell>Id.</th>
     <td mat-cell *matCellDef="let element"> {{element.id}} </td>
   </ng-container>
 
   <ng-container matColumnDef="name">
-    <th *matHeaderCellDef mat-header-cell> Name</th>
+    <th *matHeaderCellDef mat-header-cell>Name</th>
     <td mat-cell *matCellDef="let element"> {{element.name}} </td>
   </ng-container>
 
   <ng-container matColumnDef="updatedAt">
-    <th *matHeaderCellDef mat-header-cell> Edited</th>
-    <td *matCellDef="let element" mat-cell> {{element.editedAt ?? "No updates"}} </td>
+    <th *matHeaderCellDef mat-header-cell>Last update</th>
+    <td *matCellDef="let element" mat-cell> {{(element.editedAt | date: "full") ?? "No updates"}} </td>
   </ng-container>
 
 
   <ng-container matColumnDef="challenges">
-    <th *matHeaderCellDef mat-header-cell> Questions</th>
+    <th *matHeaderCellDef mat-header-cell>Questions</th>
     <td *matCellDef="let element" mat-cell> {{element.questions.length}} </td>
   </ng-container>
 
