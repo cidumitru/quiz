@@ -20,6 +20,7 @@ import { MatButtonModule } from "@angular/material/button";
     CommonModule,
     MatButtonModule
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true
 })
 export class QuestionImportComponent {
@@ -30,6 +31,7 @@ export class QuestionImportComponent {
     this.id = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
   }
 
+  // Note: Do not repeat this at home
   public get value(): QuestionModel[] | undefined {
 
     const questions = this.control.value?.replace(/\n/g, " ").split(/(?=\b\d{1,2}\b\.)/);
