@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import { QuestionBankService } from "../services/question-bank.service";
 import { Router, RouterModule } from "@angular/router";
 import exportFromJSON from "export-from-json";
@@ -7,7 +7,7 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
-import { MatTableModule } from "@angular/material/table";
+import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import { MatCardModule } from "@angular/material/card";
 import { MatRadioModule } from "@angular/material/radio";
 import { CommonModule } from "@angular/common";
@@ -15,6 +15,7 @@ import { questionBankScheme } from "../services/question-bank.models";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
 import {map} from "rxjs";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-quiz-list',
@@ -34,12 +35,18 @@ import {map} from "rxjs";
         MatTooltipModule
     ]
 })
-export class QuestionBankListComponent {
+export class QuestionBankListComponent implements AfterViewInit {
 
-    public quizzes$ = this.quiz.quizzesArr$.pipe(map(quizzes => quizzes.map(quiz => new QuizViewModel(quiz))));
+    @ViewChild(MatSort) sort!: MatSort;
+  public questionBanksDs = new MatTableDataSource(this.questionBank.questionBankArr);
+  public quizzes$ = this.quiz.quizzesArr$.pipe(map(quizzes => quizzes.map(quiz => new QuizViewModel(quiz))));
 
   constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService) {
   }
+
+    ngAfterViewInit(): void {
+      this.questionBanksDs.sort = this.sort;
+    }
 
   newQuestionBank(): void {
     const newQuizId = this.questionBank.create();

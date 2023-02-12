@@ -4,18 +4,19 @@
 <div [formGroup]="formGroup">
   <mat-card *ngFor="let question of quiz.questions; let i = index" style="margin-bottom: 1rem;" class="mat-elevation-z10">
     <mat-card-header>
+      <mat-card-subtitle>Question number: {{i + 1}} | questionId: {{question.id}}</mat-card-subtitle>
       <mat-card-title [ngClass]="{invalid: formGroup.controls[question.id].invalid}">
         {{question.question}}
         <mat-icon *ngIf="!question.rightAnswer" color="warn" matTooltip="No answer provided">info</mat-icon>
       </mat-card-title>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-actions align="start">
       <mat-radio-group [formControlName]="question.id">
         <mat-radio-button *ngFor="let option of question.answers" [disabled]="hasFinished"
                           [color]="formGroup.controls[question.id].valid ? 'primary' : 'warn'"
                           [value]="option.id">{{option.text}}</mat-radio-button>
       </mat-radio-group>
-    </mat-card-content>
+    </mat-card-actions>
   </mat-card>
 </div>
 <div class="stats" style="text-align: center;height: 15rem; margin-top: 5rem">

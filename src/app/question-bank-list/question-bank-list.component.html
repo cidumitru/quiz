@@ -14,7 +14,7 @@
   </div>
 </div>
 
-<table [dataSource]="questionBank.questionBankArr$" class="mat-elevation-z8" mat-table style="width:100%; margin-top: 2rem">
+<table [dataSource]="questionBanksDs" class="mat-elevation-z8" mat-table matSort style="width:100%; margin-top: 2rem">
 
   <ng-container matColumnDef="id">
     <th *matHeaderCellDef mat-header-cell>Id.</th>
@@ -22,7 +22,7 @@
   </ng-container>
 
   <ng-container matColumnDef="name">
-    <th *matHeaderCellDef mat-header-cell>Name</th>
+    <th *matHeaderCellDef mat-header-cell mat-sort-header>Name</th>
     <td mat-cell *matCellDef="let element"> {{element.name}} </td>
   </ng-container>
 

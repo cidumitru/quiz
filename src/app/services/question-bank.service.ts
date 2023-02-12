@@ -109,4 +109,15 @@ export class QuestionBankService {
       }
     });
   }
+
+    deleteQuestion(questionBankId: string, questionId: string): void {
+      this._questionBanks.next({
+        ...this.questionBanks,
+        [questionBankId]: {
+          ...this.questionBanks[questionBankId],
+          editedAt: new Date().toISOString(),
+          questions: this.questionBanks[questionBankId].questions.filter((question) => question.id !== questionId)
+        }
+      });
+    }
 }
