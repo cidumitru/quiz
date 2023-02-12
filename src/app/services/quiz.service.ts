@@ -64,15 +64,24 @@ export class QuizService {
         return newQuiz;
     }
 
-    finishQuiz(quizId: string, answers: {questionId: string, answerId: string}[]): void {
+    markQuizAsFinished(quizId: string) {
+        const quiz = this.quizzes[quizId];
+        this._quizzes.next({ ...this.quizzes, [quizId]: { ...quiz, finishedAt: new Date() } });
+    }
+
+    setQuizAnswers(quizId: string, answers: {questionId: string, answerId: string}[]): void {
         const quiz = this.quizzes[quizId];
         const questions = quiz.questions.map(question => {
-            const answer = answers.find(answer => answer.questionId === question.id);
+            const userAnswer = answers.find(answer => answer.questionId === question.id);
             return {
                 ...question,
-                answer: question.answers.find(answer => answer.id === answer.id)
+                answer: question.answers.find(answer => answer.id === userAnswer?.answerId)
             }
         });
-        this._quizzes.next({ ...this.quizzes, [quizId]: { ...quiz, questions, finishedAt: new Date() } });
+        this._quizzes.next({ ...this.quizzes, [quizId]: { ...quiz, questions } });
+    }
+
+    getQuiz(id: string) {
+        return this.quizzes[id];
     }
 }

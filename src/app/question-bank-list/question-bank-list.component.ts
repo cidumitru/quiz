@@ -106,6 +106,7 @@ export class QuizViewModel {
     questionBankName: string;
     questions: IAnsweredQuestion[];
     correctAnswers: number;
+    answersCount: number;
     startedAt: Date;
     finishedAt?: Date;
 
@@ -116,6 +117,7 @@ export class QuizViewModel {
         this.questionBankId = quiz.questionBankId;
         this.questionBankName = inject(QuestionBankService).questionBanks[quiz.questionBankId]?.name ?? 'Unknown';
 
+        this.answersCount = quiz.questions.filter(q => q.answer).length;
         this.questions = quiz.questions;
         this.startedAt = new Date(quiz.startedAt);
         this.finishedAt = quiz.finishedAt ? new Date(quiz.finishedAt) : undefined;

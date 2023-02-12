@@ -16,6 +16,10 @@ const routes: Routes = [
   {
     path: ":id/practice",
     component: QuizComponent
+  },
+  {
+    path: ":id/practice/:quizId",
+    component: QuizComponent
   }
 ];
 
