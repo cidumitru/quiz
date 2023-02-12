@@ -17,3 +17,16 @@
   background-color: green;
   color: #fff;
 }
+
+.table-container {
+  margin-top: 2rem;
+  width: 100%;
+  overflow: scroll;
+  mat-table {
+    width: 100%;
+  }
+}
+
+.cdk-cell {
+  white-space: nowrap
+}

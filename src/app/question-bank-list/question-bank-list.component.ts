@@ -121,9 +121,10 @@ export class QuizViewModel {
         this.questions = quiz.questions;
         this.startedAt = new Date(quiz.startedAt);
         this.finishedAt = quiz.finishedAt ? new Date(quiz.finishedAt) : undefined;
+
         this.duration = this.finishedAt
             ? `${Math.round((this.finishedAt.getTime() - this.startedAt.getTime()) / 1000)}s`
-            : Math.round((Date.now() - this.startedAt.getTime()) / 1000) > 600 ? 'Abandoned' : 'In progress';
+            : 'In progress';
 
         this.correctAnswers = this.questions.filter(q => q.answers.find(a => a.correct)?.id === q.answer?.id).length;
     }

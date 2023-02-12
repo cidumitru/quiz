@@ -14,8 +14,8 @@
     </div>
 </div>
 
-<div class="mat-elevation-z8">
-    <table [dataSource]="questionBanksDs" mat-table matSort style="width:100%; margin-top: 2rem">
+<div class="mat-elevation-z8 table-container">
+    <table [dataSource]="questionBanksDs" mat-table matSort>
 
         <ng-container matColumnDef="id">
             <th *matHeaderCellDef mat-header-cell>Id.</th>
@@ -42,7 +42,7 @@
             <th *matHeaderCellDef mat-header-cell style="text-align: right"> Actions</th>
             <td *matCellDef="let element" mat-cell width="35%">
                 <div class="actions">
-                    <button mat-flat-button color="primary" routerLink="{{element.id}}/practice">
+                    <button mat-flat-button [disabled]="element.questions.length === 0" color="primary" routerLink="{{element.id}}/practice">
                         <mat-icon>school</mat-icon>
                         Practice
                     </button>
@@ -82,8 +82,8 @@
     </div>
 </div>
 
-<div class="mat-elevation-z8">
-    <table [dataSource]="quizHistoryDs" class="mat-elevation-z8" mat-table style="width:100%; margin-top: 2rem">
+<div class="mat-elevation-z8 table-container">
+    <table [dataSource]="quizHistoryDs" class="mat-elevation-z8" mat-table>
 
         <ng-container matColumnDef="id">
             <th *matHeaderCellDef mat-header-cell>Id.</th>
