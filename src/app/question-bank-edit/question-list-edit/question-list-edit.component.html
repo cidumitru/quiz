@@ -1,6 +1,12 @@
 <h1 *ngIf="(quiz$ | async)?.questions?.length === 0">No questions added</h1>
+
+<mat-form-field appearance="fill" style="width: 100%">
+  <mat-label>Search by question title</mat-label>
+  <input matInput [formControl]="searchControl">
+</mat-form-field>
+
 <cdk-virtual-scroll-viewport itemSize="100" style="height: 70vh">
-  <mat-card *cdkVirtualFor="let question of (quiz$ | async)?.questions; let i = index" style="margin-bottom: 1rem;">
+  <mat-card *cdkVirtualFor="let question of questions$ | async; let i = index" style="margin-bottom: 1rem;">
     <mat-card-header style="display: block">
       <mat-card-subtitle style="display:flex;justify-content: space-between;">
         <div>
