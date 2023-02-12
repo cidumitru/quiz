@@ -45,6 +45,9 @@ export class QuestionBankListComponent implements AfterViewInit {
     public questionBanksDs = new MatTableDataSource(this.questionBank.questionBankArr);
     public quizHistoryDs = new MatTableDataSource(this.quiz.quizzesArr.map(quiz => new QuizViewModel(quiz)));
 
+    public questionBankDisplayedColumns = ['name', 'challenges', 'updatedAt', 'actions'];
+    public quizHistoryDisplayColumns =  ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers'];
+
     constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService) {
     }
 
@@ -96,6 +99,11 @@ export class QuestionBankListComponent implements AfterViewInit {
         };
 
         input.click();
+    }
+
+    clearQuizHistory() {
+        const result = confirm(`Are you sure?`);
+        if (result.valueOf()) this.quiz.clear();
     }
 }
 

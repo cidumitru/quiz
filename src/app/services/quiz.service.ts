@@ -20,7 +20,7 @@ export interface IQuiz {
 
 export interface ICreateQuiz {
     questionBankId: string;
-    questionsCount: number;
+    questionsCount?: number;
 }
 
 @Injectable({
@@ -28,15 +28,22 @@ export interface ICreateQuiz {
 })
 export class QuizService {
 
+    private _defaultQuizSize = 25;
+    get defaultQuizSize(): number {
+        return this._defaultQuizSize;
+    }
+
+    set defaultQuizSize(value: number) {
+        this._defaultQuizSize = value;
+    }
+
     private _quizzes = new BehaviorSubject<Record<string, IQuiz>>({});
     public quizzesArr$ = this._quizzes.asObservable().pipe(
         map(quizzes => values(quizzes).sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime())),
     );
-
     public get quizzes() {
         return this._quizzes.getValue();
     }
-
     public get quizzesArr() {
         return Object.values(this.quizzes).sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
     }
@@ -56,7 +63,7 @@ export class QuizService {
             id: uuidv4(),
             questionBankId: options.questionBankId,
             startedAt: new Date(),
-            questions: sampleSize(this.questionBanks.questionBanks[options.questionBankId].questions, options.questionsCount),
+            questions: sampleSize(this.questionBanks.questionBanks[options.questionBankId].questions, options.questionsCount ?? this.defaultQuizSize),
         }
 
         this._quizzes.next({ ...this.quizzes, [newQuiz.id]: newQuiz });
@@ -83,5 +90,9 @@ export class QuizService {
 
     getQuiz(id: string) {
         return this.quizzes[id];
+    }
+
+    clear() {
+        this._quizzes.next({});
     }
 }

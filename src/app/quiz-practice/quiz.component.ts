@@ -52,7 +52,7 @@ export class QuizComponent {
         if (this.activatedRoute.snapshot.paramMap.get("quizId")) {
             this.quiz = new QuizModel(this.quizService.getQuiz(this.activatedRoute.snapshot.paramMap.get("quizId")!));
         } else {
-            this.quiz = new QuizModel(this.quizService.startQuiz({questionsCount: 25, questionBankId: this.questionBank.id}));
+            this.quiz = new QuizModel(this.quizService.startQuiz({questionBankId: this.questionBank.id}));
         }
 
 

@@ -4,10 +4,11 @@
 <div [formGroup]="formGroup">
   <mat-card *ngFor="let question of quiz.questions; let i = index" style="margin-bottom: 1rem;" class="mat-elevation-z10">
     <mat-card-header>
-      <mat-card-subtitle>Question number: {{i + 1}} | questionId: {{question.id}}</mat-card-subtitle>
+      <mat-card-subtitle>
+        Q{{i + 1}} <span style="color:red">{{!question.rightAnswer ? ' - No answer provided' : ""}}</span>
+      </mat-card-subtitle>
       <mat-card-title [ngClass]="{invalid: formGroup.controls[question.id].invalid}">
         {{question.question}}
-        <mat-icon *ngIf="!question.rightAnswer" color="warn" matTooltip="No answer provided">info</mat-icon>
       </mat-card-title>
     </mat-card-header>
     <mat-card-actions align="start">
@@ -21,9 +22,11 @@
 </div>
 <div class="stats">
   <div>
-    <span style="font-size: 7rem"><span>{{stats.total}}</span> / <span class="correct">{{stats.correct}}</span> / <span
+    <span style="font-size: 4rem"><span>{{stats.total}}</span> / <span class="correct">{{stats.correct}}</span> / <span
       class="incorrect">{{stats.incorrect}}</span></span>
   </div>
-  <button color="primary" mat-raised-button routerLink="/" style="margin-top: 2rem">GO HOME</button>
-  <button *ngIf="hasFinished" (click)="retry()" color="accent" mat-raised-button style="margin-top: 2rem">TRY AGAIN</button>
+  <div style="margin-top: 2rem">
+    <button color="primary" mat-raised-button routerLink="/">GO HOME</button>
+    <button *ngIf="hasFinished" (click)="retry()" color="accent" mat-raised-button style="margin-left: 1rem">TRY AGAIN</button>
+  </div>
 </div>

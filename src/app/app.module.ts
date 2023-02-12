@@ -10,6 +10,9 @@ import { MatButtonModule } from "@angular/material/button";
 import { QuestionBankService } from "./services/question-bank.service";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {QuizService} from "./services/quiz.service";
+import {MatSelectModule} from "@angular/material/select";
+import {MatDialogModule} from "@angular/material/dialog";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -23,6 +26,9 @@ import {QuizService} from "./services/quiz.service";
         MatToolbarModule,
         MatButtonModule,
         MatTooltipModule,
+        MatSelectModule,
+        MatDialogModule,
+        ReactiveFormsModule
     ],
   providers: [
     {
