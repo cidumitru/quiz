@@ -87,7 +87,6 @@ export class QuestionBankService {
 
   delete(id: string): void {
     const result = omit(this.questionBanks, id);
-    console.log(this.questionBanks, result);
     this._questionBanks.next(result);
   }
 

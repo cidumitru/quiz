@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, inject, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, inject, OnDestroy, ViewChild} from '@angular/core';
 import {QuestionBankService} from "../services/question-bank.service";
 import {Router, RouterModule} from "@angular/router";
 import exportFromJSON from "export-from-json";
@@ -14,7 +14,7 @@ import {CommonModule} from "@angular/common";
 import {IAnswer, IQuestionBank, questionBankScheme} from "../services/question-bank.models";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
-import {map} from "rxjs";
+import {map, Subscription} from "rxjs";
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 
@@ -37,18 +37,22 @@ import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
         MatPaginatorModule
     ]
 })
-export class QuestionBankListComponent implements AfterViewInit {
+export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
 
     @ViewChild(MatSort) sort!: MatSort;
     @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
     @ViewChild("quizHistoryPaginator") quizHistoryPaginator!: MatPaginator;
-    public questionBanksDs = new MatTableDataSource(this.questionBank.questionBankArr);
+    public questionBanksDs = new MatTableDataSource();
     public quizHistoryDs = new MatTableDataSource(this.quiz.quizzesArr.map(quiz => new QuizViewModel(quiz)));
 
     public questionBankDisplayedColumns = ['name', 'challenges', 'updatedAt', 'actions'];
     public quizHistoryDisplayColumns =  ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers', 'correctRatio'];
 
+    public _qbSubscription: Subscription;
     constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService) {
+        this._qbSubscription = this.questionBank.questionBankArr$.subscribe(() => {
+            this.questionBanksDs.data = this.questionBank.questionBankArr;
+        });
     }
 
     ngAfterViewInit(): void {
@@ -104,6 +108,10 @@ export class QuestionBankListComponent implements AfterViewInit {
     clearQuizHistory() {
         const result = confirm(`Are you sure?`);
         if (result.valueOf()) this.quiz.clear();
+    }
+
+    ngOnDestroy(): void {
+        this._qbSubscription.unsubscribe();
     }
 }
 
