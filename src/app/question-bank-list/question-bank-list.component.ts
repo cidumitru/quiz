@@ -2,7 +2,7 @@ import {AfterViewInit, Component, inject, ViewChild} from '@angular/core';
 import {QuestionBankService} from "../services/question-bank.service";
 import {Router, RouterModule} from "@angular/router";
 import exportFromJSON from "export-from-json";
-import {first} from "lodash";
+import {first, isNil} from "lodash";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
@@ -11,7 +11,7 @@ import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatCardModule} from "@angular/material/card";
 import {MatRadioModule} from "@angular/material/radio";
 import {CommonModule} from "@angular/common";
-import {questionBankScheme} from "../services/question-bank.models";
+import {IAnswer, IQuestionBank, questionBankScheme} from "../services/question-bank.models";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
 import {map} from "rxjs";
@@ -46,7 +46,7 @@ export class QuestionBankListComponent implements AfterViewInit {
     public quizHistoryDs = new MatTableDataSource(this.quiz.quizzesArr.map(quiz => new QuizViewModel(quiz)));
 
     public questionBankDisplayedColumns = ['name', 'challenges', 'updatedAt', 'actions'];
-    public quizHistoryDisplayColumns =  ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers'];
+    public quizHistoryDisplayColumns =  ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers', 'correctRatio'];
 
     constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService) {
     }
@@ -115,17 +115,24 @@ export class QuizViewModel {
     questions: IAnsweredQuestion[];
     correctAnswers: number;
     answersCount: number;
+
+    answers: IAnswer[];
     startedAt: Date;
     finishedAt?: Date;
 
     duration: string;
+    correctRatio: string;
 
     constructor(quiz: IQuiz) {
         this.id = quiz.id;
         this.questionBankId = quiz.questionBankId;
         this.questionBankName = inject(QuestionBankService).questionBanks[quiz.questionBankId]?.name ?? 'Unknown';
 
-        this.answersCount = quiz.questions.filter(q => q.answer).length;
+        this.answers = quiz.questions.map(q => q.answer).filter(a => !isNil(a)) as IAnswer[];
+        this.answersCount = this.answers.length;
+        this.correctAnswers = this.answers.filter(a => a.correct).length;
+        this.correctRatio = this.answersCount > 0 ? `${(this.correctAnswers / this.answersCount) * 100}%` : "N/A";
+
         this.questions = quiz.questions;
         this.startedAt = new Date(quiz.startedAt);
         this.finishedAt = quiz.finishedAt ? new Date(quiz.finishedAt) : undefined;
@@ -134,6 +141,5 @@ export class QuizViewModel {
             ? `${Math.round((this.finishedAt.getTime() - this.startedAt.getTime()) / 1000)}s`
             : 'In progress';
 
-        this.correctAnswers = this.questions.filter(q => q.answers.find(a => a.correct)?.id === q.answer?.id).length;
     }
 }

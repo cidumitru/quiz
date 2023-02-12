@@ -4,10 +4,6 @@
   align-items: center;
   flex-wrap: wrap;
 }
-.mat-row:hover {
-  background-color: #8ce1a7;
-  cursor: pointer;
-}
 
 .actions {
   display: flex;
@@ -22,12 +18,15 @@
 .table-container {
   margin-top: 2rem;
   width: 100%;
-  overflow: scroll;
+  overflow: auto;
   mat-table {
     width: 100%;
   }
 }
 
 .cdk-cell {
+  white-space: nowrap
+}
+.cdk-header-cell {
   white-space: nowrap
 }
