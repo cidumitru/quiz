@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, inject, ViewChild} from '@angular/core';
 import {QuestionBankService} from "../services/question-bank.service";
 import {Router, RouterModule} from "@angular/router";
 import exportFromJSON from "export-from-json";
@@ -102,6 +102,8 @@ export class QuestionBankListComponent implements AfterViewInit {
 export class QuizViewModel {
     id: string;
     questionBankId: string;
+
+    questionBankName: string;
     questions: IAnsweredQuestion[];
     correctAnswers: number;
     startedAt: Date;
@@ -112,6 +114,8 @@ export class QuizViewModel {
     constructor(quiz: IQuiz) {
         this.id = quiz.id;
         this.questionBankId = quiz.questionBankId;
+        this.questionBankName = inject(QuestionBankService).questionBanks[quiz.questionBankId]?.name ?? 'Unknown';
+
         this.questions = quiz.questions;
         this.startedAt = new Date(quiz.startedAt);
         this.finishedAt = quiz.finishedAt ? new Date(quiz.finishedAt) : undefined;

@@ -5,20 +5,20 @@ import { Observable } from "rxjs";
 import { IQuestionBank } from "../services/question-bank.models";
 
 @Component({
-  selector: 'app-quiz-edit',
+  selector: 'app-questionBank-edit',
   templateUrl: './question-bank-edit.component.html',
   styleUrls: ['./question-bank-edit.component.scss'],
 })
 export class QuestionBankEditComponent {
   public id: string;
-  public quiz$: Observable<IQuestionBank>;
+  public questionBank$: Observable<IQuestionBank>;
 
-  constructor(private activatedRoute: ActivatedRoute, private quiz: QuestionBankService) {
+  constructor(private activatedRoute: ActivatedRoute, private questionBank: QuestionBankService) {
     this.id = this.activatedRoute.snapshot.paramMap.get("id")!;
-    this.quiz$ = this.quiz.watchQuestionBank(this.id);
+    this.questionBank$ = this.questionBank.watchQuestionBank(this.id);
   }
 
   updateName(value: string): void {
-    this.quiz.updateQuestionBank(this.id, value);
+    this.questionBank.updateQuestionBank(this.id, value);
   }
 }

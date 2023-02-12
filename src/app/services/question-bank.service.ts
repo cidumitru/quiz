@@ -34,7 +34,7 @@ export class QuestionBankService {
   create(): string {
     const id = uuidv4();
     const createdAt = new Date().toISOString();
-    const name = `NEW QUIZ: ${createdAt.toLocaleString()}`;
+    const name = `NEW QUESTION BANK: ${createdAt.toLocaleString()}`;
 
     this._questionBanks.next({ ...this.questionBanks, [id]: { id, name, createdAt, questions: [] } });
     return id;

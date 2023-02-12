@@ -90,6 +90,11 @@
             <td mat-cell *matCellDef="let element"> {{element.id}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="questionBankName">
+            <th *matHeaderCellDef mat-header-cell>Question bank</th>
+            <td mat-cell *matCellDef="let element"> {{element.questionBankName}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="startedAt">
             <th *matHeaderCellDef mat-header-cell>Started at</th>
             <td mat-cell *matCellDef="let element"> {{element.startedAt | date: 'short'}} </td>
@@ -121,9 +126,9 @@
         </tr>
 
         <tr mat-header-row
-            *matHeaderRowDef="['id', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers']"></tr>
+            *matHeaderRowDef="['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers']"></tr>
         <tr mat-row
-            *matRowDef="let row; columns: ['id', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers'];"></tr>
+            *matRowDef="let row; columns: ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers'];"></tr>
     </table>
     <mat-paginator #quizHistoryPaginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
