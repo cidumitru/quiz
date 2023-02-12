@@ -30,7 +30,7 @@ export class QuizService {
 
     private _quizzes = new BehaviorSubject<Record<string, IQuiz>>({});
     public quizzesArr$ = this._quizzes.asObservable().pipe(
-        map(quizzes => values(quizzes)),
+        map(quizzes => values(quizzes).sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime())),
     );
 
     public get quizzes() {
@@ -38,7 +38,7 @@ export class QuizService {
     }
 
     public get quizzesArr() {
-        return Object.values(this.quizzes);
+        return Object.values(this.quizzes).sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
     }
 
     constructor(private questionBanks: QuestionBankService) {
