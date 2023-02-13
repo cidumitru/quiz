@@ -15,7 +15,7 @@ import {IAnswer, IQuestionBank, questionBankScheme} from "../services/question-b
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
 import {map, Subscription} from "rxjs";
-import {MatSort} from "@angular/material/sort";
+import {MatSort, MatSortModule} from "@angular/material/sort";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {IQuestionBankStats, QuestionBankStatistics} from "../services/question-bank.statistics";
 
@@ -35,7 +35,8 @@ import {IQuestionBankStats, QuestionBankStatistics} from "../services/question-b
         MatSnackBarModule,
         RouterModule,
         MatTooltipModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatSortModule
     ]
 })
 export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
