@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {Observable, startWith} from "rxjs";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
+import {Observable, startWith, Subscription} from "rxjs";
 import {QuestionBankService} from "../services/question-bank.service";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
 import {entries, keyBy, map, mapValues, sampleSize, values} from 'lodash';
@@ -21,6 +21,7 @@ import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
     templateUrl: './quiz.component.html',
     styleUrls: ['./quiz.component.scss'],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
         MatToolbarModule,
@@ -35,18 +36,19 @@ import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
         MatTooltipModule
     ]
 })
-export class QuizComponent {
+export class QuizComponent implements OnDestroy {
     public questionBank: IQuestionBank;
     public quiz: QuizModel;
     public formGroup: FormGroup;
     public created = new Date();
     public stats: { total: number, correct: number, incorrect: number } = {total: 0, correct: 0, incorrect: 0};
+    public statsSubs: Subscription;
 
     public get hasFinished() {
         return values(this.formGroup.controls).every(c => c.value);
     }
 
-    constructor(private activatedRoute: ActivatedRoute, private questionBankService: QuestionBankService, private router: Router, private quizService: QuizService) {
+    constructor(private activatedRoute: ActivatedRoute, private questionBankService: QuestionBankService, private router: Router, private quizService: QuizService, private cdr: ChangeDetectorRef) {
         this.questionBank = questionBankService.questionBanks[this.activatedRoute.snapshot.paramMap.get("id")!];
 
         if (this.activatedRoute.snapshot.paramMap.get("quizId")) {
@@ -63,7 +65,7 @@ export class QuizComponent {
             )
         )
 
-        this.formGroup.valueChanges
+        this.statsSubs = this.formGroup.valueChanges
             .pipe(startWith(this.formGroup.value))
             .subscribe((value) => {
 
@@ -86,8 +88,14 @@ export class QuizComponent {
                     }
                 })
 
+                this.cdr.detectChanges();
+
                 if (this.hasFinished) this.quizService.markQuizAsFinished(this.quiz.id);
             });
+    }
+
+    ngOnDestroy(): void {
+        this.statsSubs.unsubscribe();
     }
 
     retry() {
