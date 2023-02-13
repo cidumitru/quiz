@@ -135,7 +135,7 @@ export class QuestionBankViewModel {
     questions: number;
     stats: IQuestionBankStats;
     get coverage() {
-        return `${this.stats.coverage}%`;
+        return this.stats.coverage;
     }
 
     constructor(questionBank: IQuestionBank, statistics: QuestionBankStatistics) {
@@ -161,7 +161,7 @@ export class QuizViewModel {
     finishedAt?: Date;
 
     duration: string;
-    correctRatio: string;
+    correctRatio: number;
 
     constructor(quiz: IQuiz) {
         this.id = quiz.id;
@@ -171,7 +171,7 @@ export class QuizViewModel {
         this.answers = quiz.questions.map(q => q.answer).filter(a => !isNil(a)) as IAnswer[];
         this.answersCount = this.answers.length;
         this.correctAnswers = this.answers.filter(a => a.correct).length;
-        this.correctRatio = this.answersCount > 0 ? `${(this.correctAnswers / this.answersCount) * 100}%` : "N/A";
+        this.correctRatio = this.answersCount > 0 ? this.correctAnswers / this.answersCount * 100 : 0;
 
         this.questions = quiz.questions;
         this.startedAt = new Date(quiz.startedAt);
