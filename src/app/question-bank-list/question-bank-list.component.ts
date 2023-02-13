@@ -14,10 +14,12 @@ import {CommonModule} from "@angular/common";
 import {IAnswer, IQuestionBank, questionBankScheme} from "../services/question-bank.models";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
-import {map, Subscription} from "rxjs";
+import {debounceTime, map, startWith, Subscription, switchMap, tap} from "rxjs";
 import {MatSort, MatSortModule} from "@angular/material/sort";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {IQuestionBankStats, QuestionBankStatistics} from "../services/question-bank.statistics";
+import {MatInputModule} from "@angular/material/input";
+import {FormControl, ReactiveFormsModule} from "@angular/forms";
 
 @Component({
     selector: 'app-quiz-list',
@@ -36,7 +38,9 @@ import {IQuestionBankStats, QuestionBankStatistics} from "../services/question-b
         RouterModule,
         MatTooltipModule,
         MatPaginatorModule,
-        MatSortModule
+        MatSortModule,
+        MatInputModule,
+        ReactiveFormsModule
     ]
 })
 export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
@@ -44,6 +48,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     @ViewChild(MatSort) sort!: MatSort;
     @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
     @ViewChild("quizHistoryPaginator") quizHistoryPaginator!: MatPaginator;
+    public questionBankFilter = new FormControl("");
     public questionBanksDs = new MatTableDataSource();
     public quizHistoryDs = new MatTableDataSource(this.quiz.quizzesArr.map(quiz => new QuizViewModel(quiz)));
 
@@ -51,10 +56,15 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     public quizHistoryDisplayColumns =  ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers', 'correctRatio'];
 
     public _qbSubscription: Subscription;
-    constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService) {
-        this._qbSubscription = this.questionBank.questionBankArr$.subscribe(() => {
-            this.questionBanksDs.data = this.questionBank.questionBankArr.map(qb => new QuestionBankViewModel(qb));
-        });
+    constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService, private stats: QuestionBankStatistics) {
+        this._qbSubscription = this.questionBank.questionBankArr$.pipe(
+            switchMap(questionBanks => this.questionBankFilter.valueChanges.pipe(
+                    debounceTime(300),
+                    startWith(""),
+                    map(searchText => questionBanks.filter(qb => qb.name.toLowerCase().includes(searchText?.toLowerCase() ?? "")).map(qb => new QuestionBankViewModel(qb, stats))),
+                    tap(qbs => this.questionBanksDs.data = qbs)
+            )
+        )).subscribe()
     }
 
     ngAfterViewInit(): void {
@@ -124,12 +134,12 @@ export class QuestionBankViewModel {
     questions: number;
     stats: IQuestionBankStats;
 
-    constructor(questionBank: IQuestionBank) {
+    constructor(questionBank: IQuestionBank, statistics: QuestionBankStatistics) {
         this.id = questionBank.id;
         this.name = questionBank.name;
         this.updatedAt = questionBank.editedAt ? new Date(questionBank.editedAt) : undefined;
         this.questions = questionBank.questions.length;
-        this.stats = inject(QuestionBankStatistics).getStatisticsForQuestionBank(questionBank.id);
+        this.stats = statistics.getStatisticsForQuestionBank(questionBank.id);
     }
 }
 
