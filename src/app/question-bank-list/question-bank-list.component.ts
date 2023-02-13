@@ -17,6 +17,7 @@ import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
 import {map, Subscription} from "rxjs";
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
+import {IQuestionBankStats, QuestionBankStatistics} from "../services/question-bank.statistics";
 
 @Component({
     selector: 'app-quiz-list',
@@ -45,13 +46,13 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     public questionBanksDs = new MatTableDataSource();
     public quizHistoryDs = new MatTableDataSource(this.quiz.quizzesArr.map(quiz => new QuizViewModel(quiz)));
 
-    public questionBankDisplayedColumns = ['name', 'challenges', 'updatedAt', 'actions'];
+    public questionBankDisplayedColumns = ['name', 'questions','stats', 'updatedAt', 'actions'];
     public quizHistoryDisplayColumns =  ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers', 'correctRatio'];
 
     public _qbSubscription: Subscription;
     constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService) {
         this._qbSubscription = this.questionBank.questionBankArr$.subscribe(() => {
-            this.questionBanksDs.data = this.questionBank.questionBankArr;
+            this.questionBanksDs.data = this.questionBank.questionBankArr.map(qb => new QuestionBankViewModel(qb));
         });
     }
 
@@ -112,6 +113,22 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
 
     ngOnDestroy(): void {
         this._qbSubscription.unsubscribe();
+    }
+}
+
+export class QuestionBankViewModel {
+    id: string;
+    name: string;
+    updatedAt?: Date;
+    questions: number;
+    stats: IQuestionBankStats;
+
+    constructor(questionBank: IQuestionBank) {
+        this.id = questionBank.id;
+        this.name = questionBank.name;
+        this.updatedAt = questionBank.editedAt ? new Date(questionBank.editedAt) : undefined;
+        this.questions = questionBank.questions.length;
+        this.stats = inject(QuestionBankStatistics).getStatisticsForQuestionBank(questionBank.id);
     }
 }
 

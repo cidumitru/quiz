@@ -17,6 +17,7 @@ export const questionBankScheme = z.object({
   createdAt: z.string(),
   editedAt: z.optional(z.string()),
   name: z.string(),
+  isDeleted: z.optional(z.boolean()),
   questions: z.array(questionScheme)
 })
 

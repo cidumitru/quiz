@@ -29,13 +29,21 @@
 
         <ng-container matColumnDef="updatedAt">
             <th *matHeaderCellDef mat-header-cell>Last update</th>
-            <td *matCellDef="let element" mat-cell> {{(element.editedAt | date: "short") ?? "No updates"}} </td>
+            <td *matCellDef="let element" mat-cell> {{(element.updatedAt | date: "short") ?? "No updates"}} </td>
         </ng-container>
 
 
-        <ng-container matColumnDef="challenges">
+        <ng-container matColumnDef="questions">
             <th *matHeaderCellDef mat-header-cell>Questions</th>
-            <td *matCellDef="let element" mat-cell> {{element.questions.length}} </td>
+            <td *matCellDef="let element" mat-cell> {{element.questions}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stats">
+            <th *matHeaderCellDef mat-header-cell>Stats</th>
+            <td *matCellDef="let element" mat-cell>
+                <span matTooltip="Total answers">{{element.stats.totalAnswers}}</span>
+                - <span matTooltip="Answers on valid questions">{{element.stats.answeredQuestions}}</span>
+                - <span matTooltip="Correct answers">{{element.stats.correctAnswers}}</span> </td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
