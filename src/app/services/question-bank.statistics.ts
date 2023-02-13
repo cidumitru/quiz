@@ -21,7 +21,7 @@ export class QuestionBankStatistics {
 
         const correctlyAnsweredQuestions = uniqBy(allQuestions.filter(q => q.answer?.correct), q => q.id);
 
-        const coverage = ((correctlyAnsweredQuestions.length / this.questionBanks.questionBanks[questionBankId]?.questions.length) * 100);
+        const coverage = ((correctlyAnsweredQuestions.length / this.questionBanks.questionBanks[questionBankId]?.questions.length) * 100) || 0;
 
         return allQuestions.reduce((acc, question) => {
             if(question.answer) {

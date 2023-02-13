@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, inject, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy, ViewChild} from '@angular/core';
 import {QuestionBankService} from "../services/question-bank.service";
 import {Router, RouterModule} from "@angular/router";
 import exportFromJSON from "export-from-json";
@@ -25,6 +25,7 @@ import {FormControl, ReactiveFormsModule} from "@angular/forms";
     selector: 'app-quiz-list',
     templateUrl: './question-bank-list.component.html',
     styleUrls: ['./question-bank-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
         CommonModule,
@@ -52,7 +53,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     public questionBanksDs = new MatTableDataSource();
     public quizHistoryDs = new MatTableDataSource(this.quiz.quizzesArr.map(quiz => new QuizViewModel(quiz)));
 
-    public questionBankDisplayedColumns = ['name', 'questions','stats', 'updatedAt', 'actions'];
+    public questionBankDisplayedColumns = ['name', 'questions','stats','coverage', 'updatedAt', 'actions'];
     public quizHistoryDisplayColumns =  ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers', 'correctRatio'];
 
     public _qbSubscription: Subscription;
@@ -133,6 +134,9 @@ export class QuestionBankViewModel {
     updatedAt?: Date;
     questions: number;
     stats: IQuestionBankStats;
+    get coverage() {
+        return `${this.stats.coverage}%`;
+    }
 
     constructor(questionBank: IQuestionBank, statistics: QuestionBankStatistics) {
         this.id = questionBank.id;

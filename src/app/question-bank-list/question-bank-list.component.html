@@ -49,8 +49,12 @@
                 <span matTooltip="Total answers">{{element.stats.totalAnswers}}</span>
                 - <span matTooltip="Answers on valid questions">{{element.stats.answeredQuestions}}</span>
                 - <span matTooltip="Correct answers">{{element.stats.correctAnswers}}</span>
-                | <span matTooltip="Coverage">{{element.stats.coverage}} %</span>
             </td>
+        </ng-container>
+
+        <ng-container matColumnDef="coverage">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>Coverage</th>
+            <td *matCellDef="let element" mat-cell>{{element.coverage}}</td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
@@ -62,6 +66,12 @@
                         <mat-icon>school</mat-icon>
                         Practice
                     </button>
+<!--                    <mat-menu #menu="matMenu">-->
+<!--                        <button mat-menu-item>25 Questions</button>-->
+<!--                        <button mat-menu-item>50 Questions</button>-->
+<!--                        <button mat-menu-item>100 Questions</button>-->
+<!--                    </mat-menu>-->
+
                     <button mat-flat-button color="accent" routerLink="{{element.id}}">
                         <mat-icon>edit</mat-icon>
                         Edit

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {map, Observable, startWith, switchMap} from "rxjs";
 import {QuestionBankService} from "../../services/question-bank.service";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
@@ -17,6 +17,7 @@ import {MatInputModule} from "@angular/material/input";
     selector: 'app-question-edit',
     templateUrl: './question-list-edit.component.html',
     styleUrls: ['./question-list-edit.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
         MatRadioModule,
