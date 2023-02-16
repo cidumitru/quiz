@@ -1,7 +1,8 @@
 import {Injectable} from "@angular/core";
 import {QuestionBankService} from "./question-bank.service";
-import {QuizService} from "./quiz.service";
-import {isNil, uniq, uniqBy} from "lodash";
+import {IAnsweredQuestion, QuizService} from "./quiz.service";
+import {groupBy, isNil, mapValues, uniq, uniqBy} from "lodash";
+import {format, isAfter, isBefore} from "date-fns";
 
 export interface IQuestionBankStats {
     totalAnswers: number;
@@ -33,5 +34,15 @@ export class QuestionBankStatistics {
             }
             return acc;
         }, {totalAnswers: 0, answeredQuestions: 0, correctAnswers: 0, coverage});
+    }
+
+    getStatisticsByDay(startDate: Date, endDate: Date): { [key: string]: IAnsweredQuestion[] } {
+        const quizzes = this.quizzes.quizzesArr.filter(quiz => {
+            return quiz.finishedAt && isAfter(new Date(quiz.finishedAt), startDate) && isBefore(new Date(quiz.finishedAt), endDate);
+        });
+
+        const days = mapValues(groupBy(quizzes, quizz => format(new Date(quizz.finishedAt!), "dd-MM-yyyy")), quizzes => quizzes.map(quiz => quiz.questions).flat());
+
+        return days;
     }
 }

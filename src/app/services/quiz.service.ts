@@ -13,8 +13,8 @@ export interface IAnsweredQuestion extends IQuestion {
 export interface IQuiz {
     id: string;
     questionBankId: string;
-    startedAt: Date;
-    finishedAt?: Date;
+    startedAt: string;
+    finishedAt?: string;
     questions: IAnsweredQuestion[];
 }
 
@@ -53,7 +53,7 @@ export class QuizService {
         const newQuiz = {
             id: uuidv4(),
             questionBankId: options.questionBankId,
-            startedAt: new Date(),
+            startedAt: new Date().toString(),
             questions: sampleSize(this.questionBanks.questionBanks[options.questionBankId].questions, options.questionsCount),
         }
 
@@ -64,7 +64,7 @@ export class QuizService {
 
     markQuizAsFinished(quizId: string) {
         const quiz = this.quizzes[quizId];
-        this._quizzes.next({ ...this.quizzes, [quizId]: { ...quiz, finishedAt: new Date() } });
+        this._quizzes.next({ ...this.quizzes, [quizId]: { ...quiz, finishedAt: new Date().toString() } });
     }
 
     setQuizAnswers(quizId: string, answers: {questionId: string, answerId: string}[]): void {

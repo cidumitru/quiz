@@ -24,6 +24,8 @@
     "@types/lodash": "^4.14.191",
     "@types/uuid": "^9.0.0",
     "ang-jsoneditor": "^2.0.0",
+    "billboard.js": "^3.7.4",
+    "date-fns": "^2.29.3",
     "export-from-json": "^1.7.0",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",

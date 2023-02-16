@@ -116,8 +116,8 @@ export class QuizModel {
     constructor(public quiz: IQuiz) {
         this.id = quiz.id;
         this.questionBankId = quiz.questionBankId;
-        this.startedAt = quiz.startedAt;
-        this.finishedAt = quiz.finishedAt;
+        this.startedAt = new Date(quiz.startedAt);
+        this.finishedAt = quiz.finishedAt ? new Date(quiz.finishedAt) : undefined;
         this.questions = quiz.questions.map(q => new QuestionViewModel(q));
         this.questionMap = keyBy(this.questions, 'id');
     }

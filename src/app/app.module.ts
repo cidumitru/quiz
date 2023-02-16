@@ -13,10 +13,12 @@ import {QuizService} from "./services/quiz.service";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
 import {ReactiveFormsModule} from "@angular/forms";
+import { StatisticsComponent } from './statistics/statistics.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    StatisticsComponent,
   ],
     imports: [
         BrowserModule,
