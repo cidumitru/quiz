@@ -61,16 +61,16 @@
             <th *matHeaderCellDef mat-header-cell style="text-align: right"> Actions</th>
             <td *matCellDef="let element" mat-cell width="35%">
                 <div class="actions">
-                    <button mat-flat-button [disabled]="element.questions.length === 0" color="primary"
-                            routerLink="{{element.id}}/practice">
+                    <button mat-flat-button
+                            [matMenuTriggerFor]="menu"
+                            [disabled]="element.questions.length === 0"
+                            color="primary">
                         <mat-icon>school</mat-icon>
                         Practice
                     </button>
-<!--                    <mat-menu #menu="matMenu">-->
-<!--                        <button mat-menu-item>25 Questions</button>-->
-<!--                        <button mat-menu-item>50 Questions</button>-->
-<!--                        <button mat-menu-item>100 Questions</button>-->
-<!--                    </mat-menu>-->
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item *ngFor="let size of [25, 50, 100]" (click)="practiceQuiz(element.id, size)">{{size}} Questions</button>
+                    </mat-menu>
 
                     <button mat-flat-button color="accent" routerLink="{{element.id}}">
                         <mat-icon>edit</mat-icon>

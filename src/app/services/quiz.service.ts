@@ -20,22 +20,13 @@ export interface IQuiz {
 
 export interface ICreateQuiz {
     questionBankId: string;
-    questionsCount?: number;
+    questionsCount: number;
 }
 
 @Injectable({
     providedIn: "root"
 })
 export class QuizService {
-
-    private _defaultQuizSize = 25;
-    get defaultQuizSize(): number {
-        return this._defaultQuizSize;
-    }
-
-    set defaultQuizSize(value: number) {
-        this._defaultQuizSize = value;
-    }
 
     private _quizzes = new BehaviorSubject<Record<string, IQuiz>>({});
     public quizzesArr$ = this._quizzes.asObservable().pipe(
@@ -63,7 +54,7 @@ export class QuizService {
             id: uuidv4(),
             questionBankId: options.questionBankId,
             startedAt: new Date(),
-            questions: sampleSize(this.questionBanks.questionBanks[options.questionBankId].questions, options.questionsCount ?? this.defaultQuizSize),
+            questions: sampleSize(this.questionBanks.questionBanks[options.questionBankId].questions, options.questionsCount),
         }
 
         this._quizzes.next({ ...this.quizzes, [newQuiz.id]: newQuiz });

@@ -20,6 +20,7 @@ import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {IQuestionBankStats, QuestionBankStatistics} from "../services/question-bank.statistics";
 import {MatInputModule} from "@angular/material/input";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
+import {MatMenuModule} from "@angular/material/menu";
 
 @Component({
     selector: 'app-quiz-list',
@@ -41,7 +42,8 @@ import {FormControl, ReactiveFormsModule} from "@angular/forms";
         MatPaginatorModule,
         MatSortModule,
         MatInputModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatMenuModule
     ]
 })
 export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
@@ -123,6 +125,12 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
         if (result.valueOf()) this.quiz.clear();
     }
 
+
+    practiceQuiz(questionBankId: string, quizSize: number): void {
+        if (isNaN(quizSize)) return;
+
+        this.router.navigate([questionBankId, 'practice'], {queryParams: {size: quizSize}}).then();
+    }
     ngOnDestroy(): void {
         this._qbSubscription.unsubscribe();
     }

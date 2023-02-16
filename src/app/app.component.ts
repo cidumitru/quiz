@@ -10,16 +10,4 @@ import {QuizService} from "./services/quiz.service";
 })
 export class AppComponent {
   title = 'quizz';
-  quizSizeControl = new FormControl(25, {nonNullable: true});
-
-  constructor(private dialog: MatDialog, public quiz: QuizService) {
-  }
-
-  openSettings(settingsDialog: TemplateRef<any>) {
-    this.dialog.open(settingsDialog);
-  }
-
-  updateQuizSize(value: number): void {
-    this.quiz.defaultQuizSize = value;
-  }
 }

@@ -1,7 +1,3 @@
-.invalid {
-  color: red;
-}
-
 .stats {
   text-align: center;
   margin-top: 5rem;
@@ -15,13 +11,44 @@
   }
 }
 
-.readonly {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-mat-card-title {
-  display: flex;
-  align-items: center;
+:host ::ng-deep  {
+  .answered {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
+    .correct {
+      .mdc-form-field {
+        label {
+          color: green!important;
+          font-weight: bold;
+        }
+        .mdc-radio {
+          .mdc-radio__outer-circle {
+            border-color: green!important;
+          };
+          .mdc-radio__inner-circle {
+            border-color: green!important;
+          }
+        }
+      }
+    }
+    &.ng-invalid {
+      .mat-mdc-radio-checked .mdc-form-field {
+        label {
+          color: red!important;
+          font-weight: bold;
+        }
+        .mdc-radio {
+          .mdc-radio__outer-circle {
+            border-color: red!important;
+          };
+          .mdc-radio__inner-circle {
+            border-color: red!important;
+          }
+        }
+      }
+    }
+  }
 }

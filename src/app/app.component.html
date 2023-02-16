@@ -1,24 +1,8 @@
 <mat-toolbar color="primary">
   <span routerLink="/" style="cursor: pointer" matTooltip="Go home">Aly's Question Bank Generator</span>
   <span class="example-spacer"></span>
-  <button mat-icon-button (click)="openSettings(settingsDialog)">
-    <mat-icon>settings</mat-icon>
-  </button>
 </mat-toolbar>
 
 <div class="content">
   <router-outlet></router-outlet>
 </div>
-
-<ng-template #settingsDialog>
-  <div style="padding: 2rem;">
-    <mat-form-field appearance="fill">
-      <mat-label>Default quiz size:</mat-label>
-      <mat-select (valueChange)="updateQuizSize($event)" [value]="quiz.defaultQuizSize">
-        <mat-option [value]="25">25 Questions</mat-option>
-        <mat-option [value]="50">50 Questions</mat-option>
-        <mat-option [value]="100">100 Questions</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-</ng-template>

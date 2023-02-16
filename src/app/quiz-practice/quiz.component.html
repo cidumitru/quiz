@@ -12,9 +12,10 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-actions align="start">
-      <mat-radio-group [formControlName]="question.id">
-        <mat-radio-button *ngFor="let option of question.answers" [disabled]="hasFinished"
-                          [color]="formGroup.controls[question.id].valid ? 'primary' : 'warn'"
+      <mat-radio-group [formControlName]="question.id" [ngClass]="{answered: formGroup.controls[question.id].dirty || formGroup.controls[question.id].value}">
+        <mat-radio-button *ngFor="let option of question.answers"
+                          color="primary"
+                          [ngClass]="{correct: option.id === question?.rightAnswer?.id}"
                           [value]="option.id">{{option.text}}</mat-radio-button>
       </mat-radio-group>
     </mat-card-actions>
@@ -27,6 +28,6 @@
   </div>
   <div style="margin-top: 2rem">
     <button color="primary" mat-raised-button routerLink="/">GO HOME</button>
-    <button *ngIf="hasFinished" (click)="retry()" color="accent" mat-raised-button style="margin-left: 1rem">TRY AGAIN</button>
+    <button *ngIf="hasFinished" (click)="retry()" color="accent" mat-raised-button style="margin-left: 1rem">GENERATE NEW</button>
   </div>
 </div>

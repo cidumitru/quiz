@@ -1,9 +1,9 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
-import {Observable, startWith, Subscription} from "rxjs";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Directive, OnDestroy} from '@angular/core';
+import {map, startWith, Subscription} from "rxjs";
 import {QuestionBankService} from "../services/question-bank.service";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
-import {entries, keyBy, map, mapValues, sampleSize, values} from 'lodash';
-import {IAnswer, IQuestion, IQuestionBank} from "../services/question-bank.models";
+import {entries, keyBy, mapValues, values} from 'lodash';
+import {IAnswer, IQuestionBank} from "../services/question-bank.models";
 import {CommonModule} from "@angular/common";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
@@ -12,7 +12,7 @@ import {MatTableModule} from "@angular/material/table";
 import {MatCardModule} from "@angular/material/card";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormGroup, NgControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
 
@@ -21,7 +21,6 @@ import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
     templateUrl: './quiz.component.html',
     styleUrls: ['./quiz.component.scss'],
     standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
         MatToolbarModule,
@@ -33,7 +32,7 @@ import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
         MatSnackBarModule,
         RouterModule,
         ReactiveFormsModule,
-        MatTooltipModule
+        MatTooltipModule,
     ]
 })
 export class QuizComponent implements OnDestroy {
@@ -51,11 +50,11 @@ export class QuizComponent implements OnDestroy {
     constructor(private activatedRoute: ActivatedRoute, private questionBankService: QuestionBankService, private router: Router, private quizService: QuizService, private cdr: ChangeDetectorRef) {
         this.questionBank = questionBankService.questionBanks[this.activatedRoute.snapshot.paramMap.get("id")!];
 
-        if (this.activatedRoute.snapshot.paramMap.get("quizId")) {
-            this.quiz = new QuizModel(this.quizService.getQuiz(this.activatedRoute.snapshot.paramMap.get("quizId")!));
-        } else {
-            this.quiz = new QuizModel(this.quizService.startQuiz({questionBankId: this.questionBank.id}));
-        }
+        const quizId = this.activatedRoute.snapshot.paramMap.get("quizId");
+        const questionsCount = parseInt(this.activatedRoute.snapshot.queryParamMap.get("size") ?? "") ?? 25;
+
+        if (quizId) this.quiz = new QuizModel(this.quizService.getQuiz(quizId));
+        else this.quiz = new QuizModel(this.quizService.startQuiz({ questionBankId: this.questionBank.id, questionsCount: questionsCount}));
 
 
         this.formGroup = new FormGroup<{[questionId: string]: FormControl<string>}>(
@@ -64,6 +63,8 @@ export class QuizComponent implements OnDestroy {
                     new FormControl(q.answer?.id ?? "", {validators: q.rightAnswer ? [Validators.pattern(q.rightAnswer.id)] : [], nonNullable: true})
             )
         )
+
+        this.formGroup.updateValueAndValidity();
 
         this.statsSubs = this.formGroup.valueChanges
             .pipe(startWith(this.formGroup.value))
@@ -87,8 +88,6 @@ export class QuizComponent implements OnDestroy {
                         else this.stats.incorrect++;
                     }
                 })
-
-                this.cdr.detectChanges();
 
                 if (this.hasFinished) this.quizService.markQuizAsFinished(this.quiz.id);
             });
