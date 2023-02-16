@@ -99,7 +99,7 @@ export class QuizComponent implements OnDestroy {
 
     retry() {
         this.router.navigate(['']).then(() => {
-            this.router.navigate([this.questionBank.id, 'practice']);
+            this.router.navigate([this.questionBank.id, 'practice', {size: this.quiz.questions.length}]).then();
             window.scrollTo(0, 0);
         });
     }
