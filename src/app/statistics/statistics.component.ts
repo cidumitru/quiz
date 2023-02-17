@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import bb, {bar} from "billboard.js";
 import {QuestionBankStatistics} from "../services/question-bank.statistics";
 import {entries} from "lodash";
@@ -9,19 +9,28 @@ import {IAnsweredQuestion} from "../services/quiz.service";
   templateUrl: './statistics.component.html',
   styleUrls: ['./statistics.component.scss']
 })
-export class StatisticsComponent implements OnInit {
+export class StatisticsComponent implements OnInit, AfterViewInit {
 
   constructor(private stats: QuestionBankStatistics) {
   }
 
   ngOnInit(): void {
+
+  }
+
+  ngAfterViewInit(): void {
+    this.plotWeeklyStats();
+    this.plotStatsByQuestionBank();
+  }
+
+  plotWeeklyStats(): void {
     const today = new Date();
     const startFrom = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
-    const questionsByDay = this.stats.getStatisticsByDay(startFrom, new Date());
+    const questionsByDay = this.stats.getQuestionsByDay(startFrom, new Date());
 
 
     const plotData: [string, IAnsweredQuestion[]][] = entries(questionsByDay).map(([date, questions]) => {
-        return [date, questions];
+      return [date, questions];
     });
 
     const dates = plotData.map(([date, questions]) => parse(date, "dd-MM-yyyy", new Date()));
@@ -32,11 +41,20 @@ export class StatisticsComponent implements OnInit {
         x: "x",
         columns: [
           ['x', ...dates],
-          ['questions', ...answeredQuestions],
+          ['answers', ...answeredQuestions],
           ['correct', ...correctQuestions],
         ],
+        labels: true,
+        empty: {label: {text: "No data"}},
         type: bar(),
-        groups: [['questions', 'answers']]
+      },
+      bar: {
+        // @ts-ignore: billboard.js types are wrong
+        overlap: true,
+        width: {
+            answers: 60,
+            correct: 50,
+        },
       },
       axis: {
         x: {
@@ -44,12 +62,52 @@ export class StatisticsComponent implements OnInit {
           localtime: false,
           tick: {
             format: "%Y-%m-%d"
-          }
+          },
+        },
+      },
+      grid: {
+        y: {
+          show: true
         }
       },
       bindto: '#barChart_1',
     });
+  }
 
+  plotStatsByQuestionBank(): void {
+const today = new Date();
+    const startFrom = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+    const answeredQuestionsByQuestionBank = this.stats.getAnsweredQuestionsByQuestionBanks(startFrom, new Date());
+
+
+    const questionBanksNames = entries(answeredQuestionsByQuestionBank).map(([_, answeredQuestions]) => answeredQuestions.questionBankName);
+    const questionBanks = Object.keys(answeredQuestionsByQuestionBank);
+    const answeredQuestions = questionBanks.map(qb => answeredQuestionsByQuestionBank[qb].answeredQuestions.length);
+    const correctQuestions = questionBanks.map(qb => answeredQuestionsByQuestionBank[qb].answeredQuestions.filter(q => q.answer?.correct).length);
+    const totalQuestions = questionBanks.map(qb => answeredQuestionsByQuestionBank[qb].totalQuestions);
+
+
+    bb.generate({
+      data: {
+        x: "x",
+        columns: [
+          ["x", ...questionBanksNames],
+          ["answered", ...answeredQuestions],
+          ["correct", ...correctQuestions],
+        ],
+        // groups: [
+        //   ["answered", "correct", "total"]
+        // ],
+        type: bar(),
+        labels: true,
+      },
+      axis: {
+        x: {
+          type: "category",
+        },
+      },
+      bindto: "#questionBanks"
+    });
   }
 
 }

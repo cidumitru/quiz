@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {QuestionBankService} from "./question-bank.service";
 import {IAnsweredQuestion, QuizService} from "./quiz.service";
-import {groupBy, isNil, mapValues, uniq, uniqBy} from "lodash";
-import {format, isAfter, isBefore} from "date-fns";
+import {find, groupBy, isNil, mapValues, reduce, uniq, uniqBy} from "lodash";
+import {eachDayOfInterval, format, isAfter, isBefore} from "date-fns";
 
 export interface IQuestionBankStats {
     totalAnswers: number;
@@ -36,13 +36,54 @@ export class QuestionBankStatistics {
         }, {totalAnswers: 0, answeredQuestions: 0, correctAnswers: 0, coverage});
     }
 
-    getStatisticsByDay(startDate: Date, endDate: Date): { [key: string]: IAnsweredQuestion[] } {
+    getQuestionsByDay(start: Date, end: Date): { [key: string]: IAnsweredQuestion[] } {
+        const daysOfWeek = eachDayOfInterval({start, end}).map(day => format(day, "dd-MM-yyyy")).reduce((acc: Record<string, IAnsweredQuestion[]>, date) => ({
+            ...acc,
+            [date]: []
+        }), {});
+        const quizzes = this.quizzes.quizzesArr.filter(quiz => quiz.finishedAt && isAfter(new Date(quiz.finishedAt), start) && isBefore(new Date(quiz.finishedAt), end));
+
+        return {
+            ...daysOfWeek,
+            ...mapValues(groupBy(quizzes, quizz => format(new Date(quizz.finishedAt!), "dd-MM-yyyy")), quizzes => quizzes.map(quiz => quiz.questions).flat())
+        };
+    }
+
+    getAnsweredQuestionsByQuestionBanks(startDate: Date, endDate: Date): { [key: string]: IQuestionBankSummaryStats } {
         const quizzes = this.quizzes.quizzesArr.filter(quiz => {
             return quiz.finishedAt && isAfter(new Date(quiz.finishedAt), startDate) && isBefore(new Date(quiz.finishedAt), endDate);
         });
 
-        const days = mapValues(groupBy(quizzes, quizz => format(new Date(quizz.finishedAt!), "dd-MM-yyyy")), quizzes => quizzes.map(quiz => quiz.questions).flat());
+        const unfilteredResult =  mapValues(groupBy(quizzes, quizz => quizz.questionBankId), quizzes => {
+            const questions = quizzes.map(quiz => quiz.questions).flat();
+            const answeredQuestions = uniq(questions.filter(q => q.answer));
+            const questionBank = this.questionBanks.questionBanks[quizzes[0].questionBankId];
+            return {
+                questionBankName: questionBank?.name || "Unknown",
+                answeredQuestions,
+                totalQuestions: questionBank?.questions.length || 0
+            };
+        });
 
-        return days;
+        return reduce(unfilteredResult, (acc: { [key: string]: IQuestionBankSummaryStats }, value, key) => {
+            if (value.questionBankName === "Unknown") {
+                acc["unknown"] = {
+                    ...(acc["unknown"], {}), ...value,
+                    totalQuestions: value.answeredQuestions.length + (acc["unknown"]?.totalQuestions || 0),
+                    answeredQuestions: [...(acc["unknown"]?.answeredQuestions || []), ...value.answeredQuestions]
+                };
+                return acc;
+            }
+            if (value.answeredQuestions.length > 0) {
+               acc[key] = value;
+            }
+            return acc;
+        }, {});
     }
+}
+
+export interface IQuestionBankSummaryStats {
+    questionBankName: string;
+    answeredQuestions: IAnsweredQuestion[];
+    totalQuestions: number;
 }
