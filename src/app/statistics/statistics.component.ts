@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import bb, {bar} from "billboard.js";
 import {QuestionBankStatistics} from "../services/question-bank.statistics";
 import {entries} from "lodash";
-import {parse} from "date-fns";
+import {addDays, endOfToday, parse} from "date-fns";
 import {IAnsweredQuestion} from "../services/quiz.service";
 @Component({
   selector: 'app-statistics',
@@ -24,9 +24,7 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
   }
 
   plotWeeklyStats(): void {
-    const today = new Date();
-    const startFrom = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
-    const questionsByDay = this.stats.getQuestionsByDay(startFrom, new Date());
+    const questionsByDay = this.stats.getQuestionsByDay(addDays(new Date(), -7), endOfToday());
 
 
     const plotData: [string, IAnsweredQuestion[]][] = entries(questionsByDay).map(([date, questions]) => {
@@ -59,7 +57,7 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
       axis: {
         x: {
           type: "timeseries",
-          localtime: false,
+          localtime: true,
           tick: {
             format: "%Y-%m-%d"
           },

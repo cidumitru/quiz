@@ -1,4 +1,13 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy, ViewChild} from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    Component,
+    inject,
+    OnDestroy,
+    Pipe,
+    PipeTransform,
+    ViewChild
+} from '@angular/core';
 import {QuestionBankService} from "../services/question-bank.service";
 import {Router, RouterModule} from "@angular/router";
 import exportFromJSON from "export-from-json";
@@ -21,6 +30,8 @@ import {IQuestionBankStats, QuestionBankStatistics} from "../services/question-b
 import {MatInputModule} from "@angular/material/input";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {MatMenuModule} from "@angular/material/menu";
+import {formatDuration, intervalToDuration} from "date-fns";
+
 
 @Component({
     selector: 'app-quiz-list',
@@ -184,9 +195,8 @@ export class QuizViewModel {
         this.questions = quiz.questions;
         this.startedAt = new Date(quiz.startedAt);
         this.finishedAt = quiz.finishedAt ? new Date(quiz.finishedAt) : undefined;
-
         this.duration = this.finishedAt
-            ? `${Math.round((this.finishedAt.getTime() - this.startedAt.getTime()) / 1000)}s`
+            ? formatDuration(intervalToDuration({start: this.startedAt, end: this.finishedAt}))
             : 'In progress';
 
     }
