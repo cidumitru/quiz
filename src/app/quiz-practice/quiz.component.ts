@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Directive, OnDestroy} from '@angular/core';
-import {map, startWith, Subscription} from "rxjs";
+import {ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
+import {startWith, Subscription} from "rxjs";
 import {QuestionBankService} from "../services/question-bank.service";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
 import {entries, keyBy, mapValues, values} from 'lodash';
@@ -12,7 +12,7 @@ import {MatTableModule} from "@angular/material/table";
 import {MatCardModule} from "@angular/material/card";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {FormControl, FormGroup, NgControl, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
 
@@ -43,10 +43,6 @@ export class QuizComponent implements OnDestroy {
     public stats: { total: number, correct: number, incorrect: number } = {total: 0, correct: 0, incorrect: 0};
     public statsSubs: Subscription;
 
-    public get hasFinished() {
-        return values(this.formGroup.controls).every(c => c.value);
-    }
-
     constructor(private activatedRoute: ActivatedRoute, private questionBankService: QuestionBankService, private router: Router, private quizService: QuizService, private cdr: ChangeDetectorRef) {
         this.questionBank = questionBankService.questionBanks[this.activatedRoute.snapshot.paramMap.get("id")!];
 
@@ -54,13 +50,19 @@ export class QuizComponent implements OnDestroy {
         const questionsCount = parseInt(this.activatedRoute.snapshot.queryParamMap.get("size") ?? "") ?? 25;
 
         if (quizId) this.quiz = new QuizModel(this.quizService.getQuiz(quizId));
-        else this.quiz = new QuizModel(this.quizService.startQuiz({ questionBankId: this.questionBank.id, questionsCount: questionsCount}));
+        else this.quiz = new QuizModel(this.quizService.startQuiz({
+            questionBankId: this.questionBank.id,
+            questionsCount: questionsCount
+        }));
 
 
-        this.formGroup = new FormGroup<{[questionId: string]: FormControl<string>}>(
+        this.formGroup = new FormGroup<{ [questionId: string]: FormControl<string> }>(
             mapValues(keyBy(this.quiz.questions, 'id'),
                 (q: QuestionViewModel) =>
-                    new FormControl(q.answer?.id ?? "", {validators: q.rightAnswer ? [Validators.pattern(q.rightAnswer.id)] : [], nonNullable: true})
+                    new FormControl(q.answer?.id ?? "", {
+                        validators: q.rightAnswer ? [Validators.pattern(q.rightAnswer.id)] : [],
+                        nonNullable: true
+                    })
             )
         )
 
@@ -91,6 +93,10 @@ export class QuizComponent implements OnDestroy {
 
                 if (this.hasFinished) this.quizService.markQuizAsFinished(this.quiz.id);
             });
+    }
+
+    public get hasFinished() {
+        return values(this.formGroup.controls).every(c => c.value);
     }
 
     ngOnDestroy(): void {

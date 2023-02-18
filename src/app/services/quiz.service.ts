@@ -1,15 +1,16 @@
 import {Injectable} from "@angular/core";
-import {IAnswer, IQuestion, IQuestionBank} from "./question-bank.models";
+import {IAnswer, IQuestion} from "./question-bank.models";
 
 import * as localForage from "localforage";
 import {BehaviorSubject, map, skip} from "rxjs";
 import {sampleSize, values} from "lodash";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {QuestionBankService} from "./question-bank.service";
 
 export interface IAnsweredQuestion extends IQuestion {
     answer?: IAnswer;
 }
+
 export interface IQuiz {
     id: string;
     questionBankId: string;
@@ -28,18 +29,21 @@ export interface ICreateQuiz {
 })
 export class QuizService {
 
+    constructor(private questionBanks: QuestionBankService) {
+    }
+
     private _quizzes = new BehaviorSubject<Record<string, IQuiz>>({});
+
     public quizzesArr$ = this._quizzes.asObservable().pipe(
         map(quizzes => values(quizzes).sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime())),
     );
+
     public get quizzes() {
         return this._quizzes.getValue();
     }
+
     public get quizzesArr() {
         return Object.values(this.quizzes).sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
-    }
-
-    constructor(private questionBanks: QuestionBankService) {
     }
 
     async init() {
@@ -57,17 +61,17 @@ export class QuizService {
             questions: sampleSize(this.questionBanks.questionBanks[options.questionBankId].questions, options.questionsCount),
         }
 
-        this._quizzes.next({ ...this.quizzes, [newQuiz.id]: newQuiz });
+        this._quizzes.next({...this.quizzes, [newQuiz.id]: newQuiz});
 
         return newQuiz;
     }
 
     markQuizAsFinished(quizId: string) {
         const quiz = this.quizzes[quizId];
-        this._quizzes.next({ ...this.quizzes, [quizId]: { ...quiz, finishedAt: new Date().toString() } });
+        this._quizzes.next({...this.quizzes, [quizId]: {...quiz, finishedAt: new Date().toString()}});
     }
 
-    setQuizAnswers(quizId: string, answers: {questionId: string, answerId: string}[]): void {
+    setQuizAnswers(quizId: string, answers: { questionId: string, answerId: string }[]): void {
         const quiz = this.quizzes[quizId];
         const questions = quiz.questions.map(question => {
             const userAnswer = answers.find(answer => answer.questionId === question.id);
@@ -76,7 +80,7 @@ export class QuizService {
                 answer: question.answers.find(answer => answer.id === userAnswer?.answerId)
             }
         });
-        this._quizzes.next({ ...this.quizzes, [quizId]: { ...quiz, questions } });
+        this._quizzes.next({...this.quizzes, [quizId]: {...quiz, questions}});
     }
 
     getQuiz(id: string) {

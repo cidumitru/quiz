@@ -19,17 +19,17 @@
 
         <ng-container matColumnDef="id">
             <th *matHeaderCellDef mat-header-cell>Id.</th>
-            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            <td *matCellDef="let element" mat-cell> {{element.id}} </td>
         </ng-container>
 
         <ng-container matColumnDef="name">
             <th *matHeaderCellDef mat-header-cell>
                 <mat-form-field appearance="fill" class="no-padding">
                     <mat-label>Search by name</mat-label>
-                    <input matInput [formControl]="questionBankFilter">
+                    <input [formControl]="questionBankFilter" matInput>
                 </mat-form-field>
             </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            <td *matCellDef="let element" mat-cell> {{element.name}} </td>
         </ng-container>
 
         <ng-container matColumnDef="updatedAt">
@@ -53,7 +53,9 @@
         </ng-container>
 
         <ng-container matColumnDef="coverage">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header matTooltip="Percentage of questions you provided a correct answer at least once.">Coverage</th>
+            <th *matHeaderCellDef mat-header-cell mat-sort-header
+                matTooltip="Percentage of questions you provided a correct answer at least once.">Coverage
+            </th>
             <td *matCellDef="let element" mat-cell>{{element.coverage  | number}}%</td>
         </ng-container>
 
@@ -61,27 +63,29 @@
             <th *matHeaderCellDef mat-header-cell style="text-align: right"> Actions</th>
             <td *matCellDef="let element" mat-cell width="35%">
                 <div class="actions">
-                    <button mat-flat-button
+                    <button [disabled]="element.questions.length === 0"
                             [matMenuTriggerFor]="menu"
-                            [disabled]="element.questions.length === 0"
-                            color="primary">
+                            color="primary"
+                            mat-flat-button>
                         <mat-icon>school</mat-icon>
                         Practice
                     </button>
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item *ngFor="let size of [25, 50, 100]" (click)="practiceQuiz(element.id, size)">{{size}} Questions</button>
+                        <button (click)="practiceQuiz(element.id, size)" *ngFor="let size of [25, 50, 100]"
+                                mat-menu-item>{{size}} Questions
+                        </button>
                     </mat-menu>
 
-                    <button mat-flat-button color="accent" routerLink="{{element.id}}">
+                    <button color="accent" mat-flat-button routerLink="{{element.id}}">
                         <mat-icon>edit</mat-icon>
                         Edit
                     </button>
-                    <button mat-flat-button style="color: white; background-color: #46a35e;"
-                            (click)="downloadQuestionBank(element.id);">
+                    <button (click)="downloadQuestionBank(element.id);" mat-flat-button
+                            style="color: white; background-color: #46a35e;">
                         <mat-icon>download</mat-icon>
                         Download
                     </button>
-                    <button mat-flat-button color="warn" (click)="deleteQuiz(element.id);">
+                    <button (click)="deleteQuiz(element.id);" color="warn" mat-flat-button>
                         <mat-icon>delete</mat-icon>
                         Delete
                     </button>
@@ -89,11 +93,11 @@
             </td>
         </ng-container>
 
-        <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" [attr.colspan]="questionBankDisplayedColumns.length">No question banks</td>
+        <tr *matNoDataRow class="mat-row">
+            <td [attr.colspan]="questionBankDisplayedColumns.length" class="mat-cell">No question banks</td>
         </tr>
-        <tr mat-header-row *matHeaderRowDef="questionBankDisplayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: questionBankDisplayedColumns;"></tr>
+        <tr *matHeaderRowDef="questionBankDisplayedColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: questionBankDisplayedColumns;" mat-row></tr>
     </table>
     <mat-paginator #questionBankPaginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
@@ -105,7 +109,7 @@
         </span>
     </div>
     <div>
-        <button (click)="clearQuizHistory()" mat-raised-button color="warn">Clear history
+        <button (click)="clearQuizHistory()" color="warn" mat-raised-button>Clear history
             <mat-icon>delete</mat-icon>
         </button>
     </div>
@@ -116,29 +120,29 @@
 
         <ng-container matColumnDef="id">
             <th *matHeaderCellDef mat-header-cell>Id.</th>
-            <td mat-cell *matCellDef="let element" style="cursor: pointer"
-                routerLink="/{{element.questionBankId}}/practice/{{element.id}}"> {{element.id}} </td>
+            <td *matCellDef="let element" mat-cell routerLink="/{{element.questionBankId}}/practice/{{element.id}}"
+                style="cursor: pointer"> {{element.id}} </td>
         </ng-container>
 
         <ng-container matColumnDef="questionBankName">
             <th *matHeaderCellDef mat-header-cell>Question bank</th>
-            <td mat-cell *matCellDef="let element"> {{element.questionBankName}} </td>
+            <td *matCellDef="let element" mat-cell> {{element.questionBankName}} </td>
         </ng-container>
 
         <ng-container matColumnDef="startedAt">
             <th *matHeaderCellDef mat-header-cell>Started at</th>
-            <td mat-cell *matCellDef="let element"> {{element.startedAt | date: 'short'}} </td>
+            <td *matCellDef="let element" mat-cell> {{element.startedAt | date: 'short'}} </td>
         </ng-container>
 
         <ng-container matColumnDef="finishedAt">
             <th *matHeaderCellDef mat-header-cell>Finished at</th>
-            <td mat-cell *matCellDef="let element">
+            <td *matCellDef="let element" mat-cell>
                 <ng-container *ngIf="element.finishedAt; else resume">
                     {{element.finishedAt | date: 'short'}}
                 </ng-container>
                 <ng-template #resume>
-                    <button mat-stroked-button routerLink="/{{element.questionBankId}}/practice/{{element.id}}"
-                            color="primary">RESUME
+                    <button color="primary" mat-stroked-button
+                            routerLink="/{{element.questionBankId}}/practice/{{element.id}}">RESUME
                     </button>
                 </ng-template>
             </td>
@@ -146,34 +150,33 @@
 
         <ng-container matColumnDef="duration">
             <th *matHeaderCellDef mat-header-cell>Duration</th>
-            <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+            <td *matCellDef="let element" mat-cell> {{element.duration}} </td>
         </ng-container>
 
         <ng-container matColumnDef="questions">
             <th *matHeaderCellDef mat-header-cell>Questions</th>
-            <td mat-cell *matCellDef="let element"> {{element.questions.length}} </td>
+            <td *matCellDef="let element" mat-cell> {{element.questions.length}} </td>
         </ng-container>
 
         <ng-container matColumnDef="correctAnswers">
             <th *matHeaderCellDef mat-header-cell>Correct answers</th>
-            <td mat-cell *matCellDef="let element"> {{element.correctAnswers}} </td>
+            <td *matCellDef="let element" mat-cell> {{element.correctAnswers}} </td>
         </ng-container>
 
         <ng-container matColumnDef="correctRatio">
             <th *matHeaderCellDef mat-header-cell>Ratio</th>
-            <td mat-cell *matCellDef="let element"> {{element.correctRatio | number}}%</td>
+            <td *matCellDef="let element" mat-cell> {{element.correctRatio | number}}%</td>
         </ng-container>
 
 
-
-        <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" [attr.colspan]="quizHistoryDisplayColumns.length">No quizzes history yet</td>
+        <tr *matNoDataRow class="mat-row">
+            <td [attr.colspan]="quizHistoryDisplayColumns.length" class="mat-cell">No quizzes history yet</td>
         </tr>
 
-        <tr mat-header-row
-            *matHeaderRowDef="quizHistoryDisplayColumns"></tr>
-        <tr mat-row
-            *matRowDef="let row; columns: quizHistoryDisplayColumns;"></tr>
+        <tr *matHeaderRowDef="quizHistoryDisplayColumns"
+            mat-header-row></tr>
+        <tr *matRowDef="let row; columns: quizHistoryDisplayColumns;"
+            mat-row></tr>
     </table>
     <mat-paginator #quizHistoryPaginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>

@@ -8,15 +8,15 @@ export class QuestionBankViewModel {
     questions: number;
     stats: IQuestionBankStats;
 
-    get coverage() {
-        return this.stats.coverage;
-    }
-
     constructor(questionBank: IQuestionBank, statistics: QuestionBankStatistics) {
         this.id = questionBank.id;
         this.name = questionBank.name;
         this.updatedAt = questionBank.editedAt ? new Date(questionBank.editedAt) : undefined;
         this.questions = questionBank.questions.length;
         this.stats = statistics.getStatisticsForQuestionBank(questionBank.id);
+    }
+
+    get coverage() {
+        return this.stats.coverage;
     }
 }

@@ -11,41 +11,49 @@
   }
 }
 
-:host ::ng-deep  {
+:host ::ng-deep {
   .answered {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
     pointer-events: none;
+
     .correct {
       .mdc-form-field {
         label {
-          color: green!important;
+          color: green !important;
           font-weight: bold;
         }
+
         .mdc-radio {
           .mdc-radio__outer-circle {
-            border-color: green!important;
-          };
+            border-color: green !important;
+          }
+        ;
+
           .mdc-radio__inner-circle {
-            border-color: green!important;
+            border-color: green !important;
           }
         }
       }
     }
+
     &.ng-invalid {
       .mat-mdc-radio-checked .mdc-form-field {
         label {
-          color: red!important;
+          color: red !important;
           font-weight: bold;
         }
+
         .mdc-radio {
           .mdc-radio__outer-circle {
-            border-color: red!important;
-          };
+            border-color: red !important;
+          }
+        ;
+
           .mdc-radio__inner-circle {
-            border-color: red!important;
+            border-color: red !important;
           }
         }
       }

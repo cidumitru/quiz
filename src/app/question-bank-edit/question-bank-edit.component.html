@@ -1,16 +1,16 @@
 <mat-form-field appearance="fill" style="width: 100%">
-  <mat-label>Your question bank name</mat-label>
-  <input (ngModelChange)="updateName($event)" [ngModel]="(questionBank$ | async)?.name" matInput
-         placeholder="Your question bank name" required>
+    <mat-label>Your question bank name</mat-label>
+    <input (ngModelChange)="updateName($event)" [ngModel]="(questionBank$ | async)?.name" matInput
+           placeholder="Your question bank name" required>
 </mat-form-field>
 
 <nav [tabPanel]="tabPanel" mat-tab-nav-bar>
-  <a #rla1="routerLinkActive" [active]="rla1.isActive" mat-tab-link routerLink="questions"
-     routerLinkActive>Questions ({{(questionBank$ | async)?.questions?.length ?? '0'}})</a>
-  <a #rla2="routerLinkActive" [active]="rla2.isActive" mat-tab-link routerLink="add" routerLinkActive>Add new
-    question</a>
-  <a #rla3="routerLinkActive" [active]="rla3.isActive" mat-tab-link routerLink="import" routerLinkActive>Import</a>
+    <a #rla1="routerLinkActive" [active]="rla1.isActive" mat-tab-link routerLink="questions"
+       routerLinkActive>Questions ({{(questionBank$ | async)?.questions?.length ?? '0'}})</a>
+    <a #rla2="routerLinkActive" [active]="rla2.isActive" mat-tab-link routerLink="add" routerLinkActive>Add new
+        question</a>
+    <a #rla3="routerLinkActive" [active]="rla3.isActive" mat-tab-link routerLink="import" routerLinkActive>Import</a>
 </nav>
 <mat-tab-nav-panel #tabPanel>
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 </mat-tab-nav-panel>

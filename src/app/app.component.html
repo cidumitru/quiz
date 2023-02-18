@@ -1,13 +1,13 @@
 <mat-toolbar color="primary">
-  <span routerLink="/" style="cursor: pointer" matTooltip="Go home">Aly's Question Bank Generator</span>
-  <span class="example-spacer"></span>
+    <span matTooltip="Go home" routerLink="/" style="cursor: pointer">Aly's Question Bank Generator</span>
+    <span class="example-spacer"></span>
     <button mat-button routerLink="/statistics">Statistics</button>
 </mat-toolbar>
 
 <div class="content">
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 </div>
 
 <div style="width: 100%; text-align: center; margin-bottom: 2rem;">
-  {{appConfig.config.build_date}}
+    {{appConfig.config.build_date}}
 </div>

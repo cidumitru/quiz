@@ -1,34 +1,36 @@
 <ng-container *ngIf="(quiz$ | async)?.questions?.length === 0; else search">
-  <h1>No questions added</h1>
+    <h1>No questions added</h1>
 </ng-container>
 
 <ng-template #search>
-  <mat-form-field  appearance="fill" style="width: 100%">
-    <mat-label>Search by question title</mat-label>
-    <input matInput [formControl]="searchControl">
-  </mat-form-field>
+    <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label>Search by question title</mat-label>
+        <input [formControl]="searchControl" matInput>
+    </mat-form-field>
 </ng-template>
 
 <cdk-virtual-scroll-viewport itemSize="100" style="height: 70vh">
-  <mat-card *cdkVirtualFor="let question of questions$ | async; let i = index" style="margin-bottom: 1rem;">
-    <mat-card-header style="display: block">
-      <mat-card-subtitle style="display:flex;justify-content: space-between;">
-        <div>
-          Question index: {{i + 1}} | questionId: {{question.id}} |
-        </div>
-        <mat-icon color="warn" style="cursor: pointer" (click)="deleteQuestion(question)" matTooltip="Delete">delete</mat-icon>
-      </mat-card-subtitle>
-      <mat-card-title>
-        {{question.question}}
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-actions align="start">
-      <mat-radio-group (change)="setCorrectAnswer(question.id, $event)">
-        <mat-radio-button *ngFor="let option of question.answers"
-                          [checked]="option.correct"
-                          [value]="option.id"
-                          matTooltip="Mark as correct">{{option.text}}</mat-radio-button>
-      </mat-radio-group>
-    </mat-card-actions>
-  </mat-card>
+    <mat-card *cdkVirtualFor="let question of questions$ | async; let i = index" style="margin-bottom: 1rem;">
+        <mat-card-header style="display: block">
+            <mat-card-subtitle style="display:flex;justify-content: space-between;">
+                <div>
+                    Question index: {{i + 1}} | questionId: {{question.id}} |
+                </div>
+                <mat-icon (click)="deleteQuestion(question)" color="warn" matTooltip="Delete" style="cursor: pointer">
+                    delete
+                </mat-icon>
+            </mat-card-subtitle>
+            <mat-card-title>
+                {{question.question}}
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-actions align="start">
+            <mat-radio-group (change)="setCorrectAnswer(question.id, $event)">
+                <mat-radio-button *ngFor="let option of question.answers"
+                                  [checked]="option.correct"
+                                  [value]="option.id"
+                                  matTooltip="Mark as correct">{{option.text}}</mat-radio-button>
+            </mat-radio-group>
+        </mat-card-actions>
+    </mat-card>
 </cdk-virtual-scroll-viewport>

@@ -58,10 +58,11 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     public questionBanksDs = new MatTableDataSource();
     public quizHistoryDs = new MatTableDataSource(this.quiz.quizzesArr.map(quiz => new QuizViewModel(quiz)));
 
-    public questionBankDisplayedColumns = ['name', 'questions','stats','coverage', 'updatedAt', 'actions'];
-    public quizHistoryDisplayColumns =  ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers', 'correctRatio'];
+    public questionBankDisplayedColumns = ['name', 'questions', 'stats', 'coverage', 'updatedAt', 'actions'];
+    public quizHistoryDisplayColumns = ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers', 'correctRatio'];
 
     public _qbSubscription: Subscription;
+
     constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService, private stats: QuestionBankStatistics) {
         this._qbSubscription = this.questionBank.questionBankArr$.pipe(
             switchMap(questionBanks => this.questionBankFilter.valueChanges.pipe(
@@ -69,8 +70,8 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
                     startWith(""),
                     map(searchText => questionBanks.filter(qb => qb.name.toLowerCase().includes(searchText?.toLowerCase() ?? "")).map(qb => new QuestionBankViewModel(qb, stats))),
                     tap(qbs => this.questionBanksDs.data = qbs)
-            )
-        )).subscribe()
+                )
+            )).subscribe()
     }
 
     ngAfterViewInit(): void {
@@ -134,6 +135,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
 
         this.router.navigate([questionBankId, 'practice'], {queryParams: {size: quizSize}}).then();
     }
+
     ngOnDestroy(): void {
         this._qbSubscription.unsubscribe();
     }

@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {QuestionBankService} from "./question-bank.service";
 import {IAnsweredQuestion, QuizService} from "./quiz.service";
-import {find, groupBy, isNil, mapValues, reduce, uniq, uniqBy} from "lodash";
+import {groupBy, isNil, mapValues, reduce, uniq, uniqBy} from "lodash";
 import {eachDayOfInterval, format, isAfter, isBefore} from "date-fns";
 
 export interface IQuestionBankStats {
@@ -10,6 +10,7 @@ export interface IQuestionBankStats {
     correctAnswers: number;
     coverage: number;
 }
+
 @Injectable({
     providedIn: "root"
 })
@@ -25,11 +26,11 @@ export class QuestionBankStatistics {
         const coverage = ((correctlyAnsweredQuestions.length / this.questionBanks.questionBanks[questionBankId]?.questions.length) * 100) || 0;
 
         return allQuestions.reduce((acc, question) => {
-            if(question.answer) {
+            if (question.answer) {
                 acc.totalAnswers++;
                 const providedAnswer = question.answers.find(a => !isNil(a.correct));
 
-                if(providedAnswer) acc.answeredQuestions++;
+                if (providedAnswer) acc.answeredQuestions++;
                 if (question.answer.correct) acc.correctAnswers++;
             }
             return acc;
@@ -37,7 +38,10 @@ export class QuestionBankStatistics {
     }
 
     getQuestionsByDay(start: Date, end: Date): { [key: string]: IAnsweredQuestion[] } {
-        const daysOfWeek = eachDayOfInterval({start, end}).map(day => format(day, "dd-MM-yyyy")).reduce((acc: Record<string, IAnsweredQuestion[]>, date) => ({
+        const daysOfWeek = eachDayOfInterval({
+            start,
+            end
+        }).map(day => format(day, "dd-MM-yyyy")).reduce((acc: Record<string, IAnsweredQuestion[]>, date) => ({
             ...acc,
             [date]: []
         }), {});
@@ -54,7 +58,7 @@ export class QuestionBankStatistics {
             return quiz.finishedAt && isAfter(new Date(quiz.finishedAt), startDate) && isBefore(new Date(quiz.finishedAt), endDate);
         });
 
-        const unfilteredResult =  mapValues(groupBy(quizzes, quizz => quizz.questionBankId), quizzes => {
+        const unfilteredResult = mapValues(groupBy(quizzes, quizz => quizz.questionBankId), quizzes => {
             const questions = quizzes.map(quiz => quiz.questions).flat();
             const answeredQuestions = uniq(questions.filter(q => q.answer));
             const questionBank = this.questionBanks.questionBanks[quizzes[0].questionBankId];
@@ -75,7 +79,7 @@ export class QuestionBankStatistics {
                 return acc;
             }
             if (value.answeredQuestions.length > 0) {
-               acc[key] = value;
+                acc[key] = value;
             }
             return acc;
         }, {});
