@@ -5,9 +5,19 @@
         </span>
     </div>
     <div>
-        <button color="warn" mat-raised-button>Clear history
-            <mat-icon>delete</mat-icon>
+        <button color="warn" mat-raised-button style="margin-right: 1rem;">
+            <mat-icon>delete</mat-icon> Clear history
         </button>
+        <button mat-raised-button class="icon-only" mat-button [matMenuTriggerFor]="menu">
+            <mat-icon>settings</mat-icon> Columns
+        </button>
+        <mat-menu #menu="matMenu">
+            <mat-selection-list>
+                <mat-list-option *ngFor="let column of tableColumnOptions" [(selected)]="column.display" (click)="$event.stopPropagation()">
+                    {{column.name}}
+                </mat-list-option>
+            </mat-selection-list>
+        </mat-menu>
     </div>
 </div>
 <div class="mat-elevation-z8 table-container">
@@ -69,12 +79,12 @@
 
 
         <tr *matNoDataRow class="mat-row">
-            <td [attr.colspan]="quizHistoryDisplayColumns.length" class="mat-cell">No quizzes history yet</td>
+            <td [attr.colspan]="displayedColumns.length" class="mat-cell">No quizzes history yet</td>
         </tr>
 
-        <tr *matHeaderRowDef="quizHistoryDisplayColumns"
+        <tr *matHeaderRowDef="displayedColumns"
             mat-header-row></tr>
-        <tr *matRowDef="let row; columns: quizHistoryDisplayColumns;"
+        <tr *matRowDef="let row; columns: displayedColumns;"
             mat-row></tr>
     </table>
     <mat-paginator #quizHistoryPaginator [pageSizeOptions]="[15, 30, 50]"></mat-paginator>

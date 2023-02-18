@@ -19,9 +19,11 @@ import {MatSort, MatSortModule} from "@angular/material/sort";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {StatisticsService} from "../statistics/statistics.service";
 import {MatInputModule} from "@angular/material/input";
-import {FormControl, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatMenuModule} from "@angular/material/menu";
 import {QuestionBankViewModel} from "./question-bank-view.model";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatListModule} from "@angular/material/list";
 
 
 @Component({
@@ -45,7 +47,10 @@ import {QuestionBankViewModel} from "./question-bank-view.model";
         MatSortModule,
         MatInputModule,
         ReactiveFormsModule,
-        MatMenuModule
+        MatMenuModule,
+        MatCheckboxModule,
+        FormsModule,
+        MatListModule
     ]
 })
 export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
@@ -54,7 +59,19 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
     public questionBankFilter = new FormControl("");
     public questionBanksDs = new MatTableDataSource();
-    public questionBankDisplayedColumns = ['name', 'questions', 'stats', 'coverage', 'updatedAt', 'actions'];
+
+    public tableColumnOptions: {name: string, display: boolean}[] = [
+        {name: 'name', display: true},
+        {name: 'questions', display: true},
+        {name: 'stats', display: false},
+        {name: 'coverage', display: true},
+        {name: 'updatedAt', display: true},
+        {name: 'actions', display: true}
+    ]
+
+    public get displayedColumns() {
+        return this.tableColumnOptions.filter(o => o.display).map(o => o.name);
+    }
     public _qbSubscription: Subscription;
 
     constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService, private stats: StatisticsService) {

@@ -4,13 +4,23 @@
       Question banks
     </span>
     </div>
-    <div>
-        <button (click)="uploadQuestionBank()" mat-raised-button style="margin-right: 1rem">Import
-            <mat-icon>upload_file</mat-icon>
+    <div class="context-buttons">
+        <button (click)="uploadQuestionBank()" mat-raised-button>
+            Import<mat-icon>upload_file</mat-icon>
         </button>
-        <button (click)="newQuestionBank()" color="primary" mat-raised-button>New
-            <mat-icon>add</mat-icon>
+        <button (click)="newQuestionBank()" color="primary" mat-raised-button>
+            New<mat-icon>add</mat-icon>
         </button>
+        <button mat-raised-button class="icon-only" mat-button [matMenuTriggerFor]="menu">
+            <mat-icon>settings</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" [overlapTrigger]="false">
+            <mat-selection-list>
+                <mat-list-option *ngFor="let column of tableColumnOptions" [(selected)]="column.display" (click)="$event.stopPropagation()">
+                    {{column.name}}
+                </mat-list-option>
+            </mat-selection-list>
+        </mat-menu>
     </div>
 </div>
 
@@ -24,10 +34,11 @@
 
         <ng-container matColumnDef="name">
             <th *matHeaderCellDef mat-header-cell>
-                <mat-form-field appearance="fill" class="no-padding">
-                    <mat-label>Search by name</mat-label>
-                    <input [formControl]="questionBankFilter" matInput>
-                </mat-form-field>
+<!--                <mat-form-field appearance="fill" class="no-padding">-->
+<!--                    <mat-label>Search by name</mat-label>-->
+<!--                    <input [formControl]="questionBankFilter" matInput>-->
+<!--                </mat-form-field>-->
+                Name
             </th>
             <td *matCellDef="let element" mat-cell> {{element.name}} </td>
         </ng-container>
@@ -66,9 +77,10 @@
                     <button [disabled]="element.questions.length === 0"
                             [matMenuTriggerFor]="menu"
                             color="primary"
+                            matTooltip="Practice"
+                            class="icon-only"
                             mat-flat-button>
                         <mat-icon>school</mat-icon>
-                        Practice
                     </button>
                     <mat-menu #menu="matMenu">
                         <button (click)="practiceQuiz(element.id, size)" *ngFor="let size of [25, 50, 100]"
@@ -76,28 +88,24 @@
                         </button>
                     </mat-menu>
 
-                    <button color="accent" mat-flat-button routerLink="{{element.id}}">
+                    <button color="accent" class="icon-only" mat-flat-button routerLink="{{element.id}}" matTooltip="Edit">
                         <mat-icon>edit</mat-icon>
-                        Edit
                     </button>
-                    <button (click)="downloadQuestionBank(element.id);" mat-flat-button
-                            style="color: white; background-color: #46a35e;">
+                    <button class="download icon-only" (click)="downloadQuestionBank(element.id);" mat-flat-button matTooltip="Download question bank" >
                         <mat-icon>download</mat-icon>
-                        Download
                     </button>
-                    <button (click)="deleteQuiz(element.id);" color="warn" mat-flat-button>
+                    <button class="icon-only" (click)="deleteQuiz(element.id);" color="warn" mat-flat-button matTooltip="Delete">
                         <mat-icon>delete</mat-icon>
-                        Delete
                     </button>
                 </div>
             </td>
         </ng-container>
 
         <tr *matNoDataRow class="mat-row">
-            <td [attr.colspan]="questionBankDisplayedColumns.length" class="mat-cell">No question banks</td>
+            <td [attr.colspan]="displayedColumns.length" class="mat-cell">No question banks</td>
         </tr>
-        <tr *matHeaderRowDef="questionBankDisplayedColumns" mat-header-row></tr>
-        <tr *matRowDef="let row; columns: questionBankDisplayedColumns;" mat-row></tr>
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
     </table>
     <mat-paginator #questionBankPaginator [pageSizeOptions]="[15, 30, 50]"></mat-paginator>
 </div>

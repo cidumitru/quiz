@@ -18,14 +18,27 @@ interface QuestionBankSelectOption {
     styleUrls: ['./quiz-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class QuizListComponent{
+export class QuizListComponent {
 
     questionBankFilter = new FormControl<QuestionBankSelectOption | undefined>(undefined);
-
     questionBanks: QuestionBankSelectOption[] = this.qb.questionBankArr.map(qb => ({id: qb.id, name: qb.name}));
     @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-    public quizHistoryDisplayColumns = ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers', 'correctRatio'];
     public quizHistoryDataSource: MatTableDataSource<QuizViewModel> = new MatTableDataSource<QuizViewModel>();
+
+    public tableColumnOptions: {name: string, display: boolean}[] = [
+        {name: 'id', display: false},
+        {name: 'questionBankName', display: true},
+        {name: 'startedAt', display: true},
+        {name: 'finishedAt', display: true},
+        {name: 'duration', display: false},
+        {name: 'questions', display: true},
+        {name: 'correctAnswers', display: false},
+        {name: 'correctRatio', display: true},
+    ]
+
+    public get displayedColumns() {
+        return this.tableColumnOptions.filter(o => o.display).map(o => o.name);
+    }
 
     constructor(private quiz: QuizService, private qb: QuestionBankService, private cdr: ChangeDetectorRef) {}
 

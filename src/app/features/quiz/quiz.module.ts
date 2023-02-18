@@ -10,6 +10,8 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
 import {ReactiveFormsModule} from "@angular/forms";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatListModule} from "@angular/material/list";
 
 
 @NgModule({
@@ -36,7 +38,9 @@ import {ReactiveFormsModule} from "@angular/forms";
         MatButtonModule,
         MatOptionModule,
         MatSelectModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatMenuModule,
+        MatListModule
     ],
     exports: [RouterModule]
 })

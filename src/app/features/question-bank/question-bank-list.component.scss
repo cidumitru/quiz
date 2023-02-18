@@ -1,13 +1,29 @@
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 2rem;
+  gap: 1rem;
+  button {
+    &.download {
+      color: white;
+      background-color: #46a35e;
+    }
+  }
 }
 
-.mat-success {
-  background-color: green;
-  color: #fff;
+button {
+  &.icon-only {
+    min-width: 3rem;
+    mat-icon {
+      margin: auto 0;
+    }
+  }
 }
+
+.context-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
 
 .table-container {
   width: 100%;
