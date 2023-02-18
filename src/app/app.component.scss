@@ -3,15 +3,21 @@
   margin: 0 auto;
   margin-top: 2rem;
   padding-bottom: 2rem;
-  &.mobile {
-    width: 90%;
-  }
 }
 
 .example-spacer {
   flex: 1 1 auto;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 
 .sidenav-container {
   /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
@@ -29,5 +35,9 @@
     position: fixed;
     /* Make sure the toolbar will stay on top of the content as it scrolls past. */
     z-index: 2;
+  }
+  .content {
+    margin-top: 6rem;
+    width: 90%;
   }
 }
