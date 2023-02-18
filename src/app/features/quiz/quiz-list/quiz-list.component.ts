@@ -3,8 +3,14 @@ import {MatTableDataSource} from "@angular/material/table";
 import {QuizViewModel} from "./quiz-view.model";
 import {QuizService} from "../quiz.service";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {startWith, tap} from "rxjs";
+import {combineLatest, merge, startWith, tap} from "rxjs";
 import {QuestionBankService} from "../../question-bank/question-bank.service";
+import {FormControl} from "@angular/forms";
+
+interface QuestionBankSelectOption {
+    id: string;
+    name: string;
+}
 
 @Component({
     selector: 'app-quiz-list',
@@ -13,8 +19,11 @@ import {QuestionBankService} from "../../question-bank/question-bank.service";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizListComponent{
-    @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
+    questionBankFilter = new FormControl<QuestionBankSelectOption | undefined>(undefined);
+
+    questionBanks: QuestionBankSelectOption[] = this.qb.questionBankArr.map(qb => ({id: qb.id, name: qb.name}));
+    @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
     public quizHistoryDisplayColumns = ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers', 'correctRatio'];
     public quizHistoryDataSource: MatTableDataSource<QuizViewModel> = new MatTableDataSource<QuizViewModel>();
 
@@ -22,10 +31,9 @@ export class QuizListComponent{
 
 
     ngAfterViewInit(): void {
-        this.paginator.page.pipe(
-            startWith({pageSize: this.paginator.pageSize, length: 0, pageIndex: this.paginator.pageIndex} satisfies PageEvent),
-            tap((page) => {
-                const range = this.quiz.getQuizzes(page.pageIndex * page.pageSize, page.pageSize);
+        combineLatest([this.questionBankFilter.valueChanges.pipe(startWith(undefined)), this.paginator.page.pipe(startWith({pageSize: this.paginator.pageSize, length: 0, pageIndex: this.paginator.pageIndex} satisfies PageEvent))]).pipe(
+            tap(([selectedQuestionBank, page]) => {
+                const range = this.quiz.getQuizzes({ questionBankId: selectedQuestionBank?.id, skip: page.pageIndex * page.pageSize, take: page.pageSize });
 
                 this.paginator.length = range.total;
                 this.quizHistoryDataSource.data = range.items.map(q => new QuizViewModel(q, this.qb.questionBanks[q.questionBankId]?.name));

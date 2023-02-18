@@ -7,3 +7,10 @@
     width: 100%;
   }
 }
+:host ::ng-deep {
+  .no-padding {
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none !important;
+    }
+  }
+}

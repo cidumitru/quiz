@@ -20,7 +20,11 @@
         </ng-container>
 
         <ng-container matColumnDef="questionBankName">
-            <th *matHeaderCellDef mat-header-cell>Question bank</th>
+            <th *matHeaderCellDef mat-header-cell>
+                    <mat-select [formControl]="questionBankFilter" placeholder="Question bank">
+                        <mat-option *ngFor="let questionBank of questionBanks" [value]="questionBank">{{questionBank.name}}</mat-option>
+                    </mat-select>
+            </th>
             <td *matCellDef="let element" mat-cell> {{element.questionBankName}} </td>
         </ng-container>
 

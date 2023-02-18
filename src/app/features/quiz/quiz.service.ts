@@ -87,11 +87,21 @@ export class QuizService {
         return this.quizzes[id];
     }
 
-    getQuizzes(skip: number, take: number): { items: IQuiz[], total: number } {
+    getQuizzes({skip, take, questionBankId}: IGetQuizzesParams): { items: IQuiz[], total: number } {
+        if (questionBankId) {
+            const filteredQuizzes = this.quizzesArr.filter(quiz => quiz.questionBankId === questionBankId);
+            return { items: filteredQuizzes.slice(skip, skip + take), total: filteredQuizzes.length}
+        }
         return { items: this.quizzesArr.slice(skip, skip + take), total: this.quizzesArr.length}
     }
 
     clear() {
         this._quizzes.next({});
     }
+}
+
+export interface IGetQuizzesParams {
+    take: number;
+    skip: number;
+    questionBankId?: string;
 }
