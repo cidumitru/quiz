@@ -51,7 +51,9 @@
                             mat-menu-item>{{size}} Questions
                     </button>
                 </mat-menu>
-                {{element.name}}
+                <span routerLink="{{element.id}}" style="cursor:pointer">
+                    {{element.name}}
+                </span>
             </td>
         </ng-container>
 
@@ -86,9 +88,6 @@
             <th *matHeaderCellDef mat-header-cell style="text-align: right"> Actions</th>
             <td *matCellDef="let element" mat-cell width="35%">
                 <div class="actions">
-                    <button color="accent" class="icon-only" mat-flat-button routerLink="{{element.id}}" matTooltip="Edit">
-                        <mat-icon>edit</mat-icon>
-                    </button>
                     <button class="download icon-only" (click)="downloadQuestionBank(element.id);" mat-flat-button matTooltip="Download question bank" >
                         <mat-icon>download</mat-icon>
                     </button>
