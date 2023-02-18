@@ -19,4 +19,8 @@ export class QuestionBankViewModel {
     get coverage() {
         return this.stats.coverage;
     }
+
+    get averageRatio() {
+        return this.stats.averageRatio;
+    }
 }

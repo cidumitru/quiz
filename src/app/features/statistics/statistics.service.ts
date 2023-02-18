@@ -9,6 +9,7 @@ export interface IQuestionBankStats {
     answeredQuestions: number;
     correctAnswers: number;
     coverage: number;
+    averageRatio: number;
 }
 
 @Injectable({
@@ -19,7 +20,12 @@ export class StatisticsService {
     }
 
     getStatisticsForQuestionBank(questionBankId: string): IQuestionBankStats {
-        const allQuestions = this.quizzes.quizzesArr.filter(quiz => quiz.questionBankId === questionBankId).map(quiz => quiz.questions).flat();
+        const quizzes = this.quizzes.quizzesArr.filter(quiz => quiz.questionBankId === questionBankId);
+        const allQuestions = quizzes.map(quiz => quiz.questions).flat();
+
+        const averageRatio = (quizzes.filter(quiz => quiz.questions.length > 0 && quiz.questions.every(q => q.answer))
+            .map(quiz => (quiz.questions.filter(q => q.answer?.correct).length / quiz.questions.length) * 100)
+            .reduce((acc, ratio) => acc + ratio, 0) / quizzes.length) || 0;
 
         const correctlyAnsweredQuestions = uniqBy(allQuestions.filter(q => q.answer?.correct), q => q.id);
 
@@ -34,7 +40,7 @@ export class StatisticsService {
                 if (question.answer.correct) acc.correctAnswers++;
             }
             return acc;
-        }, {totalAnswers: 0, answeredQuestions: 0, correctAnswers: 0, coverage});
+        }, {totalAnswers: 0, answeredQuestions: 0, correctAnswers: 0, coverage, averageRatio});
     }
 
     getQuestionsByDay(start: Date, end: Date): { [key: string]: IAnsweredQuestion[] } {

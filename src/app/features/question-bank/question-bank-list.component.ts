@@ -65,6 +65,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
         {name: 'questions', display: true},
         {name: 'stats', display: false},
         {name: 'coverage', display: true},
+        {name: 'avgRatio', display: true},
         {name: 'updatedAt', display: true},
         {name: 'actions', display: false}
     ]

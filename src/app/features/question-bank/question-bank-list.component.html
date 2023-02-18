@@ -78,10 +78,13 @@
         </ng-container>
 
         <ng-container matColumnDef="coverage">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header
-                matTooltip="Percentage of questions you provided a correct answer at least once.">Coverage
-            </th>
-            <td *matCellDef="let element" mat-cell>{{element.coverage  | number}}%</td>
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>Coverage</th>
+            <td *matCellDef="let element" mat-cell matTooltip="Percentage of questions you provided a correct answer.">{{element.coverage  | number}}%</td>
+        </ng-container>
+
+        <ng-container matColumnDef="avgRatio">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>Avg Ratio</th>
+            <td *matCellDef="let element" mat-cell>{{element.averageRatio  | number}}%</td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
