@@ -3,7 +3,7 @@ import bb, {bar} from "billboard.js";
 import {StatisticsService} from "./statistics.service";
 import {entries} from "lodash";
 import {addDays, endOfToday, parse} from "date-fns";
-import {IAnsweredQuestion} from "../quiz-list/quiz.service";
+import {IAnsweredQuestion} from "../quiz/quiz.service";
 
 @Component({
     selector: 'app-statistics',

@@ -1,4 +1,4 @@
-import {IAnswer} from "../../services/question-bank.models";
+import {IAnswer} from "../../question-bank/question-bank.models";
 import {IAnsweredQuestion} from "../quiz.service";
 
 export class QuestionViewModel {

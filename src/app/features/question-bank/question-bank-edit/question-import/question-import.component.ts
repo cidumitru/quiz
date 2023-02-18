@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
-import {QuestionBankService} from "../../services/question-bank.service";
+import {QuestionBankService} from "../../question-bank.service";
 import {ActivatedRoute} from "@angular/router";
 import {MatCardModule} from "@angular/material/card";
 import {MatInputModule} from "@angular/material/input";

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {map, Observable, startWith, switchMap} from "rxjs";
-import {QuestionBankService} from "../../services/question-bank.service";
+import {QuestionBankService} from "../../question-bank.service";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {MatRadioChange, MatRadioModule} from "@angular/material/radio";
@@ -8,7 +8,7 @@ import {MatCardModule} from "@angular/material/card";
 import {CommonModule} from "@angular/common";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {ScrollingModule} from "@angular/cdk/scrolling";
-import {IQuestion, IQuestionBank} from "../../services/question-bank.models";
+import {IQuestion, IQuestionBank} from "../../question-bank.models";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";

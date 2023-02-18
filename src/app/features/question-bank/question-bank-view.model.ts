@@ -1,5 +1,5 @@
 import {IQuestionBankStats, StatisticsService} from "../statistics/statistics.service";
-import {IQuestionBank} from "../services/question-bank.models";
+import {IQuestionBank} from "./question-bank.models";
 
 export class QuestionBankViewModel {
     id: string;

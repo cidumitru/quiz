@@ -1,9 +1,9 @@
 import {ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
 import {startWith, Subscription} from "rxjs";
-import {QuestionBankService} from "../../services/question-bank.service";
+import {QuestionBankService} from "../../question-bank/question-bank.service";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
 import {entries, keyBy, mapValues, values} from 'lodash';
-import {IQuestionBank} from "../../services/question-bank.models";
+import {IQuestionBank} from "../../question-bank/question-bank.models";
 import {CommonModule} from "@angular/common";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";

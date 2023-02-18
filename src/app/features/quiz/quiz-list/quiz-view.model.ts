@@ -1,5 +1,5 @@
 import {IAnsweredQuestion, IQuiz} from "../quiz.service";
-import {IAnswer} from "../../services/question-bank.models";
+import {IAnswer} from "../../question-bank/question-bank.models";
 import {isNil} from "lodash";
 import {formatDuration, intervalToDuration} from "date-fns";
 

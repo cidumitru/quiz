@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {QuestionBankService} from "../services/question-bank.service";
+import {QuestionBankService} from "../question-bank.service";
 import {Observable} from "rxjs";
-import {IQuestionBank} from "../services/question-bank.models";
+import {IQuestionBank} from "../question-bank.models";
 
 @Component({
     selector: 'app-questionBank-edit',

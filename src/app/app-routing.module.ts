@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {QuestionBankListComponent} from "./question-bank-list/question-bank-list.component";
-import {QuestionBankEditModule} from "./question-bank-edit/question-bank-edit.module";
-import {StatisticsComponent} from "./statistics/statistics.component";
-import {QuizModule} from "./quiz-list/quiz.module";
+import {QuestionBankListComponent} from "./features/question-bank/question-bank-list.component";
+import {QuestionBankEditModule} from "./features/question-bank/question-bank-edit/question-bank-edit.module";
+import {StatisticsComponent} from "./features/statistics/statistics.component";
+import {QuizModule} from "./features/quiz/quiz.module";
 
 const routes: Routes = [
     {
@@ -12,7 +12,7 @@ const routes: Routes = [
     },
     {
         path: "quizzes",
-        loadChildren: () => import("./quiz-list/quiz.module").then(m => QuizModule)
+        loadChildren: () => import("./features/quiz/quiz.module").then(m => QuizModule)
     },
     {
         path: "statistics",
@@ -20,7 +20,7 @@ const routes: Routes = [
     },
     {
         path: ":id",
-        loadChildren: () => import("./question-bank-edit/question-bank-edit.module").then(m => QuestionBankEditModule)
+        loadChildren: () => import("./features/question-bank/question-bank-edit/question-bank-edit.module").then(m => QuestionBankEditModule)
     }
 ];
 

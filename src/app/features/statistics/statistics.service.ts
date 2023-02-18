@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
-import {QuestionBankService} from "../services/question-bank.service";
-import {IAnsweredQuestion, QuizService} from "../quiz-list/quiz.service";
+import {QuestionBankService} from "../question-bank/question-bank.service";
+import {IAnsweredQuestion, QuizService} from "../quiz/quiz.service";
 import {groupBy, isNil, mapValues, reduce, uniq, uniqBy} from "lodash";
 import {eachDayOfInterval, format, isAfter, isBefore} from "date-fns";
 

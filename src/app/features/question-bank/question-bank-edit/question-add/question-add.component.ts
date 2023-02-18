@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {QuestionBankService} from "../../services/question-bank.service";
+import {QuestionBankService} from "../../question-bank.service";
 import {ActivatedRoute} from "@angular/router";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";

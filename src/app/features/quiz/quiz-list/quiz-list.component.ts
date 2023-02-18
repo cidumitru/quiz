@@ -4,7 +4,7 @@ import {QuizViewModel} from "./quiz-view.model";
 import {QuizService} from "../quiz.service";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {startWith, tap} from "rxjs";
-import {QuestionBankService} from "../../services/question-bank.service";
+import {QuestionBankService} from "../../question-bank/question-bank.service";
 
 @Component({
     selector: 'app-quiz-list',
