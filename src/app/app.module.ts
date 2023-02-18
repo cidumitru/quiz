@@ -9,14 +9,15 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {QuestionBankService} from "./services/question-bank.service";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import {QuizService} from "./services/quiz.service";
+import {QuizService} from "./quiz-list/quiz.service";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
 import {ReactiveFormsModule} from "@angular/forms";
 import {StatisticsComponent} from './statistics/statistics.component';
 import {HttpClientModule} from "@angular/common/http";
 import {AppConfig} from "./services/app-config.service";
-import { QuizListComponent } from './quiz-list/quiz-list/quiz-list.component';
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatListModule} from "@angular/material/list";
 
 @NgModule({
     declarations: [
@@ -34,7 +35,9 @@ import { QuizListComponent } from './quiz-list/quiz-list/quiz-list.component';
         MatSelectModule,
         MatDialogModule,
         ReactiveFormsModule,
-        HttpClientModule
+        HttpClientModule,
+        MatSidenavModule,
+        MatListModule
     ],
     providers: [
         {

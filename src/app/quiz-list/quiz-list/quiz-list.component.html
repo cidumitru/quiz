@@ -5,13 +5,13 @@
         </span>
     </div>
     <div>
-        <button  color="warn" mat-raised-button>Clear history
+        <button color="warn" mat-raised-button>Clear history
             <mat-icon>delete</mat-icon>
         </button>
     </div>
 </div>
 <div class="mat-elevation-z8 table-container">
-    <table [dataSource]="quizHistoryDs" class="mat-elevation-z8" mat-table>
+    <table [dataSource]="quizHistoryDataSource" class="mat-elevation-z8" mat-table>
 
         <ng-container matColumnDef="id">
             <th *matHeaderCellDef mat-header-cell>Id.</th>

@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {AppConfig} from "./services/app-config.service";
+import {MediaMatcher} from "@angular/cdk/layout";
 
 @Component({
     selector: 'app-root',
@@ -9,6 +10,17 @@ import {AppConfig} from "./services/app-config.service";
 export class AppComponent {
     title = 'quizz';
 
-    constructor(public appConfig: AppConfig) {
+    mobileQuery: MediaQueryList;
+
+    private _mobileQueryListener: () => void;
+
+    constructor(changeDetectorRef: ChangeDetectorRef, public media: MediaMatcher, public appConfig: AppConfig) {
+        this.mobileQuery = media.matchMedia('(max-width: 600px)');
+        this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+        this.mobileQuery.addListener(this._mobileQueryListener);
+    }
+
+    ngOnDestroy(): void {
+        this.mobileQuery.removeListener(this._mobileQueryListener);
     }
 }

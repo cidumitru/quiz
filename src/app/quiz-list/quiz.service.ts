@@ -1,11 +1,11 @@
 import {Injectable} from "@angular/core";
-import {IAnswer, IQuestion} from "./question-bank.models";
+import {IAnswer, IQuestion} from "../services/question-bank.models";
 
 import * as localForage from "localforage";
 import {BehaviorSubject, map, skip} from "rxjs";
 import {sampleSize, values} from "lodash";
 import {v4 as uuidv4} from 'uuid';
-import {QuestionBankService} from "./question-bank.service";
+import {QuestionBankService} from "../services/question-bank.service";
 
 export interface IAnsweredQuestion extends IQuestion {
     answer?: IAnswer;
@@ -85,6 +85,10 @@ export class QuizService {
 
     getQuiz(id: string) {
         return this.quizzes[id];
+    }
+
+    getQuizzes(skip: number, take: number): { items: IQuiz[], total: number } {
+        return { items: this.quizzesArr.slice(skip, skip + take), total: this.quizzesArr.length}
     }
 
     clear() {

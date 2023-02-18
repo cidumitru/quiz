@@ -1,5 +1,5 @@
 import {IAnswer} from "../../services/question-bank.models";
-import {IAnsweredQuestion} from "../../services/quiz.service";
+import {IAnsweredQuestion} from "../quiz.service";
 
 export class QuestionViewModel {
     public id: string;

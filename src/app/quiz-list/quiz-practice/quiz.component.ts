@@ -14,7 +14,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import {QuizService} from "../../services/quiz.service";
+import {QuizService} from "../quiz.service";
 import {QuizModel} from "./quiz.model";
 import {QuestionViewModel} from "./question.view-model";
 
@@ -63,7 +63,7 @@ export class QuizComponent implements OnDestroy {
             if (!quizId) throw new Error("quizId is required for resuming quiz");
 
             this.quiz = new QuizModel(this.quizService.getQuiz(quizId));
-            if(!this.quiz) throw new Error("Quiz not found");
+            if (!this.quiz) throw new Error("Quiz not found");
 
             this.questionBank = this.questionBankService.questionBanks[this.quiz.questionBankId];
         }
@@ -118,7 +118,12 @@ export class QuizComponent implements OnDestroy {
 
     retry() {
         this.router.navigate(['quizzes']).then(() => {
-            this.router.navigate(['quizzes', 'practice'], {queryParams: {size: this.quiz.questions.length, questionBankId: this.questionBank.id}}).then();
+            this.router.navigate(['quizzes', 'practice'], {
+                queryParams: {
+                    size: this.quiz.questions.length,
+                    questionBankId: this.questionBank.id
+                }
+            }).then();
             window.scrollTo(0, 0);
         });
     }

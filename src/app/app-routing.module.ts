@@ -1,10 +1,8 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {QuestionBankListComponent} from "./question-bank-list/question-bank-list.component";
-import {QuizComponent} from "./quiz-list/quiz-practice/quiz.component";
 import {QuestionBankEditModule} from "./question-bank-edit/question-bank-edit.module";
 import {StatisticsComponent} from "./statistics/statistics.component";
-import {QuizListComponent} from "./quiz-list/quiz-list/quiz-list.component";
 import {QuizModule} from "./quiz-list/quiz.module";
 
 const routes: Routes = [

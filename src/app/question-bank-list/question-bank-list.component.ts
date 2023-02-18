@@ -13,7 +13,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {CommonModule} from "@angular/common";
 import {questionBankScheme} from "../services/question-bank.models";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import {QuizService} from "../services/quiz.service";
+import {QuizService} from "../quiz-list/quiz.service";
 import {debounceTime, map, startWith, Subscription, switchMap, tap} from "rxjs";
 import {MatSort, MatSortModule} from "@angular/material/sort";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
@@ -125,7 +125,12 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     practiceQuiz(questionBankId: string, quizSize: number): void {
         if (isNaN(quizSize)) return;
 
-        this.router.navigate(['quizzes', 'practice'], {queryParams: {size: quizSize, questionBankId: questionBankId}}).then();
+        this.router.navigate(['quizzes', 'practice'], {
+            queryParams: {
+                size: quizSize,
+                questionBankId: questionBankId
+            }
+        }).then();
     }
 
     ngOnDestroy(): void {

@@ -1,7 +1,5 @@
-import {IAnsweredQuestion, IQuiz} from "../../services/quiz.service";
+import {IAnsweredQuestion, IQuiz} from "../quiz.service";
 import {IAnswer} from "../../services/question-bank.models";
-import {inject} from "@angular/core";
-import {QuestionBankService} from "../../services/question-bank.service";
 import {isNil} from "lodash";
 import {formatDuration, intervalToDuration} from "date-fns";
 
@@ -21,10 +19,10 @@ export class QuizViewModel {
     duration: string;
     correctRatio: number;
 
-    constructor(quiz: IQuiz) {
+    constructor(quiz: IQuiz, questionBankName: string) {
         this.id = quiz.id;
         this.questionBankId = quiz.questionBankId;
-        this.questionBankName = inject(QuestionBankService).questionBanks[quiz.questionBankId]?.name ?? 'Unknown';
+        this.questionBankName = questionBankName ?? 'Unknown';
 
         this.answers = quiz.questions.map(q => q.answer).filter(a => !isNil(a)) as IAnswer[];
         this.answersCount = this.answers.length;

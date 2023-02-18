@@ -1,4 +1,4 @@
-import {IQuiz} from "../../services/quiz.service";
+import {IQuiz} from "../quiz.service";
 import {keyBy} from "lodash";
 import {QuestionViewModel} from "./question.view-model";
 
