@@ -4,6 +4,7 @@
     on {{created | date: 'short'}}
 </h1>
 <div [formGroup]="formGroup">
+    <h2 *ngIf="quiz.questions.length === 0">No questions for selected criteria</h2>
     <mat-card *ngFor="let question of quiz.questions; let i = index" class="mat-elevation-z10"
               style="margin-bottom: 1rem;">
         <mat-card-header>
