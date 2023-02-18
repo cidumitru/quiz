@@ -66,7 +66,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
         {name: 'stats', display: false},
         {name: 'coverage', display: true},
         {name: 'updatedAt', display: true},
-        {name: 'actions', display: true}
+        {name: 'actions', display: false}
     ]
 
     public get displayedColumns() {

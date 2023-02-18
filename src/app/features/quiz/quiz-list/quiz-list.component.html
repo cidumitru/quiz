@@ -25,8 +25,7 @@
 
         <ng-container matColumnDef="id">
             <th *matHeaderCellDef mat-header-cell>Id.</th>
-            <td *matCellDef="let element" mat-cell routerLink="./practice/{{element.id}}"
-                style="cursor: pointer"> {{element.id}} </td>
+            <td *matCellDef="let element" mat-cell>{{element.id}}</td>
         </ng-container>
 
         <ng-container matColumnDef="questionBankName">
@@ -35,26 +34,23 @@
                         <mat-option *ngFor="let questionBank of questionBanks" [value]="questionBank">{{questionBank.name}}</mat-option>
                     </mat-select>
             </th>
-            <td *matCellDef="let element" mat-cell> {{element.questionBankName}} </td>
+            <td *matCellDef="let element" mat-cell>
+
+                <button *ngIf="!element.finishedAt; else view" mat-flat-button routerLink="./practice/{{element.id}}" color="primary" class="icon-only" style="margin-right: 0.5rem">
+                    <mat-icon>edit_note</mat-icon>
+                </button>
+                {{element.questionBankName}}
+                <ng-template #view>
+                    <button mat-stroked-button routerLink="./practice/{{element.id}}" color="primary" class="icon-only" style="margin-right: 0.5rem">
+                        <mat-icon>edit_note</mat-icon>
+                    </button>
+                </ng-template>
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="startedAt">
             <th *matHeaderCellDef mat-header-cell>Started at</th>
             <td *matCellDef="let element" mat-cell> {{element.startedAt | date: 'short'}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="finishedAt">
-            <th *matHeaderCellDef mat-header-cell>Finished at</th>
-            <td *matCellDef="let element" mat-cell>
-                <ng-container *ngIf="element.finishedAt; else resume">
-                    {{element.finishedAt | date: 'short'}}
-                </ng-container>
-                <ng-template #resume>
-                    <button color="primary" mat-stroked-button
-                            routerLink="./practice/{{element.id}}">RESUME
-                    </button>
-                </ng-template>
-            </td>
         </ng-container>
 
         <ng-container matColumnDef="duration">

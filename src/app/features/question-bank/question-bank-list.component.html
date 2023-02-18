@@ -34,13 +34,25 @@
 
         <ng-container matColumnDef="name">
             <th *matHeaderCellDef mat-header-cell>
-<!--                <mat-form-field appearance="fill" class="no-padding">-->
-<!--                    <mat-label>Search by name</mat-label>-->
-<!--                    <input [formControl]="questionBankFilter" matInput>-->
-<!--                </mat-form-field>-->
                 Name
             </th>
-            <td *matCellDef="let element" mat-cell> {{element.name}} </td>
+            <td *matCellDef="let element" mat-cell>
+                <button [disabled]="element.questions.length === 0"
+                        [matMenuTriggerFor]="menu"
+                        color="primary"
+                        matTooltip="Practice"
+                        class="icon-only"
+                        style="margin-right: 0.5rem"
+                        mat-flat-button>
+                    <mat-icon>school</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button (click)="practiceQuiz(element.id, size)" *ngFor="let size of [25, 50, 100]"
+                            mat-menu-item>{{size}} Questions
+                    </button>
+                </mat-menu>
+                {{element.name}}
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="updatedAt">
@@ -74,20 +86,6 @@
             <th *matHeaderCellDef mat-header-cell style="text-align: right"> Actions</th>
             <td *matCellDef="let element" mat-cell width="35%">
                 <div class="actions">
-                    <button [disabled]="element.questions.length === 0"
-                            [matMenuTriggerFor]="menu"
-                            color="primary"
-                            matTooltip="Practice"
-                            class="icon-only"
-                            mat-flat-button>
-                        <mat-icon>school</mat-icon>
-                    </button>
-                    <mat-menu #menu="matMenu">
-                        <button (click)="practiceQuiz(element.id, size)" *ngFor="let size of [25, 50, 100]"
-                                mat-menu-item>{{size}} Questions
-                        </button>
-                    </mat-menu>
-
                     <button color="accent" class="icon-only" mat-flat-button routerLink="{{element.id}}" matTooltip="Edit">
                         <mat-icon>edit</mat-icon>
                     </button>

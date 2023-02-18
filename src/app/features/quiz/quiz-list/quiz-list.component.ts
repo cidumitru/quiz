@@ -29,7 +29,6 @@ export class QuizListComponent {
         {name: 'id', display: false},
         {name: 'questionBankName', display: true},
         {name: 'startedAt', display: true},
-        {name: 'finishedAt', display: true},
         {name: 'duration', display: false},
         {name: 'questions', display: true},
         {name: 'correctAnswers', display: false},

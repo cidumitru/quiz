@@ -10,15 +10,6 @@
   }
 }
 
-button {
-  &.icon-only {
-    min-width: 3rem;
-    mat-icon {
-      margin: auto 0;
-    }
-  }
-}
-
 .context-buttons {
   display: flex;
   gap: 1rem;

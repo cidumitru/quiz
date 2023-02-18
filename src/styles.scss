@@ -18,3 +18,12 @@ body {
   margin-bottom: 2rem;
   gap: 1rem;
 }
+
+button {
+  &.icon-only {
+    min-width: 2rem;
+    mat-icon {
+      margin: auto 0!important;
+    }
+  }
+}
