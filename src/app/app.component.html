@@ -10,7 +10,7 @@
             <button mat-button routerLink="/statistics">Statistics</button>
         </div>
         <span class="example-spacer"></span>
-        <button mat-button>Build: {{appConfig.config.build_date}}</button>
+        <a mat-button href="https://github.com/cidumitru/quiz">Github</a>
     </mat-toolbar>
 
     <mat-sidenav-container class="sidenav-container">
@@ -26,6 +26,7 @@
             <div class="content" [class.mobile]="mobileQuery.matches">
                 <router-outlet></router-outlet>
             </div>
+            <div style="text-align: center">Build: {{appConfig.config.build_date}}</div>
         </mat-sidenav-content>
     </mat-sidenav-container>
 </div>

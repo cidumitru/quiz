@@ -1,27 +1,46 @@
-# Quizz
+# Angular Quiz Generator
+This project provides a solution written in Angular for generating quizzes based on user-created question banks. It allows users to create and manage their own question banks, and then use those banks to generate quizzes that can be taken online. The project provides a user-friendly interface for creating, editing, and deleting questions and question banks, as well as generating quizzes with custom settings and options.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.4.
+DEMO: <https://cidumitru.github.io/quiz/#/>
 
-## Development server
+Features
+--------
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+-   Create, edit, and delete question banks
+-   Add and remove questions from question banks
+-   Generate quizzes based on your question banks
+-   Allow users to take quizzes online and receive immediate feedback on their performance
+-   Uses localforage as a persistence layer, allowing users to save their question banks and quizzes locally
 
-## Code scaffolding
+Installation
+------------
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+To use this project, you will need to have the following installed:
 
-## Build
+-   Node.js
+-   Angular CLI
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+You can install Node.js from <https://nodejs.org/>, and Angular CLI using the following command:
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+`npm install -g @angular/cli`
 
-## Running end-to-end tests
+To install the project, clone the repository and run the following commands in the project directory:
+```
+npm install
+ng serve
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+You can then access the project in your browser at <http://localhost:4200/>.
 
-## Further help
+Usage
+-----
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+To use the project, simply access the project in your browser at http://localhost:4200/. From there, you can create and manage your own question banks, add and remove questions from those banks, and generate quizzes based on the question banks you have created.
+
+When generating a quiz, you can customize various settings, such as the number of questions. You can then take the quiz online and receive immediate feedback on your performance.
+
+Contributing
+------------
+
+If you would like to contribute to this project, please fork the repository and submit a pull request with your changes. Before submitting a pull request, please make sure to run the tests and ensure that your changes do not break any existing functionality.
