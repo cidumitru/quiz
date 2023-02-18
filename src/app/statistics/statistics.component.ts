@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import bb, {bar} from "billboard.js";
-import {QuestionBankStatistics} from "../services/question-bank.statistics";
+import {StatisticsService} from "./statistics.service";
 import {entries} from "lodash";
 import {addDays, endOfToday, parse} from "date-fns";
 import {IAnsweredQuestion} from "../services/quiz.service";
@@ -12,7 +12,7 @@ import {IAnsweredQuestion} from "../services/quiz.service";
 })
 export class StatisticsComponent implements OnInit, AfterViewInit {
 
-    constructor(private stats: QuestionBankStatistics) {
+    constructor(private stats: StatisticsService) {
     }
 
     ngOnInit(): void {

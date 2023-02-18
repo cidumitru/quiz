@@ -1,4 +1,4 @@
-import {IQuestionBankStats, QuestionBankStatistics} from "../services/question-bank.statistics";
+import {IQuestionBankStats, StatisticsService} from "../statistics/statistics.service";
 import {IQuestionBank} from "../services/question-bank.models";
 
 export class QuestionBankViewModel {
@@ -8,7 +8,7 @@ export class QuestionBankViewModel {
     questions: number;
     stats: IQuestionBankStats;
 
-    constructor(questionBank: IQuestionBank, statistics: QuestionBankStatistics) {
+    constructor(questionBank: IQuestionBank, statistics: StatisticsService) {
         this.id = questionBank.id;
         this.name = questionBank.name;
         this.updatedAt = questionBank.editedAt ? new Date(questionBank.editedAt) : undefined;

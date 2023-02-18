@@ -17,11 +17,10 @@ import {QuizService} from "../services/quiz.service";
 import {debounceTime, map, startWith, Subscription, switchMap, tap} from "rxjs";
 import {MatSort, MatSortModule} from "@angular/material/sort";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {QuestionBankStatistics} from "../services/question-bank.statistics";
+import {StatisticsService} from "../statistics/statistics.service";
 import {MatInputModule} from "@angular/material/input";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {MatMenuModule} from "@angular/material/menu";
-import {QuizViewModel} from "./quiz-view.model";
 import {QuestionBankViewModel} from "./question-bank-view.model";
 
 
@@ -53,17 +52,12 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
 
     @ViewChild(MatSort) sort!: MatSort;
     @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
-    @ViewChild("quizHistoryPaginator") quizHistoryPaginator!: MatPaginator;
     public questionBankFilter = new FormControl("");
     public questionBanksDs = new MatTableDataSource();
-    public quizHistoryDs = new MatTableDataSource(this.quiz.quizzesArr.map(quiz => new QuizViewModel(quiz)));
-
     public questionBankDisplayedColumns = ['name', 'questions', 'stats', 'coverage', 'updatedAt', 'actions'];
-    public quizHistoryDisplayColumns = ['id', 'questionBankName', 'startedAt', 'finishedAt', 'duration', 'questions', 'correctAnswers', 'correctRatio'];
-
     public _qbSubscription: Subscription;
 
-    constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService, private stats: QuestionBankStatistics) {
+    constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService, private stats: StatisticsService) {
         this._qbSubscription = this.questionBank.questionBankArr$.pipe(
             switchMap(questionBanks => this.questionBankFilter.valueChanges.pipe(
                     debounceTime(300),
@@ -77,8 +71,6 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     ngAfterViewInit(): void {
         this.questionBanksDs.sort = this.sort;
         this.questionBanksDs.paginator = this.questionBankPaginator;
-
-        this.quizHistoryDs.paginator = this.quizHistoryPaginator;
     }
 
     newQuestionBank(): void {
@@ -133,7 +125,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     practiceQuiz(questionBankId: string, quizSize: number): void {
         if (isNaN(quizSize)) return;
 
-        this.router.navigate([questionBankId, 'practice'], {queryParams: {size: quizSize}}).then();
+        this.router.navigate(['quizzes', 'practice'], {queryParams: {size: quizSize, questionBankId: questionBankId}}).then();
     }
 
     ngOnDestroy(): void {

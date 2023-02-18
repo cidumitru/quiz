@@ -16,6 +16,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {StatisticsComponent} from './statistics/statistics.component';
 import {HttpClientModule} from "@angular/common/http";
 import {AppConfig} from "./services/app-config.service";
+import { QuizListComponent } from './quiz-list/quiz-list/quiz-list.component';
 
 @NgModule({
     declarations: [

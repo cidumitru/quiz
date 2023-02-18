@@ -1,7 +1,7 @@
-import {IAnsweredQuestion, IQuiz} from "../services/quiz.service";
-import {IAnswer} from "../services/question-bank.models";
+import {IAnsweredQuestion, IQuiz} from "../../services/quiz.service";
+import {IAnswer} from "../../services/question-bank.models";
 import {inject} from "@angular/core";
-import {QuestionBankService} from "../services/question-bank.service";
+import {QuestionBankService} from "../../services/question-bank.service";
 import {isNil} from "lodash";
 import {formatDuration, intervalToDuration} from "date-fns";
 

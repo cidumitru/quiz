@@ -1,5 +1,7 @@
 <mat-toolbar color="primary">
-    <span matTooltip="Go home" routerLink="/" style="cursor: pointer">Aly's Question Bank Generator</span>
+    <span matTooltip="Go home" routerLink="/" style="cursor: pointer">AQB</span>
+    <button mat-button routerLink="/">Question Banks</button>
+    <button mat-button routerLink="/quizzes">Quizzes</button>
     <span class="example-spacer"></span>
     <button mat-button routerLink="/statistics">Statistics</button>
 </mat-toolbar>
@@ -8,6 +10,6 @@
     <router-outlet></router-outlet>
 </div>
 
-<div style="width: 100%; text-align: center; margin-bottom: 2rem;">
+<div style="width: 100%; text-align: center; padding: 2rem;">
     {{appConfig.config.build_date}}
 </div>

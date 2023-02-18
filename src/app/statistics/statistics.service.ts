@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
-import {QuestionBankService} from "./question-bank.service";
-import {IAnsweredQuestion, QuizService} from "./quiz.service";
+import {QuestionBankService} from "../services/question-bank.service";
+import {IAnsweredQuestion, QuizService} from "../services/quiz.service";
 import {groupBy, isNil, mapValues, reduce, uniq, uniqBy} from "lodash";
 import {eachDayOfInterval, format, isAfter, isBefore} from "date-fns";
 
@@ -14,7 +14,7 @@ export interface IQuestionBankStats {
 @Injectable({
     providedIn: "root"
 })
-export class QuestionBankStatistics {
+export class StatisticsService {
     constructor(private questionBanks: QuestionBankService, private quizzes: QuizService) {
     }
 

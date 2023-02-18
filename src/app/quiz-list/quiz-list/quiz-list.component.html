@@ -1,0 +1,77 @@
+<div class="action-bar">
+    <div>
+        <span style="font-size: 1.5rem">
+          Quiz history
+        </span>
+    </div>
+    <div>
+        <button  color="warn" mat-raised-button>Clear history
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+</div>
+<div class="mat-elevation-z8 table-container">
+    <table [dataSource]="quizHistoryDs" class="mat-elevation-z8" mat-table>
+
+        <ng-container matColumnDef="id">
+            <th *matHeaderCellDef mat-header-cell>Id.</th>
+            <td *matCellDef="let element" mat-cell routerLink="./practice/{{element.id}}"
+                style="cursor: pointer"> {{element.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="questionBankName">
+            <th *matHeaderCellDef mat-header-cell>Question bank</th>
+            <td *matCellDef="let element" mat-cell> {{element.questionBankName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="startedAt">
+            <th *matHeaderCellDef mat-header-cell>Started at</th>
+            <td *matCellDef="let element" mat-cell> {{element.startedAt | date: 'short'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="finishedAt">
+            <th *matHeaderCellDef mat-header-cell>Finished at</th>
+            <td *matCellDef="let element" mat-cell>
+                <ng-container *ngIf="element.finishedAt; else resume">
+                    {{element.finishedAt | date: 'short'}}
+                </ng-container>
+                <ng-template #resume>
+                    <button color="primary" mat-stroked-button
+                            routerLink="./practice/{{element.id}}">RESUME
+                    </button>
+                </ng-template>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="duration">
+            <th *matHeaderCellDef mat-header-cell>Duration</th>
+            <td *matCellDef="let element" mat-cell> {{element.duration}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="questions">
+            <th *matHeaderCellDef mat-header-cell>Questions</th>
+            <td *matCellDef="let element" mat-cell> {{element.questions.length}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="correctAnswers">
+            <th *matHeaderCellDef mat-header-cell>Correct answers</th>
+            <td *matCellDef="let element" mat-cell> {{element.correctAnswers}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="correctRatio">
+            <th *matHeaderCellDef mat-header-cell>Ratio</th>
+            <td *matCellDef="let element" mat-cell> {{element.correctRatio | number}}%</td>
+        </ng-container>
+
+
+        <tr *matNoDataRow class="mat-row">
+            <td [attr.colspan]="quizHistoryDisplayColumns.length" class="mat-cell">No quizzes history yet</td>
+        </tr>
+
+        <tr *matHeaderRowDef="quizHistoryDisplayColumns"
+            mat-header-row></tr>
+        <tr *matRowDef="let row; columns: quizHistoryDisplayColumns;"
+            mat-row></tr>
+    </table>
+    <mat-paginator #quizHistoryPaginator [pageSizeOptions]="[15, 30, 50]"></mat-paginator>
+</div>
