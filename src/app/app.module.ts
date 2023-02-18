@@ -14,6 +14,8 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
 import {ReactiveFormsModule} from "@angular/forms";
 import { StatisticsComponent } from './statistics/statistics.component';
+import {HttpClientModule} from "@angular/common/http";
+import {AppConfig} from "./services/app-config.service";
 
 @NgModule({
   declarations: [
@@ -30,13 +32,14 @@ import { StatisticsComponent } from './statistics/statistics.component';
         MatTooltipModule,
         MatSelectModule,
         MatDialogModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpClientModule
     ],
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: (questionBank: QuestionBankService, quiz: QuizService) => () => Promise.all([questionBank.init(), quiz.init()]),
-      deps: [QuestionBankService, QuizService],
+      useFactory: (appConfig: AppConfig, questionBank: QuestionBankService, quiz: QuizService) => () => Promise.all([appConfig.init(), questionBank.init(), quiz.init()]),
+      deps: [AppConfig, QuestionBankService, QuizService],
       multi: true
     },
     QuestionBankService

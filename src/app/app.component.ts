@@ -2,6 +2,7 @@ import {Component, TemplateRef} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {FormControl} from "@angular/forms";
 import {QuizService} from "./services/quiz.service";
+import {AppConfig} from "./services/app-config.service";
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,7 @@ import {QuizService} from "./services/quiz.service";
 })
 export class AppComponent {
   title = 'quizz';
+
+  constructor(public appConfig: AppConfig) {
+  }
 }

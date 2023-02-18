@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build-github-pages": "ng build --base-href  https://cidumitru.github.io/quiz/"
+    "build:release": "ng build --base-href  https://cidumitru.github.io/quiz/ && node ./src/update-build-number.js"
   },
   "private": true,
   "dependencies": {
