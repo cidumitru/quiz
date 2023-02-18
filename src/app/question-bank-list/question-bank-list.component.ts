@@ -1,17 +1,8 @@
-import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    Component,
-    inject,
-    OnDestroy,
-    Pipe,
-    PipeTransform,
-    ViewChild
-} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, ViewChild} from '@angular/core';
 import {QuestionBankService} from "../services/question-bank.service";
 import {Router, RouterModule} from "@angular/router";
 import exportFromJSON from "export-from-json";
-import {first, isNil} from "lodash";
+import {first} from "lodash";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
@@ -20,17 +11,18 @@ import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatCardModule} from "@angular/material/card";
 import {MatRadioModule} from "@angular/material/radio";
 import {CommonModule} from "@angular/common";
-import {IAnswer, IQuestionBank, questionBankScheme} from "../services/question-bank.models";
+import {questionBankScheme} from "../services/question-bank.models";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import {IAnsweredQuestion, IQuiz, QuizService} from "../services/quiz.service";
+import {QuizService} from "../services/quiz.service";
 import {debounceTime, map, startWith, Subscription, switchMap, tap} from "rxjs";
 import {MatSort, MatSortModule} from "@angular/material/sort";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {IQuestionBankStats, QuestionBankStatistics} from "../services/question-bank.statistics";
+import {QuestionBankStatistics} from "../services/question-bank.statistics";
 import {MatInputModule} from "@angular/material/input";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {MatMenuModule} from "@angular/material/menu";
-import {formatDuration, intervalToDuration} from "date-fns";
+import {QuizViewModel} from "./quiz-view.model";
+import {QuestionBankViewModel} from "./question-bank-view.model";
 
 
 @Component({
@@ -147,57 +139,3 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     }
 }
 
-export class QuestionBankViewModel {
-    id: string;
-    name: string;
-    updatedAt?: Date;
-    questions: number;
-    stats: IQuestionBankStats;
-    get coverage() {
-        return this.stats.coverage;
-    }
-
-    constructor(questionBank: IQuestionBank, statistics: QuestionBankStatistics) {
-        this.id = questionBank.id;
-        this.name = questionBank.name;
-        this.updatedAt = questionBank.editedAt ? new Date(questionBank.editedAt) : undefined;
-        this.questions = questionBank.questions.length;
-        this.stats = statistics.getStatisticsForQuestionBank(questionBank.id);
-    }
-}
-
-export class QuizViewModel {
-    id: string;
-    questionBankId: string;
-
-    questionBankName: string;
-    questions: IAnsweredQuestion[];
-    correctAnswers: number;
-    answersCount: number;
-
-    answers: IAnswer[];
-    startedAt: Date;
-    finishedAt?: Date;
-
-    duration: string;
-    correctRatio: number;
-
-    constructor(quiz: IQuiz) {
-        this.id = quiz.id;
-        this.questionBankId = quiz.questionBankId;
-        this.questionBankName = inject(QuestionBankService).questionBanks[quiz.questionBankId]?.name ?? 'Unknown';
-
-        this.answers = quiz.questions.map(q => q.answer).filter(a => !isNil(a)) as IAnswer[];
-        this.answersCount = this.answers.length;
-        this.correctAnswers = this.answers.filter(a => a.correct).length;
-        this.correctRatio = this.answersCount > 0 ? this.correctAnswers / this.answersCount * 100 : 0;
-
-        this.questions = quiz.questions;
-        this.startedAt = new Date(quiz.startedAt);
-        this.finishedAt = quiz.finishedAt ? new Date(quiz.finishedAt) : undefined;
-        this.duration = this.finishedAt
-            ? formatDuration(intervalToDuration({start: this.startedAt, end: this.finishedAt}))
-            : 'In progress';
-
-    }
-}
