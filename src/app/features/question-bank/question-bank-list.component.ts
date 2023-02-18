@@ -13,7 +13,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {CommonModule} from "@angular/common";
 import {questionBankScheme} from "./question-bank.models";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import {QuizService} from "../quiz/quiz.service";
+import {QuizQuestionsPriority, QuizService} from "../quiz/quiz.service";
 import {debounceTime, map, startWith, Subscription, switchMap, tap} from "rxjs";
 import {MatSort, MatSortModule} from "@angular/material/sort";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
@@ -23,7 +23,9 @@ import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatMenuModule} from "@angular/material/menu";
 import {QuestionBankViewModel} from "./question-bank-view.model";
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatListModule} from "@angular/material/list";
+import {MatListModule, MatListOption} from "@angular/material/list";
+import {MatSelectModule} from "@angular/material/select";
+import {MatLegacyListOption} from "@angular/material/legacy-list";
 
 
 @Component({
@@ -50,7 +52,8 @@ import {MatListModule} from "@angular/material/list";
         MatMenuModule,
         MatCheckboxModule,
         FormsModule,
-        MatListModule
+        MatListModule,
+        MatSelectModule
     ]
 })
 export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
@@ -69,6 +72,12 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
         {name: 'updatedAt', display: true},
         {name: 'actions', display: false}
     ]
+    public questionPriorityOptions = [
+        {name: 'All', value: QuizQuestionsPriority.All },
+        {name: 'Mistakes', value: QuizQuestionsPriority.Mistakes },
+        {name: 'Unanswered', value: QuizQuestionsPriority.Unanswered },
+    ]
+    public questionPriorityControl = this.questionPriorityOptions[0];
 
     public get displayedColumns() {
         return this.tableColumnOptions.filter(o => o.display).map(o => o.name);
@@ -140,13 +149,14 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     }
 
 
-    practiceQuiz(questionBankId: string, quizSize: number): void {
+    practiceQuiz(questionBankId: string, quizSize: number, questionPrioritySelection: MatListOption[]): void {
         if (isNaN(quizSize)) return;
 
         this.router.navigate(['quizzes', 'practice'], {
             queryParams: {
                 size: quizSize,
-                questionBankId: questionBankId
+                questionBankId: questionBankId,
+                priority: first(questionPrioritySelection)?.value?.value ?? QuizQuestionsPriority.All
             }
         }).then();
     }

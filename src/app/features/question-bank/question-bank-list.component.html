@@ -14,7 +14,7 @@
         <button mat-raised-button class="icon-only" mat-button [matMenuTriggerFor]="menu">
             <mat-icon>settings</mat-icon>
         </button>
-        <mat-menu #menu="matMenu" [overlapTrigger]="false">
+        <mat-menu #menu="matMenu">
             <mat-selection-list>
                 <mat-list-option *ngFor="let column of tableColumnOptions" [(selected)]="column.display" (click)="$event.stopPropagation()">
                     {{column.name}}
@@ -47,7 +47,13 @@
                     <mat-icon>school</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button (click)="practiceQuiz(element.id, size)" *ngFor="let size of [25, 50, 100]"
+                    <mat-selection-list [multiple]="false" #selectionList>
+                        <mat-list-option *ngFor="let priority of questionPriorityOptions" (click)="$event.stopPropagation()" [value]="priority" [selected]="priority === questionPriorityOptions[0]">
+                            {{priority.name}}
+                        </mat-list-option>
+                    </mat-selection-list>
+                    <mat-divider></mat-divider>
+                    <button (click)="practiceQuiz(element.id, size, selectionList.selectedOptions.selected)" *ngFor="let size of [25, 50, 100]"
                             mat-menu-item>{{size}} Questions
                     </button>
                 </mat-menu>

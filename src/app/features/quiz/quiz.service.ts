@@ -3,7 +3,7 @@ import {IAnswer, IQuestion} from "../question-bank/question-bank.models";
 
 import * as localForage from "localforage";
 import {BehaviorSubject, map, skip} from "rxjs";
-import {sampleSize, values} from "lodash";
+import {sampleSize, uniqBy, values} from "lodash";
 import {v4 as uuidv4} from 'uuid';
 import {QuestionBankService} from "../question-bank/question-bank.service";
 
@@ -19,9 +19,16 @@ export interface IQuiz {
     questions: IAnsweredQuestion[];
 }
 
+export enum QuizQuestionsPriority {
+    All = "all",
+    Mistakes = "mistakes",
+    Unanswered = "unanswered",
+}
+
 export interface ICreateQuiz {
     questionBankId: string;
     questionsCount: number;
+    questionsPriority?: QuizQuestionsPriority;
 }
 
 @Injectable({
@@ -54,11 +61,34 @@ export class QuizService {
     }
 
     startQuiz(options: ICreateQuiz): IQuiz {
+        let questions;
+        switch (options.questionsPriority) {
+            case QuizQuestionsPriority.Mistakes:
+                const questionAnswerMap = this.quizzesArr.filter(q => q.questionBankId === options.questionBankId).reduce((acc, quiz) => {
+                    quiz.questions.forEach(question => {
+                        if (question.answer) acc[question.id] = [...(acc[question.id] ?? []), !!question.answer?.correct];
+                    });
+                    return acc;
+                }, {} as Record<string, boolean[]>);
+
+                questions = this.questionBanks.questionBanks[options.questionBankId].questions.filter(question => {
+                    const answers = questionAnswerMap[question.id];
+                    return answers?.length && answers.filter(answer => answer).length / answers.length < 0.8;
+                });
+                break;
+            case QuizQuestionsPriority.Unanswered:
+                const answeredQuestionsSet = new Set(this.quizzesArr.filter(q => q.questionBankId === options.questionBankId).map(quiz => quiz.questions).flat().filter(q => q.answer).map(question => question.id));
+
+                questions = this.questionBanks.questionBanks[options.questionBankId].questions.filter(question => !answeredQuestionsSet.has(question.id));
+                break;
+            default:
+                questions = this.questionBanks.questionBanks[options.questionBankId].questions;
+        }
         const newQuiz = {
             id: uuidv4(),
             questionBankId: options.questionBankId,
             startedAt: new Date().toString(),
-            questions: sampleSize(this.questionBanks.questionBanks[options.questionBankId].questions, options.questionsCount),
+            questions: sampleSize(questions, options.questionsCount),
         }
 
         this._quizzes.next({...this.quizzes, [newQuiz.id]: newQuiz});
