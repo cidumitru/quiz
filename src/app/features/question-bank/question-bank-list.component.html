@@ -48,7 +48,7 @@
                 </button>
                 <mat-menu #menu="matMenu">
                     <mat-selection-list [multiple]="false" #selectionList>
-                        <mat-list-option *ngFor="let priority of questionPriorityOptions" (click)="$event.stopPropagation()" [value]="priority" [selected]="priority === questionPriorityOptions[0]">
+                        <mat-list-option *ngFor="let priority of questionPriorityOptions" (click)="$event.stopPropagation()" [value]="priority" [selected]="priority === questionPriorityOptions[2]">
                             {{priority.name}}
                         </mat-list-option>
                     </mat-selection-list>
