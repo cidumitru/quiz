@@ -73,7 +73,7 @@ export class QuizService {
 
                 questions = this.questionBanks.questionBanks[options.questionBankId].questions.filter(question => {
                     const answers = questionAnswerMap[question.id];
-                    return answers?.length && answers.filter(answer => answer).length / answers.length < 0.8;
+                    return answers?.length && answers.filter(answer => answer).length / answers.length < 0.7;
                 });
                 break;
             case QuizQuestionsPriority.Unanswered:

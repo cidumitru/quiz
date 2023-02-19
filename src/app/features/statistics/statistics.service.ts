@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {QuestionBankService} from "../question-bank/question-bank.service";
 import {IAnsweredQuestion, QuizService} from "../quiz/quiz.service";
-import {groupBy, isNil, mapValues, reduce, uniq, uniqBy} from "lodash";
+import {groupBy, isBoolean, isNil, mapValues, reduce, uniq, uniqBy} from "lodash";
 import {eachDayOfInterval, format, isAfter, isBefore} from "date-fns";
 
 export interface IQuestionBankStats {
@@ -23,13 +23,14 @@ export class StatisticsService {
         const quizzes = this.quizzes.quizzesArr.filter(quiz => quiz.questionBankId === questionBankId);
         const allQuestions = quizzes.map(quiz => quiz.questions).flat();
 
-        const averageRatio = (quizzes.filter(quiz => quiz.questions.length > 0 && quiz.questions.every(q => q.answer))
+        const validQuizzes = quizzes.filter(quiz => quiz.questions.length > 0 && quiz.questions.every(q => q.answer));
+        const averageRatio = (validQuizzes
             .map(quiz => (quiz.questions.filter(q => q.answer?.correct).length / quiz.questions.length) * 100)
-            .reduce((acc, ratio) => acc + ratio, 0) / quizzes.length) || 0;
+            .reduce((acc, ratio) => acc + ratio, 0) / validQuizzes.length) || 0;
 
-        const correctlyAnsweredQuestions = uniqBy(allQuestions.filter(q => q.answer?.correct), q => q.id);
+        const answeredQuestions = uniqBy(allQuestions.filter(q => q.answer), q => q.id);
 
-        const coverage = ((correctlyAnsweredQuestions.length / this.questionBanks.questionBanks[questionBankId]?.questions.length) * 100) || 0;
+        const coverage = ((answeredQuestions.length / this.questionBanks.questionBanks[questionBankId]?.questions.length) * 100) || 0;
 
         return allQuestions.reduce((acc, question) => {
             if (question.answer) {
