@@ -23,13 +23,13 @@ export interface IQuiz {
 export enum QuizMode {
     All = "all",
     Mistakes = "mistakes",
-    Discovery = "unanswered",
+    Discovery = "discovery",
 }
 
 export interface ICreateQuiz {
     questionBankId: string;
     questionsCount: number;
-    questionsPriority?: QuizMode;
+    mode?: QuizMode;
 }
 
 @Injectable({
@@ -63,7 +63,7 @@ export class QuizService {
 
     startQuiz(options: ICreateQuiz): IQuiz {
         let questions;
-        switch (options.questionsPriority) {
+        switch (options.mode) {
             case QuizMode.Mistakes:
                 const questionAnswerMap = this.quizzesArr.filter(q => q.questionBankId === options.questionBankId).reduce((acc, quiz) => {
                     quiz.questions.forEach(question => {
@@ -85,8 +85,9 @@ export class QuizService {
             default:
                 questions = this.questionBanks.questionBanks[options.questionBankId].questions;
         }
-        const newQuiz = {
+        const newQuiz: IQuiz = {
             id: uuidv4(),
+            mode: options.mode,
             questionBankId: options.questionBankId,
             startedAt: new Date().toString(),
             questions: sampleSize(questions, options.questionsCount),

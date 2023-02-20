@@ -57,7 +57,7 @@ export class QuizComponent implements OnDestroy {
             this.quiz = new QuizModel(this.quizService.startQuiz({
                 questionBankId: this.questionBank.id,
                 questionsCount: parseInt(queryParamMap.get("size") ?? "") ?? 25,
-                questionsPriority: queryParamMap.get("priority") as QuizMode,
+                mode: queryParamMap.get("mode") as QuizMode,
             }))
         } else {
             const quizId = this.activatedRoute.snapshot.paramMap.get("quizId")!;

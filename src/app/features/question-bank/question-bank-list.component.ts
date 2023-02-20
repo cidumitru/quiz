@@ -158,7 +158,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
             queryParams: {
                 size: quizSize,
                 questionBankId: questionBankId,
-                priority: first(questionPrioritySelection)?.value?.value ?? QuizMode.All
+                mode: first(questionPrioritySelection)?.value?.value ?? QuizMode.All
             }
         }).then();
     }
