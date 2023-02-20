@@ -14,7 +14,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import {QuizQuestionsPriority, QuizService} from "../quiz.service";
+import {QuizMode, QuizService} from "../quiz.service";
 import {QuizModel} from "./quiz.model";
 import {QuestionViewModel} from "./question.view-model";
 
@@ -57,7 +57,7 @@ export class QuizComponent implements OnDestroy {
             this.quiz = new QuizModel(this.quizService.startQuiz({
                 questionBankId: this.questionBank.id,
                 questionsCount: parseInt(queryParamMap.get("size") ?? "") ?? 25,
-                questionsPriority: queryParamMap.get("priority") as QuizQuestionsPriority,
+                questionsPriority: queryParamMap.get("priority") as QuizMode,
             }))
         } else {
             const quizId = this.activatedRoute.snapshot.paramMap.get("quizId")!;

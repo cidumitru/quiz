@@ -16,19 +16,20 @@ export interface IQuiz {
     questionBankId: string;
     startedAt: string;
     finishedAt?: string;
+    mode?: QuizMode;
     questions: IAnsweredQuestion[];
 }
 
-export enum QuizQuestionsPriority {
+export enum QuizMode {
     All = "all",
     Mistakes = "mistakes",
-    Unanswered = "unanswered",
+    Discovery = "unanswered",
 }
 
 export interface ICreateQuiz {
     questionBankId: string;
     questionsCount: number;
-    questionsPriority?: QuizQuestionsPriority;
+    questionsPriority?: QuizMode;
 }
 
 @Injectable({
@@ -63,7 +64,7 @@ export class QuizService {
     startQuiz(options: ICreateQuiz): IQuiz {
         let questions;
         switch (options.questionsPriority) {
-            case QuizQuestionsPriority.Mistakes:
+            case QuizMode.Mistakes:
                 const questionAnswerMap = this.quizzesArr.filter(q => q.questionBankId === options.questionBankId).reduce((acc, quiz) => {
                     quiz.questions.forEach(question => {
                         if (question.answer) acc[question.id] = [...(acc[question.id] ?? []), !!question.answer?.correct];
@@ -76,7 +77,7 @@ export class QuizService {
                     return answers?.length && answers.filter(answer => answer).length / answers.length < 0.7;
                 });
                 break;
-            case QuizQuestionsPriority.Unanswered:
+            case QuizMode.Discovery:
                 const answeredQuestionsSet = new Set(this.quizzesArr.filter(q => q.questionBankId === options.questionBankId).map(quiz => quiz.questions).flat().filter(q => q.answer).map(question => question.id));
 
                 questions = this.questionBanks.questionBanks[options.questionBankId].questions.filter(question => !answeredQuestionsSet.has(question.id));

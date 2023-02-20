@@ -13,7 +13,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {CommonModule} from "@angular/common";
 import {questionBankScheme} from "./question-bank.models";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import {QuizQuestionsPriority, QuizService} from "../quiz/quiz.service";
+import {QuizMode, QuizService} from "../quiz/quiz.service";
 import {debounceTime, map, startWith, Subscription, switchMap, tap} from "rxjs";
 import {MatSort, MatSortModule} from "@angular/material/sort";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
@@ -79,9 +79,9 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
         return this.tableColumnOptions.filter(o => o.visible).map(o => o.name);
     }
     public questionPriorityOptions = [
-        {name: 'All', value: QuizQuestionsPriority.All },
-        {name: 'Mistakes', value: QuizQuestionsPriority.Mistakes },
-        {name: 'Unanswered', value: QuizQuestionsPriority.Unanswered },
+        {name: 'All', value: QuizMode.All },
+        {name: 'Mistakes', value: QuizMode.Mistakes },
+        {name: 'Discovery', value: QuizMode.Discovery },
     ]
     public questionPriorityControl = this.questionPriorityOptions[0];
     public _qbSubscription: Subscription;
@@ -158,7 +158,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
             queryParams: {
                 size: quizSize,
                 questionBankId: questionBankId,
-                priority: first(questionPrioritySelection)?.value?.value ?? QuizQuestionsPriority.All
+                priority: first(questionPrioritySelection)?.value?.value ?? QuizMode.All
             }
         }).then();
     }
