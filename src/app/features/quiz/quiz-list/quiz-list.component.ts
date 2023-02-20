@@ -6,11 +6,25 @@ import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {combineLatest, merge, startWith, tap} from "rxjs";
 import {QuestionBankService} from "../../question-bank/question-bank.service";
 import {FormControl} from "@angular/forms";
+import {MatSelectionListChange} from "@angular/material/list";
+import {isBoolean} from "lodash";
+import {ColumnsPersistenceService, IColumn} from "../../../core/services/columns-persistence.service";
 
 interface QuestionBankSelectOption {
     id: string;
     name: string;
 }
+
+const TABLE_NAME = "QuizHistoryTable";
+const DEFAULT_COLUMNS = [
+    {name: 'id', visible: false},
+    {name: 'questionBankName', visible: true},
+    {name: 'startedAt', visible: true},
+    {name: 'duration', visible: false},
+    {name: 'questions', visible: true},
+    {name: 'correctAnswers', visible: false},
+    {name: 'correctRatio', visible: true},
+]
 
 @Component({
     selector: 'app-quiz-list',
@@ -25,21 +39,16 @@ export class QuizListComponent {
     @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
     public quizHistoryDataSource: MatTableDataSource<QuizViewModel> = new MatTableDataSource<QuizViewModel>();
 
-    public tableColumnOptions: {name: string, display: boolean}[] = [
-        {name: 'id', display: false},
-        {name: 'questionBankName', display: true},
-        {name: 'startedAt', display: true},
-        {name: 'duration', display: false},
-        {name: 'questions', display: true},
-        {name: 'correctAnswers', display: false},
-        {name: 'correctRatio', display: true},
-    ]
-
+    public tableColumnOptions: IColumn[] = this.columns.hasColumnsForTable(TABLE_NAME)
+        ? this.columns.getColumnsForTable(TABLE_NAME)
+        : DEFAULT_COLUMNS;
+    // TODO: Update on change
     public get displayedColumns() {
-        return this.tableColumnOptions.filter(o => o.display).map(o => o.name);
+        return this.tableColumnOptions.filter(o => o.visible).map(o => o.name);
     }
 
-    constructor(private quiz: QuizService, private qb: QuestionBankService, private cdr: ChangeDetectorRef) {}
+
+    constructor(private quiz: QuizService, private qb: QuestionBankService, private cdr: ChangeDetectorRef, private columns: ColumnsPersistenceService) {}
 
 
     ngAfterViewInit(): void {
@@ -53,5 +62,19 @@ export class QuizListComponent {
                 this.cdr.detectChanges();
             })
         ).subscribe()
+    }
+
+    async onColumnToggle(selection: MatSelectionListChange): Promise<void> {
+        const updated = this.tableColumnOptions.map(o => {
+            const updated = selection.options.find(s => s.value.name === o.name);
+
+            return {
+                ...o,
+                visible: isBoolean(updated?.selected) ? updated?.selected!! : o.visible
+            }
+        });
+
+        this.tableColumnOptions = updated;
+        await this.columns.updateColumnsForTable(TABLE_NAME, updated);
     }
 }

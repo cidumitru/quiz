@@ -12,8 +12,8 @@
             <mat-icon>settings</mat-icon> Columns
         </button>
         <mat-menu #menu="matMenu">
-            <mat-selection-list>
-                <mat-list-option *ngFor="let column of tableColumnOptions" [(selected)]="column.display" (click)="$event.stopPropagation()">
+            <mat-selection-list (selectionChange)="onColumnToggle($event)">
+                <mat-list-option *ngFor="let column of tableColumnOptions" [value]="column" [selected]="column.visible" (click)="$event.stopPropagation()">
                     {{column.name}}
                 </mat-list-option>
             </mat-selection-list>

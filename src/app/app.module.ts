@@ -18,6 +18,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {AppConfig} from "./core/services/app-config.service";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
+import {ColumnsPersistenceService} from "./core/services/columns-persistence.service";
 
 @NgModule({
     declarations: [
@@ -42,8 +43,9 @@ import {MatListModule} from "@angular/material/list";
     providers: [
         {
             provide: APP_INITIALIZER,
-            useFactory: (appConfig: AppConfig, questionBank: QuestionBankService, quiz: QuizService) => () => Promise.all([appConfig.init(), questionBank.init(), quiz.init()]),
-            deps: [AppConfig, QuestionBankService, QuizService],
+            // TODO: Create a bootstrapper service
+            useFactory: (appConfig: AppConfig, questionBank: QuestionBankService, quiz: QuizService, columns: ColumnsPersistenceService) => () => Promise.all([appConfig.init(), questionBank.init(), quiz.init(), columns.init()]),
+            deps: [AppConfig, QuestionBankService, QuizService, ColumnsPersistenceService],
             multi: true
         },
         QuestionBankService

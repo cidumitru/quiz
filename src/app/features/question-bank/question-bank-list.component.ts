@@ -2,7 +2,7 @@ import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, ViewChild}
 import {QuestionBankService} from "./question-bank.service";
 import {Router, RouterModule} from "@angular/router";
 import exportFromJSON from "export-from-json";
-import {first} from "lodash";
+import {first, isBoolean} from "lodash";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
@@ -23,11 +23,20 @@ import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatMenuModule} from "@angular/material/menu";
 import {QuestionBankViewModel} from "./question-bank-view.model";
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatListModule, MatListOption} from "@angular/material/list";
+import {MatListModule, MatListOption, MatSelectionListChange} from "@angular/material/list";
 import {MatSelectModule} from "@angular/material/select";
-import {MatLegacyListOption} from "@angular/material/legacy-list";
+import {ColumnsPersistenceService, IColumn} from "../../core/services/columns-persistence.service";
 
-
+const TABLE_NAME = "QuestionBanksTable";
+const DEFAULT_COLUMNS = [
+    {name: 'name', visible: true},
+    {name: 'questions', visible: true},
+    {name: 'stats', visible: false},
+    {name: 'coverage', visible: true},
+    {name: 'avgRatio', visible: true},
+    {name: 'updatedAt', visible: true},
+    {name: 'actions', visible: false}
+]
 @Component({
     selector: 'app-quiz-list',
     templateUrl: './question-bank-list.component.html',
@@ -62,29 +71,22 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
     public questionBankFilter = new FormControl("");
     public questionBanksDs = new MatTableDataSource();
-
-    public tableColumnOptions: {name: string, display: boolean}[] = [
-        {name: 'name', display: true},
-        {name: 'questions', display: true},
-        {name: 'stats', display: false},
-        {name: 'coverage', display: true},
-        {name: 'avgRatio', display: true},
-        {name: 'updatedAt', display: true},
-        {name: 'actions', display: false}
-    ]
+    public tableColumnOptions: IColumn[] = this.columns.hasColumnsForTable(TABLE_NAME)
+        ? this.columns.getColumnsForTable(TABLE_NAME)
+        : DEFAULT_COLUMNS;
+    // TODO: Update on change
+    public get displayedColumns() {
+        return this.tableColumnOptions.filter(o => o.visible).map(o => o.name);
+    }
     public questionPriorityOptions = [
         {name: 'All', value: QuizQuestionsPriority.All },
         {name: 'Mistakes', value: QuizQuestionsPriority.Mistakes },
         {name: 'Unanswered', value: QuizQuestionsPriority.Unanswered },
     ]
     public questionPriorityControl = this.questionPriorityOptions[0];
-
-    public get displayedColumns() {
-        return this.tableColumnOptions.filter(o => o.display).map(o => o.name);
-    }
     public _qbSubscription: Subscription;
 
-    constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService, private stats: StatisticsService) {
+    constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService, private stats: StatisticsService, private columns: ColumnsPersistenceService) {
         this._qbSubscription = this.questionBank.questionBankArr$.pipe(
             switchMap(questionBanks => this.questionBankFilter.valueChanges.pipe(
                     debounceTime(300),
@@ -163,6 +165,20 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
 
     ngOnDestroy(): void {
         this._qbSubscription.unsubscribe();
+    }
+
+    async onColumnToggle(selection: MatSelectionListChange): Promise<void> {
+        const updated = this.tableColumnOptions.map(o => {
+            const updated = selection.options.find(s => s.value.name === o.name);
+
+            return {
+                ...o,
+                visible: isBoolean(updated?.selected) ? updated?.selected!! : o.visible
+            }
+        });
+
+        this.tableColumnOptions = updated;
+        await this.columns.updateColumnsForTable(TABLE_NAME, updated);
     }
 }
 
