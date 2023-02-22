@@ -21,6 +21,17 @@ jobs:
 
       - name: Build
         run: npm run build:prod
+        
+      - name: Replace build number
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const fs = require('fs');
+            const result = data.replace("$BUILD_DATE$", new Date().toISOString());
+
+            fs.writeFile(filePath, result, 'utf8', function (err) {
+                if (err) return console.log(err);
+            });
 
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v3
