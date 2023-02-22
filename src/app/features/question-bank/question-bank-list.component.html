@@ -88,9 +88,14 @@
             <td *matCellDef="let element" mat-cell matTooltip="Percentage of questions you provided a correct answer.">{{element.coverage  | number}}%</td>
         </ng-container>
 
-        <ng-container matColumnDef="avgRatio">
+        <ng-container matColumnDef="averageScore">
             <th *matHeaderCellDef mat-header-cell mat-sort-header>Avg Score</th>
-            <td *matCellDef="let element" mat-cell>{{element.averageRatio  | number}}%</td>
+            <td *matCellDef="let element" mat-cell>{{element.averageScore  | number}}%</td>
+        </ng-container>
+
+        <ng-container matColumnDef="averageScoreToday">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>Today's Avg Score</th>
+            <td *matCellDef="let element" mat-cell>{{element.averageScoreToday  | number}}%</td>
         </ng-container>
 
         <ng-container matColumnDef="actions">

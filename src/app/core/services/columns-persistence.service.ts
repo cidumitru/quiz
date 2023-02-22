@@ -19,7 +19,7 @@ export class ColumnsPersistenceService {
             await localforage.setItem("columns", this._columns.value);
         }
 
-        public getColumnsForTable(tableId: string): IColumn[] {
+        public getStoredColumnsForTable(tableId: string): IColumn[] | undefined {
             return this._columns.value[tableId];
         }
 

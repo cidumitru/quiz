@@ -19,8 +19,11 @@ export class StatisticsService {
     constructor(private questionBanks: QuestionBankService, private quizzes: QuizService) {
     }
 
-    getStatisticsForQuestionBank(questionBankId: string): IQuestionBankStats {
-        const quizzes = this.quizzes.quizzesArr.filter(quiz => quiz.questionBankId === questionBankId);
+    getStatisticsForQuestionBank(questionBankId: string, startDate?: Date, endDate?: Date): IQuestionBankStats {
+        let quizzes = this.quizzes.quizzesArr.filter(quiz => quiz.questionBankId === questionBankId);
+        if (startDate && endDate) quizzes = quizzes.filter(({finishedAt}) => finishedAt && isAfter(new Date(finishedAt), startDate) && isBefore(new Date(finishedAt), endDate));
+
+
         const allQuestions = quizzes.map(quiz => quiz.questions).flat();
 
         const validQuizzes = quizzes.filter(quiz => quiz.questions.length > 0 && quiz.questions.every(q => q.answer));

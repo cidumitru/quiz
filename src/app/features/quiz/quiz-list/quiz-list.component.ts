@@ -7,7 +7,7 @@ import {combineLatest, merge, startWith, tap} from "rxjs";
 import {QuestionBankService} from "../../question-bank/question-bank.service";
 import {FormControl} from "@angular/forms";
 import {MatSelectionListChange} from "@angular/material/list";
-import {isBoolean} from "lodash";
+import {isBoolean, uniqBy} from "lodash";
 import {ColumnsPersistenceService, IColumn} from "../../../core/services/columns-persistence.service";
 
 interface QuestionBankSelectOption {
@@ -39,9 +39,7 @@ export class QuizListComponent {
     @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
     public quizHistoryDataSource: MatTableDataSource<QuizViewModel> = new MatTableDataSource<QuizViewModel>();
 
-    public tableColumnOptions: IColumn[] = this.columns.hasColumnsForTable(TABLE_NAME)
-        ? this.columns.getColumnsForTable(TABLE_NAME)
-        : DEFAULT_COLUMNS;
+    public tableColumnOptions: IColumn[] = DEFAULT_COLUMNS.map(c => ({...c, visible: this.columns.getStoredColumnsForTable(TABLE_NAME)?.find(sc => sc.name === c.name)?.visible ?? c.visible}))
     // TODO: Update on change
     public get displayedColumns() {
         return this.tableColumnOptions.filter(o => o.visible).map(o => o.name);

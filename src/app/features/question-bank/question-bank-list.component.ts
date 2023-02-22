@@ -2,7 +2,7 @@ import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, ViewChild}
 import {QuestionBankService} from "./question-bank.service";
 import {Router, RouterModule} from "@angular/router";
 import exportFromJSON from "export-from-json";
-import {first, isBoolean} from "lodash";
+import {first, isBoolean, uniqBy} from "lodash";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
@@ -33,7 +33,8 @@ const DEFAULT_COLUMNS = [
     {name: 'questions', visible: true},
     {name: 'stats', visible: true},
     {name: 'coverage', visible: true},
-    {name: 'avgRatio', visible: true},
+    {name: 'averageScore', visible: true},
+    {name: 'averageScoreToday', visible: true},
     {name: 'updatedAt', visible: true},
     {name: 'actions', visible: true}
 ]
@@ -71,9 +72,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
     public questionBankFilter = new FormControl("");
     public questionBanksDs = new MatTableDataSource();
-    public tableColumnOptions: IColumn[] = this.columns.hasColumnsForTable(TABLE_NAME)
-        ? this.columns.getColumnsForTable(TABLE_NAME)
-        : DEFAULT_COLUMNS;
+    public tableColumnOptions: IColumn[] = DEFAULT_COLUMNS.map(c => ({...c, visible: this.columns.getStoredColumnsForTable(TABLE_NAME)?.find(sc => sc.name === c.name)?.visible ?? c.visible}))
     // TODO: Update on change
     public get displayedColumns() {
         return this.tableColumnOptions.filter(o => o.visible).map(o => o.name);
@@ -83,7 +82,6 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
         {name: 'Mistakes', value: QuizMode.Mistakes },
         {name: 'Discovery', value: QuizMode.Discovery },
     ]
-    public questionPriorityControl = this.questionPriorityOptions[0];
     public _qbSubscription: Subscription;
 
     constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService, private stats: StatisticsService, private columns: ColumnsPersistenceService) {
