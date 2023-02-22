@@ -17,12 +17,12 @@ interface QuestionBankSelectOption {
 
 const TABLE_NAME = "QuizHistoryTable";
 const DEFAULT_COLUMNS = [
-    {name: 'id', visible: false},
+    {name: 'id', visible: true},
     {name: 'questionBankName', visible: true},
     {name: 'startedAt', visible: true},
-    {name: 'duration', visible: false},
+    {name: 'duration', visible: true},
     {name: 'questions', visible: true},
-    {name: 'correctAnswers', visible: false},
+    {name: 'correctAnswers', visible: true},
     {name: 'correctRatio', visible: true},
 ]
 

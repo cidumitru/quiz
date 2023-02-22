@@ -31,11 +31,11 @@ const TABLE_NAME = "QuestionBanksTable";
 const DEFAULT_COLUMNS = [
     {name: 'name', visible: true},
     {name: 'questions', visible: true},
-    {name: 'stats', visible: false},
+    {name: 'stats', visible: true},
     {name: 'coverage', visible: true},
     {name: 'avgRatio', visible: true},
     {name: 'updatedAt', visible: true},
-    {name: 'actions', visible: false}
+    {name: 'actions', visible: true}
 ]
 @Component({
     selector: 'app-quiz-list',
