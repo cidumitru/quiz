@@ -27,10 +27,14 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const result = data.replace("$BUILD_DATE$", new Date().toISOString());
+            fs.readFile(filePath, 'utf8', function (err, data) {
+              if (err) return console.log(err);
 
-            fs.writeFile(filePath, result, 'utf8', function (err) {
-                if (err) return console.log(err);
+              const result = data.replace("$BUILD_DATE$", new Date().toISOString());
+
+              fs.writeFile(filePath, result, 'utf8', function (err) {
+                  if (err) return console.log(err);
+              });
             });
 
       - name: Deploy to GitHub Pages
