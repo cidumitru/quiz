@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {map, Observable, startWith, switchMap} from "rxjs";
+import {combineLatest, combineLatestWith, map, Observable, startWith, switchMap} from "rxjs";
 import {QuestionBankService} from "../../question-bank.service";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
@@ -12,6 +12,7 @@ import {IQuestion, IQuestionBank} from "../../question-bank.models";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @Component({
     selector: 'app-question-edit',
@@ -27,7 +28,8 @@ import {MatInputModule} from "@angular/material/input";
         MatButtonModule,
         MatIconModule,
         ReactiveFormsModule,
-        MatInputModule
+        MatInputModule,
+        MatSlideToggleModule
     ],
     standalone: true
 })
@@ -37,11 +39,16 @@ export class QuestionListEditComponent {
 
     public control = new FormControl("");
     public searchControl = new FormControl("", {nonNullable: true});
+    public questionsWithoutAnswerControl = new FormControl(false, {nonNullable: true});
 
     public questions$ = this.searchControl.valueChanges.pipe(
         startWith(""),
-        switchMap(search => this.quiz$.pipe(
-            map(quiz => quiz.questions.filter(question => question.question.toLowerCase().includes(search.toLowerCase())))
+        combineLatestWith(this.questionsWithoutAnswerControl.valueChanges.pipe(startWith(false))),
+        switchMap(([searchText, onlyQuestionWithoutAnswer]) => this.quiz$.pipe(
+            map(quiz => quiz.questions.filter(question => {
+                if (onlyQuestionWithoutAnswer && question.answers.find(a => a.correct) !== undefined) return false;
+                return question.question.toLowerCase().includes(searchText.toLowerCase());
+            }))
         )));
 
     constructor(private activatedRoute: ActivatedRoute, private questionBank: QuestionBankService) {
