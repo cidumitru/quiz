@@ -19,6 +19,19 @@ import {AppConfig} from "./core/services/app-config.service";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {ColumnsPersistenceService} from "./core/services/columns-persistence.service";
+import {MockDataLoader} from "./core/mock/mock-data.loader";
+
+export const bootstrapFactory = (appConfig: AppConfig, questionBank: QuestionBankService, quiz: QuizService, columns: ColumnsPersistenceService, mockDataLoader: MockDataLoader) => async () => {
+    await appConfig.init();
+    await questionBank.init();
+    await quiz.init();
+    await columns.init();
+
+    if (localStorage.getItem("firstVisit")) return;
+
+    localStorage.setItem("firstVisit", new Date().getTime().toString());
+    await mockDataLoader.load();
+}
 
 @NgModule({
     declarations: [
@@ -43,9 +56,8 @@ import {ColumnsPersistenceService} from "./core/services/columns-persistence.ser
     providers: [
         {
             provide: APP_INITIALIZER,
-            // TODO: Create a bootstrapper service
-            useFactory: (appConfig: AppConfig, questionBank: QuestionBankService, quiz: QuizService, columns: ColumnsPersistenceService) => () => Promise.all([appConfig.init(), questionBank.init(), quiz.init(), columns.init()]),
-            deps: [AppConfig, QuestionBankService, QuizService, ColumnsPersistenceService],
+            useFactory: bootstrapFactory,
+            deps: [AppConfig, QuestionBankService, QuizService, ColumnsPersistenceService, MockDataLoader],
             multi: true
         },
         QuestionBankService
