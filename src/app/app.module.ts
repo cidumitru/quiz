@@ -27,7 +27,7 @@ export const bootstrapFactory = (appConfig: AppConfig, questionBank: QuestionBan
     await quiz.init();
     await columns.init();
 
-    if (localStorage.getItem("firstVisit")) return;
+    if (questionBank.questionBankArr.length || localStorage.getItem("firstVisit")) return;
 
     localStorage.setItem("firstVisit", new Date().getTime().toString());
     await mockDataLoader.load();
