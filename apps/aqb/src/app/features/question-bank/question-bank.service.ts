@@ -3,12 +3,7 @@ import {BehaviorSubject, map, Observable, skip} from "rxjs";
 import {v4 as uuidv4} from 'uuid';
 import {omit, values} from "lodash";
 import * as localForage from "localforage";
-import {IAnswer, IQuestionBank, QuestionType} from "./question-bank.models";
-
-export interface IQuestionCreate {
-    question: string;
-    answers: Pick<IAnswer, 'text' | 'correct'>[];
-}
+import {IAnswer, IQuestionBank, QuestionType, IQuestionCreate} from "./question-bank.models";
 
 @Injectable()
 export class QuestionBankService {

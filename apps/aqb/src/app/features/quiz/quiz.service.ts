@@ -1,36 +1,16 @@
 import {inject, Injectable} from "@angular/core";
 import {IAnswer, IQuestion} from "../question-bank/question-bank.models";
+import {IAnsweredQuestion, IQuiz, QuizMode, ICreateQuiz, IGetQuizzesParams} from "./quiz.models";
+
+// Re-export the interfaces for backward compatibility
+export {QuizMode} from "./quiz.models";
+export type {IAnsweredQuestion, IQuiz, ICreateQuiz, IGetQuizzesParams} from "./quiz.models";
 
 import * as localForage from "localforage";
 import {BehaviorSubject, map, skip} from "rxjs";
 import {sampleSize, uniqBy, values} from "lodash";
 import {v4 as uuidv4} from 'uuid';
 import {QuestionBankService} from "../question-bank/question-bank.service";
-
-export interface IAnsweredQuestion extends IQuestion {
-    answer?: IAnswer;
-}
-
-export interface IQuiz {
-    id: string;
-    questionBankId: string;
-    startedAt: string;
-    finishedAt?: string;
-    mode?: QuizMode;
-    questions: IAnsweredQuestion[];
-}
-
-export enum QuizMode {
-    All = "all",
-    Mistakes = "mistakes",
-    Discovery = "discovery",
-}
-
-export interface ICreateQuiz {
-    questionBankId: string;
-    questionsCount: number;
-    mode?: QuizMode;
-}
 
 @Injectable({
     providedIn: "root"
@@ -128,10 +108,4 @@ export class QuizService {
     clear() {
         this._quizzes.next({});
     }
-}
-
-export interface IGetQuizzesParams {
-    take: number;
-    skip: number;
-    questionBankId?: string;
 }
