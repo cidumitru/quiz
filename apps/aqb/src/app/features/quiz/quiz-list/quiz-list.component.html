@@ -5,10 +5,10 @@
         </span>
     </div>
     <div>
-        <button color="warn" mat-raised-button style="margin-right: 1rem;">
+        <button mat-button appearance="filled" color="warn" style="margin-right: 1rem;">
             <mat-icon>delete</mat-icon> Clear history
         </button>
-        <button mat-raised-button class="icon-only" mat-button [matMenuTriggerFor]="menu">
+        <button mat-button appearance="outlined" [matMenuTriggerFor]="menu">
             <mat-icon>settings</mat-icon> Columns
         </button>
         <mat-menu #menu="matMenu">
@@ -41,11 +41,11 @@
             <td *matCellDef="let element" mat-cell>
 
                 @if (!element.finishedAt) {
-                    <button mat-flat-button routerLink="./practice/{{element.id}}" color="primary" class="icon-only" style="margin-right: 0.5rem">
+                    <button mat-icon-button routerLink="./practice/{{element.id}}" color="primary" style="margin-right: 0.5rem">
                         <mat-icon>edit_note</mat-icon>
                     </button>
                 } @else {
-                    <button mat-stroked-button routerLink="./practice/{{element.id}}" color="primary" class="icon-only" style="margin-right: 0.5rem">
+                    <button mat-icon-button routerLink="./practice/{{element.id}}" color="primary" style="margin-right: 0.5rem">
                         <mat-icon>edit_note</mat-icon>
                     </button>
                 }

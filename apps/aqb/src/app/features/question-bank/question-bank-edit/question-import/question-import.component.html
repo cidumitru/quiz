@@ -10,7 +10,7 @@
         @if ((questions$ | async); as questions) {
             @if (questions.length > 0) {
                 <h1>Output
-                    <button (click)="import()" color="primary" mat-raised-button>Import {{questions.length}}questions
+                    <button mat-button appearance="filled" color="primary" (click)="import()">Import {{questions.length}} questions
                     </button>
                 </h1>
                 <div style="max-height: 80vh; overflow:scroll">

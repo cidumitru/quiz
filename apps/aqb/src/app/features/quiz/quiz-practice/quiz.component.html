@@ -36,9 +36,9 @@
             class="incorrect">{{stats.incorrect}}</span></span>
     </div>
     <div style="margin-top: 2rem">
-        <button color="primary" mat-raised-button routerLink="/">GO HOME</button>
+        <button mat-button appearance="filled" color="primary" routerLink="/">GO HOME</button>
         @if (hasFinished) {
-            <button (click)="retry()" color="accent" mat-raised-button style="margin-left: 1rem">
+            <button mat-button appearance="outlined" color="accent" (click)="retry()" style="margin-left: 1rem">
                 GENERATE NEW
             </button>
         }

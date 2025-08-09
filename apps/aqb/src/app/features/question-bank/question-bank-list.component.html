@@ -5,13 +5,13 @@
     </span>
     </div>
     <div class="context-buttons">
-        <button (click)="uploadQuestionBank()" mat-raised-button>
+        <button mat-button appearance="outlined" (click)="uploadQuestionBank()">
             Import<mat-icon>upload_file</mat-icon>
         </button>
-        <button (click)="newQuestionBank()" color="primary" mat-raised-button>
+        <button mat-button appearance="filled" color="primary" (click)="newQuestionBank()">
             New<mat-icon>add</mat-icon>
         </button>
-        <button mat-raised-button class="icon-only" mat-button [matMenuTriggerFor]="menu">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>settings</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
@@ -45,7 +45,7 @@
                         matTooltip="Practice"
                         class="icon-only"
                         style="margin-right: 0.5rem"
-                        mat-flat-button>
+                        mat-button appearance="filled" color="primary">
                     <mat-icon>school</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
@@ -108,10 +108,10 @@
             <th *matHeaderCellDef mat-header-cell style="text-align: right"> Actions</th>
             <td *matCellDef="let element" mat-cell width="35%">
                 <div class="actions">
-                    <button class="download icon-only" (click)="downloadQuestionBank(element.id);" mat-flat-button matTooltip="Download question bank" >
+                    <button class="download icon-only" mat-icon-button (click)="downloadQuestionBank(element.id);" matTooltip="Download question bank">
                         <mat-icon>download</mat-icon>
                     </button>
-                    <button class="icon-only" (click)="deleteQuiz(element.id);" color="warn" mat-flat-button matTooltip="Delete">
+                    <button class="icon-only" mat-icon-button color="warn" (click)="deleteQuiz(element.id);" matTooltip="Delete">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>

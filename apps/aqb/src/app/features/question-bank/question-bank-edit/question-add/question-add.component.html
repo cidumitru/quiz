@@ -21,7 +21,7 @@
             <mat-label>Wrong answer</mat-label>
             <input [formControl]="newQuestionForm.controls.wrongAnswer3" matInput placeholder="Wrong answer" required>
         </mat-form-field>
-        <button (click)="addQuestion()" color="primary" mat-raised-button>Add question</button>
+        <button mat-button appearance="filled" color="primary" (click)="addQuestion()">Add question</button>
     </div>
     <div class="column">
         <h1>Preview</h1>

@@ -1,48 +1,110 @@
-<div class="container" [class.is-mobile]="mobileQuery.matches">
-    <mat-toolbar color="primary">
-        @if (mobileQuery.matches) {
-            <button mat-icon-button (click)="snav.toggle()">
-                <mat-icon>menu</mat-icon>
-            </button>
-        }
-        <span matTooltip="Go home" routerLink="/" style="cursor: pointer; margin-right: 1rem">AQB</span>
-        @if (!mobileQuery.matches) {
-            <div>
-                <button mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Question Banks</button>
-                <button mat-button routerLink="/quizzes" routerLinkActive="active">Quizzes</button>
-                <button mat-button routerLink="/statistics" routerLinkActive="active">Statistics</button>
+<mat-sidenav-container class="app-container" [hasBackdrop]="mobileQuery.matches">
+    <!-- Navigation Rail/Drawer -->
+    <mat-sidenav 
+        #drawer 
+        class="navigation-drawer"
+        [mode]="mobileQuery.matches ? 'over' : 'side'" 
+        [opened]="!mobileQuery.matches"
+        [fixedInViewport]="true"
+        [fixedTopGap]="0">
+        
+        <!-- App Identity -->
+        <div class="nav-header">
+            <div class="app-identity">
+                <div class="app-logo">
+                    <mat-icon class="logo-icon">quiz</mat-icon>
+                </div>
+                <h1 class="app-title">AQB</h1>
+                <p class="app-subtitle">Question Bank</p>
             </div>
-        }
-        <span class="example-spacer"></span>
-        <button 
-            mat-icon-button 
-            (click)="themeService.toggleTheme()" 
-            [matTooltip]="themeService.getThemeLabel()"
-            class="theme-toggle">
-            <mat-icon>{{themeService.getThemeIcon()}}</mat-icon>
-        </button>
-        <a mat-button href="https://github.com/cidumitru/quiz">Github</a>
-    </mat-toolbar>
-
-    <mat-sidenav-container class="sidenav-container">
-        <mat-sidenav #snav mode="over" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
-            <mat-nav-list>
-                <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Question Banks</a>
-                <a mat-list-item routerLink="/quizzes" routerLinkActive="active">Quizzes</a>
-                <a mat-list-item routerLink="/statistics" routerLinkActive="active">Statistics</a>
-                <mat-divider></mat-divider>
-                <a mat-list-item (click)="themeService.toggleTheme()" class="theme-toggle-mobile">
+        </div>
+        
+        <mat-divider></mat-divider>
+        
+        <!-- Primary Navigation -->
+        <div class="nav-section">
+            <mat-nav-list class="primary-nav">
+                <a mat-list-item 
+                   routerLink="/" 
+                   routerLinkActive="active" 
+                   [routerLinkActiveOptions]="{exact: true}"
+                   class="nav-item">
+                    <mat-icon matListItemIcon>quiz</mat-icon>
+                    <span matListItemTitle>Question Banks</span>
+                </a>
+                
+                <a mat-list-item 
+                   routerLink="/quizzes" 
+                   routerLinkActive="active"
+                   class="nav-item">
+                    <mat-icon matListItemIcon>assignment</mat-icon>
+                    <span matListItemTitle>Quizzes</span>
+                </a>
+                
+                <a mat-list-item 
+                   routerLink="/statistics" 
+                   routerLinkActive="active"
+                   class="nav-item">
+                    <mat-icon matListItemIcon>analytics</mat-icon>
+                    <span matListItemTitle>Statistics</span>
+                </a>
+            </mat-nav-list>
+        </div>
+        
+        <mat-divider></mat-divider>
+        
+        <!-- Secondary Navigation -->
+        <div class="nav-section">
+            <mat-nav-list class="secondary-nav">
+                <a mat-list-item 
+                   (click)="themeService.toggleTheme()" 
+                   class="nav-item theme-toggle">
                     <mat-icon matListItemIcon>{{themeService.getThemeIcon()}}</mat-icon>
                     <span matListItemTitle>{{themeService.getThemeLabel()}}</span>
                 </a>
+                
+                <a mat-list-item 
+                   href="https://github.com/cidumitru/quiz" 
+                   target="_blank"
+                   class="nav-item">
+                    <mat-icon matListItemIcon>code</mat-icon>
+                    <span matListItemTitle>GitHub</span>
+                </a>
             </mat-nav-list>
-        </mat-sidenav>
+        </div>
+        
+        <!-- Footer info -->
+        <div class="nav-footer">
+            <div class="build-info">
+                <small>Build: {{appConfig.config.build_date}}</small>
+            </div>
+        </div>
+    </mat-sidenav>
 
-        <mat-sidenav-content>
-            <div class="content" [class.mobile]="mobileQuery.matches">
+    <!-- Main Content Area -->
+    <mat-sidenav-content class="main-container">
+        <!-- Top App Bar for Mobile -->
+        @if (mobileQuery.matches) {
+            <mat-toolbar class="mobile-toolbar">
+                <button mat-icon-button (click)="drawer.toggle()" class="menu-toggle">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <span class="mobile-title">AQB</span>
+                <div class="toolbar-spacer"></div>
+                <button mat-icon-button 
+                        (click)="themeService.toggleTheme()" 
+                        [matTooltip]="themeService.getThemeLabel()"
+                        class="theme-toggle-btn">
+                    <mat-icon>{{themeService.getThemeIcon()}}</mat-icon>
+                </button>
+            </mat-toolbar>
+        }
+        
+        <!-- Page Content -->
+        <main class="page-content" [class.has-mobile-toolbar]="mobileQuery.matches">
+            <div class="content-container">
                 <router-outlet></router-outlet>
             </div>
-            <div style="text-align: center">Build: {{appConfig.config.build_date}}</div>
-        </mat-sidenav-content>
-    </mat-sidenav-container>
-</div>
+        </main>
+    </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,88 +1,261 @@
-.content {
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 2rem;
-  padding-bottom: 2rem;
+// Main app container
+.app-container {
+  height: 100vh;
+  background-color: var(--mat-sys-background);
 }
 
-.example-spacer {
-  flex: 1 1 auto;
+// Navigation Drawer
+.navigation-drawer {
+  width: 360px;
+  background-color: var(--mat-sys-surface);
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  
+  // App identity section
+  .nav-header {
+    padding: 28px 24px 20px;
+    
+    .app-identity {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      
+      .app-logo {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, var(--mat-sys-primary) 0%, var(--mat-sys-tertiary) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        
+        .logo-icon {
+          font-size: 32px;
+          color: var(--mat-sys-on-primary);
+        }
+      }
+      
+      .app-title {
+        margin: 0 0 4px 0;
+        font-size: 28px;
+        font-weight: 500;
+        color: var(--mat-sys-on-surface);
+        letter-spacing: 0.25px;
+      }
+      
+      .app-subtitle {
+        margin: 0;
+        font-size: 14px;
+        color: var(--mat-sys-on-surface-variant);
+        font-weight: 400;
+      }
+    }
+  }
+  
+  // Navigation sections
+  .nav-section {
+    padding: 12px 0;
+    
+    .primary-nav,
+    .secondary-nav {
+      padding: 0;
+    }
+    
+    .nav-item {
+      margin: 4px 16px;
+      border-radius: 28px;
+      height: 56px;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      
+      // Default state
+      background-color: transparent;
+      color: var(--mat-sys-on-surface-variant);
+      
+      // Hover state
+      &:hover {
+        background-color: var(--mat-sys-secondary-container);
+        color: var(--mat-sys-on-secondary-container);
+        
+        mat-icon {
+          color: var(--mat-sys-on-secondary-container);
+        }
+      }
+      
+      // Active state
+      &.active {
+        background-color: var(--mat-sys-secondary-container) !important;
+        color: var(--mat-sys-on-secondary-container) !important;
+        
+        mat-icon {
+          color: var(--mat-sys-on-secondary-container) !important;
+        }
+        
+        // Active indicator
+        &::before {
+          content: '';
+          position: absolute;
+          left: -16px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 4px;
+          height: 32px;
+          background-color: var(--mat-sys-primary);
+          border-radius: 0 2px 2px 0;
+        }
+      }
+      
+      // Icons
+      mat-icon {
+        color: var(--mat-sys-on-surface-variant);
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      // Text
+      span[matListItemTitle] {
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.1px;
+      }
+    }
+    
+    // Theme toggle specific styling
+    .theme-toggle {
+      cursor: pointer;
+      
+      mat-icon {
+        transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), 
+                    color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      &:hover mat-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  
+  // Footer info
+  .nav-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px 24px;
+    
+    .build-info {
+      text-align: center;
+      
+      small {
+        color: var(--mat-sys-on-surface-variant);
+        font-size: 12px;
+        opacity: 0.7;
+      }
+    }
+  }
 }
 
-.container {
+// Main content container
+.main-container {
+  background-color: var(--mat-sys-background);
   display: flex;
   flex-direction: column;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  height: 100%;
 }
 
-.sidenav-container {
-  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
-     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+// Mobile toolbar
+.mobile-toolbar {
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  height: 64px;
+  padding: 0 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
+  .menu-toggle {
+    margin-right: 12px;
+  }
+  
+  .mobile-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--mat-sys-on-surface);
+  }
+  
+  .toolbar-spacer {
+    flex: 1;
+  }
+  
+  .theme-toggle-btn {
+    mat-icon {
+      transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    &:hover mat-icon {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+// Page content
+.page-content {
   flex: 1;
-}
-
-// Active link styles
-.active {
-  background-color: rgba(255, 255, 255, 0.12) !important;
-  color: white !important;
-}
-
-a[mat-list-item].active {
-  background-color: rgba(63, 81, 181, 0.12) !important;
-  color: #3f51b5 !important;
-}
-
-button[mat-button].active {
-  background-color: rgba(255, 255, 255, 0.12) !important;
-  color: white !important;
-}
-
-// Theme toggle styling
-.theme-toggle {
-  margin-right: 8px !important;
+  overflow-y: auto;
+  background-color: var(--mat-sys-background);
   
-  mat-icon {
-    transition: transform 0.3s ease-in-out;
+  &.has-mobile-toolbar {
+    // Account for mobile toolbar
   }
   
-  &:hover mat-icon {
-    transform: rotate(180deg);
+  .content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    
+    @media (max-width: 768px) {
+      padding: 24px 16px;
+    }
   }
 }
 
-.theme-toggle-mobile {
-  cursor: pointer;
-  
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+// Responsive adjustments
+@media (max-width: 768px) {
+  .navigation-drawer {
+    width: 320px;
   }
   
-  mat-icon {
-    transition: transform 0.3s ease-in-out;
+  .nav-header .app-identity {
+    .app-logo {
+      width: 56px;
+      height: 56px;
+      
+      .logo-icon {
+        font-size: 28px;
+      }
+    }
+    
+    .app-title {
+      font-size: 24px;
+    }
   }
   
-  &:hover mat-icon {
-    transform: rotate(180deg);
-  }
-}
-
-.is-mobile {
-  .sidenav-container {
-    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
-     `<body>` to be our scrolling element for mobile layouts. */
-    flex: 1 0 auto;
-  }
-  mat-toolbar {
-    position: fixed;
-    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
-    z-index: 2;
-  }
-  .content {
-    margin-top: 6rem;
-    width: 90%;
+  .nav-section .nav-item {
+    height: 48px;
+    margin: 2px 12px;
+    border-radius: 24px;
+    
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+    
+    span[matListItemTitle] {
+      font-size: 13px;
+    }
   }
 }
