@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, inject, OnDestroy} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ElementRef} from '@angular/core';
 import {startWith, Subscription} from "rxjs";
 import {QuestionBankService} from "../../question-bank/question-bank.service";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
@@ -37,7 +37,7 @@ import {QuestionViewModel} from "./question.view-model";
         MatTooltipModule,
     ]
 })
-export class QuizComponent implements OnDestroy {
+export class QuizComponent implements OnInit, OnDestroy {
     public questionBank: IQuestionBank;
     public quiz: QuizModel;
     public formGroup: FormGroup;
@@ -45,11 +45,18 @@ export class QuizComponent implements OnDestroy {
     public stats: { total: number, correct: number, incorrect: number } = {total: 0, correct: 0, incorrect: 0};
     public statsSubs: Subscription;
 
+    // Scroll navigation properties
+    private currentQuestionIndex = 0;
+    private isScrolling = false;
+    private scrollTimeout: any;
+    private wheelHandler!: (e: WheelEvent) => void;
+
     private activatedRoute = inject(ActivatedRoute);
     private questionBankService = inject(QuestionBankService);
     private router = inject(Router);
     private quizService = inject(QuizService);
     private cdr = inject(ChangeDetectorRef);
+    private elementRef = inject(ElementRef);
 
     constructor() {
         const isNewQuiz = !this.activatedRoute.snapshot.paramMap.get("quizId");
@@ -115,6 +122,56 @@ export class QuizComponent implements OnDestroy {
             });
     }
 
+    ngOnInit() {
+        this.setupScrollNavigation();
+    }
+
+    private setupScrollNavigation() {
+        this.wheelHandler = (e: WheelEvent) => {
+            // Prevent default scrolling
+            e.preventDefault();
+
+            // Debounce rapid scroll events
+            if (this.isScrolling) {
+                return;
+            }
+
+            this.isScrolling = true;
+
+            // Determine scroll direction
+            const isScrollDown = e.deltaY > 0;
+            const isScrollUp = e.deltaY < 0;
+
+            if (isScrollDown && this.currentQuestionIndex < this.quiz.questions.length - 1) {
+                this.currentQuestionIndex++;
+                this.scrollToQuestion(this.currentQuestionIndex);
+            } else if (isScrollUp && this.currentQuestionIndex > 0) {
+                this.currentQuestionIndex--;
+                this.scrollToQuestion(this.currentQuestionIndex);
+            }
+
+            // Reset scroll lock after a shorter delay for quicker navigation
+            this.scrollTimeout = setTimeout(() => {
+                this.isScrolling = false;
+            }, 150); // Much shorter timeout for responsive navigation
+        };
+
+        // Add wheel event listener
+        document.addEventListener('wheel', this.wheelHandler, { passive: false });
+    }
+
+    private scrollToQuestion(questionIndex: number) {
+        const questionElement = document.querySelector(`[data-question-index="${questionIndex}"]`) as HTMLElement;
+
+        if (questionElement) {
+            questionElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'nearest'
+            });
+        }
+    }
+
     public get hasFinished() {
         return values(this.formGroup.controls).every(c => c.value);
     }
@@ -161,9 +218,9 @@ export class QuizComponent implements OnDestroy {
         if (this.isQuestionAnswered(questionId)) {
             return;
         }
-        
+
         this.formGroup.controls[questionId].setValue(answerId);
-        
+
         // Check if the selected answer is correct and auto-scroll to next question
         setTimeout(() => {
             if (this.isQuestionCorrect(questionId)) {
@@ -175,30 +232,31 @@ export class QuizComponent implements OnDestroy {
     // Auto-scroll to next question on correct answer
     private scrollToNextQuestion(currentIndex: number): void {
         const nextIndex = currentIndex + 1;
-        
+
         // Don't scroll if this is the last question
         if (nextIndex >= this.quiz.questions.length) {
             return;
         }
-        
-        // Find the next question card element
-        const nextQuestionElement = document.querySelector(`[data-question-index="${nextIndex}"]`);
-        
-        if (nextQuestionElement) {
-            // Smooth scroll to the next question with some offset for better positioning
-            const yOffset = -100; // Offset to account for header
-            const elementPosition = nextQuestionElement.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset + yOffset;
-            
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-        }
+
+        // Update current question index for scroll navigation
+        this.currentQuestionIndex = nextIndex;
+
+        // Use the common scroll method
+        this.scrollToQuestion(nextIndex);
     }
 
     ngOnDestroy(): void {
         this.statsSubs.unsubscribe();
+
+        // Clean up scroll event listener
+        if (this.wheelHandler) {
+            document.removeEventListener('wheel', this.wheelHandler);
+        }
+
+        // Clear any pending timeouts
+        if (this.scrollTimeout) {
+            clearTimeout(this.scrollTimeout);
+        }
     }
 
     retry() {
