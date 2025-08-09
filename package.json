@@ -65,6 +65,7 @@
     "@nestjs/testing": "^11.0.0",
     "@nx/angular": "21.3.11",
     "@nx/devkit": "21.3.11",
+    "@nx/esbuild": "^21.3.11",
     "@nx/eslint": "21.3.11",
     "@nx/eslint-plugin": "21.3.11",
     "@nx/js": "21.3.11",
