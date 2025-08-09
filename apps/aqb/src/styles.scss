@@ -10,6 +10,43 @@ html, body {
   padding: 0;
 }
 
+// Prevent layout shift from scrollbar
+html {
+  scrollbar-gutter: stable;
+  overflow-y: scroll; // Always show vertical scrollbar space
+}
+
+// Global scrollbar styling
+* {
+  // Firefox scrollbar styling
+  scrollbar-width: thin;
+  scrollbar-color: var(--mat-sys-outline-variant) transparent;
+}
+
+// Webkit scrollbar styling
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--mat-sys-outline-variant);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  
+  &:hover {
+    background-color: var(--mat-sys-outline);
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   background: var(--mat-sys-background);
