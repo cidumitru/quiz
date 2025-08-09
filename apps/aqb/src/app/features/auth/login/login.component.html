@@ -1,0 +1,80 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>
+        {{ showOtpForm ? 'Enter Verification Code' : 'Sign In' }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ showOtpForm ? `We sent a 6-digit code to ${email}` : 'Enter your email to receive a verification code' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Email Form -->
+      <form *ngIf="!showOtpForm" [formGroup]="emailForm" (ngSubmit)="onRequestOtp()">
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="your@email.com" />
+          <mat-error *ngIf="emailForm.get('email')?.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="emailForm.get('email')?.hasError('email')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit" 
+          class="full-width submit-button"
+          [disabled]="!emailForm.valid || isLoading">
+          <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
+          {{ isLoading ? 'Sending...' : 'Send Verification Code' }}
+        </button>
+      </form>
+
+      <!-- OTP Form -->
+      <form *ngIf="showOtpForm" [formGroup]="otpForm" (ngSubmit)="onVerifyOtp()">
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Verification Code</mat-label>
+          <input 
+            matInput 
+            type="text" 
+            formControlName="code" 
+            placeholder="000000"
+            maxlength="6"
+            pattern="[0-9]*" />
+          <mat-error *ngIf="otpForm.get('code')?.hasError('required')">
+            Verification code is required
+          </mat-error>
+          <mat-error *ngIf="otpForm.get('code')?.hasError('pattern')">
+            Please enter a valid 6-digit code
+          </mat-error>
+        </mat-form-field>
+
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit" 
+          class="full-width submit-button"
+          [disabled]="!otpForm.valid || isLoading">
+          <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
+          {{ isLoading ? 'Verifying...' : 'Verify & Sign In' }}
+        </button>
+
+        <div class="otp-actions">
+          <button mat-button type="button" (click)="onBackToEmail()">
+            <mat-icon>arrow_back</mat-icon>
+            Back to Email
+          </button>
+          
+          <button mat-button type="button" (click)="onResendOtp()" [disabled]="isLoading">
+            <mat-icon>refresh</mat-icon>
+            Resend Code
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
