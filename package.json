@@ -7,7 +7,8 @@
     "build": "ng build",
     "build:prod": "ng build --base-href https://cidumitru.github.io/quiz/",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "parse-questions": "ts-node scripts/parseQuestions.ts"
   },
   "private": true,
   "dependencies": {
@@ -40,6 +41,7 @@
     "@angular/cli": "~15.1.5",
     "@angular/compiler-cli": "^15.1.4",
     "@types/jasmine": "~4.0.0",
+    "@types/node": "^24.2.1",
     "@types/uuid": "9.0.0",
     "angular-cli-ghpages": "^1.0.5",
     "jasmine-core": "~4.3.0",
@@ -48,6 +50,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "~4.9.5"
   }
 }
