@@ -36,30 +36,6 @@
                 Name
             </th>
             <td *matCellDef="let element" mat-cell>
-                <button [disabled]="element.questions.length === 0"
-                        [matMenuTriggerFor]="menu"
-                        color="primary"
-                        matTooltip="Practice"
-                        class="icon-only"
-                        style="margin-right: 0.5rem"
-                        mat-button appearance="filled" color="primary">
-                    <mat-icon>school</mat-icon>
-                </button>
-                <mat-menu #menu="matMenu">
-                    <mat-selection-list [multiple]="false" #selectionList>
-                        @for (priority of questionPriorityOptions; track priority) {
-                            <mat-list-option (click)="$event.stopPropagation()" [value]="priority" [selected]="priority === questionPriorityOptions[2]">
-                                {{priority.name}}
-                            </mat-list-option>
-                        }
-                    </mat-selection-list>
-                    <mat-divider></mat-divider>
-                    @for (size of [25, 50, 100]; track size) {
-                        <button (click)="practiceQuiz(element.id, size, selectionList.selectedOptions.selected)"
-                                mat-menu-item>{{size}} Questions
-                        </button>
-                    }
-                </mat-menu>
                 <span routerLink="{{element.id}}" style="cursor:pointer">
                     {{element.name}}
                 </span>
@@ -103,8 +79,31 @@
 
         <ng-container matColumnDef="actions">
             <th *matHeaderCellDef mat-header-cell style="text-align: right"> Actions</th>
-            <td *matCellDef="let element" mat-cell width="35%">
+            <td *matCellDef="let element" mat-cell width="200px">
                 <div class="actions">
+                    <button [disabled]="element.questions.length === 0"
+                            [matMenuTriggerFor]="menu"
+                            class="icon-only"
+                            mat-icon-button
+                            color="primary"
+                            matTooltip="Practice">
+                        <mat-icon>school</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <mat-selection-list [multiple]="false" #selectionList>
+                            @for (priority of questionPriorityOptions; track priority) {
+                                <mat-list-option (click)="$event.stopPropagation()" [value]="priority" [selected]="priority === questionPriorityOptions[2]">
+                                    {{priority.name}}
+                                </mat-list-option>
+                            }
+                        </mat-selection-list>
+                        <mat-divider></mat-divider>
+                        @for (size of [25, 50, 100]; track size) {
+                            <button (click)="practiceQuiz(element.id, size, selectionList.selectedOptions.selected)"
+                                    mat-menu-item>{{size}} Questions
+                            </button>
+                        }
+                    </mat-menu>
                     <button class="download icon-only" mat-icon-button (click)="downloadQuestionBank(element.id);" matTooltip="Download question bank">
                         <mat-icon>download</mat-icon>
                     </button>

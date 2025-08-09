@@ -1,11 +1,28 @@
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
+  align-items: center;
+  gap: 8px;
+  min-width: 180px;
+  
   button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    
     &.download {
       color: white;
       background-color: #46a35e;
+    }
+    
+    mat-icon {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 }

@@ -306,6 +306,46 @@ html:not(.light-theme):not(.dark-theme) {
   width: 48px !important;
   height: 48px !important;
   border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  mat-icon {
+    margin: 0 !important;
+    font-size: 20px !important;
+    width: 20px !important;
+    height: 20px !important;
+    line-height: 1 !important;
+  }
+}
+
+// Fix icon alignment in all Material buttons
+.mat-mdc-button-base {
+  mat-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    &:first-child {
+      margin-right: 8px !important;
+      margin-left: 0 !important;
+    }
+    
+    &:last-child {
+      margin-left: 8px !important;
+      margin-right: 0 !important;
+    }
+    
+    &:only-child {
+      margin: 0 !important;
+    }
+  }
+  
+  &.mat-mdc-icon-button {
+    mat-icon {
+      margin: 0 !important;
+    }
+  }
 }
 
 // Stats styling for quiz component
