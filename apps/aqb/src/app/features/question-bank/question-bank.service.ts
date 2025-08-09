@@ -19,6 +19,11 @@ export class QuestionBankService {
     public questionBanks = computed(() => this._questionBanks());
     public questionBankArr = computed(() => values(this._questionBanks()));
     
+    // Getter for backward compatibility
+    public get questionBanksValue() {
+        return this._questionBanks();
+    }
+    
     // Keep RxJS compatibility for now
     private _questionBanksSubject = new BehaviorSubject<Record<string, IQuestionBank>>({});
     public questionBankArr$ = this._questionBanksSubject.asObservable().pipe(

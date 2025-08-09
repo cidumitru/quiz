@@ -16,6 +16,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatToolbarModule} from "@angular/material/toolbar";
+import {RouterLink} from "@angular/router";
 
 interface QuestionBankSelectOption {
     id: string;
@@ -47,7 +48,8 @@ const DEFAULT_COLUMNS = [
         MatMenuModule,
         MatButtonModule,
         MatIconModule,
-        MatToolbarModule
+        MatToolbarModule,
+        RouterLink
     ],
     templateUrl: './quiz-list.component.html',
     styleUrls: ['./quiz-list.component.scss'],
@@ -56,7 +58,7 @@ const DEFAULT_COLUMNS = [
 export class QuizListComponent implements AfterViewInit {
 
     questionBankFilter = new FormControl<QuestionBankSelectOption | undefined>(undefined);
-    questionBanks: QuestionBankSelectOption[] = this.qb.questionBankArr.map(qb => ({id: qb.id, name: qb.name}));
+    questionBanks: QuestionBankSelectOption[] = [];
     @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
     public quizHistoryDataSource: MatTableDataSource<QuizViewModel> = new MatTableDataSource<QuizViewModel>();
 
@@ -70,6 +72,11 @@ export class QuizListComponent implements AfterViewInit {
     private quiz = inject(QuizService);
     private qb = inject(QuestionBankService);
     private columns = inject(ColumnsPersistenceService);
+
+    constructor() {
+        this.questionBanks = this.qb.questionBankArr().map(qb => ({id: qb.id, name: qb.name}));
+    }
+    
     private cdr = inject(ChangeDetectorRef);
 
 
@@ -79,7 +86,7 @@ export class QuizListComponent implements AfterViewInit {
                 const range = this.quiz.getQuizzes({ questionBankId: selectedQuestionBank?.id, skip: page.pageIndex * page.pageSize, take: page.pageSize });
 
                 this.paginator.length = range.total;
-                this.quizHistoryDataSource.data = range.items.map(q => new QuizViewModel(q, this.qb.questionBanks[q.questionBankId]?.name));
+                this.quizHistoryDataSource.data = range.items.map(q => new QuizViewModel(q, this.qb.questionBanksValue[q.questionBankId]?.name));
 
                 this.cdr.detectChanges();
             })

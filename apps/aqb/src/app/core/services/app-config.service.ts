@@ -19,12 +19,11 @@ export class AppConfig {
 
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            this.httpClient.get<IAppConfig>('./assets/app-config.json').subscribe(config => {
-                this._config = config;
-                resolve();
-            }, error => {
-                reject(error);
-            });
+          this._config = {
+            ...this._config,
+            build_date: new Date().toISOString()
+          }
+          resolve()
         });
     }
 }

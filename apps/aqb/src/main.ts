@@ -51,7 +51,7 @@ const routes = [
 
 bootstrapApplication(AppComponent, {
     providers: [
-        provideRouter(routes, { useHash: true }),
+        provideRouter(routes),
         importProvidersFrom(
             BrowserAnimationsModule,
             HttpClientModule,

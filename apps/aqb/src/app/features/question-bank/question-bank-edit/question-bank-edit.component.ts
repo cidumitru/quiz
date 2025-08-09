@@ -1,9 +1,13 @@
 import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterOutlet, RouterLink, RouterLinkActive} from "@angular/router";
 import {QuestionBankService} from "../question-bank.service";
 import {Observable} from "rxjs";
 import {IQuestionBank} from "../question-bank.models";
 import {CommonModule} from "@angular/common";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatTabsModule} from "@angular/material/tabs";
+import {FormsModule} from "@angular/forms";
 
 @Component({
     selector: 'app-questionBank-edit',
@@ -12,7 +16,14 @@ import {CommonModule} from "@angular/common";
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
-        CommonModule
+        CommonModule,
+        RouterOutlet,
+        RouterLink,
+        RouterLinkActive,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTabsModule,
+        FormsModule
     ]
 })
 export class QuestionBankEditComponent {

@@ -96,7 +96,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
             switchMap(questionBanks => this.questionBankFilter.valueChanges.pipe(
                     debounceTime(300),
                     startWith(""),
-                    map(searchText => questionBanks.filter(qb => qb.name.toLowerCase().includes(searchText?.toLowerCase() ?? "")).map(qb => new QuestionBankViewModel(qb, stats))),
+                    map(searchText => questionBanks.filter(qb => qb.name.toLowerCase().includes(searchText?.toLowerCase() ?? "")).map(qb => new QuestionBankViewModel(qb, this.stats))),
                     tap(qbs => this.questionBanksDs.data = qbs)
                 )
             )).subscribe()
@@ -118,7 +118,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     }
 
     downloadQuestionBank(id: string): void {
-        const targetQuestionBank = this.questionBank.questionBanks[id];
+        const targetQuestionBank = this.questionBank.questionBanksValue[id];
         return exportFromJSON({
             data: targetQuestionBank,
             fileName: `${targetQuestionBank.name} - ${targetQuestionBank.questions.length} Questions`,

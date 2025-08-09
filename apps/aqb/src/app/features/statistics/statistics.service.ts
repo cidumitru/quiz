@@ -33,7 +33,7 @@ export class StatisticsService {
 
         const answeredQuestions = uniqBy(allQuestions.filter(q => q.answer), q => q.id);
 
-        const coverage = ((answeredQuestions.length / this.questionBanks.questionBanks[questionBankId]?.questions.length) * 100) || 0;
+        const coverage = ((answeredQuestions.length / this.questionBanks.questionBanksValue[questionBankId]?.questions.length) * 100) || 0;
 
         return allQuestions.reduce((acc, question) => {
             if (question.answer) {
@@ -71,7 +71,7 @@ export class StatisticsService {
         const unfilteredResult = mapValues(groupBy(quizzes, quizz => quizz.questionBankId), quizzes => {
             const questions = quizzes.map(quiz => quiz.questions).flat();
             const answeredQuestions = uniq(questions.filter(q => q.answer));
-            const questionBank = this.questionBanks.questionBanks[quizzes[0].questionBankId];
+            const questionBank = this.questionBanks.questionBanksValue[quizzes[0].questionBankId];
             return {
                 questionBankName: questionBank?.name || "Unknown",
                 answeredQuestions,

@@ -70,7 +70,7 @@ export class QuizService {
                     return acc;
                 }, {} as Record<string, boolean[]>);
 
-                questions = this.questionBanks.questionBanks[options.questionBankId].questions.filter(question => {
+                questions = this.questionBanks.questionBanksValue[options.questionBankId].questions.filter(question => {
                     const answers = questionAnswerMap[question.id];
                     return answers?.length && answers.filter(answer => answer).length / answers.length < 0.7;
                 });
@@ -78,10 +78,10 @@ export class QuizService {
             case QuizMode.Discovery:
                 const answeredQuestionsSet = new Set(this.quizzesArr.filter(q => q.questionBankId === options.questionBankId).map(quiz => quiz.questions).flat().filter(q => q.answer).map(question => question.id));
 
-                questions = this.questionBanks.questionBanks[options.questionBankId].questions.filter(question => !answeredQuestionsSet.has(question.id));
+                questions = this.questionBanks.questionBanksValue[options.questionBankId].questions.filter(question => !answeredQuestionsSet.has(question.id));
                 break;
             default:
-                questions = this.questionBanks.questionBanks[options.questionBankId].questions;
+                questions = this.questionBanks.questionBanksValue[options.questionBankId].questions;
         }
         const newQuiz: IQuiz = {
             id: uuidv4(),

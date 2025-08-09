@@ -59,7 +59,7 @@ export class QuizComponent implements OnDestroy {
             const questionBankId = queryParamMap.get("questionBankId");
             if (!questionBankId) throw new Error("questionBankId is required for starting a new quiz");
 
-            this.questionBank = this.questionBankService.questionBanks[questionBankId!];
+            this.questionBank = this.questionBankService.questionBanksValue[questionBankId!];
             this.quiz = new QuizModel(this.quizService.startQuiz({
                 questionBankId: this.questionBank.id,
                 questionsCount: parseInt(queryParamMap.get("size") ?? "") ?? 25,
@@ -72,7 +72,7 @@ export class QuizComponent implements OnDestroy {
             this.quiz = new QuizModel(this.quizService.getQuiz(quizId));
             if (!this.quiz) throw new Error("Quiz not found");
 
-            this.questionBank = this.questionBankService.questionBanks[this.quiz.questionBankId];
+            this.questionBank = this.questionBankService.questionBanksValue[this.quiz.questionBankId];
         }
 
 
