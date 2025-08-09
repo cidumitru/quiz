@@ -8,6 +8,8 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
+import {MatDividerModule} from "@angular/material/divider";
+import {ThemeService} from "./core/services/theme.service";
 
 @Component({
     selector: 'app-root',
@@ -21,7 +23,8 @@ import {MatListModule} from "@angular/material/list";
         MatButtonModule,
         MatTooltipModule,
         MatSidenavModule,
-        MatListModule
+        MatListModule,
+        MatDividerModule
     ],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
@@ -30,6 +33,7 @@ export class AppComponent implements OnDestroy {
     private changeDetectorRef = inject(ChangeDetectorRef);
     private media = inject(MediaMatcher);
     protected appConfig = inject(AppConfig);
+    protected themeService = inject(ThemeService);
 
     title = signal('quizz');
     mobileQuery: MediaQueryList;

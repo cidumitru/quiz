@@ -14,6 +14,13 @@
             </div>
         }
         <span class="example-spacer"></span>
+        <button 
+            mat-icon-button 
+            (click)="themeService.toggleTheme()" 
+            [matTooltip]="themeService.getThemeLabel()"
+            class="theme-toggle">
+            <mat-icon>{{themeService.getThemeIcon()}}</mat-icon>
+        </button>
         <a mat-button href="https://github.com/cidumitru/quiz">Github</a>
     </mat-toolbar>
 
@@ -23,6 +30,11 @@
                 <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Question Banks</a>
                 <a mat-list-item routerLink="/quizzes" routerLinkActive="active">Quizzes</a>
                 <a mat-list-item routerLink="/statistics" routerLinkActive="active">Statistics</a>
+                <mat-divider></mat-divider>
+                <a mat-list-item (click)="themeService.toggleTheme()" class="theme-toggle-mobile">
+                    <mat-icon matListItemIcon>{{themeService.getThemeIcon()}}</mat-icon>
+                    <span matListItemTitle>{{themeService.getThemeLabel()}}</span>
+                </a>
             </mat-nav-list>
         </mat-sidenav>
 

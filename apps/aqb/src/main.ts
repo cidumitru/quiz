@@ -12,6 +12,7 @@ import { QuizService } from './app/features/quiz/quiz.service';
 import { AppConfig } from './app/core/services/app-config.service';
 import { ColumnsPersistenceService } from './app/core/services/columns-persistence.service';
 import { MockDataLoader } from './app/core/mock/mock-data.loader';
+import { ThemeService } from './app/core/services/theme.service';
 import { APP_INITIALIZER } from '@angular/core';
 
 export const bootstrapFactory = (appConfig: AppConfig, questionBank: QuestionBankService, quiz: QuizService, columns: ColumnsPersistenceService, mockDataLoader: MockDataLoader) => async () => {
@@ -62,6 +63,7 @@ bootstrapApplication(AppComponent, {
         AppConfig,
         ColumnsPersistenceService,
         MockDataLoader,
+        ThemeService,
         {
             provide: APP_INITIALIZER,
             useFactory: bootstrapFactory,

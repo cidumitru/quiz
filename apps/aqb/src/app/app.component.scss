@@ -41,6 +41,35 @@ button[mat-button].active {
   color: white !important;
 }
 
+// Theme toggle styling
+.theme-toggle {
+  margin-right: 8px !important;
+  
+  mat-icon {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  &:hover mat-icon {
+    transform: rotate(180deg);
+  }
+}
+
+.theme-toggle-mobile {
+  cursor: pointer;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  
+  mat-icon {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  &:hover mat-icon {
+    transform: rotate(180deg);
+  }
+}
+
 .is-mobile {
   .sidenav-container {
     /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
