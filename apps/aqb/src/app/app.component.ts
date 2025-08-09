@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, inject, OnDestroy, signal} from '@angular/core';
 import {AppConfig} from "./core/services/app-config.service";
 import {MediaMatcher} from "@angular/cdk/layout";
-import {RouterOutlet} from "@angular/router";
+import {RouterOutlet, RouterLink, RouterLinkActive} from "@angular/router";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
@@ -14,6 +14,8 @@ import {MatListModule} from "@angular/material/list";
     standalone: true,
     imports: [
         RouterOutlet,
+        RouterLink,
+        RouterLinkActive,
         MatToolbarModule,
         MatIconModule,
         MatButtonModule,
