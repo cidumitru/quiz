@@ -36,34 +36,42 @@
     } @else {
         <div class="questions-list">
             @for (question of quiz.questions; track question.id; let i = $index) {
-                <mat-card class="question-card" 
-                         #questionCard
-                         [attr.data-question-index]="i"
+                <div class="question-wrapper">
+                    <!-- Floating Question Number Badge -->
+                    <div class="floating-question-number" 
                          [ngClass]="{
                            'answered': isQuestionAnswered(question.id),
                            'correct': isQuestionCorrect(question.id),
                            'incorrect': isQuestionIncorrect(question.id),
                            'unanswered': !isQuestionAnswered(question.id)
                          }">
+                        {{i + 1}}
+                    </div>
                     
-                    <!-- Question Header -->
-                    <mat-card-header class="question-header">
-                        <div class="question-number-badge">
-                            <span class="question-number">{{i + 1}}</span>
-                        </div>
+                    <mat-card class="question-card" 
+                             #questionCard
+                             [attr.data-question-index]="i"
+                             [ngClass]="{
+                               'answered': isQuestionAnswered(question.id),
+                               'correct': isQuestionCorrect(question.id),
+                               'incorrect': isQuestionIncorrect(question.id),
+                               'unanswered': !isQuestionAnswered(question.id)
+                             }">
                         
-                        <div class="question-content">
-                            <mat-card-title class="question-text">
-                                {{question.question}}
-                            </mat-card-title>
-                            @if (!question.rightAnswer) {
-                                <mat-card-subtitle class="no-answer-warning">
-                                    <mat-icon>warning</mat-icon>
-                                    No correct answer provided
-                                </mat-card-subtitle>
-                            }
-                        </div>
-                    </mat-card-header>
+                        <!-- Question Header -->
+                        <mat-card-header class="question-header">
+                            <div class="question-content">
+                                <mat-card-title class="question-text">
+                                    {{question.question}}
+                                </mat-card-title>
+                                @if (!question.rightAnswer) {
+                                    <mat-card-subtitle class="no-answer-warning">
+                                        <mat-icon>warning</mat-icon>
+                                        No correct answer provided
+                                    </mat-card-subtitle>
+                                }
+                            </div>
+                        </mat-card-header>
                     
                     <!-- Answer Options -->
                     <mat-card-content class="answers-section">
@@ -104,6 +112,7 @@
                         </mat-radio-group>
                     </mat-card-content>
                 </mat-card>
+                </div>
             }
         </div>
     }

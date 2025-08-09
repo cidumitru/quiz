@@ -127,8 +127,37 @@ export class QuizComponent implements OnInit, OnDestroy {
     }
 
     private setupScrollNavigation() {
+        // Check if we're on a mobile device - if so, skip custom scroll navigation
+        const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
+        
+        if (isMobile) {
+            return; // Allow normal scrolling on mobile devices
+        }
+        
         this.wheelHandler = (e: WheelEvent) => {
-            // Prevent default scrolling
+            // Only intercept scrolling if we're within the quiz content area
+            const target = e.target as HTMLElement;
+            const quizContainer = this.elementRef.nativeElement.querySelector('.quiz-container');
+            
+            // Check if the scroll event is within the quiz container
+            if (!quizContainer || !quizContainer.contains(target)) {
+                return; // Allow normal scrolling outside quiz content
+            }
+            
+            // Determine scroll direction first
+            const isScrollDown = e.deltaY > 0;
+            const isScrollUp = e.deltaY < 0;
+            
+            // Allow normal scrolling if at boundaries
+            if (isScrollUp && this.currentQuestionIndex === 0) {
+                return; // Allow scrolling up to access menu/header
+            }
+            
+            if (isScrollDown && this.currentQuestionIndex >= this.quiz.questions.length - 1) {
+                return; // Allow normal scrolling beyond last question
+            }
+            
+            // Only prevent default if we're going to navigate between questions
             e.preventDefault();
 
             // Debounce rapid scroll events
@@ -137,10 +166,6 @@ export class QuizComponent implements OnInit, OnDestroy {
             }
 
             this.isScrolling = true;
-
-            // Determine scroll direction
-            const isScrollDown = e.deltaY > 0;
-            const isScrollUp = e.deltaY < 0;
 
             if (isScrollDown && this.currentQuestionIndex < this.quiz.questions.length - 1) {
                 this.currentQuestionIndex++;
@@ -156,7 +181,7 @@ export class QuizComponent implements OnInit, OnDestroy {
             }, 150); // Much shorter timeout for responsive navigation
         };
 
-        // Add wheel event listener
+        // Add wheel event listener only for desktop
         document.addEventListener('wheel', this.wheelHandler, { passive: false });
     }
 
