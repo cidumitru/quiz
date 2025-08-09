@@ -1,54 +1,301 @@
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
-  min-width: 180px;
+// Cards container with responsive grid
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
   
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 48px;
-    height: 48px;
-    flex-shrink: 0;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+// Question bank card styling
+.question-bank-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px !important;
+  border: 1px solid var(--mat-sys-outline-variant);
+  background: linear-gradient(145deg, var(--mat-sys-surface-container-lowest), var(--mat-sys-surface-container-low));
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  // Subtle gradient overlay
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--mat-sys-primary), transparent);
+    opacity: 0.6;
+  }
+  
+  &:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 
+      0 8px 25px rgba(0, 0, 0, 0.12),
+      0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    border-color: var(--mat-sys-primary);
     
-    &.download {
-      color: white;
-      background-color: #46a35e;
+    &::before {
+      opacity: 1;
+      height: 2px;
+    }
+  }
+  
+  .mat-mdc-card-header {
+    padding: 24px 24px 16px !important;
+    background: transparent;
+    
+    .mat-mdc-card-title {
+      .bank-name {
+        cursor: pointer;
+        color: var(--mat-sys-on-surface);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 18px;
+        letter-spacing: -0.2px;
+        line-height: 24px;
+        transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        
+        &:hover {
+          color: var(--mat-sys-primary);
+        }
+      }
+    }
+    
+    .mat-mdc-card-subtitle {
+      color: var(--mat-sys-on-surface-variant);
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 6px;
+      opacity: 0.8;
+    }
+  }
+  
+  .mat-mdc-card-content {
+    padding: 0 24px 20px !important;
+  }
+}
+
+// Stats grid layout
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: var(--mat-sys-surface-container-highest);
+  border-radius: 16px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  
+  .stat-item {
+    text-align: center;
+    position: relative;
+    
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -10px;
+      top: 20%;
+      bottom: 20%;
+      width: 1px;
+      background: var(--mat-sys-outline-variant);
+      opacity: 0.5;
+    }
+    
+    .stat-label {
+      font-size: 11px;
+      color: var(--mat-sys-on-surface-variant);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+      opacity: 0.8;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--mat-sys-on-surface);
+      line-height: 1;
+      
+      &.primary {
+        background: linear-gradient(135deg, var(--mat-sys-primary), var(--mat-sys-tertiary));
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: var(--mat-sys-primary); // Fallback
+      }
+    }
+  }
+}
+
+// Detailed stats chips
+.detailed-stats {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  
+  .stat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--mat-sys-tertiary-container), var(--mat-sys-secondary-container));
+    color: var(--mat-sys-on-tertiary-container);
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--mat-sys-outline-variant);
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
     mat-icon {
-      margin: 0;
-      display: flex;
-      align-items: center;
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      opacity: 0.9;
+    }
+  }
+}
+
+// Card actions styling
+.mat-mdc-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 20px 24px !important;
+  background: var(--mat-sys-surface-container);
+  margin: 0 -1px -1px -1px;
+  border-radius: 0 0 19px 19px;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  
+  button {
+    &.mat-mdc-button {
+      border-radius: 24px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.2px !important;
+      padding: 0 20px !important;
+      height: 40px !important;
+      min-width: 120px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+      
+      mat-icon {
+        margin-right: 8px !important;
+        margin-left: 0 !important;
+        font-size: 18px !important;
+        width: 18px !important;
+        height: 18px !important;
+      }
+      
+      &[appearance="outlined"] {
+        border-width: 1.5px !important;
+        
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+    
+    &.mat-mdc-icon-button {
+      width: 40px !important;
+      height: 40px !important;
+      border-radius: 50% !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+      flex-shrink: 0 !important;
+      
+      mat-icon {
+        font-size: 20px !important;
+        width: 20px !important;
+        height: 20px !important;
+        margin: 0 !important;
+      }
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+  
+  @media (max-width: 360px) {
+    flex-direction: column;
+    gap: 12px;
+    
+    button:not(.mat-mdc-icon-button) {
+      width: 100%;
       justify-content: center;
     }
   }
 }
 
-// Table container with Material 3 styling
-.table-container {
-  background-color: var(--mat-sys-surface-container-low);
-  border-radius: 16px;
-  padding: 0;
-  border: 1px solid var(--mat-sys-outline-variant);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  overflow: hidden;
+// No data state
+.no-data-card {
+  grid-column: 1 / -1;
   
-  mat-table {
-    width: 100%;
-    background: transparent;
+  mat-card {
+    text-align: center;
+    padding: 64px 32px !important;
+    border-radius: 24px !important;
+    border: 2px dashed var(--mat-sys-outline-variant);
+    background: linear-gradient(145deg, var(--mat-sys-surface-container-lowest), var(--mat-sys-surface-container));
+    
+    .no-data-content {
+      mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: var(--mat-sys-on-surface-variant);
+        margin-bottom: 24px;
+        opacity: 0.6;
+      }
+      
+      h3 {
+        margin: 0 0 12px 0;
+        color: var(--mat-sys-on-surface);
+        font-weight: 600;
+        font-size: 24px;
+        letter-spacing: -0.2px;
+      }
+      
+      p {
+        margin: 0;
+        color: var(--mat-sys-on-surface-variant);
+        font-size: 16px;
+        opacity: 0.8;
+      }
+    }
   }
 }
 
-.cdk-cell {
-  white-space: nowrap
-}
-
-.cdk-header-cell {
-  white-space: nowrap
-}
 
 :host ::ng-deep {
   .no-padding {

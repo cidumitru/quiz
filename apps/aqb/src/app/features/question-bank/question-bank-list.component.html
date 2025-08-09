@@ -23,103 +23,101 @@
         </div>
     </div>
 
-    <div class="table-container">
-        <table [dataSource]="questionBanksDs" mat-table matSort>
-
-        <ng-container matColumnDef="id">
-            <th *matHeaderCellDef mat-header-cell>Id.</th>
-            <td *matCellDef="let element" mat-cell> {{element.id}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="name">
-            <th *matHeaderCellDef mat-header-cell>
-                Name
-            </th>
-            <td *matCellDef="let element" mat-cell>
-                <span routerLink="banks/{{element.id}}" style="cursor:pointer">
-                    {{element.name}}
-                </span>
-            </td>
-        </ng-container>
-
-        <ng-container matColumnDef="updatedAt">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>Last update</th>
-            <td *matCellDef="let element" mat-cell> {{(element.updatedAt | date: "short") ?? "No updates"}} </td>
-        </ng-container>
-
-
-        <ng-container matColumnDef="questions">
-            <th *matHeaderCellDef mat-header-cell>Questions</th>
-            <td *matCellDef="let element" mat-cell> {{element.questions}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="stats">
-            <th *matHeaderCellDef mat-header-cell>Stats</th>
-            <td *matCellDef="let element" mat-cell>
-                <span matTooltip="Total answers">{{element.stats.totalAnswers}}</span>
-                - <span matTooltip="Answers on valid questions">{{element.stats.answeredQuestions}}</span>
-                - <span matTooltip="Correct answers">{{element.stats.correctAnswers}}</span>
-            </td>
-        </ng-container>
-
-        <ng-container matColumnDef="coverage">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>Coverage</th>
-            <td *matCellDef="let element" mat-cell matTooltip="Percentage of questions you provided a correct answer.">{{element.coverage  | number}}%</td>
-        </ng-container>
-
-        <ng-container matColumnDef="averageScore">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>Avg Score</th>
-            <td *matCellDef="let element" mat-cell>{{element.averageScore  | number}}%</td>
-        </ng-container>
-
-        <ng-container matColumnDef="averageScoreToday">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>Today's Avg Score</th>
-            <td *matCellDef="let element" mat-cell>{{element.averageScoreToday  | number}}%</td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-            <th *matHeaderCellDef mat-header-cell style="text-align: right"> Actions</th>
-            <td *matCellDef="let element" mat-cell width="200px">
-                <div class="actions">
-                    <button [disabled]="element.questions.length === 0"
-                            [matMenuTriggerFor]="menu"
-                            class="icon-only"
-                            mat-icon-button
-                            color="primary"
-                            matTooltip="Practice">
-                        <mat-icon>school</mat-icon>
-                    </button>
-                    <mat-menu #menu="matMenu">
-                        <mat-selection-list [multiple]="false" #selectionList>
-                            @for (priority of questionPriorityOptions; track priority) {
-                                <mat-list-option (click)="$event.stopPropagation()" [value]="priority" [selected]="priority === questionPriorityOptions[2]">
-                                    {{priority.name}}
-                                </mat-list-option>
+    <div class="cards-container">
+        @if (questionBanksDs.data.length === 0) {
+            <div class="no-data-card">
+                <mat-card>
+                    <mat-card-content>
+                        <div class="no-data-content">
+                            <mat-icon>quiz</mat-icon>
+                            <h3>No question banks</h3>
+                            <p>Create your first question bank to get started</p>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        } @else {
+            @for (element of questionBanksDs.data; track element.id) {
+                <mat-card class="question-bank-card">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <span class="bank-name" routerLink="banks/{{element.id}}">
+                                {{element.name}}
+                            </span>
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            {{element.questions}} questions • Updated {{(element.updatedAt | date: "short") ?? "Never"}}
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    
+                    <mat-card-content>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-label">Coverage</div>
+                                <div class="stat-value primary">{{element.coverage | number}}%</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Avg Score</div>
+                                <div class="stat-value">{{element.averageScore | number}}%</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Today</div>
+                                <div class="stat-value">{{element.averageScoreToday | number}}%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detailed-stats">
+                            <span class="stat-chip" matTooltip="Total answers">
+                                <mat-icon>quiz</mat-icon>
+                                {{element.stats.totalAnswers}}
+                            </span>
+                            <span class="stat-chip" matTooltip="Answers on valid questions">
+                                <mat-icon>check_circle</mat-icon>
+                                {{element.stats.answeredQuestions}}
+                            </span>
+                            <span class="stat-chip" matTooltip="Correct answers">
+                                <mat-icon>verified</mat-icon>
+                                {{element.stats.correctAnswers}}
+                            </span>
+                        </div>
+                    </mat-card-content>
+                    
+                    <mat-card-actions>
+                        <button [disabled]="element.questions === 0"
+                                [matMenuTriggerFor]="menu"
+                                mat-button
+                                appearance="outlined"
+                                color="primary">
+                            <mat-icon>school</mat-icon>
+                            Practice
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <mat-selection-list [multiple]="false" #selectionList>
+                                @for (priority of questionPriorityOptions; track priority) {
+                                    <mat-list-option (click)="$event.stopPropagation()" [value]="priority" [selected]="priority === questionPriorityOptions[2]">
+                                        {{priority.name}}
+                                    </mat-list-option>
+                                }
+                            </mat-selection-list>
+                            <mat-divider></mat-divider>
+                            @for (size of [25, 50, 100]; track size) {
+                                <button (click)="practiceQuiz(element.id, size, selectionList.selectedOptions.selected)"
+                                        mat-menu-item>{{size}} Questions
+                                </button>
                             }
-                        </mat-selection-list>
-                        <mat-divider></mat-divider>
-                        @for (size of [25, 50, 100]; track size) {
-                            <button (click)="practiceQuiz(element.id, size, selectionList.selectedOptions.selected)"
-                                    mat-menu-item>{{size}} Questions
-                            </button>
-                        }
-                    </mat-menu>
-                    <button class="download icon-only" mat-icon-button (click)="downloadQuestionBank(element.id);" matTooltip="Download question bank">
-                        <mat-icon>download</mat-icon>
-                    </button>
-                    <button class="icon-only" mat-icon-button color="warn" (click)="deleteQuiz(element.id);" matTooltip="Delete">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                </div>
-            </td>
-        </ng-container>
-
-        <tr *matNoDataRow class="mat-row">
-            <td [attr.colspan]="displayedColumns.length" class="mat-cell">No question banks</td>
-        </tr>
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
-    </table>
-        <mat-paginator #questionBankPaginator [pageSizeOptions]="[15, 30, 50]"></mat-paginator>
+                        </mat-menu>
+                        
+                        <button mat-button appearance="outlined" (click)="downloadQuestionBank(element.id);" matTooltip="Download question bank">
+                            <mat-icon>download</mat-icon>
+                            Download
+                        </button>
+                        
+                        <button mat-icon-button color="warn" (click)="deleteQuiz(element.id);" matTooltip="Delete">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+            }
+        }
     </div>
 </div>

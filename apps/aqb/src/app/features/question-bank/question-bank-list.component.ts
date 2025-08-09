@@ -71,7 +71,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     @ViewChild(MatSort) sort!: MatSort;
     @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
     public questionBankFilter = new FormControl("");
-    public questionBanksDs = new MatTableDataSource();
+    public questionBanksDs = new MatTableDataSource<QuestionBankViewModel>();
     public tableColumnOptions: IColumn[] = [];
     // TODO: Update on change
     public get displayedColumns() {

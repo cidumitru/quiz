@@ -426,7 +426,7 @@ html:not(.light-theme):not(.dark-theme) {
     }
   }
   
-  @media (max-width: 480px) {
+  @media (max-width: 320px) {
     .header-actions {
       flex-direction: column;
       gap: 8px;
