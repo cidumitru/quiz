@@ -162,6 +162,17 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     }
 
 
+    practiceQuizDefault(questionBankId: string): void {
+        // Default: All questions, 25 count
+        this.router.navigate(['quizzes', 'practice'], {
+            queryParams: {
+                size: 25,
+                questionBankId: questionBankId,
+                mode: QuizMode.All
+            }
+        }).then();
+    }
+
     practiceQuiz(questionBankId: string, quizSize: number, questionPrioritySelection: MatListOption[]): void {
         if (isNaN(quizSize)) return;
 

@@ -69,7 +69,7 @@
                     
                     <mat-card-actions>
                         <button [disabled]="element.questions === 0"
-                                [matMenuTriggerFor]="practiceMenu"
+                                (click)="practiceQuizDefault(element.id)"
                                 mat-button
                                 appearance="filled"
                                 color="accent"
@@ -77,26 +77,16 @@
                             <mat-icon>school</mat-icon>
                             Practice
                         </button>
-                        <mat-menu #practiceMenu="matMenu">
-                            <mat-selection-list [multiple]="false" #selectionList>
-                                @for (priority of questionPriorityOptions; track priority) {
-                                    <mat-list-option (click)="$event.stopPropagation()" [value]="priority" [selected]="priority === questionPriorityOptions[2]">
-                                        {{priority.name}}
-                                    </mat-list-option>
-                                }
-                            </mat-selection-list>
-                            <mat-divider></mat-divider>
-                            @for (size of [25, 50, 100]; track size) {
-                                <button (click)="practiceQuiz(element.id, size, selectionList.selectedOptions.selected)"
-                                        mat-menu-item>{{size}} Questions
-                                </button>
-                            }
-                        </mat-menu>
                         
                         <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="More actions">
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #actionsMenu="matMenu">
+                            <button mat-menu-item [matMenuTriggerFor]="practiceOptionsMenu">
+                                <mat-icon>school</mat-icon>
+                                <span>Practice Options</span>
+                            </button>
+                            <mat-divider></mat-divider>
                             <button mat-menu-item (click)="downloadQuestionBank(element.id);">
                                 <mat-icon>download</mat-icon>
                                 <span>Download</span>
@@ -105,6 +95,29 @@
                                 <mat-icon>delete</mat-icon>
                                 <span>Delete</span>
                             </button>
+                        </mat-menu>
+                        
+                        <mat-menu #practiceOptionsMenu="matMenu">
+                            <div class="practice-options-menu">
+                                <div class="menu-section-title">Priority Mode</div>
+                                <mat-selection-list [multiple]="false" #selectionList>
+                                    @for (priority of questionPriorityOptions; track priority) {
+                                        <mat-list-option (click)="$event.stopPropagation()" 
+                                                         [value]="priority" 
+                                                         [selected]="priority === questionPriorityOptions[0]">
+                                            {{priority.name}}
+                                        </mat-list-option>
+                                    }
+                                </mat-selection-list>
+                                <mat-divider></mat-divider>
+                                <div class="menu-section-title">Number of Questions</div>
+                                @for (size of [25, 50, 100]; track size) {
+                                    <button (click)="practiceQuiz(element.id, size, selectionList.selectedOptions.selected)"
+                                            mat-menu-item>
+                                        <span>{{size}} Questions</span>
+                                    </button>
+                                }
+                            </div>
                         </mat-menu>
                     </mat-card-actions>
                 </mat-card>

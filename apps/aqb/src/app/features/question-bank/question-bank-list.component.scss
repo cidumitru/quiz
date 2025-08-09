@@ -295,6 +295,36 @@
 }
 
 
+// Practice options menu styling
+.practice-options-menu {
+  .menu-section-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--mat-sys-on-surface-variant);
+    padding: 8px 16px 4px;
+    opacity: 0.8;
+  }
+  
+  mat-selection-list {
+    padding: 0;
+    
+    .mat-mdc-list-option {
+      height: 40px;
+      font-size: 14px;
+    }
+  }
+  
+  mat-divider {
+    margin: 8px 0;
+  }
+  
+  button[mat-menu-item] {
+    font-size: 14px;
+  }
+}
+
 :host ::ng-deep {
   .no-padding {
     .mat-mdc-form-field-subscript-wrapper {

@@ -1,7 +1,7 @@
 import {IAnsweredQuestion, IQuiz} from "../quiz.service";
 import {IAnswer} from "../../question-bank/question-bank.models";
 import {isNil} from "lodash";
-import {formatDuration, intervalToDuration} from "date-fns";
+import {Duration, intervalToDuration} from "date-fns";
 
 export class QuizViewModel {
     id: string;
@@ -33,8 +33,31 @@ export class QuizViewModel {
         this.startedAt = new Date(quiz.startedAt);
         this.finishedAt = quiz.finishedAt ? new Date(quiz.finishedAt) : undefined;
         this.duration = this.finishedAt
-            ? formatDuration(intervalToDuration({start: this.startedAt, end: this.finishedAt}))
-            : 'In progress';
-
+            ? this.formatShortDuration(intervalToDuration({start: this.startedAt, end: this.finishedAt}))
+            : '—';
+    }
+    
+    private formatShortDuration(duration: Duration): string {
+        const parts = [];
+        
+        if (duration.hours && duration.hours > 0) {
+            parts.push(`${duration.hours}h`);
+        }
+        
+        if (duration.minutes && duration.minutes > 0) {
+            parts.push(`${duration.minutes}m`);
+        }
+        
+        if (duration.seconds && duration.seconds > 0 && !duration.hours) {
+            parts.push(`${duration.seconds}s`);
+        }
+        
+        // If duration is very short (< 1 second)
+        if (parts.length === 0) {
+            return '< 1s';
+        }
+        
+        // Return only first two parts for brevity
+        return parts.slice(0, 2).join(' ');
     }
 }
