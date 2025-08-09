@@ -119,6 +119,84 @@ export class QuizComponent implements OnDestroy {
         return values(this.formGroup.controls).every(c => c.value);
     }
 
+    // Progress tracking getters
+    public get answeredCount(): number {
+        return values(this.formGroup.controls).filter(c => c.value).length;
+    }
+
+    public get progressPercentage(): number {
+        return (this.answeredCount / this.quiz.questions.length) * 100;
+    }
+
+    public get accuracyPercentage(): number {
+        return this.answeredCount > 0 ? Math.round((this.stats.correct / this.answeredCount) * 100) : 0;
+    }
+
+    // Question state helper methods
+    public isQuestionAnswered(questionId: string): boolean {
+        return !!this.formGroup.controls[questionId].value;
+    }
+
+    public isQuestionCorrect(questionId: string): boolean {
+        const control = this.formGroup.controls[questionId];
+        return control.valid && !!control.value;
+    }
+
+    public isQuestionIncorrect(questionId: string): boolean {
+        const control = this.formGroup.controls[questionId];
+        return control.invalid && !!control.value;
+    }
+
+    public getSelectedAnswerId(questionId: string): string {
+        return this.formGroup.controls[questionId].value || '';
+    }
+
+    public getAnswerLabel(index: number): string {
+        return String.fromCharCode(65 + index); // A, B, C, D...
+    }
+
+    // Answer selection method with auto-scroll
+    public selectAnswer(questionId: string, answerId: string, questionIndex: number): void {
+        // Prevent changing answer if already answered
+        if (this.isQuestionAnswered(questionId)) {
+            return;
+        }
+        
+        this.formGroup.controls[questionId].setValue(answerId);
+        
+        // Check if the selected answer is correct and auto-scroll to next question
+        setTimeout(() => {
+            if (this.isQuestionCorrect(questionId)) {
+                this.scrollToNextQuestion(questionIndex);
+            }
+        }, 300); // Small delay to allow UI state update
+    }
+
+    // Auto-scroll to next question on correct answer
+    private scrollToNextQuestion(currentIndex: number): void {
+        const nextIndex = currentIndex + 1;
+        
+        // Don't scroll if this is the last question
+        if (nextIndex >= this.quiz.questions.length) {
+            return;
+        }
+        
+        // Find the next question card element
+        const nextQuestionElement = document.querySelector(`[data-question-index="${nextIndex}"]`);
+        
+        if (nextQuestionElement) {
+            // Smooth scroll to the next question with some offset for better positioning
+            const yOffset = -100; // Offset to account for header
+            const elementPosition = nextQuestionElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset + yOffset;
+            
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    }
+
     ngOnDestroy(): void {
         this.statsSubs.unsubscribe();
     }
