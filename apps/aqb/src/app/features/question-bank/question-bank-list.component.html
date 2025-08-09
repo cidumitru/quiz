@@ -65,33 +65,19 @@
                                 <div class="stat-value">{{element.averageScoreToday | number}}%</div>
                             </div>
                         </div>
-                        
-                        <div class="detailed-stats">
-                            <span class="stat-chip" matTooltip="Total answers">
-                                <mat-icon>quiz</mat-icon>
-                                {{element.stats.totalAnswers}}
-                            </span>
-                            <span class="stat-chip" matTooltip="Answers on valid questions">
-                                <mat-icon>check_circle</mat-icon>
-                                {{element.stats.answeredQuestions}}
-                            </span>
-                            <span class="stat-chip" matTooltip="Correct answers">
-                                <mat-icon>verified</mat-icon>
-                                {{element.stats.correctAnswers}}
-                            </span>
-                        </div>
                     </mat-card-content>
                     
                     <mat-card-actions>
                         <button [disabled]="element.questions === 0"
-                                [matMenuTriggerFor]="menu"
+                                [matMenuTriggerFor]="practiceMenu"
                                 mat-button
-                                appearance="outlined"
-                                color="primary">
+                                appearance="filled"
+                                color="accent"
+                                class="primary-action">
                             <mat-icon>school</mat-icon>
                             Practice
                         </button>
-                        <mat-menu #menu="matMenu">
+                        <mat-menu #practiceMenu="matMenu">
                             <mat-selection-list [multiple]="false" #selectionList>
                                 @for (priority of questionPriorityOptions; track priority) {
                                     <mat-list-option (click)="$event.stopPropagation()" [value]="priority" [selected]="priority === questionPriorityOptions[2]">
@@ -107,14 +93,19 @@
                             }
                         </mat-menu>
                         
-                        <button mat-button appearance="outlined" (click)="downloadQuestionBank(element.id);" matTooltip="Download question bank">
-                            <mat-icon>download</mat-icon>
-                            Download
+                        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="More actions">
+                            <mat-icon>more_vert</mat-icon>
                         </button>
-                        
-                        <button mat-icon-button color="warn" (click)="deleteQuiz(element.id);" matTooltip="Delete">
-                            <mat-icon>delete</mat-icon>
-                        </button>
+                        <mat-menu #actionsMenu="matMenu">
+                            <button mat-menu-item (click)="downloadQuestionBank(element.id);">
+                                <mat-icon>download</mat-icon>
+                                <span>Download</span>
+                            </button>
+                            <button mat-menu-item (click)="deleteQuiz(element.id);" class="delete-action">
+                                <mat-icon>delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                        </mat-menu>
                     </mat-card-actions>
                 </mat-card>
             }
