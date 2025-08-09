@@ -1,55 +1,36 @@
-import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatTableModule} from "@angular/material/table";
+import {AfterViewInit, ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {MatTableDataSource} from "@angular/material/table";
 import {QuizViewModel} from "./quiz-view.model";
 import {QuizService} from "../quiz.service";
-import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
-import {combineLatest, startWith, tap} from "rxjs";
+import {startWith, tap} from "rxjs";
 import {QuestionBankService} from "../../question-bank/question-bank.service";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
-import {MatListModule, MatSelectionListChange} from "@angular/material/list";
-import {isBoolean} from "lodash";
-import {ColumnsPersistenceService, IColumn} from "../../../core/services/columns-persistence.service";
 import {CommonModule} from "@angular/common";
 import {MatSelectModule} from "@angular/material/select";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
-import {MatToolbarModule} from "@angular/material/toolbar";
 import {RouterLink} from "@angular/router";
+import {MatCardModule} from "@angular/material/card";
+import {MatFormFieldModule} from "@angular/material/form-field";
 
 interface QuestionBankSelectOption {
     id: string;
     name: string;
 }
 
-const TABLE_NAME = "QuizHistoryTable";
-const DEFAULT_COLUMNS = [
-    {name: 'id', visible: true},
-    {name: 'questionBankName', visible: true},
-    {name: 'startedAt', visible: true},
-    {name: 'duration', visible: true},
-    {name: 'questions', visible: true},
-    {name: 'correctAnswers', visible: true},
-    {name: 'correctRatio', visible: true},
-]
 
 @Component({
     selector: 'app-quiz-list',
     standalone: true,
     imports: [
         CommonModule,
-        MatTableModule,
-        MatPaginatorModule,
         ReactiveFormsModule,
-        MatListModule,
         MatSelectModule,
-        MatCheckboxModule,
-        MatMenuModule,
         MatButtonModule,
         MatIconModule,
-        MatToolbarModule,
-        RouterLink
+        RouterLink,
+        MatCardModule,
+        MatFormFieldModule
     ],
     templateUrl: './quiz-list.component.html',
     styleUrls: ['./quiz-list.component.scss'],
@@ -59,57 +40,34 @@ export class QuizListComponent implements AfterViewInit {
 
     questionBankFilter = new FormControl<QuestionBankSelectOption | undefined>(undefined);
     questionBanks: QuestionBankSelectOption[] = [];
-    @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
     public quizHistoryDataSource: MatTableDataSource<QuizViewModel> = new MatTableDataSource<QuizViewModel>();
-
-    public tableColumnOptions: IColumn[] = [];
-    // TODO: Update on change
-    public get displayedColumns() {
-        return this.tableColumnOptions.filter(o => o.visible).map(o => o.name);
-    }
-
 
     private quiz = inject(QuizService);
     private qb = inject(QuestionBankService);
-    private columns = inject(ColumnsPersistenceService);
 
     constructor() {
-        // Initialize table column options after services are injected
-        this.tableColumnOptions = DEFAULT_COLUMNS.map(c => ({
-            ...c, 
-            visible: this.columns.getStoredColumnsForTable(TABLE_NAME)?.find(sc => sc.name === c.name)?.visible ?? c.visible
-        }));
-
         this.questionBanks = this.qb.questionBankArr().map(qb => ({id: qb.id, name: qb.name}));
+        this.loadQuizzes();
     }
-    
-    private cdr = inject(ChangeDetectorRef);
-
 
     ngAfterViewInit(): void {
-        combineLatest([this.questionBankFilter.valueChanges.pipe(startWith(undefined)), this.paginator.page.pipe(startWith({pageSize: this.paginator.pageSize, length: 0, pageIndex: this.paginator.pageIndex} satisfies PageEvent))]).pipe(
-            tap(([selectedQuestionBank, page]) => {
-                const range = this.quiz.getQuizzes({ questionBankId: selectedQuestionBank?.id, skip: page.pageIndex * page.pageSize, take: page.pageSize });
-
-                this.paginator.length = range.total;
-                this.quizHistoryDataSource.data = range.items.map(q => new QuizViewModel(q, this.qb.questionBanksValue[q.questionBankId]?.name));
-
-                this.cdr.detectChanges();
-            })
-        ).subscribe()
+        this.questionBankFilter.valueChanges.pipe(
+            startWith(undefined),
+            tap(() => this.loadQuizzes())
+        ).subscribe();
     }
 
-    async onColumnToggle(selection: MatSelectionListChange): Promise<void> {
-        const updated = this.tableColumnOptions.map(o => {
-            const updated = selection.options.find(s => s.value.name === o.name);
-
-            return {
-                ...o,
-                visible: isBoolean(updated?.selected) ? updated?.selected!! : o.visible
-            }
+    private loadQuizzes(): void {
+        const selectedQuestionBank = this.questionBankFilter.value;
+        const allQuizzes = this.quiz.getQuizzes({ 
+            questionBankId: selectedQuestionBank?.id,
+            skip: 0,
+            take: 1000 // Get all quizzes since we're not paginating
         });
 
-        this.tableColumnOptions = updated;
-        await this.columns.updateColumnsForTable(TABLE_NAME, updated);
+        this.quizHistoryDataSource.data = allQuizzes.items.map(q => 
+            new QuizViewModel(q, this.qb.questionBanksValue[q.questionBankId]?.name)
+        );
     }
+
 }
