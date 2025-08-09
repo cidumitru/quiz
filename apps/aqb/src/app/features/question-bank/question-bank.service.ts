@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {computed, effect, Injectable, signal} from "@angular/core";
 import {BehaviorSubject, map, Observable, skip} from "rxjs";
 import {v4 as uuidv4} from 'uuid';
 import {omit, values} from "lodash";
@@ -12,23 +12,37 @@ export interface IQuestionCreate {
 
 @Injectable()
 export class QuestionBankService {
-    private _questionBanks = new BehaviorSubject<Record<string, IQuestionBank>>({});
-    public questionBankArr$ = this._questionBanks.asObservable().pipe(
+    // Signals for modern state management
+    private _questionBanks = signal<Record<string, IQuestionBank>>({});
+    
+    // Computed values
+    public questionBanks = computed(() => this._questionBanks());
+    public questionBankArr = computed(() => values(this._questionBanks()));
+    
+    // Keep RxJS compatibility for now
+    private _questionBanksSubject = new BehaviorSubject<Record<string, IQuestionBank>>({});
+    public questionBankArr$ = this._questionBanksSubject.asObservable().pipe(
         map(quizzes => values(quizzes)),
     );
 
-    public get questionBanks() {
-        return this._questionBanks.getValue();
-    }
-
-    public get questionBankArr() {
-        return Object.values(this.questionBanks);
+    constructor() {
+        // Sync signals with RxJS subjects for backward compatibility
+        effect(() => {
+            this._questionBanksSubject.next(this._questionBanks());
+        });
     }
 
     async init() {
         const quizzes = await localForage.getItem("questionBanks");
-        this._questionBanks.next(JSON.parse(quizzes as string) || {});
-        this._questionBanks.pipe(skip(1)).subscribe(() => localForage.setItem("questionBanks", JSON.stringify(this.questionBanks)));
+        this._questionBanks.set(JSON.parse(quizzes as string) || {});
+        
+        // Auto-save to localStorage whenever state changes
+        effect(() => {
+            const currentState = this._questionBanks();
+            if (Object.keys(currentState).length > 0) {
+                localForage.setItem("questionBanks", JSON.stringify(currentState));
+            }
+        });
     }
 
     create(): string {
@@ -36,30 +50,31 @@ export class QuestionBankService {
         const createdAt = new Date().toISOString();
         const name = `NEW QUESTION BANK: ${createdAt.toLocaleString()}`;
 
-        this._questionBanks.next({...this.questionBanks, [id]: {id, name, createdAt, questions: []}});
+        this._questionBanks.update(current => ({...current, [id]: {id, name, createdAt, questions: []}}));
         return id;
     }
 
     updateQuestionBank(id: string, name: string): void {
-        this._questionBanks.next({...this.questionBanks, [id]: {...this.questionBanks[id], name}})
+        this._questionBanks.update(current => ({
+            ...current, 
+            [id]: {...current[id], name}
+        }));
     }
-
 
     insertQuestionBank(questionBank: IQuestionBank): void {
         let questionBankId = questionBank.id;
-        if (this.questionBanks[questionBank.id]) {
+        if (this.questionBanks()[questionBank.id]) {
             questionBankId = uuidv4();
         }
 
-        this._questionBanks.next({
-                ...this.questionBanks,
-                [questionBankId]: {
-                    ...questionBank,
-                    id: questionBankId,
-                    name: questionBank.id === questionBankId ? questionBank.name : `${questionBank.name} (copy)`,
-                }
+        this._questionBanks.update(current => ({
+            ...current,
+            [questionBankId]: {
+                ...questionBank,
+                id: questionBankId,
+                name: questionBank.id === questionBankId ? questionBank.name : `${questionBank.name} (copy)`,
             }
-        )
+        }));
     }
 
     addQuestion(questionBankId: string, question: IQuestionCreate | IQuestionCreate[]): void {
@@ -70,33 +85,31 @@ export class QuestionBankService {
             answers: question.answers.map((answer) => ({id: uuidv4(), text: answer.text}))
         }));
 
-        this._questionBanks.next({
-                ...this.questionBanks,
-                [questionBankId]: {
-                    ...this.questionBanks[questionBankId],
-                    editedAt: new Date().toISOString(),
-                    questions: [...this.questionBanks[questionBankId].questions, ...questions]
-                }
+        this._questionBanks.update(current => ({
+            ...current,
+            [questionBankId]: {
+                ...current[questionBankId],
+                editedAt: new Date().toISOString(),
+                questions: [...current[questionBankId].questions, ...questions]
             }
-        )
+        }));
     }
 
     watchQuestionBank(id: string): Observable<IQuestionBank> {
-        return this._questionBanks.pipe(map(quizzes => quizzes[id]));
+        return this._questionBanksSubject.pipe(map(quizzes => quizzes[id]));
     }
 
     delete(id: string): void {
-        const result = omit(this.questionBanks, id);
-        this._questionBanks.next(result);
+        this._questionBanks.update(current => omit(current, id));
     }
 
     setCorrectAnswer(questionBankId: string, questionId: string, correctAnswerId: string) {
-        this._questionBanks.next({
-            ...this.questionBanks,
+        this._questionBanks.update(current => ({
+            ...current,
             [questionBankId]: {
-                ...this.questionBanks[questionBankId],
+                ...current[questionBankId],
                 editedAt: new Date().toISOString(),
-                questions: this.questionBanks[questionBankId].questions.map((question) => {
+                questions: current[questionBankId].questions.map((question) => {
                     if (question.id === questionId) {
                         return {
                             ...question,
@@ -109,17 +122,17 @@ export class QuestionBankService {
                     return question;
                 })
             }
-        });
+        }));
     }
 
     deleteQuestion(questionBankId: string, questionId: string): void {
-        this._questionBanks.next({
-            ...this.questionBanks,
+        this._questionBanks.update(current => ({
+            ...current,
             [questionBankId]: {
-                ...this.questionBanks[questionBankId],
+                ...current[questionBankId],
                 editedAt: new Date().toISOString(),
-                questions: this.questionBanks[questionBankId].questions.filter((question) => question.id !== questionId)
+                questions: current[questionBankId].questions.filter((question) => question.id !== questionId)
             }
-        });
+        }));
     }
 }

@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, inject, OnDestroy, ViewChild} from '@angular/core';
 import {QuestionBankService} from "./question-bank.service";
 import {Router, RouterModule} from "@angular/router";
 import exportFromJSON from "export-from-json";
@@ -84,7 +84,14 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     ]
     public _qbSubscription: Subscription;
 
-    constructor(public questionBank: QuestionBankService, private router: Router, private snackbar: MatSnackBar, public quiz: QuizService, private stats: StatisticsService, private columns: ColumnsPersistenceService) {
+    public questionBank = inject(QuestionBankService);
+    private router = inject(Router);
+    private snackbar = inject(MatSnackBar);
+    public quiz = inject(QuizService);
+    private stats = inject(StatisticsService);
+    private columns = inject(ColumnsPersistenceService);
+
+    constructor() {
         this._qbSubscription = this.questionBank.questionBankArr$.pipe(
             switchMap(questionBanks => this.questionBankFilter.valueChanges.pipe(
                     debounceTime(300),

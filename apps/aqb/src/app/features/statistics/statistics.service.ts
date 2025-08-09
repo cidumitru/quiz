@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 import {QuestionBankService} from "../question-bank/question-bank.service";
 import {IAnsweredQuestion, QuizService} from "../quiz/quiz.service";
 import {groupBy, isBoolean, isNil, mapValues, reduce, uniq, uniqBy} from "lodash";
@@ -16,8 +16,8 @@ export interface IQuestionBankStats {
     providedIn: "root"
 })
 export class StatisticsService {
-    constructor(private questionBanks: QuestionBankService, private quizzes: QuizService) {
-    }
+    private questionBanks = inject(QuestionBankService);
+    private quizzes = inject(QuizService);
 
     getStatisticsForQuestionBank(questionBankId: string, startDate?: Date, endDate?: Date): IQuestionBankStats {
         let quizzes = this.quizzes.quizzesArr.filter(quiz => quiz.questionBankId === questionBankId);

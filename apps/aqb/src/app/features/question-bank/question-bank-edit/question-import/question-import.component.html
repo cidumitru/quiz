@@ -7,28 +7,31 @@
         </mat-form-field>
     </div>
     <div class="column">
-        <ng-container *ngIf="(questions$ | async) as questions;">
-            <ng-container *ngIf="questions.length > 0">
+        @if ((questions$ | async); as questions) {
+            @if (questions.length > 0) {
                 <h1>Output
                     <button (click)="import()" color="primary" mat-raised-button>Import {{questions.length}}questions
                     </button>
                 </h1>
                 <div style="max-height: 80vh; overflow:scroll">
-                    <mat-card *ngFor="let i of questions" style="margin-bottom: 1rem;">
-                        <mat-card-header>
-                            <mat-card-title>
-                                {{i.question}}
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <mat-radio-group>
-                                <mat-radio-button *ngFor="let option of i.options"
-                                                  [value]="option">{{option}}</mat-radio-button>
-                            </mat-radio-group>
-                        </mat-card-content>
-                    </mat-card>
+                    @for (i of questions; track $index) {
+                        <mat-card style="margin-bottom: 1rem;">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    {{i.question}}
+                                </mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <mat-radio-group>
+                                    @for (option of i.options; track option) {
+                                        <mat-radio-button [value]="option">{{option}}</mat-radio-button>
+                                    }
+                                </mat-radio-group>
+                            </mat-card-content>
+                        </mat-card>
+                    }
                 </div>
-            </ng-container>
-        </ng-container>
+            }
+        }
     </div>
 </div>

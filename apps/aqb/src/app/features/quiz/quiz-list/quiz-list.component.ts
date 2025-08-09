@@ -1,14 +1,21 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, ViewChild} from '@angular/core';
+import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {QuizViewModel} from "./quiz-view.model";
 import {QuizService} from "../quiz.service";
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {combineLatest, merge, startWith, tap} from "rxjs";
+import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
+import {combineLatest, startWith, tap} from "rxjs";
 import {QuestionBankService} from "../../question-bank/question-bank.service";
-import {FormControl} from "@angular/forms";
-import {MatSelectionListChange} from "@angular/material/list";
-import {isBoolean, uniqBy} from "lodash";
+import {FormControl, ReactiveFormsModule} from "@angular/forms";
+import {MatListModule, MatSelectionListChange} from "@angular/material/list";
+import {isBoolean} from "lodash";
 import {ColumnsPersistenceService, IColumn} from "../../../core/services/columns-persistence.service";
+import {CommonModule} from "@angular/common";
+import {MatSelectModule} from "@angular/material/select";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatButtonModule} from "@angular/material/button";
+import {MatIconModule} from "@angular/material/icon";
+import {MatToolbarModule} from "@angular/material/toolbar";
 
 interface QuestionBankSelectOption {
     id: string;
@@ -28,11 +35,25 @@ const DEFAULT_COLUMNS = [
 
 @Component({
     selector: 'app-quiz-list',
+    standalone: true,
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatPaginatorModule,
+        ReactiveFormsModule,
+        MatListModule,
+        MatSelectModule,
+        MatCheckboxModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatIconModule,
+        MatToolbarModule
+    ],
     templateUrl: './quiz-list.component.html',
     styleUrls: ['./quiz-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class QuizListComponent {
+export class QuizListComponent implements AfterViewInit {
 
     questionBankFilter = new FormControl<QuestionBankSelectOption | undefined>(undefined);
     questionBanks: QuestionBankSelectOption[] = this.qb.questionBankArr.map(qb => ({id: qb.id, name: qb.name}));
@@ -46,7 +67,10 @@ export class QuizListComponent {
     }
 
 
-    constructor(private quiz: QuizService, private qb: QuestionBankService, private cdr: ChangeDetectorRef, private columns: ColumnsPersistenceService) {}
+    private quiz = inject(QuizService);
+    private qb = inject(QuestionBankService);
+    private columns = inject(ColumnsPersistenceService);
+    private cdr = inject(ChangeDetectorRef);
 
 
     ngAfterViewInit(): void {

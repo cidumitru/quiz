@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnDestroy} from '@angular/core';
 import {startWith, Subscription} from "rxjs";
 import {QuestionBankService} from "../../question-bank/question-bank.service";
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
@@ -45,7 +45,13 @@ export class QuizComponent implements OnDestroy {
     public stats: { total: number, correct: number, incorrect: number } = {total: 0, correct: 0, incorrect: 0};
     public statsSubs: Subscription;
 
-    constructor(private activatedRoute: ActivatedRoute, private questionBankService: QuestionBankService, private router: Router, private quizService: QuizService, private cdr: ChangeDetectorRef) {
+    private activatedRoute = inject(ActivatedRoute);
+    private questionBankService = inject(QuestionBankService);
+    private router = inject(Router);
+    private quizService = inject(QuizService);
+    private cdr = inject(ChangeDetectorRef);
+
+    constructor() {
         const isNewQuiz = !this.activatedRoute.snapshot.paramMap.get("quizId");
         const queryParamMap = this.activatedRoute.snapshot.queryParamMap;
 

@@ -1,5 +1,5 @@
 import {QuestionBankService} from "../../features/question-bank/question-bank.service";
-import {Injectable} from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 import {questionBankScheme} from "../../features/question-bank/question-bank.models";
 import {concatMap, firstValueFrom, forkJoin, lastValueFrom, merge, mergeMap, tap} from "rxjs";
 
@@ -7,8 +7,7 @@ import {concatMap, firstValueFrom, forkJoin, lastValueFrom, merge, mergeMap, tap
     providedIn: "root"
 })
 export class MockDataLoader {
-    constructor(private questionBank: QuestionBankService) {
-    }
+    private questionBank = inject(QuestionBankService);
 
     async load(): Promise<void> {
         await lastValueFrom(merge(import("./mock-question-banks/thermodynamics.json"), import("./mock-question-banks/solar-system.json")).pipe(

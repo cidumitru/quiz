@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
 import bb, {bar} from "billboard.js";
 import {StatisticsService} from "./statistics.service";
 import {entries} from "lodash";
@@ -7,13 +7,12 @@ import {IAnsweredQuestion} from "../quiz/quiz.service";
 
 @Component({
     selector: 'app-statistics',
+    standalone: true,
     templateUrl: './statistics.component.html',
     styleUrls: ['./statistics.component.scss']
 })
 export class StatisticsComponent implements OnInit, AfterViewInit {
-
-    constructor(private stats: StatisticsService) {
-    }
+    private stats = inject(StatisticsService);
 
     ngOnInit(): void {
 

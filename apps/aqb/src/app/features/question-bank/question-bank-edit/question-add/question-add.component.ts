@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {QuestionBankService} from "../../question-bank.service";
 import {ActivatedRoute} from "@angular/router";
@@ -23,7 +23,10 @@ import {CommonModule} from "@angular/common";
     standalone: true
 })
 export class QuestionAddComponent {
-    public id: string;
+    public quiz = inject(QuestionBankService);
+    private activatedRoute = inject(ActivatedRoute);
+    
+    public id: string = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
     newQuestionForm = new FormGroup({
         question: new FormControl('', {nonNullable: true}),
         answer: new FormControl('', {nonNullable: true}),
@@ -31,10 +34,6 @@ export class QuestionAddComponent {
         wrongAnswer2: new FormControl(''),
         wrongAnswer3: new FormControl(''),
     });
-
-    constructor(public quiz: QuestionBankService, private activatedRoute: ActivatedRoute) {
-        this.id = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
-    }
 
     addQuestion() {
         const formValue = this.newQuestionForm.value;

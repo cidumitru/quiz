@@ -1,5 +1,72 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { App } from './app/app';
+import { AppComponent } from './app/app.component';
+import { provideRouter } from '@angular/router';
+import { importProvidersFrom } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { MatDialogModule } from '@angular/material/dialog';
+import { QuestionBankListComponent } from './app/features/question-bank/question-bank-list.component';
+import { StatisticsComponent } from './app/features/statistics/statistics.component';
+import { QuestionBankService } from './app/features/question-bank/question-bank.service';
+import { QuizService } from './app/features/quiz/quiz.service';
+import { AppConfig } from './app/core/services/app-config.service';
+import { ColumnsPersistenceService } from './app/core/services/columns-persistence.service';
+import { MockDataLoader } from './app/core/mock/mock-data.loader';
+import { APP_INITIALIZER } from '@angular/core';
 
-bootstrapApplication(App, appConfig).catch((err) => console.error(err));
+export const bootstrapFactory = (appConfig: AppConfig, questionBank: QuestionBankService, quiz: QuizService, columns: ColumnsPersistenceService, mockDataLoader: MockDataLoader) => async () => {
+    await appConfig.init();
+    await questionBank.init();
+    await quiz.init();
+    await columns.init();
+
+    if (questionBank.questionBankArr.length || localStorage.getItem("firstVisit")) return;
+
+    localStorage.setItem("firstVisit", new Date().getTime().toString());
+    await mockDataLoader.load();
+}
+
+const routes = [
+    {
+        path: "",
+        component: QuestionBankListComponent
+    },
+    {
+        path: "quizzes",
+        loadComponent: () => import("./app/features/quiz/quiz-list/quiz-list.component").then(m => m.QuizListComponent)
+    },
+    {
+        path: "quizzes/practice",
+        loadComponent: () => import("./app/features/quiz/quiz-practice/quiz.component").then(m => m.QuizComponent)
+    },
+    {
+        path: "statistics",
+        component: StatisticsComponent
+    },
+    {
+        path: ":id",
+        loadComponent: () => import("./app/features/question-bank/question-bank-edit/question-bank-edit.component").then(m => m.QuestionBankEditComponent)
+    }
+];
+
+bootstrapApplication(AppComponent, {
+    providers: [
+        provideRouter(routes, { useHash: true }),
+        importProvidersFrom(
+            BrowserAnimationsModule,
+            HttpClientModule,
+            MatDialogModule
+        ),
+        QuestionBankService,
+        QuizService,
+        AppConfig,
+        ColumnsPersistenceService,
+        MockDataLoader,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: bootstrapFactory,
+            deps: [AppConfig, QuestionBankService, QuizService, ColumnsPersistenceService, MockDataLoader],
+            multi: true
+        }
+    ]
+}).catch((err) => console.error(err));

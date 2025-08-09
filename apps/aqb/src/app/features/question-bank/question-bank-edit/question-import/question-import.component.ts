@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {QuestionBankService} from "../../question-bank.service";
 import {ActivatedRoute} from "@angular/router";
@@ -26,7 +26,10 @@ import {isEmpty} from "lodash";
     standalone: true
 })
 export class QuestionImportComponent {
-    public id: string;
+    private quiz = inject(QuestionBankService);
+    private activatedRoute = inject(ActivatedRoute);
+    
+    public id: string = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
     public control = new FormControl("");
     private parsedQuestions: QuestionModel[] | undefined = [];
     public questions$ = this.control.valueChanges.pipe(
@@ -40,10 +43,6 @@ export class QuestionImportComponent {
         }),
         shareReplay(1)
     )
-
-    constructor(private quiz: QuestionBankService, private activatedRoute: ActivatedRoute) {
-        this.id = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
-    }
 
     import() {
         const dto = this.parsedQuestions?.map(question => ({

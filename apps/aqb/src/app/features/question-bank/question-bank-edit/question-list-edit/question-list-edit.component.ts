@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {combineLatest, combineLatestWith, map, Observable, startWith, switchMap} from "rxjs";
 import {QuestionBankService} from "../../question-bank.service";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
@@ -34,8 +34,11 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
     standalone: true
 })
 export class QuestionListEditComponent {
-    public id: string;
-    public quiz$: Observable<IQuestionBank>;
+    private activatedRoute = inject(ActivatedRoute);
+    private questionBank = inject(QuestionBankService);
+    
+    public id: string = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
+    public quiz$: Observable<IQuestionBank> = this.questionBank.watchQuestionBank(this.id);
 
     public control = new FormControl("");
     public searchControl = new FormControl("", {nonNullable: true});
@@ -50,11 +53,6 @@ export class QuestionListEditComponent {
                 return question.question.toLowerCase().includes(searchText.toLowerCase());
             }))
         )));
-
-    constructor(private activatedRoute: ActivatedRoute, private questionBank: QuestionBankService) {
-        this.id = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
-        this.quiz$ = this.questionBank.watchQuestionBank(this.id);
-    }
 
     setCorrectAnswer(id: string, $event: MatRadioChange) {
         this.questionBank.setCorrectAnswer(this.id, id, $event.value);

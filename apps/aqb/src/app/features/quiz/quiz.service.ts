@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 import {IAnswer, IQuestion} from "../question-bank/question-bank.models";
 
 import * as localForage from "localforage";
@@ -36,9 +36,7 @@ export interface ICreateQuiz {
     providedIn: "root"
 })
 export class QuizService {
-
-    constructor(private questionBanks: QuestionBankService) {
-    }
+    private questionBanks = inject(QuestionBankService);
 
     private _quizzes = new BehaviorSubject<Record<string, IQuiz>>({});
 

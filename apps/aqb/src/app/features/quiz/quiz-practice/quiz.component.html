@@ -4,9 +4,11 @@
     on {{created | date: 'short'}}
 </h1>
 <div [formGroup]="formGroup">
-    <h2 *ngIf="quiz.questions.length === 0">No questions for selected criteria</h2>
-    <mat-card *ngFor="let question of quiz.questions; let i = index" class="mat-elevation-z10"
-              style="margin-bottom: 1rem;">
+    @if (quiz.questions.length === 0) {
+        <h2>No questions for selected criteria</h2>
+    }
+    @for (question of quiz.questions; track question.id; let i = $index) {
+        <mat-card class="mat-elevation-z10" style="margin-bottom: 1rem;">
         <mat-card-header>
             <mat-card-subtitle>
                 Q{{i + 1}} <span style="color:red">{{!question.rightAnswer ? ' - No answer provided' : ""}}</span>
@@ -18,13 +20,15 @@
         <mat-card-actions align="start">
             <mat-radio-group [formControlName]="question.id"
                              [ngClass]="{answered: formGroup.controls[question.id].dirty || formGroup.controls[question.id].value}">
-                <mat-radio-button *ngFor="let option of question.answers"
-                                  [ngClass]="{correct: option.id === question?.rightAnswer?.id}"
-                                  [value]="option.id"
-                                  color="primary">{{option.text}}</mat-radio-button>
+                @for (option of question.answers; track option.id) {
+                    <mat-radio-button [ngClass]="{correct: option.id === question?.rightAnswer?.id}"
+                                      [value]="option.id"
+                                      color="primary">{{option.text}}</mat-radio-button>
+                }
             </mat-radio-group>
         </mat-card-actions>
-    </mat-card>
+        </mat-card>
+    }
 </div>
 <div class="stats">
     <div>
@@ -33,8 +37,10 @@
     </div>
     <div style="margin-top: 2rem">
         <button color="primary" mat-raised-button routerLink="/">GO HOME</button>
-        <button (click)="retry()" *ngIf="hasFinished" color="accent" mat-raised-button style="margin-left: 1rem">
-            GENERATE NEW
-        </button>
+        @if (hasFinished) {
+            <button (click)="retry()" color="accent" mat-raised-button style="margin-left: 1rem">
+                GENERATE NEW
+            </button>
+        }
     </div>
 </div>

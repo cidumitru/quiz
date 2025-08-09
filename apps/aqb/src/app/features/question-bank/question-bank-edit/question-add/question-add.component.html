@@ -33,14 +33,18 @@
             </mat-card-header>
             <mat-card-content>
                 <mat-radio-group>
-                    <mat-radio-button *ngIf="newQuestionForm.controls.answer.value as answer"
-                                      [value]="answer">{{answer}}</mat-radio-button>
-                    <mat-radio-button *ngIf="newQuestionForm.controls.wrongAnswer.value as wrongAnswer"
-                                      [value]="wrongAnswer">{{wrongAnswer}}</mat-radio-button>
-                    <mat-radio-button *ngIf="newQuestionForm.controls.wrongAnswer2.value as wrongAnswer2"
-                                      [value]="wrongAnswer2">{{wrongAnswer2}}</mat-radio-button>
-                    <mat-radio-button *ngIf="newQuestionForm.controls.wrongAnswer3.value as wrongAnswer3"
-                                      [value]="wrongAnswer3">{{wrongAnswer3}}</mat-radio-button>
+                    @if (newQuestionForm.controls.answer.value; as answer) {
+                        <mat-radio-button [value]="answer">{{answer}}</mat-radio-button>
+                    }
+                    @if (newQuestionForm.controls.wrongAnswer.value; as wrongAnswer) {
+                        <mat-radio-button [value]="wrongAnswer">{{wrongAnswer}}</mat-radio-button>
+                    }
+                    @if (newQuestionForm.controls.wrongAnswer2.value; as wrongAnswer2) {
+                        <mat-radio-button [value]="wrongAnswer2">{{wrongAnswer2}}</mat-radio-button>
+                    }
+                    @if (newQuestionForm.controls.wrongAnswer3.value; as wrongAnswer3) {
+                        <mat-radio-button [value]="wrongAnswer3">{{wrongAnswer3}}</mat-radio-button>
+                    }
                 </mat-radio-group>
             </mat-card-content>
         </mat-card>

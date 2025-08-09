@@ -13,9 +13,11 @@
         </button>
         <mat-menu #menu="matMenu">
             <mat-selection-list (selectionChange)="onColumnToggle($event)">
-                <mat-list-option *ngFor="let column of tableColumnOptions" [value]="column" [selected]="column.visible" (click)="$event.stopPropagation()">
-                    {{column.name}}
-                </mat-list-option>
+                @for (column of tableColumnOptions; track column) {
+                    <mat-list-option [value]="column" [selected]="column.visible" (click)="$event.stopPropagation()">
+                        {{column.name}}
+                    </mat-list-option>
+                }
             </mat-selection-list>
         </mat-menu>
     </div>
@@ -31,20 +33,23 @@
         <ng-container matColumnDef="questionBankName">
             <th *matHeaderCellDef mat-header-cell>
                     <mat-select [formControl]="questionBankFilter" placeholder="Question bank">
-                        <mat-option *ngFor="let questionBank of questionBanks" [value]="questionBank">{{questionBank.name}}</mat-option>
+                        @for (questionBank of questionBanks; track questionBank.id) {
+                            <mat-option [value]="questionBank">{{questionBank.name}}</mat-option>
+                        }
                     </mat-select>
             </th>
             <td *matCellDef="let element" mat-cell>
 
-                <button *ngIf="!element.finishedAt; else view" mat-flat-button routerLink="./practice/{{element.id}}" color="primary" class="icon-only" style="margin-right: 0.5rem">
-                    <mat-icon>edit_note</mat-icon>
-                </button>
-                {{element.questionBankName}}
-                <ng-template #view>
+                @if (!element.finishedAt) {
+                    <button mat-flat-button routerLink="./practice/{{element.id}}" color="primary" class="icon-only" style="margin-right: 0.5rem">
+                        <mat-icon>edit_note</mat-icon>
+                    </button>
+                } @else {
                     <button mat-stroked-button routerLink="./practice/{{element.id}}" color="primary" class="icon-only" style="margin-right: 0.5rem">
                         <mat-icon>edit_note</mat-icon>
                     </button>
-                </ng-template>
+                }
+                {{element.questionBankName}}
             </td>
         </ng-container>
 

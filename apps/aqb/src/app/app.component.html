@@ -1,14 +1,18 @@
 <div class="container" [class.is-mobile]="mobileQuery.matches">
     <mat-toolbar color="primary">
-        <button mat-icon-button (click)="snav.toggle()" *ngIf="mobileQuery.matches">
-            <mat-icon>menu</mat-icon>
-        </button>
+        @if (mobileQuery.matches) {
+            <button mat-icon-button (click)="snav.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+        }
         <span matTooltip="Go home" routerLink="/" style="cursor: pointer; margin-right: 1rem">AQB</span>
-        <div *ngIf="!mobileQuery.matches">
-            <button mat-button routerLink="/">Question Banks</button>
-            <button mat-button routerLink="/quizzes">Quizzes</button>
-            <button mat-button routerLink="/statistics">Statistics</button>
-        </div>
+        @if (!mobileQuery.matches) {
+            <div>
+                <button mat-button routerLink="/">Question Banks</button>
+                <button mat-button routerLink="/quizzes">Quizzes</button>
+                <button mat-button routerLink="/statistics">Statistics</button>
+            </div>
+        }
         <span class="example-spacer"></span>
         <a mat-button href="https://github.com/cidumitru/quiz">Github</a>
     </mat-toolbar>

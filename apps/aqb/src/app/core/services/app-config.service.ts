@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 
 export interface IAppConfig {
@@ -9,8 +9,7 @@ export interface IAppConfig {
     providedIn: 'root'
 })
 export class AppConfig {
-    constructor(private httpClient: HttpClient) {
-    }
+    private httpClient = inject(HttpClient);
 
     private _config!: IAppConfig;
 
