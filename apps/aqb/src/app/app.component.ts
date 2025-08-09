@@ -38,6 +38,7 @@ export class AppComponent implements OnDestroy {
     title = signal('quizz');
     mobileQuery: MediaQueryList;
     private _mobileQueryListener: () => void;
+    isNavExpanded = false;
 
     constructor() {
         this.mobileQuery = this.media.matchMedia('(max-width: 600px)');
@@ -47,5 +48,9 @@ export class AppComponent implements OnDestroy {
 
     ngOnDestroy(): void {
         this.mobileQuery.removeListener(this._mobileQueryListener);
+    }
+    
+    openGitHub() {
+        window.open('https://github.com/cidumitru/quiz', '_blank');
     }
 }
