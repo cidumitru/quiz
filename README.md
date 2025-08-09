@@ -1,46 +1,82 @@
-# Angular Quiz Generator
-This project provides a solution written in Angular for generating quizzes based on user-created question banks. It allows users to create and manage their own question banks, and then use those banks to generate quizzes that can be taken online. The project provides a user-friendly interface for creating, editing, and deleting questions and question banks, as well as generating quizzes with custom settings and options.
+# Aqb
 
-DEMO: <https://cidumitru.github.io/quiz/#/>
+<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
-Features
---------
+✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
 
--   Create, edit, and delete question banks
--   Add and remove questions from question banks
--   Generate quizzes based on your question banks
--   Allow users to take quizzes online and receive immediate feedback on their performance
--   Uses localforage as a persistence layer, allowing users to save their question banks and quizzes locally
+[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
 
-Installation
-------------
+## Finish your CI setup
 
-To use this project, you will need to have the following installed:
-
--   Node.js
--   Angular CLI
-
-You can install Node.js from <https://nodejs.org/>, and Angular CLI using the following command:
+[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/YDbbMMRPgf)
 
 
-`npm install -g @angular/cli`
+## Run tasks
 
-To install the project, clone the repository and run the following commands in the project directory:
-```
-npm install
-ng serve
+To run the dev server for your app, use:
+
+```sh
+npx nx serve aqb
 ```
 
-You can then access the project in your browser at <http://localhost:4200/>.
+To create a production bundle:
 
-Usage
------
+```sh
+npx nx build aqb
+```
 
-To use the project, simply access the project in your browser at http://localhost:4200/. From there, you can create and manage your own question banks, add and remove questions from those banks, and generate quizzes based on the question banks you have created.
+To see all available targets to run for a project, run:
 
-When generating a quiz, you can customize various settings, such as the number of questions. You can then take the quiz online and receive immediate feedback on your performance.
+```sh
+npx nx show project aqb
+```
 
-Contributing
-------------
+These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
 
-If you would like to contribute to this project, please fork the repository and submit a pull request with your changes. Before submitting a pull request, please make sure to run the tests and ensure that your changes do not break any existing functionality.
+[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+
+## Add new projects
+
+While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+
+Use the plugin's generator to create new projects.
+
+To generate a new application, use:
+
+```sh
+npx nx g @nx/angular:app demo
+```
+
+To generate a new library, use:
+
+```sh
+npx nx g @nx/angular:lib mylib
+```
+
+You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+
+[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+
+
+[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+
+## Install Nx Console
+
+Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+
+[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+
+## Useful links
+
+Learn more:
+
+- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
+- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+
+And join the Nx community:
+- [Discord](https://go.nx.dev/community)
+- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
+- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
+- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)

@@ -1,0 +1,5962 @@
+{
+  "id": "4dbf5022-196e-415d-878c-a6de4d5dfac8",
+  "createdAt": "2025-08-09T15:03:22.873Z",
+  "name": "Physio Questions",
+  "isDeleted": false,
+  "questions": [
+    {
+      "id": "bb526918-0394-41c3-a8fd-8d9e435126c6",
+      "question": "The following are true about norepinephrine, EXCEPT:",
+      "answers": [
+        {
+          "id": "10c17f18-c18d-4722-a377-239a746aee09",
+          "text": "Functions in arousal/wakefulness",
+          "correct": false
+        },
+        {
+          "id": "1fa4c2d7-bb2d-42a4-a311-84c6661eeaa8",
+          "text": "Has a greater beta 2 action than epinephrine",
+          "correct": true
+        },
+        {
+          "id": "1f4c2103-9090-47ce-be27-95a4c9339626",
+          "text": "Acts as a neuromodulator in the CNS only",
+          "correct": false
+        },
+        {
+          "id": "4a472f63-aca3-4d4c-88bc-a275fb9283a3",
+          "text": "Found in the pons",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "ad534296-1994-4503-8975-f95182c9a1ad",
+      "question": "Cones are receptor cells found in the retina. Which of the following is NOT true about cones?",
+      "answers": [
+        {
+          "id": "88f43816-d8e6-4975-84aa-baaa10d6dd46",
+          "text": "They synapse with bipolar cells.",
+          "correct": false
+        },
+        {
+          "id": "5d198f55-eb0d-4ee8-bc60-f0b48b37b767",
+          "text": "They are responsible for color vision.",
+          "correct": false
+        },
+        {
+          "id": "3d19429d-419a-4c41-8c89-f8273db0d34d",
+          "text": "They are heavily concentrated in the parafoveal region.",
+          "correct": true
+        },
+        {
+          "id": "153cc18e-a1a0-44df-8b3b-281d80c03441",
+          "text": "They are primarily sensitive to high-intensity light.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "59f96811-bb4b-402c-807a-870af9ff2375",
+      "question": "All of the following are true about the lens of the eye EXCEPT:",
+      "answers": [
+        {
+          "id": "cd293a77-7c53-438e-8a3c-5242aa508dd2",
+          "text": "Becomes flat when focusing on far objects",
+          "correct": false
+        },
+        {
+          "id": "6426e159-f83f-4c6f-a6a8-fb75497da9f7",
+          "text": "Provides the greatest refractive power of the eye",
+          "correct": true
+        },
+        {
+          "id": "2462cc1a-f909-4731-892b-890752774704",
+          "text": "Is spherical when the ciliary muscles are contracted.",
+          "correct": false
+        },
+        {
+          "id": "950abaad-b6e8-4835-b93f-142aeff982a0",
+          "text": "None of the above.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "525b1ee5-e948-49a7-ba41-c40454b70a49",
+      "question": "Which is unlikely to occur with bilateral ablation of the amygdala?",
+      "answers": [
+        {
+          "id": "d6fec020-528e-42ae-a66f-65de65161242",
+          "text": "Extreme curiosity about everything",
+          "correct": false
+        },
+        {
+          "id": "bed8a49f-187b-4427-8e68-465ef5db1e52",
+          "text": "diminished libido",
+          "correct": true
+        },
+        {
+          "id": "d618a11f-49d7-4173-b23c-037a1482fd88",
+          "text": "loss of social inhibition",
+          "correct": false
+        },
+        {
+          "id": "de520f47-a4a0-4fbb-934a-432567691569",
+          "text": "hyperorality",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "501e3e95-d1d6-46f2-8349-385c8fb36be4",
+      "question": "B-lymphocytes are found in what area of the lymph nodes?",
+      "answers": [
+        {
+          "id": "8e384b4a-58a1-4c16-b431-d5fab6d9c7f2",
+          "text": "Paracortical area",
+          "correct": false
+        },
+        {
+          "id": "60df1945-7662-433e-aab4-afad51fbbb58",
+          "text": "Periarteriolar lymphoid area",
+          "correct": false
+        },
+        {
+          "id": "04c7f2a2-bb45-4341-8b6a-586655e8370a",
+          "text": "Superficial cortex",
+          "correct": true
+        },
+        {
+          "id": "1c4d727b-659e-435e-a6a0-7fce9eed9ec9",
+          "text": "Paracortical cortex",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "f4807b77-5071-40bd-bdb4-347e8b66a968",
+      "question": "Which among the following is untrue about the non- nucleated cells from megakaryocytes?",
+      "answers": [
+        {
+          "id": "1ce3d77b-d0eb-4503-84d1-ff4bb0c3de0e",
+          "text": "Biconcave",
+          "correct": true
+        },
+        {
+          "id": "d6384c81-ffb4-4dcb-8fa5-8d68007ef390",
+          "text": "Involved in primary hemostasis",
+          "correct": false
+        },
+        {
+          "id": "ef281fbc-01b4-4acb-829e-bd0c9312b604",
+          "text": "Not considered as white blood cells",
+          "correct": false
+        },
+        {
+          "id": "7edd980c-1810-4a4e-a7e1-94e55b0302f0",
+          "text": "Activate the blood-clotting mechanism",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "abe373b7-d6db-486e-8bbd-b5e20657c5ed",
+      "question": "Which of the following is true about the most produced antibody in the body?",
+      "answers": [
+        {
+          "id": "93f71635-5c7c-40bc-a48c-5105556108c4",
+          "text": "It is the most abundant antibody in serum.",
+          "correct": false
+        },
+        {
+          "id": "28920644-1ccf-42bf-9c95-0d9a13a00314",
+          "text": "It is the antibody found in Peyer patches.",
+          "correct": true
+        },
+        {
+          "id": "9a202eb3-5be9-482c-83b2-97af0f69c29e",
+          "text": "It is responsible for the primary immune response.",
+          "correct": false
+        },
+        {
+          "id": "765c5ca4-b09d-413b-86b2-32b542d9ac22",
+          "text": "It is found on the surface of naïve B cells.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "fb2d1291-4978-4122-9d06-256672d5944e",
+      "question": "What is the most active and strongest androgen?",
+      "answers": [
+        {
+          "id": "3e26cf75-46d1-4abc-a326-658eae2f2a9c",
+          "text": "Androstenedione",
+          "correct": false
+        },
+        {
+          "id": "da26ce49-28ea-4a4f-80c2-a55de636eb59",
+          "text": "Dehydroepiandrosterone",
+          "correct": false
+        },
+        {
+          "id": "557ee80f-54a7-4126-b0c8-915c0958ef9d",
+          "text": "Testosterone",
+          "correct": false
+        },
+        {
+          "id": "250b3c83-e7a4-409f-97ff-b2da08774041",
+          "text": "Dihydrotestosterone",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "c738676c-43ce-4051-858e-c51bcc7200e6",
+      "question": "The following are true about testosterone, EXCEPT:",
+      "answers": [
+        {
+          "id": "7189c497-0c71-49ea-878b-0fc5d52dec13",
+          "text": "Primarily responsible for the pubertal growth spurt",
+          "correct": true
+        },
+        {
+          "id": "b6298217-da2b-442a-b84c-3458a2027a47",
+          "text": "Considered as the primary testicular hormone",
+          "correct": false
+        },
+        {
+          "id": "9a31b492-afb2-46d9-a6f9-8b837f8efc1b",
+          "text": "Responsible for the differentiation of the penis",
+          "correct": false
+        },
+        {
+          "id": "4de2d144-431e-450f-bc06-18291ef9bbbd",
+          "text": "Primary hormone involved in testicular descent",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "0951d4b5-e2db-4b2b-995a-1272b0b7d3df",
+      "question": "What is the hormone believed to be responsible for the initiation of the onset of puberty?",
+      "answers": [
+        {
+          "id": "e0527f87-1b96-4478-b18d-19d9731c0097",
+          "text": "Estrogen in females, testosterone in males",
+          "correct": false
+        },
+        {
+          "id": "8c3f9858-ce72-469a-a54b-fc4bbf9c1901",
+          "text": "Gonadotropin releasing hormone (GnRH)",
+          "correct": true
+        },
+        {
+          "id": "b0812da6-c427-49db-b459-30b0174938f1",
+          "text": "Growth hormone (GH)",
+          "correct": false
+        },
+        {
+          "id": "792e90d8-efb2-4d51-bbc4-8b063fa4de0d",
+          "text": "Adrenocorticotropic hormone (ACTH)",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "e95d1eee-6e1b-4a2d-a0f2-3b5c18bb4cd9",
+      "question": "What happens to the filtration fraction in the presence of a ureteral stone?",
+      "answers": [
+        {
+          "id": "860e887b-5c97-4f9b-8577-2e380fae2599",
+          "text": "Decreases",
+          "correct": true
+        },
+        {
+          "id": "5088264b-e970-4dbd-a1f5-9fa411b46430",
+          "text": "Increases",
+          "correct": false
+        },
+        {
+          "id": "e9aafa45-e9f2-452e-87d9-72e75ef41ab0",
+          "text": "Cannot determine",
+          "correct": false
+        },
+        {
+          "id": "52da4f4a-2406-459c-b3c0-57143dfc9757",
+          "text": "No change",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "5cb6bedc-0d84-4c31-ba9f-d654564956d8",
+      "question": "What is true of the glomerular filtration rate?",
+      "answers": [
+        {
+          "id": "f0b9af8c-f47f-4624-92f2-eaa6d76f9225",
+          "text": "The normal GFR is 180L/day.",
+          "correct": true
+        },
+        {
+          "id": "cb1ac113-63b3-46a9-ad6d-10a4d7ef17a0",
+          "text": "The GFR in males is higher by 50% compared to females.",
+          "correct": false
+        },
+        {
+          "id": "b6008b8b-b080-435e-9897-60454b988eeb",
+          "text": "BUN and creatinine are directly proportional to GFR.",
+          "correct": false
+        },
+        {
+          "id": "db2bd6c7-8ab9-4434-8831-ea400d143f37",
+          "text": "GFR increases with decreased Bowman space hydrostatic pressure.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "1f332347-767c-4c91-9e42-ac67695147af",
+      "question": "The following are functions of astrocytes EXCEPT?",
+      "answers": [
+        {
+          "id": "aa0bfaa9-15bc-4bc2-ac46-7a60ff704197",
+          "text": "Help make the blood-brain barrier",
+          "correct": false
+        },
+        {
+          "id": "8035c7ac-6c7a-46a4-a213-e080736dc2a8",
+          "text": "Play a role in the reuptake of neurotransmitters",
+          "correct": false
+        },
+        {
+          "id": "3d0baf47-b4ea-4e7f-b327-13cc9ebfa63a",
+          "text": "Integral in the production of myelin",
+          "correct": true
+        },
+        {
+          "id": "f24e3777-76b3-42e1-9c47-97390ea30f38",
+          "text": "Maintain appropriate concentration of glutamate",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "543d6557-1b24-49be-ac26-30aef57d9b1d",
+      "question": "Which is an excitatory neurotransmitter?",
+      "answers": [
+        {
+          "id": "7a196f1e-ae54-49d9-9dba-eec41f3ccbc0",
+          "text": "Nitric oxide",
+          "correct": false
+        },
+        {
+          "id": "2078dc00-2045-42c0-99bb-1fc083657afd",
+          "text": "Glutamate",
+          "correct": true
+        },
+        {
+          "id": "2e66857f-1b32-4f3f-8af8-6e0565f4c694",
+          "text": "Glycine",
+          "correct": false
+        },
+        {
+          "id": "2314b04f-e5b7-457a-a933-f3d133bb28c1",
+          "text": "Gamma-aminobutyric acid",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "3f25e018-2c4e-45d7-9867-1afe0004d88e",
+      "question": "In the synthesis of neurotransmitters, what enzyme is responsible for the conversion of dopamine to norepinephrine?",
+      "answers": [
+        {
+          "id": "f570c2f0-67b8-4e93-936b-319a7e77d05b",
+          "text": "Dopa decarboxylase",
+          "correct": false
+        },
+        {
+          "id": "ebf6f565-0d74-457f-9159-b221c6915896",
+          "text": "Dopamine b-hydroxylase",
+          "correct": true
+        },
+        {
+          "id": "08a825f8-e22f-4cc4-9099-7e5c7de3be0c",
+          "text": "Phenylethanolamine-N-methyltransferase",
+          "correct": false
+        },
+        {
+          "id": "042f9ba9-92ac-41ab-9b3e-73ecde99ecad",
+          "text": "Tyrosine hydroxylase",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "c91f4e6b-b360-46e9-aeaf-b00d253f2fde",
+      "question": "Stimulation of which type of opioid receptor results to dysphoria?",
+      "answers": [
+        {
+          "id": "ec4910e1-322f-4d69-aaeb-3c4d04e7f20d",
+          "text": "Delta",
+          "correct": false
+        },
+        {
+          "id": "71d50f8a-cabd-4dc7-b6bd-bb9beff777af",
+          "text": "Kappa",
+          "correct": true
+        },
+        {
+          "id": "407bd663-31bc-4022-a71e-dafc35c4a2b9",
+          "text": "Mu",
+          "correct": false
+        },
+        {
+          "id": "03a6865d-0450-4a44-b614-83f413233905",
+          "text": "Gamma",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "e50f543d-3c50-446d-a353-634eb35ace28",
+      "question": "Which does NOT occur during muscle contraction?",
+      "answers": [
+        {
+          "id": "56510a12-a2a9-42c3-850b-ce5e261ee2bb",
+          "text": "Action potential starts at the initial segment of the motor neuron, spreads through the axon, neural fibril, and then the terminal boutons.",
+          "correct": false
+        },
+        {
+          "id": "f97e5f69-0458-45ea-b55c-2c1a950ae5c4",
+          "text": "Miniature end plate potential is due to the influx of Na+.",
+          "correct": false
+        },
+        {
+          "id": "65c5eba8-0183-45ab-a7dd-20cfdf031aa6",
+          "text": "ADP bound to myosin undergoes complete hydrolysis which produces the end plate potential.",
+          "correct": true
+        },
+        {
+          "id": "e8a58770-6e27-4c35-b8bb-2cbd8f8e233b",
+          "text": "The binding of troponin C with Ca2+ displaces tropomyosin.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "a1932275-5648-4b5f-a83d-43d177eb060e",
+      "question": "Much of the carbon dioxide in the body is transported in the blood as __________.",
+      "answers": [
+        {
+          "id": "b2385ef3-3052-4a31-9330-76990f3070fe",
+          "text": "Carbaminohemoglobin",
+          "correct": false
+        },
+        {
+          "id": "2c66961c-47dc-4b1f-8123-3ab6f2e502d6",
+          "text": "CO2 dissolved in plasma",
+          "correct": false
+        },
+        {
+          "id": "027c18d0-d48d-48b0-9d89-500d1b5f437a",
+          "text": "Carbonic acid",
+          "correct": false
+        },
+        {
+          "id": "9bbe233d-57f6-41b9-802f-a1788dca5b0c",
+          "text": "Bicarbonate",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "83aaa00b-921b-4b52-82e0-366b11ab0975",
+      "question": "This is activated when the tidal volume increases to more than thrice the normal, protecting the lungs from excess inflation.",
+      "answers": [
+        {
+          "id": "1a8bdb11-181b-40a9-9e5a-234c2d510e15",
+          "text": "Apneustic center",
+          "correct": false
+        },
+        {
+          "id": "fadd919b-1ab6-426a-bb0e-6b28a89048ef",
+          "text": "Hering-Breuer inflation reflex",
+          "correct": false
+        },
+        {
+          "id": "d4c868c1-43bf-4914-8b2d-3c045fa80c7f",
+          "text": "Nucleus parabrachialis",
+          "correct": true
+        },
+        {
+          "id": "787f2ed5-a3a1-41f6-b979-ba30703b3bfb",
+          "text": "Ventral respiratory group pre-Botzinger Complex",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "73783f94-1304-4f6f-ac87-e4395c0cc2fa",
+      "question": "Which of the following do not change during moderate exercise? I. Pulmonary blood flow II. Arterial pO2 III. Arterial pCO2 IV. Arterial pH V. Venous PCO2",
+      "answers": [
+        {
+          "id": "1640f48d-0c18-41e1-9075-f1b988e0c6e7",
+          "text": "I and IV",
+          "correct": false
+        },
+        {
+          "id": "65f60663-bc7f-4160-af1b-46e56eaeae4d",
+          "text": "I, II, and III",
+          "correct": false
+        },
+        {
+          "id": "d530c46d-58e8-4da1-a6a7-3182c1c08235",
+          "text": "II, III, and IV",
+          "correct": false
+        },
+        {
+          "id": "6a29f09d-7834-419d-b73d-853a061dc0c0",
+          "text": "II, IV, and V",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "bd873037-a9c1-4ef2-a254-da7060889b94",
+      "question": "All of the following pertain to the relative refractory period of the action potential EXCEPT:",
+      "answers": [
+        {
+          "id": "5921c0f4-014a-4020-a564-49d3966af911",
+          "text": "Due to the closure of Na+ channels.",
+          "correct": true
+        },
+        {
+          "id": "f3e80f34-3dcd-4acf-86d4-dc2cfcd97fc5",
+          "text": "Occurs during an action potential after the absolute refractory period.",
+          "correct": false
+        },
+        {
+          "id": "53a514d1-74fd-4206-afb8-dd1b308b0a83",
+          "text": "A period where a new action potential can be elicited",
+          "correct": false
+        },
+        {
+          "id": "6bff3267-0863-44d8-abdd-5364397f1d38",
+          "text": "K+ channels play a role during this period.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "f7459b9f-9096-40c8-a230-cfa4ed593711",
+      "question": "What is the active form of vitamin D?",
+      "answers": [
+        {
+          "id": "27d871d4-ffa5-45dd-894f-6807e9b14b7c",
+          "text": "1,25-dihydroxycholecalciferol",
+          "correct": true
+        },
+        {
+          "id": "310385f6-b2b7-41e8-addd-827769087881",
+          "text": "1,25-dihydroxycholecalcitriol",
+          "correct": false
+        },
+        {
+          "id": "d0b9422a-7607-44ff-9c22-d8f88cfef3e2",
+          "text": "24,25-dihydroxycholecalciferol",
+          "correct": false
+        },
+        {
+          "id": "b80a0ac0-a2d9-459a-8e1f-f01b4d0646c3",
+          "text": "24,25-dihydroxycholecalcitriol",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "674a8cca-42c8-4179-8667-e16a9a31801a",
+      "question": "What hormone exerts a potent influence in determining the functional effects of vitamin D in the body?",
+      "answers": [
+        {
+          "id": "2777f61e-828c-4a56-bb22-a44473d76fb3",
+          "text": "Parathyroid hormone",
+          "correct": true
+        },
+        {
+          "id": "1732c79c-4ddd-4399-8a5e-8f0d619aa1de",
+          "text": "Thyroid hormone",
+          "correct": false
+        },
+        {
+          "id": "a26d3536-07a2-4870-9134-6bba70e01aec",
+          "text": "Estrogen",
+          "correct": false
+        },
+        {
+          "id": "037e2095-9f01-4a6c-8778-da7769d6ff64",
+          "text": "Adrenocorticotropic hormone",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "7873a731-2fa8-496b-826e-65577c4034ad",
+      "question": "Which of the following hormones are diabetogenic? I. Epinephrine II. Cortisol III. Growth hormone IV. Insulin V. Glucagon",
+      "answers": [
+        {
+          "id": "b3bae000-60c2-4da0-9bd1-14c81fb40867",
+          "text": "II, and V",
+          "correct": false
+        },
+        {
+          "id": "9ed5d171-39c2-4744-826a-e7fcbc02a883",
+          "text": "II, III, and V",
+          "correct": false
+        },
+        {
+          "id": "2a83eabe-5325-42ec-a7cf-6687d471ae31",
+          "text": "I, II, III, and IV",
+          "correct": false
+        },
+        {
+          "id": "7c8d6252-14db-454f-9165-ba66ef756b5f",
+          "text": "I, II, III, and V",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "e4e8b145-6458-400e-a29a-27d8c7314f83",
+      "question": "Oxytocin is released by the hypothalamic paraventricular nuclei in response to several stimuli and serves an array of functions. Which is NOT true of oxytocin?",
+      "answers": [
+        {
+          "id": "a9ce522e-5e9a-4aa1-99b6-fec28b47dc9c",
+          "text": "Responsible for the milk let down",
+          "correct": false
+        },
+        {
+          "id": "8a057dc3-426f-416a-b76a-cdb0aa35b853",
+          "text": "Released as the cervix dilates",
+          "correct": false
+        },
+        {
+          "id": "ecf57448-79c8-46f6-b606-6290e6130d2c",
+          "text": "Secreted in response to the cry of an infant",
+          "correct": false
+        },
+        {
+          "id": "10821c4f-4c85-4a87-bd70-86b07cd95b47",
+          "text": "Rises steadily during the fifth week of pregnancy up to the birth of the baby",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "c6e6833d-cdd0-422c-b860-743edb52e8a1",
+      "question": "Which of the following produce the hormone responsible for the deposition of calcium in the bones and decreasing extracellular fluid calcium ion concentration?",
+      "answers": [
+        {
+          "id": "d500679a-49a5-4188-bc6c-b367f0bf44da",
+          "text": "Chief cells of the parathyroid gland",
+          "correct": false
+        },
+        {
+          "id": "73fdde37-2119-4bea-a3ac-f76109d80ba2",
+          "text": "Chief cells of the thyroid gland",
+          "correct": false
+        },
+        {
+          "id": "70af9269-4c85-4783-b907-6a3f46480a1f",
+          "text": "C cells of the parathyroid gland",
+          "correct": false
+        },
+        {
+          "id": "55a5bba6-bc44-4831-8858-5c83a659122e",
+          "text": "C cells of the thyroid gland",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "43cfc4d2-2dd6-413b-b4a0-2000a6ea6be4",
+      "question": "Ohm’s law is the basis of the formula for cardiac output. In line with this, what is the equivalent of voltage when computing for the cardiac output?",
+      "answers": [
+        {
+          "id": "a2e318b2-47b9-48b5-9e45-54d48b0accad",
+          "text": "Stroke volume",
+          "correct": false
+        },
+        {
+          "id": "fabee176-9773-4ddd-a051-a948d1f3922f",
+          "text": "Blood pressure",
+          "correct": true
+        },
+        {
+          "id": "ca308115-1873-42b9-af91-fc3dd4763be3",
+          "text": "Pulmonary arterial pressure",
+          "correct": false
+        },
+        {
+          "id": "81b77297-6e2c-4ea7-ae44-aad5febd17e2",
+          "text": "Left atrial pressure",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "0ecc05b1-83b9-42b7-9ab0-1dfc2e726555",
+      "question": "Turbulence of blood flow is predicted by Reynold’s number. Which is false about Reynold’s number?",
+      "answers": [
+        {
+          "id": "a40bab15-1aa3-46ea-b8e8-c43cba8c02e7",
+          "text": "Reynold’s number is directly proportional to the probability of turbulence in blood flow.",
+          "correct": false
+        },
+        {
+          "id": "4a7cb5d9-e14c-440f-b114-b0b7cb16c7f6",
+          "text": "Viscosity is directly proportional to the Reynold’s number.",
+          "correct": true
+        },
+        {
+          "id": "b536789b-dc96-4beb-bb39-6d2ce4935171",
+          "text": "A higher Reynold’s number is most likely seen in cases of anemia.",
+          "correct": false
+        },
+        {
+          "id": "bc4d8c58-5f08-4608-8900-0b80cbbe4000",
+          "text": "Blood that is higher in density can increase the Reynold’s number.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "43fcd86b-bb55-413c-bed4-15dc6e90bffc",
+      "question": "Which of the following will result to a widened pulse pressure?",
+      "answers": [
+        {
+          "id": "4e653184-08d4-4b2a-910f-a4e0b3860882",
+          "text": "Decreased ability of the heart to pump blood",
+          "correct": false
+        },
+        {
+          "id": "1a1e4a5c-2335-4d0d-8bb7-4feae21ebbab",
+          "text": "Aortic sclerosis",
+          "correct": true
+        },
+        {
+          "id": "61ea2fc7-471d-4c57-9463-06f078c95e4d",
+          "text": "Cardiac tamponade",
+          "correct": false
+        },
+        {
+          "id": "8345ac96-b26e-4e1a-a2be-28616cf79b80",
+          "text": "Uterine atony unresponsive to uterotonics",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "811e63ee-0e50-441d-a675-5d4d9e256212",
+      "question": "In a healthy individual, the physiologic dead space is ________.",
+      "answers": [
+        {
+          "id": "4d4e2ada-310f-49ce-8888-9c6b9ad72050",
+          "text": "Approximately equal to zero",
+          "correct": false
+        },
+        {
+          "id": "e81969d6-d43c-4b4d-a588-d7d90dc8b345",
+          "text": "Equal to the alveolar dead space",
+          "correct": false
+        },
+        {
+          "id": "e3c0f56e-7acf-4466-878f-5d7e95262178",
+          "text": "Approximately equal to the volume of air from the nose to the terminal bronchioles",
+          "correct": true
+        },
+        {
+          "id": "fcaef232-45be-4df2-b3de-b404ab5fe3b7",
+          "text": "Approximately 250 mL",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "47aeda51-fe2c-4988-8ca7-be8720df71a6",
+      "question": "Which of the following factors is the main determinant of conduction velocity along a nerve?",
+      "answers": [
+        {
+          "id": "aee4ced5-f3b1-48e9-af30-9b7f2cd5147e",
+          "text": "Nerve fiber length",
+          "correct": false
+        },
+        {
+          "id": "53f4f3bb-9eb2-4ede-89ee-137ad5ae5879",
+          "text": "Degree of myelination of the nerve",
+          "correct": false
+        },
+        {
+          "id": "2f0cb1a1-6681-4d12-8341-78132e09b6fe",
+          "text": "Diameter of the nerve fiber",
+          "correct": true
+        },
+        {
+          "id": "2baaeabd-cf27-47f9-8a60-c134e06ec33f",
+          "text": "Concentration of neurotransmitters",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "60a2a1e1-0766-4ae6-8a82-f3887e4390e9",
+      "question": "Which of the following utilizes a carrier mediated transport process?",
+      "answers": [
+        {
+          "id": "47c5b9eb-565c-4338-856e-29e5503d3235",
+          "text": "Movement of alcohol across the cell membrane",
+          "correct": false
+        },
+        {
+          "id": "4613d900-e4c2-49c4-bc81-4dd318a9c3db",
+          "text": "Urea reabsorption in the inner medullary collecting ducts of the kidneys",
+          "correct": true
+        },
+        {
+          "id": "580a33c0-f118-4977-b0e4-3910299f0f63",
+          "text": "Phagocytosis of bacteria by neutrophils",
+          "correct": false
+        },
+        {
+          "id": "a0ddc22e-ded5-482e-961b-537d9ae20e21",
+          "text": "Anesthetic drugs crossing the cell membrane",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "9832d318-6199-4a34-a163-ace3901101c5",
+      "question": "Of the following characteristics, which is most likely to increase the ease with which a solute diffuses through a membrane?",
+      "answers": [
+        {
+          "id": "97010a8c-d3d5-4dd0-bfdc-7402ee71ddc8",
+          "text": "Decreased oil/water partition coefficient of a solute",
+          "correct": false
+        },
+        {
+          "id": "43c44633-5456-43a0-b6b1-6b771a3a3488",
+          "text": "Increased radius of the solute",
+          "correct": false
+        },
+        {
+          "id": "c255851b-5bf7-444b-b7ee-e9f06c481c7c",
+          "text": "Decreased membrane thickness through which a solute must pass",
+          "correct": true
+        },
+        {
+          "id": "5572e827-b053-40ce-8a75-a53a95d794d9",
+          "text": "A hydrophilic solute",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "3a88e93a-61cc-42bc-a937-382b7f16f6a9",
+      "question": "What receptor mediates increased renin secretion?",
+      "answers": [
+        {
+          "id": "1530bce4-6675-48f0-a187-a0f472076b98",
+          "text": "a1",
+          "correct": false
+        },
+        {
+          "id": "890bcdd5-6d94-43d6-9018-4d4e0b671851",
+          "text": "a2",
+          "correct": false
+        },
+        {
+          "id": "d9ba053f-c01f-48ed-8304-268185cd144d",
+          "text": "b1",
+          "correct": true
+        },
+        {
+          "id": "772c834c-dbb1-4443-b2a6-42e712b6bbf0",
+          "text": "b2",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "5d8e55fc-99c7-4c82-916e-5e4e4b316d6f",
+      "question": "In the sensory pathway, the cell body of the fourth order neurons are located at the _______?",
+      "answers": [
+        {
+          "id": "3741ca39-9a93-48bd-b79a-7f7c263aeff2",
+          "text": "Cranial nerve ganglia",
+          "correct": false
+        },
+        {
+          "id": "196b86a8-6516-46e2-b599-299191bff1db",
+          "text": "Spinal cord",
+          "correct": false
+        },
+        {
+          "id": "bc5ffbe1-4e0e-4078-812b-9e0811639839",
+          "text": "Relay nucleus of the thalamus",
+          "correct": false
+        },
+        {
+          "id": "1eef3b45-8f25-427f-a865-ce53cfaa7540",
+          "text": "Sensory cortex",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "1154cea1-ffd8-44ce-91db-126a4566c88c",
+      "question": "A patient was diagnosed with astigmatism. What is appropriate for his condition?",
+      "answers": [
+        {
+          "id": "c27899ef-eeb3-4dc9-b362-47c25fd6ac09",
+          "text": "Convex lenses",
+          "correct": false
+        },
+        {
+          "id": "5d221853-f297-4fca-b655-fe4743487de4",
+          "text": "Biconcave lenses",
+          "correct": false
+        },
+        {
+          "id": "3542cf39-824c-40b3-8841-7887b527086c",
+          "text": "Cylindrical lenses",
+          "correct": true
+        },
+        {
+          "id": "4347dba0-3306-4eb2-88ef-4f0c550ef4d2",
+          "text": "Spherical soft lenses",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "0ef63f02-9ba2-443a-a536-8f587bd5d462",
+      "question": "Which of the following does not correctly describe arterioles?",
+      "answers": [
+        {
+          "id": "7906c424-9c4a-49e4-a878-b0bfa65dd915",
+          "text": "The main determinant of total peripheral resistance",
+          "correct": false
+        },
+        {
+          "id": "579e4ca0-8223-4359-a419-2219bde16c4e",
+          "text": "Contain the stressed volume of blood",
+          "correct": true
+        },
+        {
+          "id": "943a86f5-2288-4875-8fc8-3e63e8166a48",
+          "text": "b2 receptors mediate their vasodilation",
+          "correct": false
+        },
+        {
+          "id": "4124a9b8-e7f8-41dc-bd24-52dcc2f6f21e",
+          "text": "Able to rapidly dilate or constrict",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "83af55d5-db42-4086-8a15-461751e2164b",
+      "question": "On the EKG strip, which pertains to the plateau phase of ventricular action potential?",
+      "answers": [
+        {
+          "id": "b5f5acd1-6748-4c27-8eba-8f8ddc4ff5a7",
+          "text": "PR segment",
+          "correct": false
+        },
+        {
+          "id": "67ab6d44-f4ae-4bb8-9ba6-5060b7a3a6e3",
+          "text": "ST segment",
+          "correct": true
+        },
+        {
+          "id": "d41a198a-f292-4235-a67c-a57dc97e1130",
+          "text": "T wave",
+          "correct": false
+        },
+        {
+          "id": "a63f5641-d06d-4944-87d7-213f909baffa",
+          "text": "PR interval",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "f7ba1556-96e3-4d46-99ed-be72bccd308d",
+      "question": "What explains the incisura seen in the aortic pressure curve during the isovolumic relaxation phase of the cardiac cycle?",
+      "answers": [
+        {
+          "id": "8bca12f1-2a7e-424c-88eb-ef14a7d2c6e0",
+          "text": "vibrations when the aortic valve closes",
+          "correct": true
+        },
+        {
+          "id": "4e46608b-de1d-4ea0-8c95-9e67adeda73f",
+          "text": "rapidly decreasing aortic pressure",
+          "correct": false
+        },
+        {
+          "id": "46352f63-93fb-49f4-92f6-3f9414478848",
+          "text": "opening of the atrioventricular valves",
+          "correct": false
+        },
+        {
+          "id": "5a7d147e-e97f-4c9c-a0a3-d455fe032416",
+          "text": "rapid increase in ventricular volume after closure of the aortic valve",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "c976eb7e-8422-4d0d-8832-467cb6e1d3cc",
+      "question": "A decreased arterial PO2 with a normal A-a gradient is expected to be seen in cases of _______.",
+      "answers": [
+        {
+          "id": "df6f094f-58c9-446f-81a5-cd03d48eab14",
+          "text": "Mountaineers’ ascent of Mt. Everest",
+          "correct": true
+        },
+        {
+          "id": "64c8f69e-9241-4c26-a397-38000cd6673b",
+          "text": "Lung fibrosis",
+          "correct": false
+        },
+        {
+          "id": "68ea03e4-0d07-4e8c-823a-d210d82e944c",
+          "text": "Tetralogy of Fallot",
+          "correct": false
+        },
+        {
+          "id": "9494961e-b405-4cc4-be3b-1ba992dab1f8",
+          "text": "Diffusion defects",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "175061e5-60cd-4ff3-baf3-efc56ac06938",
+      "question": "A blood cell was placed in a solution. Thereafter, hemolysis of the cell was observed. The solution is most likely _________.",
+      "answers": [
+        {
+          "id": "645bcf40-504f-4bf1-ac97-f21cf056a592",
+          "text": "Hypotonic",
+          "correct": false
+        },
+        {
+          "id": "df6b0b8e-03a2-4a4e-a2d6-0be5413f8544",
+          "text": "Hypertonic",
+          "correct": true
+        },
+        {
+          "id": "f7bc7e92-6528-4e0a-ad3c-a40dd7011320",
+          "text": "Isotonic",
+          "correct": false
+        },
+        {
+          "id": "f2b1a5ea-d9e1-44fb-9a84-7015229b936c",
+          "text": "Homotonic",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "d1268718-60f7-41c3-97a8-14f1c3694407",
+      "question": "Which hormone can cause vascular smooth muscle contraction?",
+      "answers": [
+        {
+          "id": "04c37f55-08f7-4876-94ed-95858a450c8a",
+          "text": "Parathyroid hormone",
+          "correct": false
+        },
+        {
+          "id": "a1d44626-eb14-477d-a35b-47106b308346",
+          "text": "Aldosterone",
+          "correct": false
+        },
+        {
+          "id": "e7e3b9e4-a878-4419-993c-2e2c99a48db3",
+          "text": "Antidiuretic hormone",
+          "correct": true
+        },
+        {
+          "id": "7695c980-a7a1-4de6-8e8e-d23430f3bb8f",
+          "text": "Estrogen",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "5b80fea4-6fda-40ce-b60a-8282848f9cfb",
+      "question": "A hypertensive patient has a BP reading of 220/100 mmHg. What is the average pressure throughout his cardiac cycle?",
+      "answers": [
+        {
+          "id": "8cf06330-000d-4d06-8ebf-0ff82cec66f3",
+          "text": "120 mmHg",
+          "correct": false
+        },
+        {
+          "id": "261fc201-d89b-4291-b86c-5395e17f92d9",
+          "text": "130mmHg",
+          "correct": false
+        },
+        {
+          "id": "9483fa08-fa50-45d5-b2cc-89f98ab6bfea",
+          "text": "140mmHg",
+          "correct": true
+        },
+        {
+          "id": "1be7e33d-7617-463b-b1f9-4a228736b338",
+          "text": "160mmHg",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "140d2b04-0ddf-4b57-a214-071278962b73",
+      "question": "The patient’s EKG showed U waves with increased amplitude. What most likely explains this finding?",
+      "answers": [
+        {
+          "id": "1a348189-a4f6-404b-9f38-ed30bfb94f39",
+          "text": "Serum potassium of 3.5 mmol/L",
+          "correct": true
+        },
+        {
+          "id": "87063ed9-576c-4311-9070-86b826045254",
+          "text": "Serum potassium of 2.0 mmol/L",
+          "correct": false
+        },
+        {
+          "id": "a723473a-6c50-49ca-b6c8-a4b977ea7ca9",
+          "text": "Serum calcium of 6 mg/dL",
+          "correct": false
+        },
+        {
+          "id": "fc9ca33a-2692-4538-b30e-23185fab82bc",
+          "text": "Serum calcium of 13 mg/dL",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "ef578e79-770c-4058-829d-53f8d37e758a",
+      "question": "What explains rigor mortis that occurs around 3-6 hours after death?",
+      "answers": [
+        {
+          "id": "d33ba4cb-310f-4430-abcb-33d79f636954",
+          "text": "ATP which is necessary for the detachment of cross bridges is not formed",
+          "correct": true
+        },
+        {
+          "id": "2ab6ec0e-4225-40f9-aea3-748d846f29ea",
+          "text": "All calcium from the sarcoplasmic reticulum has been released",
+          "correct": false
+        },
+        {
+          "id": "b962f757-6840-44d1-9794-2d32be322fd4",
+          "text": "Dwindling ATP and action potentials in the dying muscle cells lead to contracture",
+          "correct": false
+        },
+        {
+          "id": "193faf84-1689-4a54-bee9-a04d2314b634",
+          "text": "Deterioration of muscle proteins prevents detachment of cross bridges",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "8719b6be-0a6f-4774-bd39-2ed3fc569284",
+      "question": "All of the following substances can be used to estimate extracellular fluid volume EXCEPT:",
+      "answers": [
+        {
+          "id": "c8fb19ef-9e0d-4815-be07-3f34abc7fe6c",
+          "text": "Thiosulfate ion",
+          "correct": false
+        },
+        {
+          "id": "e8d1bd00-5202-47b3-99b0-a92490af8e39",
+          "text": "Inulin",
+          "correct": false
+        },
+        {
+          "id": "0130db82-ccf7-4ec9-8192-b28a03095fe7",
+          "text": "Mannitol",
+          "correct": false
+        },
+        {
+          "id": "ab3a0dba-ef86-468b-8cb2-6785e67f4b6b",
+          "text": "Anti-pyrine",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "66fb6732-8583-4b32-9d6c-01ec5b838264",
+      "question": "Which is NOT TRUE about the cerebrospinal fluid (CSF)?",
+      "answers": [
+        {
+          "id": "9cc5f88b-dc2e-4b69-8d80-d9c8e6723044",
+          "text": "CSF has more sodium content than blood.",
+          "correct": false
+        },
+        {
+          "id": "3cacbaa8-2d18-4b8f-b89f-be3886baf8e3",
+          "text": "The cholesterol content of CSF is almost equal to that of the blood.",
+          "correct": true
+        },
+        {
+          "id": "8b6ad544-6e5c-4dd1-b85d-7e89771542cb",
+          "text": "CSF and the brain have about the same specific gravity.",
+          "correct": false
+        },
+        {
+          "id": "eb2a5925-28d2-48e1-b065-f0ece782fc48",
+          "text": "Approximately 500mL of CSF is produced per day.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "c1d3e36c-2377-43d6-9910-58abae92f426",
+      "question": "All of the following vitamins are formed as a result of bacterial activity in the colon except:",
+      "answers": [
+        {
+          "id": "ec80014e-c783-48cb-bdd0-7c9fddc9746a",
+          "text": "Vitamin B1",
+          "correct": false
+        },
+        {
+          "id": "e1a9f610-b3ba-47af-966a-08b3780dbc26",
+          "text": "Vitamin B2",
+          "correct": false
+        },
+        {
+          "id": "7f0680e9-82b6-492f-b6c1-fc3369ba8d6f",
+          "text": "Vitamin B3",
+          "correct": true
+        },
+        {
+          "id": "e20f06ff-0a62-44f3-a9e2-f920c1bf2df9",
+          "text": "Vitamin K",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "6d2e5d0d-13f1-4db5-bb20-4785ed702b66",
+      "question": "Which is NOT a protein hormone?",
+      "answers": [
+        {
+          "id": "b4a39562-d72e-4c65-bc27-3c2e1c4e56c6",
+          "text": "Insulin",
+          "correct": false
+        },
+        {
+          "id": "7a1938c1-cae0-44fe-9474-3020d6e63731",
+          "text": "Growth Hormone",
+          "correct": false
+        },
+        {
+          "id": "bb887972-a670-40c5-96d3-1b6e8a2d5c42",
+          "text": "Glucagon",
+          "correct": false
+        },
+        {
+          "id": "d04afa9f-262f-4147-88b0-f62da9855c71",
+          "text": "Aldosterone",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "aefc32f4-2e75-4e1d-aded-63efd614d92c",
+      "question": "A patient undergoes electroencephalogram (EEG). You noticed some brain waves that disappeared when the patient opened his/her eyes. What type of brain waves are these?",
+      "answers": [
+        {
+          "id": "3fc836d6-664d-4ddd-a7cc-2585993102e5",
+          "text": "Alpha",
+          "correct": true
+        },
+        {
+          "id": "ca65706f-bcf8-499a-8672-d16aacdf90d3",
+          "text": "Beta",
+          "correct": false
+        },
+        {
+          "id": "f3cde4ae-640a-47ff-9328-6815c97f4d46",
+          "text": "Theta",
+          "correct": false
+        },
+        {
+          "id": "f6e3e576-8428-40bb-b893-87df0e82d358",
+          "text": "Delta",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "025e9460-f2cf-4869-9392-c2ee864525c3",
+      "question": "What part of the stomach secretes gastrin?",
+      "answers": [
+        {
+          "id": "98c4b9da-1dc8-4d03-869d-c2bbd898a623",
+          "text": "Cardia",
+          "correct": false
+        },
+        {
+          "id": "e7eb84e4-bf82-4d9a-9de7-f1b8f0381eb8",
+          "text": "Fundus",
+          "correct": false
+        },
+        {
+          "id": "0c9b380c-471c-438a-875d-d6d674a97ab6",
+          "text": "Antrum",
+          "correct": true
+        },
+        {
+          "id": "28bda8cc-4113-4beb-9fa9-b36dc472f590",
+          "text": "Pylorus",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "25182837-665e-46f0-87de-a4a9702eb372",
+      "question": "What part of the kidney converts vitamin D to its active form?",
+      "answers": [
+        {
+          "id": "c62f4e83-4bb1-4685-a199-38b456c97021",
+          "text": "Glomerulus",
+          "correct": false
+        },
+        {
+          "id": "06bada6b-c76e-47fd-ada9-9a5b1f245ea8",
+          "text": "Proximal convoluted tubule",
+          "correct": true
+        },
+        {
+          "id": "0908c2b9-40b7-454a-9b49-22c89836202e",
+          "text": "Thick ascending loop of Henle",
+          "correct": false
+        },
+        {
+          "id": "e2ed9330-5eee-40cf-b1f1-949d102d14a5",
+          "text": "Distal convoluted tubule",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "c82d65d7-dd86-4d79-acac-436bb8d79eb8",
+      "question": "In a healthy patient’s urine, which of the following is least likely to be found in high amounts?",
+      "answers": [
+        {
+          "id": "c9a62c75-16c7-4032-be0b-bb36ec9310b2",
+          "text": "Potassium",
+          "correct": false
+        },
+        {
+          "id": "442aa0c6-3768-428a-9474-a4b248545f59",
+          "text": "Urea",
+          "correct": false
+        },
+        {
+          "id": "c97eafa9-5b18-41fe-8bf6-1acf74b564df",
+          "text": "Sodium",
+          "correct": false
+        },
+        {
+          "id": "d6e98fef-97c0-4abf-a4eb-c642c1487383",
+          "text": "Bicarbonate",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "4fa92434-3dcc-4472-a4dd-10b3da498034",
+      "question": "What is considered as the gold standard method to determine GFR?",
+      "answers": [
+        {
+          "id": "1a35cbc0-2822-4a93-b7fd-e76d63f98b32",
+          "text": "Measuring clearance of inulin",
+          "correct": true
+        },
+        {
+          "id": "60fc0f07-cc99-4dfb-bda6-99bf84c7b3ec",
+          "text": "Measuring creatinine clearance",
+          "correct": false
+        },
+        {
+          "id": "8c91fde9-52e2-47f7-8a19-ca2ed291dc0e",
+          "text": "Measuring clearance of iothalamate",
+          "correct": false
+        },
+        {
+          "id": "efd54649-90f6-4d6b-85bd-be31732c6b10",
+          "text": "Measuring clearance of cystatin C",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "737b256f-48ad-4d17-a83e-1b54d5cfd737",
+      "question": "What enzyme converts almost all the androgens and progesterone to estrogen in the granulosa cells of the ovaries?",
+      "answers": [
+        {
+          "id": "cb931eab-30aa-4cf6-a1fa-773d6a2b37f7",
+          "text": "Desmolase",
+          "correct": false
+        },
+        {
+          "id": "2771542c-b2d7-49a4-bea7-5b32e3b10441",
+          "text": "17-a hydroxylase",
+          "correct": false
+        },
+        {
+          "id": "ddd67cd0-fca8-460c-b5d6-bcdefab6adeb",
+          "text": "3b-hydroxysteroid dehydrogenase",
+          "correct": false
+        },
+        {
+          "id": "8dec7d43-4e56-4612-85b6-0a657f10afb5",
+          "text": "Aromatase",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "cac7f252-7a7d-4a70-830b-37b60770d8b6",
+      "question": "A patient has fluent speech and good comprehension. However, he has difficulty repeating words or phrases. Which part of the brain is most likely affected?",
+      "answers": [
+        {
+          "id": "2bdd4a57-1cac-428e-bfed-eacb1a3cdcba",
+          "text": "Brodmann areas 44 and 45",
+          "correct": false
+        },
+        {
+          "id": "b258291d-2797-47ed-9015-e766eaab09cd",
+          "text": "Brodmann area 22",
+          "correct": false
+        },
+        {
+          "id": "fe49abfd-f068-4bc3-839b-38911fde4f68",
+          "text": "Arcuate fasciculus",
+          "correct": true
+        },
+        {
+          "id": "b46c708b-ce04-4c70-8c6b-58c8e43ee0b7",
+          "text": "Corpus callosum",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "2d3b8c39-e7b6-4b83-8761-79af534d8adc",
+      "question": "Which is not true of insulin?",
+      "answers": [
+        {
+          "id": "c2e0cc4c-007a-461a-968a-934ab2c47e21",
+          "text": "Second messenger is a tyrosine kinase receptor",
+          "correct": false
+        },
+        {
+          "id": "31ef138d-b780-4097-8741-3710bc6af0b4",
+          "text": "Has a long plasma half-life",
+          "correct": true
+        },
+        {
+          "id": "e6112f92-826e-4153-9c24-694bb7b24465",
+          "text": "Degraded by insulinase in the liver, kidneys, and muscles.",
+          "correct": false
+        },
+        {
+          "id": "f11c861e-eb46-4bfa-98e2-9f84a13cedc4",
+          "text": "Circulates in the blood almost entirely in an unbound form",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "5fec2f85-4bc7-4ee4-9dd6-5ffad0e1670c",
+      "question": "Majority of testosterone in the blood is _______.",
+      "answers": [
+        {
+          "id": "df9933ed-ebec-4428-8cd1-478da0f97254",
+          "text": "free testosterone",
+          "correct": false
+        },
+        {
+          "id": "957896ab-6b56-45e1-9cb2-f5012af7ab3d",
+          "text": "bound to sex-hormone binding globulin",
+          "correct": true
+        },
+        {
+          "id": "34e14d22-4c37-4d56-bde1-1ef19c11c3de",
+          "text": "bound to albumin",
+          "correct": false
+        },
+        {
+          "id": "deece7a4-82bb-4ce3-b103-10ab2467b025",
+          "text": "bound to erythrocytes",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "655e512a-5b14-4add-a9cf-dfb2eb5d6f11",
+      "question": "Which is the most likely cause of the diminished follicle-stimulating hormone levels when spermatogenesis proceeds too rapidly?",
+      "answers": [
+        {
+          "id": "d6121850-e887-417f-b421-059ad47189ea",
+          "text": "Production of sperm by the seminiferous tubules",
+          "correct": false
+        },
+        {
+          "id": "abdf663d-4e00-43a4-bf9e-1ab663975e58",
+          "text": "Release of inhibin by Sertoli cells",
+          "correct": true
+        },
+        {
+          "id": "0b426293-7b30-4cb7-bd6b-b31b45106aa3",
+          "text": "Release of testosterone by Leydig cells",
+          "correct": false
+        },
+        {
+          "id": "bd96c6f0-e90e-470e-aa4a-0bba9f0f6766",
+          "text": "Stimulation of the interstitial cells of Leydig in the testes",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "f2d22add-4379-4160-b1ba-7c3d5e4a4540",
+      "question": "During the third trimester of pregnancy, blood cell formation in the fetus occurs primarily in the _______?",
+      "answers": [
+        {
+          "id": "b598ccc8-50e5-4fec-adf3-9dc1367f93bb",
+          "text": "Yolk sac",
+          "correct": false
+        },
+        {
+          "id": "d83588ac-5830-46f1-8eb3-828ce834394c",
+          "text": "Spleen",
+          "correct": false
+        },
+        {
+          "id": "483eb300-6d60-440b-9629-0bba1f4aa694",
+          "text": "Liver",
+          "correct": false
+        },
+        {
+          "id": "e94703b6-f7b0-43d2-8843-7503760ee9ba",
+          "text": "Bone marrow",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "b0552744-7668-4acb-8262-10f59b660d86",
+      "question": "Which type of hemoglobin has more affinity with 2,3-biphosphoglycerate?",
+      "answers": [
+        {
+          "id": "f13034e6-ebf7-4309-9a8d-61cc687277a0",
+          "text": "a2-b2 hemoglobin",
+          "correct": true
+        },
+        {
+          "id": "ddb3897e-30b7-488c-9c9d-5773fc496ba5",
+          "text": "a2-d2 hemoglobin",
+          "correct": false
+        },
+        {
+          "id": "e9384999-6800-4c1a-b109-d1bb59023b22",
+          "text": "a2-g2 hemoglobin",
+          "correct": false
+        },
+        {
+          "id": "aceb4778-6929-4aa2-834d-b128595fb1d7",
+          "text": "a2-e2 hemoglobin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "d5a98528-e3c5-4220-880f-eb537c2deb1b",
+      "question": "Which is an appropriate description of adaptive immunity?",
+      "answers": [
+        {
+          "id": "5c9a0460-09ad-4e62-b52e-7b69728bde2d",
+          "text": "Has two basic types",
+          "correct": true
+        },
+        {
+          "id": "3af0c249-1b50-48ce-bf2a-d60c3f52a45f",
+          "text": "Includes destruction of swallowed organisms by the acid secretions of the stomach",
+          "correct": false
+        },
+        {
+          "id": "1851f040-7d1c-4d91-8cde-6bec3c03074b",
+          "text": "Involves natural killer lymphocytes that can destroy tumor cells",
+          "correct": false
+        },
+        {
+          "id": "38aac768-0cb5-418c-b0fb-8c062891d298",
+          "text": "Acts within minutes",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "206aa352-4507-4e0d-be7b-3e7f49358e22",
+      "question": "Which of the following acute phase reactants (APRs) are downregulated in inflammation?",
+      "answers": [
+        {
+          "id": "3240a957-37a1-4eab-a752-3002de2a5897",
+          "text": "Hepcidin",
+          "correct": false
+        },
+        {
+          "id": "640d011f-8015-445e-9273-e80a5ca41433",
+          "text": "Albumin",
+          "correct": true
+        },
+        {
+          "id": "ab5a6454-be04-425a-a8b4-9004c56e8295",
+          "text": "Fibrinogen",
+          "correct": false
+        },
+        {
+          "id": "92cdd0b7-fd81-42db-a892-713f913e3138",
+          "text": "Ferritin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "f88b4a40-de99-4096-b05c-89b741e1eea5",
+      "question": "Which of the following clotting factors are involved in the common pathway of the coagulation cascade? I. Fibrin-stabilizing factor II. Hageman factor III. Stuart-Prower factor IV. Tissue factor V. Prothrombin",
+      "answers": [
+        {
+          "id": "6a7ba6c3-f699-46ce-882f-52a2c8209e65",
+          "text": "I, II, and IV",
+          "correct": false
+        },
+        {
+          "id": "9d4df9c1-ed4d-4f8c-aac6-9bb4cb2dc1b3",
+          "text": "I, III, and V",
+          "correct": true
+        },
+        {
+          "id": "9a3c07c2-0a1a-4952-b750-24db0a44d2c6",
+          "text": "II, III, IV, and V",
+          "correct": false
+        },
+        {
+          "id": "3f1a2d44-98c6-4148-9c93-157df538ba4b",
+          "text": "III, IV, and V",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "1b872b7c-ad4d-49bd-bfb2-b0aa1a4c2505",
+      "question": "Of the following GI hormones, which is the most potent inhibitor of stomach motility caused by gastrin?",
+      "answers": [
+        {
+          "id": "e1239300-89fa-4a41-b5f0-1d7f51661cbf",
+          "text": "Cholecystokinin",
+          "correct": true
+        },
+        {
+          "id": "0744e1be-c3c3-4944-99c6-f3eb4c08bfec",
+          "text": "Secretin",
+          "correct": false
+        },
+        {
+          "id": "180d4851-f28e-4c6c-b87b-50bac0ca7fdd",
+          "text": "Gastric inhibitory peptide",
+          "correct": false
+        },
+        {
+          "id": "b747e728-6fe3-4d75-858d-d7604e4ac848",
+          "text": "Entero-glucagon",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "083788e9-be0a-4bac-a28f-16e17040e232",
+      "question": "Alexis, a 22-year-old obese male was brought to the ER due to multiple physical injuries from a vehicular collision. His growth hormone (GH) levels are increased. Which of the following patient factors is related to the increased GH levels?",
+      "answers": [
+        {
+          "id": "7949d535-adc3-4c2d-8022-e9bb18581e4c",
+          "text": "Age",
+          "correct": false
+        },
+        {
+          "id": "1dc7ca74-0222-49e0-9d29-3d267d9e6552",
+          "text": "Sex",
+          "correct": false
+        },
+        {
+          "id": "b5a99153-4ca6-4733-b65c-4a3d306e56f0",
+          "text": "BMI",
+          "correct": false
+        },
+        {
+          "id": "afcb226a-8f12-4d6c-b94d-821e6f6c6794",
+          "text": "Multiple physical injuries",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "d321d236-a38b-4d02-9729-573657cf0e5a",
+      "question": "What is the most potent stimulus of arginine vasopressin?",
+      "answers": [
+        {
+          "id": "31d7275c-d043-4bdd-a11b-7691700124e5",
+          "text": "Decreased blood pressure",
+          "correct": false
+        },
+        {
+          "id": "c153d1b0-3530-409e-a839-67fc9a3913c3",
+          "text": "Decreased blood volume",
+          "correct": false
+        },
+        {
+          "id": "340895cc-59f7-4193-a358-79bd4d5adc91",
+          "text": "Increased plasma osmolarity",
+          "correct": true
+        },
+        {
+          "id": "18d98894-5025-4d1f-aba8-78c1a762f3cc",
+          "text": "Increased blood pressure",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "aa0d468b-e4a6-4700-9b98-5c7ddf297465",
+      "question": "What is an expected effect of the stress hormone?",
+      "answers": [
+        {
+          "id": "f26bc73c-2547-4e40-9404-c345ce71a0e7",
+          "text": "Lipogenesis",
+          "correct": false
+        },
+        {
+          "id": "e520fd03-1798-4c85-a924-ed4b130261b4",
+          "text": "Promotes bone formation",
+          "correct": false
+        },
+        {
+          "id": "489f4329-4885-4349-ae3e-90f09f8d2de6",
+          "text": "Anti-inflammation",
+          "correct": true
+        },
+        {
+          "id": "f31d4a5e-a4fe-41ce-8f8c-bea0476c328b",
+          "text": "Conservation of muscle proteins for the fight- flight response",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "26f10358-eb8b-46a0-97e4-a4d826f0a847",
+      "question": "Which vitamin is sometimes called the “anti-sterility vitamin”?",
+      "answers": [
+        {
+          "id": "7a77d951-6b9e-43a4-b3f7-9025ad674d9b",
+          "text": "Vitamin A",
+          "correct": false
+        },
+        {
+          "id": "ffd074a1-2eee-471e-b566-9fc510a8e5ec",
+          "text": "Niacin",
+          "correct": false
+        },
+        {
+          "id": "a3dc0a4a-075a-4f7b-ae51-bf8c7f1a5b2e",
+          "text": "Folic acid",
+          "correct": false
+        },
+        {
+          "id": "2a43f5c8-75e6-410d-a7b7-19c24238e710",
+          "text": "Vitamin E",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "132b888a-01ad-4e14-83e8-603a8c7ba0d5",
+      "question": "What function differentiates the cerebellum from the basal ganglia?",
+      "answers": [
+        {
+          "id": "33d1bf54-b9a8-4085-9025-3008661f2c2b",
+          "text": "Fine tuning of movement",
+          "correct": false
+        },
+        {
+          "id": "74903040-6f51-476e-a6c9-5ff5117b693e",
+          "text": "Motor learning",
+          "correct": false
+        },
+        {
+          "id": "561518fb-f15c-423b-883f-d23d2fbc3cce",
+          "text": "Coordination of movement",
+          "correct": false
+        },
+        {
+          "id": "a12ada79-ced3-4f96-8d76-91c0f17492b8",
+          "text": "Posture",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "caed0624-9cc2-417f-b1ba-db455b8f6659",
+      "question": "How long is the period of female fertility during each month?",
+      "answers": [
+        {
+          "id": "a2dcf77f-bc87-4149-b157-d9d19524b420",
+          "text": "2-3 days",
+          "correct": false
+        },
+        {
+          "id": "98047050-66c8-4258-92d5-83b1d62475ce",
+          "text": "3-4 days",
+          "correct": false
+        },
+        {
+          "id": "38cf38da-fbde-4d75-9620-4bd441f706c3",
+          "text": "4-5 days",
+          "correct": true
+        },
+        {
+          "id": "18b1f525-7fbc-4e08-b745-2eeef7024c55",
+          "text": "5-7 days",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "142a991c-aac4-44de-bd55-44881030dbe4",
+      "question": "What substance plays an important role in opening pathways between the granulosa cells of the oocyte so that sperm can reach the ovum?",
+      "answers": [
+        {
+          "id": "5274f5c3-e8f7-4630-809d-ce36fc45441d",
+          "text": "Prostaglandins",
+          "correct": false
+        },
+        {
+          "id": "e1ebce3b-0b29-461d-aa66-7681d1d22b66",
+          "text": "Acrosome",
+          "correct": false
+        },
+        {
+          "id": "50409f58-8532-46f2-bd87-5cb7dc047c5c",
+          "text": "Hyaluronidase",
+          "correct": false
+        },
+        {
+          "id": "1396f875-cb39-4a0a-9b2b-39b6c3c51f1b",
+          "text": "Cortical granules",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "adeb0c38-60d6-432b-ade0-c2bf8600c730",
+      "question": "Edema in cases of inflammation is due to ______.",
+      "answers": [
+        {
+          "id": "cfa33112-ed35-4280-ba17-7a7865345274",
+          "text": "Increased capillary hydrostatic pressure",
+          "correct": false
+        },
+        {
+          "id": "12698963-bddc-4bd6-af68-60398cb3ce5f",
+          "text": "Decreased capillary oncotic pressure",
+          "correct": false
+        },
+        {
+          "id": "7dcba2ca-e343-4d08-952a-b4c032171dcd",
+          "text": "Increased filtration coefficient",
+          "correct": true
+        },
+        {
+          "id": "a6b747e9-dbbf-45cf-8cd7-2359d3b586dc",
+          "text": "Increased interstitial hydrostatic pressure",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "f46353af-4754-4ec1-98d7-eb2622c0b04b",
+      "question": "Which is NOT accurate about the myogenic theory of autoregulation of blood flow during changes in arterial pressure?",
+      "answers": [
+        {
+          "id": "8705ad92-4c3e-4d29-84ac-824c67f78674",
+          "text": "Increased oxygen to the tissues causes blood vessels to constrict and return blood flow to nearly normal despite the increased BP.",
+          "correct": true
+        },
+        {
+          "id": "64ec9a24-cbe1-4b4d-b0f4-c199bcc7f597",
+          "text": "Sudden stretch of small blood vessels causes the smooth muscle of vessel wall to contract.",
+          "correct": false
+        },
+        {
+          "id": "0241f0db-252c-4491-ac03-0d2b4df0a841",
+          "text": "Inherent to vascular smooth muscle and can occur in the absence of neural or hormonal influences",
+          "correct": false
+        },
+        {
+          "id": "83bdbda3-a8ce-4280-acd8-88dfa7a79fd6",
+          "text": "Important in preventing excessive stretching of blood vessels when BP is increased",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "45f52c49-68e6-4353-a45c-a33892ac8288",
+      "question": "Which is TRUE of the longest phase of the cardiac cycle?",
+      "answers": [
+        {
+          "id": "56b74d94-dfdf-4f42-a373-d76270fe8c57",
+          "text": "Phase when ventricular volume rapidly increases",
+          "correct": false
+        },
+        {
+          "id": "4d150b72-a6af-4a27-926f-9681f0aa87cd",
+          "text": "Dependent on the heart rate",
+          "correct": true
+        },
+        {
+          "id": "03f92b45-a61c-4c75-a5c9-6678eec8f77d",
+          "text": "Ventricular pressure rapidly decreases to a point less than atrial pressure",
+          "correct": false
+        },
+        {
+          "id": "b7ef65f5-44da-4da4-9f53-ee989d4edbeb",
+          "text": "The atrioventricular valves open",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "849b0515-a402-42bb-91e1-15dba4743ddd",
+      "question": "What strongly stimulates the peripheral chemoreceptors?",
+      "answers": [
+        {
+          "id": "90b3ead9-5968-4d08-b82f-b60515ab66ff",
+          "text": "PaO2 <60 mmHg",
+          "correct": true
+        },
+        {
+          "id": "cc72e98a-870e-482b-91f0-458f1c2006a1",
+          "text": "High PaCO2",
+          "correct": false
+        },
+        {
+          "id": "4a3588eb-b1fe-4a9d-a67b-3d929c961352",
+          "text": "Low plasma pH",
+          "correct": false
+        },
+        {
+          "id": "380fb8bc-3a45-4da8-b50b-4961e7f4bc44",
+          "text": "High arterial H+",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "28eeee20-37a6-4d9e-98e8-41ca48a8ec4d",
+      "question": "All of the following appropriately describe the J receptors in the lungs EXCEPT:",
+      "answers": [
+        {
+          "id": "a93ce56e-e0dc-4e8c-878e-52f5594d12b9",
+          "text": "Stimulated in cases of congestive heart failure",
+          "correct": false
+        },
+        {
+          "id": "d4c6cd7b-c96e-4fd7-95e5-14274088cc0e",
+          "text": "Found in juxtaposition to the pulmonary capillaries",
+          "correct": false
+        },
+        {
+          "id": "b7e3c685-4b71-43ff-964f-5f2c72f6a1f2",
+          "text": "Their functional role is not clear",
+          "correct": false
+        },
+        {
+          "id": "cfd1684c-8d1d-4626-afeb-79ad40f41482",
+          "text": "Provide compensatory mechanism in cases of dyspnea",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "357d552b-652f-434c-968d-6cf699bd8cad",
+      "question": "In a patient with Addison’s disease, the following may be expected to be increased EXCEPT:",
+      "answers": [
+        {
+          "id": "953763db-178c-45da-83ca-69299f00e957",
+          "text": "Melanocyte-stimulating hormone",
+          "correct": false
+        },
+        {
+          "id": "68b11ac8-f820-4407-8b5a-a56cd6222157",
+          "text": "Adrenocorticotropic hormone",
+          "correct": false
+        },
+        {
+          "id": "e73870ce-fbc9-4e1d-bfe5-281124e851f5",
+          "text": "Growth hormone",
+          "correct": true
+        },
+        {
+          "id": "bad54223-d6c7-42e7-95b9-78f8ecd2d42b",
+          "text": "Beta-lipotropin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "6007639e-b9c6-46c6-8ae6-5dc06d1354d9",
+      "question": "Spontaneous writhing movements of the hands, arm, neck or face can be observed in a patient with a lesion in the ________.",
+      "answers": [
+        {
+          "id": "8ff6b739-8bc7-4e40-b036-f0c4ba9689cb",
+          "text": "Putamen",
+          "correct": false
+        },
+        {
+          "id": "b5b196ca-ccc6-47cb-a36c-b04008c43798",
+          "text": "Substantia nigra",
+          "correct": false
+        },
+        {
+          "id": "f8f32d4b-aaea-45c9-9722-cf6133f6f0fa",
+          "text": "Striatum",
+          "correct": false
+        },
+        {
+          "id": "0d1abea2-b5b8-4409-954c-21cfee9c98f4",
+          "text": "Globus pallidus",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "fc58ce63-7709-4752-a9d3-f9770cd02e29",
+      "question": "Which heart sound is normally present in the younger age group but generally indicates systolic heart failure in older adults?",
+      "answers": [
+        {
+          "id": "dd488704-b16c-4050-9c84-1f4805d2de50",
+          "text": "S1",
+          "correct": false
+        },
+        {
+          "id": "7afa3384-11bf-4633-8c92-7332a9abcd86",
+          "text": "S2",
+          "correct": false
+        },
+        {
+          "id": "6b66f8cb-29ce-49c1-adc3-98373ce3fcea",
+          "text": "S3",
+          "correct": true
+        },
+        {
+          "id": "aee51428-de62-4fad-8b78-93b5d1ec05af",
+          "text": "S4",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "e9895cf3-9aaf-4a80-b2a2-c2e254170c96",
+      "question": "What is the most abundant substance secreted in the bile?",
+      "answers": [
+        {
+          "id": "5c0f1a54-e392-4367-9b99-fa1adda1b26f",
+          "text": "Cholesterol",
+          "correct": false
+        },
+        {
+          "id": "c1b7de4b-f703-44db-be06-8d9b6ecef520",
+          "text": "Bile salts",
+          "correct": true
+        },
+        {
+          "id": "c9ad5a5d-3784-4152-ba1a-6e36b9cbdcfd",
+          "text": "Bilirubin",
+          "correct": false
+        },
+        {
+          "id": "30728821-81be-4783-81a1-37dfcf7d3f22",
+          "text": "Lecithin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "57e81f4d-8355-457d-a1d4-ee6f76a0f54e",
+      "question": "Of the following hormones, which has the shortest half-life?",
+      "answers": [
+        {
+          "id": "b27a8c63-5acb-459b-bd9f-cf2f459956ab",
+          "text": "Aldosterone",
+          "correct": false
+        },
+        {
+          "id": "074aa5dc-cf6c-4dcb-a8be-6bb6596ef3d0",
+          "text": "Renin",
+          "correct": false
+        },
+        {
+          "id": "8a0d92af-2ab9-4236-92e7-b7dae597bcac",
+          "text": "Angiotensin II",
+          "correct": true
+        },
+        {
+          "id": "682a2686-a1cc-4b44-9a95-ce68a2365cf9",
+          "text": "Corticosterone",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "9cd8ec45-96bb-49ea-a0de-de3567477849",
+      "question": "A person goes through two types of sleep each night. Which is accurate about paradoxical sleep?",
+      "answers": [
+        {
+          "id": "23b0f4c2-7fd0-4277-9ab7-f68e84b174de",
+          "text": "Deep sleep that a person experiences during the first hour of sleep after having been awake for many hours",
+          "correct": false
+        },
+        {
+          "id": "4dfa1574-af98-4d44-be3f-098b43ce7fac",
+          "text": "Consolidation of the dreams in memory does not occur",
+          "correct": false
+        },
+        {
+          "id": "a6f4b488-8f33-47d6-85c3-bfdf351bb465",
+          "text": "Exceedingly restful",
+          "correct": false
+        },
+        {
+          "id": "c58c368e-f37b-42d5-a1fd-4c4ae78bc4d7",
+          "text": "Beta waves are seen in the EEG",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "0cae3c81-9511-4ce9-8fdf-c54870e9ae88",
+      "question": "What is responsible for the low permeability of the blood-brain barrier?",
+      "answers": [
+        {
+          "id": "45d3058d-6ee7-4ef8-9f44-a522fe3c3602",
+          "text": "Charged slit pores between adjacent endothelial cells",
+          "correct": false
+        },
+        {
+          "id": "c1f4ce01-aa58-404c-9334-50ab8f2b7a87",
+          "text": "Presence of tight junctions",
+          "correct": true
+        },
+        {
+          "id": "b6acb825-7509-4ff3-9954-328f7246ad11",
+          "text": "Rigid desmosomes",
+          "correct": false
+        },
+        {
+          "id": "8b6ff047-6b37-4a09-88d4-54c7d0f8d2d7",
+          "text": "Efficiency of the zonula adherens",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "b2bbadfe-d3a6-41e7-aa87-fec25c7e0f09",
+      "question": "What is a characteristic of the fluid found in the scala vestibuli and scala tympani of the ear?",
+      "answers": [
+        {
+          "id": "3afcff8e-b636-4363-acf4-578a2dfed498",
+          "text": "Almost identical to cerebrospinal fluid",
+          "correct": true
+        },
+        {
+          "id": "d10dbfa1-5393-4c0c-982b-f9adff5a3a1d",
+          "text": "High in potassium",
+          "correct": false
+        },
+        {
+          "id": "666cdb0f-5699-4f01-a903-4087a489262f",
+          "text": "Also found in the cochlear duct",
+          "correct": false
+        },
+        {
+          "id": "32371fcc-a830-4406-a038-3ef18d716d68",
+          "text": "High in chloride",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "b843a6a4-1272-456c-a1ba-b4fb5941291d",
+      "question": "What type of cell in the visual cortex responds to moving bars of light?",
+      "answers": [
+        {
+          "id": "3aa6a89d-b5d1-4fb9-9719-5f63a258bdda",
+          "text": "Simple cells",
+          "correct": false
+        },
+        {
+          "id": "3d1bca93-2eb0-428d-bdc1-9763e1696985",
+          "text": "Complex cells",
+          "correct": true
+        },
+        {
+          "id": "a4d1a462-b56f-497c-adff-3758b7c2d1fa",
+          "text": "Hypercomplex cells",
+          "correct": false
+        },
+        {
+          "id": "e2c3fb48-93b3-47e4-9bd5-b442d2ceae73",
+          "text": "Parallel cells",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "579a4c87-36a7-41ea-98ab-61ae3372077c",
+      "question": "At low doses, what is the effect of dopamine on the kidneys?",
+      "answers": [
+        {
+          "id": "4a945418-5274-4cd4-b2cb-439984747ab5",
+          "text": "Prevents natriuresis ensuring adequate plasma volume",
+          "correct": false
+        },
+        {
+          "id": "6d2c8d28-988e-477a-8062-8b1820976937",
+          "text": "Dilates afferent arterioles",
+          "correct": true
+        },
+        {
+          "id": "a518190e-6b36-454d-a44c-e7ad459b4255",
+          "text": "Constricts efferent arterioles",
+          "correct": false
+        },
+        {
+          "id": "96c0141c-9f48-445d-b7dd-d1838c8d22c9",
+          "text": "Limits renal blood flow",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "28e0ebad-08c5-4505-9e1e-1649158ba5e3",
+      "question": "Endothelium-derived nitric oxide is an important vasodilator. What amino acid is the precursor of nitric oxide?",
+      "answers": [
+        {
+          "id": "fb965162-84c9-45bf-a8e6-5cd4b2728339",
+          "text": "Glutamine",
+          "correct": false
+        },
+        {
+          "id": "17c277be-aee6-4c0b-aa69-57bc4857bd0c",
+          "text": "Arginine",
+          "correct": true
+        },
+        {
+          "id": "c20c9169-2f0d-4ecd-9ce4-2d832a497bd7",
+          "text": "Proline",
+          "correct": false
+        },
+        {
+          "id": "d75faef9-539f-4b7e-bcf1-fdbd03ca61e3",
+          "text": "Valine",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "3181c342-dea2-4a6b-b0f9-822af4233009",
+      "question": "Which of the following cytokines is an endogenous pyrogen?",
+      "answers": [
+        {
+          "id": "05505b10-73aa-484f-9c86-4f55678809de",
+          "text": "IL-1",
+          "correct": true
+        },
+        {
+          "id": "dcb9f3b8-ce97-4f2c-aec5-2d395a58284f",
+          "text": "IL-2",
+          "correct": false
+        },
+        {
+          "id": "8da0061c-b8d9-413d-8422-17d6347e2ca4",
+          "text": "IL-4",
+          "correct": false
+        },
+        {
+          "id": "79896771-1d09-49e2-9558-95a1e4bf634f",
+          "text": "IL-6",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "270f883f-5917-4238-94fe-64b98159796c",
+      "question": "What substance is expressed by endothelial cells and prevents blood clotting in the normal vascular system by binding to thrombin?",
+      "answers": [
+        {
+          "id": "1ce97aab-7366-44f5-8e35-28424df78e2d",
+          "text": "Protein C",
+          "correct": false
+        },
+        {
+          "id": "28eb44ec-b778-49cf-8761-fa205d0b82a6",
+          "text": "Thrombomodulin",
+          "correct": true
+        },
+        {
+          "id": "9cfc4a1d-7318-4278-90c6-af2ad7a5a4f9",
+          "text": "Prostacyclin",
+          "correct": false
+        },
+        {
+          "id": "3360dad1-8144-43d3-8d6d-c0f73582530b",
+          "text": "Thromboplastin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "dbb405e5-e12e-4666-b97b-2f3948935182",
+      "question": "Which is NOT accurate about type 2 alveolar epithelial cells?",
+      "answers": [
+        {
+          "id": "5df6c465-81cb-4249-bfac-f2f6b1b51e6c",
+          "text": "Constitute about 10% of the surface area of the alveoli",
+          "correct": false
+        },
+        {
+          "id": "40f129fc-a9f9-4de4-8b5e-aa3f324453ad",
+          "text": "May turn into type 1 alveolar epithelial cells",
+          "correct": false
+        },
+        {
+          "id": "d03b106d-cf97-40c3-8f5f-4e596835c55e",
+          "text": "Involved in gas exchange",
+          "correct": true
+        },
+        {
+          "id": "4e3ffdef-83b2-4f7e-b982-5f9c511e759d",
+          "text": "Cuboidal cells containing lipid inclusions",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "3bf699c1-2aed-4a4e-97f4-a9ac030b8925",
+      "question": "What cells remove particles that become entrapped in the alveoli and form capsules around tubercle bacilli in the lungs?",
+      "answers": [
+        {
+          "id": "16e6f903-0091-48cf-bc2d-c06e0c5020e4",
+          "text": "Goblet cells",
+          "correct": false
+        },
+        {
+          "id": "f3bb697d-d096-41d7-85e3-1efbeb032af6",
+          "text": "Clara cells",
+          "correct": false
+        },
+        {
+          "id": "c2abce4e-6f1b-442b-bb52-19afbcc0b158",
+          "text": "Club cells",
+          "correct": false
+        },
+        {
+          "id": "19af58ae-2b38-4c35-b922-b365bb8504c4",
+          "text": "Dust cells",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "6f2dcaba-b796-44ca-b944-25db599fff33",
+      "question": "Which is a vasoconstrictor? I. Endothelin II. Lactate III. Prostaglandin E IV. Serotonin V. Antidiuretic hormone",
+      "answers": [
+        {
+          "id": "4660285a-3389-483a-b6d6-27612d177e12",
+          "text": "I, II, IV",
+          "correct": false
+        },
+        {
+          "id": "5617e13f-a871-46e6-ba2b-a57700a4c831",
+          "text": "I, III, IV",
+          "correct": false
+        },
+        {
+          "id": "a714410e-a124-491b-9c28-804f7e88efb3",
+          "text": "I, IV, V",
+          "correct": false
+        },
+        {
+          "id": "ab7be0f0-3a4f-4d5e-98a3-a75b9eb03870",
+          "text": "I, III, IV, V",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "07cd1af1-f0ef-4c42-8b14-1eae511c33d9",
+      "question": "Which stimulates the secretion of the hormone produced by the delta cells of the pancreas?",
+      "answers": [
+        {
+          "id": "1f8f2b37-ab7e-4546-8038-ac2c7ce08f13",
+          "text": "Increased blood glucose",
+          "correct": false
+        },
+        {
+          "id": "8a1dc3eb-37aa-4b9b-8947-64554b449de2",
+          "text": "High concentration of amino acids",
+          "correct": false
+        },
+        {
+          "id": "3be8776b-23a8-431c-9c2d-eb96515483f7",
+          "text": "Slowed motility of the stomach",
+          "correct": true
+        },
+        {
+          "id": "1edea816-c829-4aff-b5e0-6ab35b72f3f9",
+          "text": "GI hormones released from the upper GIT in response to food intake",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "4d21248e-c750-4643-8d8e-42f4a0012bef",
+      "question": "This describes hemoglobin’s lower affinity for oxygen secondary to increased carbon dioxide or decreased blood pH.",
+      "answers": [
+        {
+          "id": "518f2d63-8502-4a45-8a5b-1696c537b783",
+          "text": "Gibbs-Donnan effect",
+          "correct": false
+        },
+        {
+          "id": "5b319e34-5e00-417a-ba36-7d9ebcd7c803",
+          "text": "Haldane effect",
+          "correct": false
+        },
+        {
+          "id": "e9bdb0dc-36c9-440a-9a78-9dcb89211461",
+          "text": "Bohr effect",
+          "correct": true
+        },
+        {
+          "id": "5424dd18-dc25-4c3f-b868-e5847f5af569",
+          "text": "None of the above",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "8e44ec6f-9228-4803-8be2-0728ffb2ccb4",
+      "question": "What protein molecule maintains the side-by-side relationship between myosin and actin filaments, providing scaffolding for the sarcomere?",
+      "answers": [
+        {
+          "id": "c60fd5e6-2501-42ce-8784-ed9d51110d6f",
+          "text": "Actinin",
+          "correct": false
+        },
+        {
+          "id": "013a97fd-c9d4-435f-b609-1e5df2bb4759",
+          "text": "Titin",
+          "correct": true
+        },
+        {
+          "id": "30608b71-4daf-4e06-a2d5-d53f6257b791",
+          "text": "Desmin",
+          "correct": false
+        },
+        {
+          "id": "d3261c35-7663-4728-a910-65d7ad6993d1",
+          "text": "Dystrophin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "aef28524-d009-4a1a-b770-773fb048d4ec",
+      "question": "A patient presented with paraplegia. Transection of the spinal cord was suspected. At what level is the spinal cord possibly transected?",
+      "answers": [
+        {
+          "id": "144fb514-9885-4885-8e56-f681f75d3082",
+          "text": "C1-C5",
+          "correct": false
+        },
+        {
+          "id": "29d7b982-a4c2-442c-b1fd-52c3a36ff999",
+          "text": "C7",
+          "correct": false
+        },
+        {
+          "id": "4a476351-d5ce-4e38-810f-562808f2ce20",
+          "text": "T1-T12",
+          "correct": true
+        },
+        {
+          "id": "c5d7e890-65e8-4e28-be46-c329fe7e6604",
+          "text": "T7-S5",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "338f1201-2748-4656-ae0c-2e6d495b5d48",
+      "question": "The functional division of the cerebellum responsible for the synergy of limb movements is precisely located at the cerebellum’s______?",
+      "answers": [
+        {
+          "id": "8c45e075-8ada-49cd-8402-0bcc7740cd2b",
+          "text": "Flocculonodular lobe",
+          "correct": false
+        },
+        {
+          "id": "b66d8722-3685-4d2a-897d-46acc9e6b166",
+          "text": "Cerebellar hemispheres",
+          "correct": false
+        },
+        {
+          "id": "c12f66ed-8e4b-417e-ae81-01e040f0c220",
+          "text": "Vermis and intermediate zones",
+          "correct": true
+        },
+        {
+          "id": "04123a6b-4369-4b67-b57d-6821af9c7fd2",
+          "text": "Pontocerebellum",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "399d0cc3-2d74-4728-94af-877bdaf26c4e",
+      "question": "Transport of glucose across the placental membrane happens through _______.",
+      "answers": [
+        {
+          "id": "c30dbb12-5eff-4f59-b92f-2683fbd6b409",
+          "text": "Simple diffusion",
+          "correct": false
+        },
+        {
+          "id": "f01f4590-c968-40b9-adbb-0b7c9c44ae3e",
+          "text": "Facilitated diffusion",
+          "correct": true
+        },
+        {
+          "id": "7dac747b-f919-4075-9341-30d2ee672239",
+          "text": "Secondary active transport",
+          "correct": false
+        },
+        {
+          "id": "2d344a2c-1943-4fe2-8c39-0709e2afe464",
+          "text": "Both A and B DISCUSSION",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "673fc924-1377-493e-93a9-bb372e4cdbe2",
+      "question": "The resting membrane potential refers to intracellular charge, which on a normal nerve is equal to -70 mV. Which of the following statements is true regarding resting membrane potential? I. The nerve membrane is more permeable to K+ than Na+ II. Depolarizing the membrane potential causes reduction of potassium leak out of the cells III. Na+ leak channels contribute to the resting membrane potential",
+      "answers": [
+        {
+          "id": "bdf62df2-b919-4a1f-91cb-fd59e9a75bcf",
+          "text": "I only",
+          "correct": true
+        },
+        {
+          "id": "90dfc1d8-6e0b-4569-9355-d96e2b596684",
+          "text": "I and II",
+          "correct": false
+        },
+        {
+          "id": "7ce7e59c-bffe-4b59-aceb-92f7f5bd6c7e",
+          "text": "II and III",
+          "correct": false
+        },
+        {
+          "id": "1459068e-8b72-4ef9-9cd3-7cec8a35b3cf",
+          "text": "I, II and III",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "b5361856-707f-43d4-9363-6ea5ef726da7",
+      "question": "What is the cardiac output of the patient if the following measurements were obtained: Heart rate: 70 beats/min Systemic arterial O2: 0.24 mL O2/mL Mixed venous O2: 0.16 mL O2/mL Whole body O2 consumption: 500 mL/min",
+      "answers": [
+        {
+          "id": "77ac8b5c-a549-4a37-b003-70f97f3049c4",
+          "text": "8.00 L/min",
+          "correct": false
+        },
+        {
+          "id": "9201fb79-e993-4932-ab29-fba9dc6a8b5a",
+          "text": "6.25 L/min",
+          "correct": true
+        },
+        {
+          "id": "ce80927e-2655-465b-9c0c-bbdaae3ac638",
+          "text": "5.09 L/min",
+          "correct": false
+        },
+        {
+          "id": "3cedb1b7-64d9-40e3-bcde-229d9e061a50",
+          "text": "4.55 L/min",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "77c33de6-1642-4168-a4f5-394cd9f1295a",
+      "question": "Compared with the systemic circulation, the pulmonary circulation has a:",
+      "answers": [
+        {
+          "id": "87e6f801-9280-4d6e-82c0-37fedd5ad1b1",
+          "text": "Higher blood flow",
+          "correct": false
+        },
+        {
+          "id": "c957aeae-33e3-4314-b011-179826cbd32f",
+          "text": "Lower resistance",
+          "correct": true
+        },
+        {
+          "id": "d1dd1c6c-4d03-4f88-b1bb-64f2eb321dc9",
+          "text": "Higher arterial pressure",
+          "correct": false
+        },
+        {
+          "id": "a2c443c7-a01a-42e1-a410-063078764ba2",
+          "text": "Higher capillary pressure",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "2b5a15df-4457-4d65-9da7-0875212dd299",
+      "question": "Which of the following statements is TRUE regarding sweat glands?",
+      "answers": [
+        {
+          "id": "5cc9038d-60fd-4493-8731-38363c01eaff",
+          "text": "Parasympathetic action increases sweating of the body",
+          "correct": false
+        },
+        {
+          "id": "56af5d3b-8db0-4d0b-b01e-77fe81d1e0f3",
+          "text": "All sweat glands utilize muscarinic receptors as final receptors",
+          "correct": false
+        },
+        {
+          "id": "f8cf3926-a91e-4aeb-9879-19247bc3c945",
+          "text": "It utilizes epinephrine and norepinephrine as the final neurotransmitter",
+          "correct": false
+        },
+        {
+          "id": "8da0bfcc-8f26-479b-8776-dde0b08fb5de",
+          "text": "Sweating is controlled by sympathetic cholinergic receptors",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "2ead370b-cdd2-4a65-b4c3-efb7efea43cd",
+      "question": "The following hormones have G protein coupled receptors, EXCEPT",
+      "answers": [
+        {
+          "id": "445b4d7e-ce4b-48f8-9dc0-e64f9dbe9ddf",
+          "text": "Insulin",
+          "correct": true
+        },
+        {
+          "id": "d0578c90-d51c-441b-9c74-a3a7f19b0af0",
+          "text": "Glucagon",
+          "correct": false
+        },
+        {
+          "id": "f1f25d6f-a0f5-43d5-bd01-51005972abe2",
+          "text": "Adrenocorticotropic hormone",
+          "correct": false
+        },
+        {
+          "id": "ea8392fe-4541-4789-8bb1-5725d701e3db",
+          "text": "Growth hormone-releasing hormone",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "d1957b04-9d62-49ef-b769-0ee4d841ca41",
+      "question": "Which of the following retinal cell receptors absorb stray light, thus preventing scattering of the light in the retina?",
+      "answers": [
+        {
+          "id": "7229b340-5f30-4d43-9ec6-52e297c62ecd",
+          "text": "Ganglion cells",
+          "correct": false
+        },
+        {
+          "id": "e02f1baa-30be-46b6-8dcd-f591f4f11faf",
+          "text": "Bipolar cells",
+          "correct": false
+        },
+        {
+          "id": "f802584f-6066-43b6-8a8e-f9d5042d4eb0",
+          "text": "Pigment epithelial cells",
+          "correct": true
+        },
+        {
+          "id": "7528bf3e-37b0-4d44-b58c-f0a778164809",
+          "text": "Cones",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "e6c81d9f-17a3-4801-b384-ad265b356b8d",
+      "question": "Cutting which structure causes total blindness of the right eye?",
+      "answers": [
+        {
+          "id": "4ba2628c-c8a4-417f-847a-81fd3487fd2f",
+          "text": "Right optic nerve",
+          "correct": true
+        },
+        {
+          "id": "8e93b7b5-e5ab-48e4-b299-193310bf6f2c",
+          "text": "Left optic tract",
+          "correct": false
+        },
+        {
+          "id": "5992807e-a3f0-4fc1-ac67-7dd95b7533ef",
+          "text": "Left geniculocalcarine tract",
+          "correct": false
+        },
+        {
+          "id": "35f78370-4093-4243-8bcf-b8629aa6fad0",
+          "text": "Left banks of calcarine fissure",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "04f50563-abef-46d0-bce8-6b7fa2b261a4",
+      "question": "A 35-year-old man has a vital capacity (VC) of 5 L, a tidal volume (TV) of 0.5 L, an inspiratory capacity (IC) of 3.5 L, and a functional residual capacity (FRC) of 2.5 L. What is his expiratory reserve volume (ERV)?",
+      "answers": [
+        {
+          "id": "7aa2401d-a60c-4071-ab1f-e61218d6b894",
+          "text": "4.5 L",
+          "correct": false
+        },
+        {
+          "id": "90ac1d4b-449b-4517-a24e-77faca0eb6ca",
+          "text": "3.9 L",
+          "correct": false
+        },
+        {
+          "id": "c8d60db7-0505-4cfa-88c9-9264b8bc3650",
+          "text": "2.0 L",
+          "correct": false
+        },
+        {
+          "id": "74706fdd-88b4-4080-a51e-526a514aac4a",
+          "text": "1.5 L",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "84a07f07-13a4-4d8c-aa36-745e7454dcb9",
+      "question": "A 45/F presents to you with pallor, chronic diarrhea, bloating and fatigue. Her diet mainly consists of bread and cereals. Which of the following nutrient deficiencies may present in the patient?",
+      "answers": [
+        {
+          "id": "0660f241-b22a-420a-9fd1-6aa5a123da52",
+          "text": "Zinc",
+          "correct": false
+        },
+        {
+          "id": "fd9d8dad-c7c3-48fa-b1e9-b14b74d3dcf6",
+          "text": "Iron",
+          "correct": false
+        },
+        {
+          "id": "3ab233b2-10e2-4825-a4df-bd447809e477",
+          "text": "Magnesium",
+          "correct": false
+        },
+        {
+          "id": "48f36277-78fb-4646-b84c-6e09102c633b",
+          "text": "All of the above",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "68f81761-6dfc-4ee4-845c-445b2108f8ad",
+      "question": "Growth hormone (GH) has _______ as their receptor mechanism.",
+      "answers": [
+        {
+          "id": "52914e7c-efe6-4f04-b570-a1f50f1b2ac8",
+          "text": "Cell surface GC",
+          "correct": false
+        },
+        {
+          "id": "cc90079c-8f9e-4fe7-8010-0c45759fb5fa",
+          "text": "Serine/Threonine kinase",
+          "correct": false
+        },
+        {
+          "id": "155c3fc1-502b-44d4-8bf8-fe3203d5ae35",
+          "text": "Tyrosine kinase",
+          "correct": false
+        },
+        {
+          "id": "04eec81b-08f7-487d-b642-c657822410d5",
+          "text": "Tyrosine-associated kinase",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "ed7956a1-36a7-448a-a372-f4b67495df73",
+      "question": "Which of the following hormones DOES NOT solely utilize cAMP as their second messenger?",
+      "answers": [
+        {
+          "id": "81244e28-51f0-4ee6-ab33-7ea944bfad3d",
+          "text": "ADH (V2)",
+          "correct": false
+        },
+        {
+          "id": "c1b29641-3a32-4452-a5f0-518af6064e63",
+          "text": "Angiotensin II",
+          "correct": true
+        },
+        {
+          "id": "a9545841-bdfd-4f91-ba8a-c3e12bdef54d",
+          "text": "Somatostatin",
+          "correct": false
+        },
+        {
+          "id": "28e61ac1-fc50-4bb0-ad5b-3e688e4455bf",
+          "text": "Calcitonin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "43e03b6b-0065-4787-9881-b56bd925f23d",
+      "question": "Compute the anion gap with the following values: [Na+] = 131 mEq/L, [K+] = 4.0 mEq/L  [Cl-] = 111 mEq/L, [HCO3-] = 10.2 mEq/L.",
+      "answers": [
+        {
+          "id": "f202da46-e737-412a-bbcf-0b4fa655ed39",
+          "text": "10.8 mEq/L",
+          "correct": false
+        },
+        {
+          "id": "9584e6d7-f2eb-4389-93e2-11ae741a5d3b",
+          "text": "9.8 mEq/L",
+          "correct": true
+        },
+        {
+          "id": "6ba614b3-e07d-4cee-bed6-ce65670ce592",
+          "text": "8.8 mEq/L",
+          "correct": false
+        },
+        {
+          "id": "0a30e2c5-5e4f-453a-92b3-8aa27d46dea9",
+          "text": "7.8 mEq/L",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "792b041d-141b-4393-bf5c-da41673edbf3",
+      "question": "This part of the brain prolongs the time for inspiration, hence decreases one’s overall respiratory rate.",
+      "answers": [
+        {
+          "id": "2d995d52-684a-469a-a49b-2bddff0d917b",
+          "text": "Thalamus",
+          "correct": false
+        },
+        {
+          "id": "309d13cb-c7ab-4a8d-a215-307691d6ceff",
+          "text": "Hypothalamus",
+          "correct": false
+        },
+        {
+          "id": "6c5256db-9187-49bc-890d-6bddc5a0f0be",
+          "text": "Pons",
+          "correct": true
+        },
+        {
+          "id": "cafaee83-d2f7-49f9-8848-d485b81bca25",
+          "text": "Medulla",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "6dcda5b0-2354-4cc5-a72f-0371fecf1291",
+      "question": "This manifestation mimics what kind of toxicity / poisoning?",
+      "answers": [
+        {
+          "id": "621e041c-e72c-4389-a252-308806c6589e",
+          "text": "Arsenic",
+          "correct": false
+        },
+        {
+          "id": "93171564-5b8e-4a93-a43b-d2f2de8a3273",
+          "text": "Mercury",
+          "correct": false
+        },
+        {
+          "id": "216a4eb3-f661-4081-86b9-21c67df733a0",
+          "text": "Malathion",
+          "correct": true
+        },
+        {
+          "id": "f05a1426-6856-4bc9-95a0-01ce6b44c610",
+          "text": "Alcohol",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "566bed57-939a-409c-a8dd-bfa411c9527d",
+      "question": "Which of the following drugs is used to diagnose the patient’s condition?",
+      "answers": [
+        {
+          "id": "2aabfe41-03b7-4147-a59d-3be2b63feb89",
+          "text": "Ambenonium",
+          "correct": false
+        },
+        {
+          "id": "3cd7895d-85e8-4f61-bb73-f2d2810808aa",
+          "text": "Echothiophate",
+          "correct": false
+        },
+        {
+          "id": "341aaa7c-2427-4855-ac66-a185a9d8e22b",
+          "text": "Edrophonium",
+          "correct": true
+        },
+        {
+          "id": "f753b56d-a2d0-4bf7-a3bb-f2cebde34adb",
+          "text": "Malathion",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "243f295b-a8d4-4bb6-afb5-bdf458adbb23",
+      "question": "Which of the following statements is TRUE regarding the treatment of the patient’s condition?",
+      "answers": [
+        {
+          "id": "9cf77a10-eae4-46dd-89eb-5c54da84b6e5",
+          "text": "Acetylcholinesterase inhibitors are used as a first- line treatment",
+          "correct": true
+        },
+        {
+          "id": "6688af3c-329f-4c9e-8a45-fdd1209ca0dc",
+          "text": "Neostigmine is preferred over pyridostigmine for this condition",
+          "correct": false
+        },
+        {
+          "id": "82703e14-2fac-4e3e-b480-5aa31d6b29fb",
+          "text": "Edrophonium, if administered in this patient, worsens his symptoms",
+          "correct": false
+        },
+        {
+          "id": "250bea56-2450-4f88-8d20-1ad15bdca49f",
+          "text": "Nondepolarizing neuromuscular blockers alleviate the patient’s symptoms",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "5113a37f-1ce4-4a85-8c6c-8c06e2e66ce2",
+      "question": "Which of the following is a feature of the sympathetic but not the parasympathetic nervous system?",
+      "answers": [
+        {
+          "id": "1cf444d2-d543-4b66-9fd6-611ad57ea70b",
+          "text": "It has a long preganglionic tract",
+          "correct": false
+        },
+        {
+          "id": "edbbd6eb-7158-4e45-a1e1-0afec32ec1eb",
+          "text": "The cell body is located in the brainstem and sacral segment of the spinal cord",
+          "correct": false
+        },
+        {
+          "id": "45ea1ada-0cba-4125-ae62-1555a87c654a",
+          "text": "The cell body is in the ganglia at the walls of effector organs",
+          "correct": false
+        },
+        {
+          "id": "6085036a-4046-4b3a-9571-41b65070f087",
+          "text": "It exhibits a thoracolumbar distribution",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "f0bb49ac-6bd0-4a72-aaa8-fc179aaffc2e",
+      "question": "This sympathetic receptor/s is/are used by the kidneys to increase renin secretion. I. β1 II. β2 III. α1",
+      "answers": [
+        {
+          "id": "452e2bfa-07c0-40d1-9d6c-499792d67851",
+          "text": "I only",
+          "correct": true
+        },
+        {
+          "id": "4c019ee8-655f-417b-89e5-d5af5fd75a64",
+          "text": "I and II",
+          "correct": false
+        },
+        {
+          "id": "8349dc67-486c-4e1b-8e18-3fe3f336531d",
+          "text": "I and III",
+          "correct": false
+        },
+        {
+          "id": "6795c7a7-b5fb-4a06-b28a-cfe6695bcbf3",
+          "text": "I, II and III",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "df4efa54-0aef-4268-97eb-3ed51a4e76da",
+      "question": "The following actions of the body are parasympathetic in nature, EXCEPT:",
+      "answers": [
+        {
+          "id": "dec1224d-c906-48b9-838f-d7bc4ba3ee89",
+          "text": "Erection",
+          "correct": false
+        },
+        {
+          "id": "8ddfdb5d-a45c-440e-b6d5-8344931b84d5",
+          "text": "Decreased atrial contractility",
+          "correct": false
+        },
+        {
+          "id": "6df312b0-ffa4-463b-9a2e-3ecfc6b52d24",
+          "text": "Bronchodilation",
+          "correct": true
+        },
+        {
+          "id": "8fbd5f49-642c-429d-8234-3c09d5fab2d0",
+          "text": "Relaxation of GI sphincters",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "e85b0632-6f8d-41fd-832f-7bb9e7678437",
+      "question": "Transducers are known to:",
+      "answers": [
+        {
+          "id": "b6c6d3db-3ce4-41c1-aaa1-d4af5c5e0d05",
+          "text": "Couple 1st messenger with the 2nd messenger",
+          "correct": true
+        },
+        {
+          "id": "f0f6ab97-5296-45e8-85b6-0e0e27cf4297",
+          "text": "Mediate the intracellular responses to many different hormones and neurotransmitters",
+          "correct": false
+        },
+        {
+          "id": "2e84a74e-f2c4-4300-b6e6-e3bc89b96b96",
+          "text": "Are hormone cell membrane receptors associated with enzymatic activity on the intracellular side of the cell membrane",
+          "correct": false
+        },
+        {
+          "id": "67857854-3606-4642-99b0-70cc54dbbc8d",
+          "text": "All of the above",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "14af7fb3-59f7-4265-8633-6ff4ee8bef9d",
+      "question": "Which of the following statements is TRUE regarding the effect of lesions on the spinal cord?",
+      "answers": [
+        {
+          "id": "799f320b-8a32-46d5-81a1-891eff3c5ac2",
+          "text": "The patient would present with decorticate rigidity if the lesion is above the lateral vestibular nucleus",
+          "correct": false
+        },
+        {
+          "id": "23910e68-9ff0-4681-80b2-b408cb6d2b61",
+          "text": "Decorticate rigidity manifests in a patient with lesions between pontine reticular formation and midbrain",
+          "correct": false
+        },
+        {
+          "id": "9cabbe2e-6a05-4443-8c16-8bf00a883855",
+          "text": "Reversal of excessive muscle tone produced in decerebrate rigidity can be done by stimulation of group Ia afferents",
+          "correct": false
+        },
+        {
+          "id": "340b261b-c36e-4fdf-a75d-b7b7da9773a4",
+          "text": "Lesions above the red nucleus would result in decorticate posturing and intact tonic neck reflexes",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "57a0a3c4-2cd4-4e16-9d46-1ee4dd26d02d",
+      "question": "Sertoli cells are known to secrete the following substances, EXCEPT:",
+      "answers": [
+        {
+          "id": "defe310c-4ff6-45a8-a8fe-11063c9a69ea",
+          "text": "Androgen-binding protein",
+          "correct": false
+        },
+        {
+          "id": "7ecb4b0f-d9fd-4e16-b232-629178685fd7",
+          "text": "Testosterone",
+          "correct": true
+        },
+        {
+          "id": "bdcf8fc6-a6f5-47c2-a4fb-c889aaea54af",
+          "text": "Inhibin",
+          "correct": false
+        },
+        {
+          "id": "5679238a-a7df-4e52-b06f-784c6e7ad441",
+          "text": "Anti-Müllerian hormone",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "b0a97aea-7948-475a-83c7-da320f38dc5e",
+      "question": "Which of the following tactile receptors is responsible for vibration, specifically high-frequency?",
+      "answers": [
+        {
+          "id": "70ed56b0-b787-41b4-abd2-2b21677af374",
+          "text": "Meissner corpuscles",
+          "correct": false
+        },
+        {
+          "id": "8d357d43-cae1-447e-a40d-40e310a61d10",
+          "text": "Merkel disc",
+          "correct": false
+        },
+        {
+          "id": "8f07ff38-f517-40c5-a56b-a93e00a902fc",
+          "text": "Ruffini corpuscles",
+          "correct": false
+        },
+        {
+          "id": "c85d7df1-fef2-4277-8926-134855cf53ef",
+          "text": "Pacinian corpuscles",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "b2e39c8f-e851-4bd0-b551-f5806cbef174",
+      "question": "In which of the following segments of the kidney is two- thirds of water more absorbed?",
+      "answers": [
+        {
+          "id": "566cb9f5-dad9-494f-9bbb-7ffd3681cabb",
+          "text": "Distal convoluted tubules",
+          "correct": false
+        },
+        {
+          "id": "84d322af-454f-4e97-a97c-951dd82c5a3f",
+          "text": "Proximal convoluted tubules",
+          "correct": true
+        },
+        {
+          "id": "ce9c8865-1f64-42dc-9209-cd00f75be76b",
+          "text": "Loop of Henle",
+          "correct": false
+        },
+        {
+          "id": "d025f76b-e430-4883-8575-9df5605ae321",
+          "text": "Collecting ducts",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "75241f9c-fcd9-4a36-965c-83010167db7e",
+      "question": "This cell/structure is responsible for filtration in the nephron tubule.",
+      "answers": [
+        {
+          "id": "de78743c-d05a-4c0c-a311-952e444f17e0",
+          "text": "Mesangial cells",
+          "correct": false
+        },
+        {
+          "id": "1f98076f-64ae-453a-9d0f-21c18de06573",
+          "text": "Juxtaglomerular cells",
+          "correct": false
+        },
+        {
+          "id": "1ab4daec-9071-42e5-9cca-e09b590428aa",
+          "text": "Podocytes",
+          "correct": true
+        },
+        {
+          "id": "6f14a190-f039-4ce8-a965-a7f8f4956d3d",
+          "text": "Macula Densa",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "299b4f69-e04c-4c19-97cf-4fd210588ba0",
+      "question": "Chronic use of PPI leads to an increase in:",
+      "answers": [
+        {
+          "id": "b2676f57-01b3-4115-8847-fdf7cd4784e9",
+          "text": "Gastrin",
+          "correct": true
+        },
+        {
+          "id": "f883ce24-6819-4178-ac30-a08c62b108ee",
+          "text": "HCl",
+          "correct": false
+        },
+        {
+          "id": "8b2f40d3-bf5e-41c5-9b27-4cb2021d2e82",
+          "text": "Secretin",
+          "correct": false
+        },
+        {
+          "id": "705e527a-6d65-434c-a4e2-8669a559b8e7",
+          "text": "CCK",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "de194610-06a9-448e-8fe7-800d82c84bea",
+      "question": "Glucagon is homologous with?",
+      "answers": [
+        {
+          "id": "45cbee86-205f-4555-9f3b-92a35eb8a6fc",
+          "text": "Secretin",
+          "correct": true
+        },
+        {
+          "id": "e54cd9a2-fa29-40d8-a678-08a2ba9db2d5",
+          "text": "Gastrin",
+          "correct": false
+        },
+        {
+          "id": "8175fd80-ba42-4165-9278-b01f4b861845",
+          "text": "CCK",
+          "correct": false
+        },
+        {
+          "id": "b9ece9e6-51ff-4e1f-94a9-cb0ee0e2aec8",
+          "text": "Motilin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "8757b5f5-ebc7-421f-a72e-b5685e6213d9",
+      "question": "The following areas of the brain are part of the vomiting mechanism, EXCEPT:",
+      "answers": [
+        {
+          "id": "1a07debe-a6b3-43ff-b07d-32653f8e4650",
+          "text": "Area postrema",
+          "correct": false
+        },
+        {
+          "id": "9f1c21bf-7487-4835-b3e3-5e958de453ff",
+          "text": "Nucleus tractus solitarius",
+          "correct": false
+        },
+        {
+          "id": "c8a381d6-4260-493d-83fb-f8661fcddd0d",
+          "text": "Dorsal motor vagus nucleus",
+          "correct": false
+        },
+        {
+          "id": "cb9e23bb-e32b-4b09-b627-3a3bd34de334",
+          "text": "Nucleus accumbens",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "0aa87571-79ee-4010-abd9-4b634e8c4e8d",
+      "question": "This type of respiration is observed when the lower pons is transected:",
+      "answers": [
+        {
+          "id": "cb57e965-054b-459e-bfc8-3c2945c59a78",
+          "text": "Biot’s respiration",
+          "correct": true
+        },
+        {
+          "id": "37bb25e4-9cb4-43db-930a-40ab655d2b4f",
+          "text": "Kussmaul breathing",
+          "correct": false
+        },
+        {
+          "id": "1c88c3da-c97d-4c02-a433-a870741ccb9b",
+          "text": "Cheyne-stokes respiration",
+          "correct": false
+        },
+        {
+          "id": "049a91d0-3db6-44ba-b098-bb202a629a18",
+          "text": "Agonal respiration",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "806f49d8-c53f-47b1-b56f-14b97abbd051",
+      "question": "A 56/M patient presents to you with a chief complaint of chest discomfort, characterized as pleuritic, knife-like pain radiating to the left trapezius. Which of the following ECG findings would be immediately expected from the patient?",
+      "answers": [
+        {
+          "id": "5ddff1bd-195e-47e7-b0d5-255eee8853ca",
+          "text": "Noted upward convexity morphology of ST elevation",
+          "correct": true
+        },
+        {
+          "id": "2a0ebf04-5a31-40f9-ac05-127fcbc049a8",
+          "text": "Right ventricular collapse",
+          "correct": false
+        },
+        {
+          "id": "b766562e-650c-42d3-af23-560b87216122",
+          "text": "T-wave inversion",
+          "correct": false
+        },
+        {
+          "id": "d7de76ba-5cb5-4838-a79a-6e9eac245522",
+          "text": "Absent PR-segment depression",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "bb99262c-3661-4a3d-b627-52fa9b3e5903",
+      "question": "What is the effect of carotid massage?",
+      "answers": [
+        {
+          "id": "7aef3791-d703-47ad-93d2-92a33db77d86",
+          "text": "Lowers blood pressure",
+          "correct": false
+        },
+        {
+          "id": "498ab4eb-7f17-4866-b6f9-92ddd5479ccf",
+          "text": "Lowers heart rate",
+          "correct": false
+        },
+        {
+          "id": "b6be14a4-e339-47c4-9700-c8119e0e74dc",
+          "text": "Lowers cardiac output",
+          "correct": false
+        },
+        {
+          "id": "09ef9b21-3808-4c7a-b437-533f773c6e7f",
+          "text": "All of the above",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "c846567c-5247-4f29-9221-7f48ba2b66ee",
+      "question": "A 68-year-old male came in for sudden onset substernal chest pain. ECG revealed ST-elevation in leads II, III and aVF.  Which of the following complications is least expected in this patient?",
+      "answers": [
+        {
+          "id": "3f051cd6-0a2b-4dd8-a7d8-cdcb1f7fa1fd",
+          "text": "Cardiogenic shock",
+          "correct": false
+        },
+        {
+          "id": "4eec66c9-93f5-4cf4-88f0-f2523355db47",
+          "text": "Ventricular tachycardia",
+          "correct": true
+        },
+        {
+          "id": "de1517e3-fed0-4e9a-861b-345e7c43fb25",
+          "text": "Hypotension",
+          "correct": false
+        },
+        {
+          "id": "09931510-5f7b-46d9-943c-8cfb362c3212",
+          "text": "Heart block",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "ddee4423-52fb-4fd0-acc5-0c60092883fd",
+      "question": "Which of the following herniation can compress the anterior cerebral artery?",
+      "answers": [
+        {
+          "id": "e2d43f27-17da-4491-a3ad-c04f5b78cfcc",
+          "text": "Subfalcine herniation",
+          "correct": true
+        },
+        {
+          "id": "2ddf89a5-986d-4fa6-8823-04fac79b7d66",
+          "text": "Central transtentorial herniation",
+          "correct": false
+        },
+        {
+          "id": "d0929c0d-a6be-4db4-b925-b6d3bc71579b",
+          "text": "Uncal herniation",
+          "correct": false
+        },
+        {
+          "id": "9946aba9-3814-4d5e-9f48-149206800db2",
+          "text": "Tonsillar herniation",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "ccda3042-649a-4ed7-8f1a-cb60d7629aeb",
+      "question": "Which immunoglobulin is predominantly involved in the primary immune response?",
+      "answers": [
+        {
+          "id": "ea82adef-ccbc-464b-96cf-e3f83866585e",
+          "text": "IgG",
+          "correct": false
+        },
+        {
+          "id": "8c0e5157-b495-499a-83ec-9eddce060b6b",
+          "text": "IgA",
+          "correct": false
+        },
+        {
+          "id": "94f30ee2-7f09-4400-841d-24feed8bf504",
+          "text": "IgM",
+          "correct": true
+        },
+        {
+          "id": "359f97d4-459c-4ad4-aa8c-5825b27e9220",
+          "text": "IgE",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "c73b5121-7762-46a0-9100-33e84864dc3a",
+      "question": "In pyloric stenosis, the resulting gastric outlet obstruction leads to what electrolyte and acid-base abnormality?",
+      "answers": [
+        {
+          "id": "1d573bcc-6321-4796-ab12-def8b6d173c2",
+          "text": "Hyperchloremic, hyperkalemic metabolic acidosis",
+          "correct": false
+        },
+        {
+          "id": "5a2ebe7e-860f-41b0-b19e-a3b875e3fdda",
+          "text": "Hypochloremic, hyperkalemic metabolic alkalosis",
+          "correct": false
+        },
+        {
+          "id": "b48fb68c-211b-456f-8aa5-420717325b8a",
+          "text": "Hyperchloremic, hypokalemic metabolic alkalosis",
+          "correct": false
+        },
+        {
+          "id": "df3ff8f1-8c79-45b1-bbc5-8b86d65eef27",
+          "text": "Hypochloremic, hypokalemic metabolic alkalosis",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "168594d3-5582-440f-aac3-ceb3702a2a15",
+      "question": "A patient's ECG showed a PR interval of >0.2 but with no effect on the QRS complex, which of the following is the likely condition:",
+      "answers": [
+        {
+          "id": "64d5ce25-3139-47ab-8532-8f4f98893f1e",
+          "text": "First Degree AV block",
+          "correct": true
+        },
+        {
+          "id": "9f32d335-850e-479f-aa6c-90dbec6fdd20",
+          "text": "Second Degree AV block",
+          "correct": false
+        },
+        {
+          "id": "3d9bd4cc-caff-44e4-beaf-48c78f91c5bf",
+          "text": "Third Degree AV block",
+          "correct": false
+        },
+        {
+          "id": "629a61a7-c86e-4a79-9624-4559bfccf2ce",
+          "text": "Complete heart block",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "4bbae555-409d-4771-a79b-069b53aeed5f",
+      "question": "For individuals with newly diagnosed hypertension, how long should lifestyle modifications be implemented before it takes effect?",
+      "answers": [
+        {
+          "id": "d5207721-7ff0-4d91-9047-2c48699ca2b8",
+          "text": "1-2 weeks",
+          "correct": false
+        },
+        {
+          "id": "fdc510a7-9c7e-40e2-8960-b3f164cf9ec1",
+          "text": "3-6 months",
+          "correct": true
+        },
+        {
+          "id": "227b5163-82a1-4f18-a72b-246d93ac533a",
+          "text": "6-12 months",
+          "correct": false
+        },
+        {
+          "id": "64727cfd-ed10-4185-b8fa-8542553e19cb",
+          "text": "12-18 months",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "7db4f272-9848-4ad8-b1b3-c1b7a6a799bd",
+      "question": "Which carpal bone is most commonly fractured in cases of wrist injury?",
+      "answers": [
+        {
+          "id": "808e4552-1e59-42e8-ac68-fbd01b4ab14b",
+          "text": "Scaphoid",
+          "correct": true
+        },
+        {
+          "id": "f4e11947-0ecc-48ac-ba98-2d28d97c7a8b",
+          "text": "Lunate",
+          "correct": false
+        },
+        {
+          "id": "126e0314-5a56-4169-ae1f-ae327b41ec22",
+          "text": "Triquetrum",
+          "correct": false
+        },
+        {
+          "id": "b8113a51-8837-488f-9797-9b21a36a6b5e",
+          "text": "Pisiform",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "926a286c-4c30-44f5-a397-0d4bca01a3a3",
+      "question": "A 66-year-old man, who has had a sympathectomy, experiences a greater than-normal fall in arterial pressure upon standing up. The explanation for this occurrence is",
+      "answers": [
+        {
+          "id": "291bd3db-b872-4350-b41a-9a31c3e22410",
+          "text": "An exaggerated response of the renin–angiotensin– aldosterone system",
+          "correct": false
+        },
+        {
+          "id": "7d3a20d2-044d-4190-af78-dd83fcce8b13",
+          "text": "A suppressed response of the renin–angiotensin– aldosterone system",
+          "correct": false
+        },
+        {
+          "id": "bace71ef-cf6c-47a2-a8ba-655061447822",
+          "text": "An exaggerated response of the baroreceptor mechanism",
+          "correct": false
+        },
+        {
+          "id": "d2e54976-c94c-49c5-ac88-4bd7d84cba9e",
+          "text": "A suppressed response of the baroreceptor mechanism",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "680cf7c2-5d58-47fd-8812-3a1dfd77d804",
+      "question": "An infant born prematurely in gestational week 25 has neonatal respiratory distress syndrome. Which of the following would be expected in this infant?",
+      "answers": [
+        {
+          "id": "33e56faf-be51-41ec-af0b-23b6b419daec",
+          "text": "Lecithin:sphingomyelin ratio of greater than 2:1 in amniotic fluid",
+          "correct": false
+        },
+        {
+          "id": "1a941bd4-6a6a-4276-8740-fe6f70866bc1",
+          "text": "Collapse of the small alveoli",
+          "correct": true
+        },
+        {
+          "id": "5115cb00-63c9-4196-b4f0-f13c55071ec4",
+          "text": "Increased lung compliance",
+          "correct": false
+        },
+        {
+          "id": "443c05ac-0b15-4d74-b128-317ed919321d",
+          "text": "Normal breathing rate",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "f5d16268-7e51-4f8c-92b5-fb4487a17fcf",
+      "question": "Which cell is considered a natural protective factor for the cornea?",
+      "answers": [
+        {
+          "id": "57fab846-9a5f-4015-9cde-ed2a4c443d67",
+          "text": "Lysozyme",
+          "correct": true
+        },
+        {
+          "id": "3cebf14a-8ef6-40d4-8508-598b578c61b4",
+          "text": "NK cells",
+          "correct": false
+        },
+        {
+          "id": "eb5eec62-117a-405e-893d-fec6ad5e1b74",
+          "text": "Interleukins",
+          "correct": false
+        },
+        {
+          "id": "8d4a1ba6-7da9-4934-949d-24712c1b6e77",
+          "text": "Eosinophils",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "0b05a5d8-d049-461e-aba2-74052daa6c84",
+      "question": "Which reproductive process requires a lower temperature than the rest of the body?",
+      "answers": [
+        {
+          "id": "056066c2-651f-4a33-9188-16e6c192f7a6",
+          "text": "Spermatogenesis",
+          "correct": true
+        },
+        {
+          "id": "d1232e6c-b1ee-45a6-92b3-6ca98e9c4a41",
+          "text": "Oogenesis",
+          "correct": false
+        },
+        {
+          "id": "4e3f859e-5a1a-4b1c-91d1-32cf014c718b",
+          "text": "Ovulation",
+          "correct": false
+        },
+        {
+          "id": "dd9c3866-fb08-4395-87c6-97992dc26259",
+          "text": "Menstruation",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "794fe8d3-a9ac-4dca-b037-0b751520e8f6",
+      "question": "Which of the following does NOT occur in the absence of fertilization?",
+      "answers": [
+        {
+          "id": "551d3082-d804-4bda-91f3-64ad64821a29",
+          "text": "The corpus luteum regresses",
+          "correct": false
+        },
+        {
+          "id": "b7f11424-87a6-43b9-8235-bb26b9935b5a",
+          "text": "LH decreases",
+          "correct": false
+        },
+        {
+          "id": "f33ab127-25ab-4a6a-a844-1a9875404eac",
+          "text": "Steroid hormones are high",
+          "correct": true
+        },
+        {
+          "id": "72743422-c3c7-4bc6-9d15-951dbca27e4e",
+          "text": "The hypothalamus releases GnRH",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "915ed8b8-b1ea-4287-be1c-f73c8c99f3f7",
+      "question": "Which of the following is NOT true regarding fertilization?",
+      "answers": [
+        {
+          "id": "31c896b5-9609-48f1-8d04-e38f6c622181",
+          "text": "During the first trimester, the corpus luteum (stimulated by HCG) is responsible for the production of estradiol and progesterone.",
+          "correct": false
+        },
+        {
+          "id": "0e152ee3-6d38-4af0-af6c-22dc0784146b",
+          "text": "Progesterone is produced by the corpus luteum during the second trimester.",
+          "correct": true
+        },
+        {
+          "id": "84827032-8318-4d92-91b4-1d4b9b7992b6",
+          "text": "Near term, the estrogen/progesterone ratio increases.",
+          "correct": false
+        },
+        {
+          "id": "812d23a0-4292-404a-b5fd-e467e1b7cfaa",
+          "text": "The initiating event in parturition is unknown",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "6539ccbd-5542-4671-8514-368c0006f639",
+      "question": "What is the typical composition of saliva at a high flow rate?",
+      "answers": [
+        {
+          "id": "d1e0522b-10c2-4fd1-85ad-c2c648031567",
+          "text": "High K+ and low HCO3-, Na+, and Cl-",
+          "correct": false
+        },
+        {
+          "id": "37f94622-2bb8-43dc-900f-dc7d77a401bf",
+          "text": "High Na+, Cl-, and HCO3- and low K+",
+          "correct": true
+        },
+        {
+          "id": "8fa053bc-1de3-4939-9aec-a085aef243d4",
+          "text": "High in Na+ and Cl-",
+          "correct": false
+        },
+        {
+          "id": "a51a5db2-d5cf-4f16-964a-750e59ce4ec0",
+          "text": "High in HCO3- and K+",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "e7a0f65a-830a-49c1-9245-0e6097a01950",
+      "question": "At which vertebral level does the inferior vena cava pass through the diaphragm?",
+      "answers": [
+        {
+          "id": "70ffbacb-f834-41d5-9d81-bb19a087ed3f",
+          "text": "T8",
+          "correct": true
+        },
+        {
+          "id": "dcdedda5-f73b-4ba9-a8ba-86af96af4e78",
+          "text": "T9",
+          "correct": false
+        },
+        {
+          "id": "72e2d727-2518-4b5e-bfb2-a1a17ecbe3cb",
+          "text": "T10",
+          "correct": false
+        },
+        {
+          "id": "f2644c73-f1b6-4866-bf0c-3995c41487ef",
+          "text": "T12",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "28357901-80c7-468a-8abd-5022e5220356",
+      "question": "Which medication is commonly used to treat Diabetes Insipidus?",
+      "answers": [
+        {
+          "id": "08251021-e560-4c9f-8190-528c206a6ec8",
+          "text": "Metformin",
+          "correct": false
+        },
+        {
+          "id": "23476145-ebaf-4a8a-8eba-cf4b119641bb",
+          "text": "Insulin",
+          "correct": false
+        },
+        {
+          "id": "d078a14c-d708-43aa-840a-6fce151c1682",
+          "text": "Desmopressin",
+          "correct": true
+        },
+        {
+          "id": "006222c1-e63a-477d-a1bc-4fdacff88c0b",
+          "text": "Demeclocycline",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "c5f896eb-9926-48da-bde5-cd5eb1487274",
+      "question": "What behavioral changes are often associated with amygdala resection?",
+      "answers": [
+        {
+          "id": "7c93f343-3968-4485-8c21-755adc7030c4",
+          "text": "Kluver-Bucy syndrome",
+          "correct": true
+        },
+        {
+          "id": "feb2f49c-7839-44d2-b75b-357efca73fb2",
+          "text": "Gerstmann’s syndrome",
+          "correct": false
+        },
+        {
+          "id": "cceaaa8b-56be-4e34-b154-408d4cf30d4d",
+          "text": "Neglect syndrome",
+          "correct": false
+        },
+        {
+          "id": "7ed44b86-2604-4da1-94f6-abe4c9c323f0",
+          "text": "Difficulty in planning and problem solving",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "cd1d4a5e-d5c9-474e-a900-cd01faffad53",
+      "question": "Which proteins are integral components of tight junctions?",
+      "answers": [
+        {
+          "id": "f248bb03-8018-4693-ac57-b21b70a83e86",
+          "text": "Claudins",
+          "correct": true
+        },
+        {
+          "id": "8b375db4-934f-43f2-9182-b14fa5a3aa87",
+          "text": "Connexons",
+          "correct": false
+        },
+        {
+          "id": "cde73c4f-5119-4df9-b610-bbcb77fb3258",
+          "text": "Connexins",
+          "correct": false
+        },
+        {
+          "id": "b5d6b7ba-e1ff-4781-adac-52975c34a6e7",
+          "text": "Desmosomes",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "06f03c71-0827-4953-b6b3-2169348cbe7e",
+      "question": "Which statement is NOT true about the phospholipid bilayer?",
+      "answers": [
+        {
+          "id": "04450a31-0923-4630-afe1-c6ad5e45b53e",
+          "text": "The head is glycerol",
+          "correct": false
+        },
+        {
+          "id": "3d7cccc2-d3a0-4be3-8614-e24c8ab06578",
+          "text": "The tail is hydrophobic",
+          "correct": false
+        },
+        {
+          "id": "59dde426-afcf-4e75-b680-d1b17bcbf2c4",
+          "text": "The two membranes are crossing each other",
+          "correct": true
+        },
+        {
+          "id": "18f1fc1e-a1e8-4db0-98f9-a2e84a7511d1",
+          "text": "The hydrophobic tails face each other and form a bilayer.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "11b1c0a0-d486-49a8-bef2-803ce8ce99e0",
+      "question": "Which hormone is secreted by endocrine cells in the stomach?",
+      "answers": [
+        {
+          "id": "26acddaf-ca98-43c3-b578-829d5e8a689f",
+          "text": "Histamine",
+          "correct": false
+        },
+        {
+          "id": "a221410b-4ae4-491a-8b95-af6dcf34d77c",
+          "text": "Motilin",
+          "correct": false
+        },
+        {
+          "id": "893a126b-6905-447f-9103-b70d9e2c67a4",
+          "text": "Ghrelin",
+          "correct": true
+        },
+        {
+          "id": "f68bd936-58b2-4a0f-8f45-48fd27fdfab4",
+          "text": "Leptin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "2d45ac11-1b97-4a8c-af47-ca2832317682",
+      "question": "Which autoimmune state is characterized by thrombocytopenia, eczema, and recurrent infections?",
+      "answers": [
+        {
+          "id": "4093691c-d796-43e3-b1ce-78bc200cd59c",
+          "text": "Wiskott-Aldrich syndrome",
+          "correct": true
+        },
+        {
+          "id": "436fe224-d650-456a-b05a-8419186b6973",
+          "text": "Bruton agammaglobulinemia",
+          "correct": false
+        },
+        {
+          "id": "df69da28-e015-4ead-bdbe-940f845cd302",
+          "text": "Pernicious anemia",
+          "correct": false
+        },
+        {
+          "id": "3939c856-a1d2-47b7-b210-f758708f5c99",
+          "text": "Myasthenia gravis",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "cd4f56c6-7cd2-4bfa-a226-09b0b1fb8243",
+      "question": "Which of the following statements regarding thyroid hormone synthesis is correct?",
+      "answers": [
+        {
+          "id": "c3082f13-5f44-4199-93fd-5eac8bbc5c71",
+          "text": "Thiocyanate and perchlorate anions stimulate the iodide pump in thyroid follicular cells.",
+          "correct": false
+        },
+        {
+          "id": "c7c456ba-7ad9-4c73-a493-3ddf3919b7a7",
+          "text": "Propylthiouracil inhibits the peroxidase enzyme, reducing thyroid hormone synthesis.",
+          "correct": true
+        },
+        {
+          "id": "1f86dfc2-f24b-40fc-b747-2d359bdb7515",
+          "text": "High levels of I− enhance organification, promoting the synthesis of thyroid hormone.",
+          "correct": false
+        },
+        {
+          "id": "eeb11913-7268-4939-911a-e37463012131",
+          "text": "In hepatic failure, TBG levels increase, leading to an increase in total thyroid hormone levels.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "942c946b-43e5-4113-a24a-a8dd5b4452c7",
+      "question": "What neurotransmitter system is primarily affected in Tetanus?",
+      "answers": [
+        {
+          "id": "ec604ac6-d1d1-4722-863c-383ec0ee82f7",
+          "text": "Acetylcholine",
+          "correct": false
+        },
+        {
+          "id": "d2d59769-12a8-42bc-a3f4-e01ae27fb4b9",
+          "text": "Serotonin",
+          "correct": false
+        },
+        {
+          "id": "0eb87ddd-374f-4e3e-938c-4001bead8e0c",
+          "text": "GABA",
+          "correct": true
+        },
+        {
+          "id": "46235c33-3d4d-401d-ae76-06574325385d",
+          "text": "Dopamine",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "0696e779-bfcf-4f48-afb0-d3ba120b9574",
+      "question": "What is the approximate lifespan of sperm and egg, respectively?",
+      "answers": [
+        {
+          "id": "11b05805-0ee6-49a1-870a-03b7a69a6e71",
+          "text": "Sperm: 3 days, Egg: 1 day",
+          "correct": true
+        },
+        {
+          "id": "556dd02d-555b-48c7-ad6a-6bf0f84d4947",
+          "text": "Sperm: 1 day, Egg: 3 days",
+          "correct": false
+        },
+        {
+          "id": "65ce1ad9-f992-45a0-9d8c-335b569f6dd1",
+          "text": "Sperm: 2 days, Egg: 2 days",
+          "correct": false
+        },
+        {
+          "id": "f337f750-75ed-444a-a447-65ea8727e57e",
+          "text": "Sperm: 1 day, Egg: 1 day",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "1a4b8cc1-21bd-4a7b-b1dd-4be6a20191d5",
+      "question": "Which of the following is true regarding Valsalva maneuver and murmur intensity?",
+      "answers": [
+        {
+          "id": "50660d29-8a5d-4198-8b5b-19fa2e6dc961",
+          "text": "Decreases intensity of most murmurs",
+          "correct": true
+        },
+        {
+          "id": "b9e29365-87f9-4a85-8caf-fe20af56a5b9",
+          "text": "Decreases intensity of HOCM",
+          "correct": false
+        },
+        {
+          "id": "cc7cb574-6e1a-4c7e-b6d3-b08ba79101cb",
+          "text": "Decreases intensity of MVP",
+          "correct": false
+        },
+        {
+          "id": "db981a6f-806a-40a2-950b-3fbd6fd9cdfd",
+          "text": "Increases intensity of mitral regurgitation",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "7c104adc-2681-4ec9-9ea3-8d618647021d",
+      "question": "Which of the following can be reversed if congenital hypothyroidism is treated early?",
+      "answers": [
+        {
+          "id": "4d64a1dd-4431-4452-8068-b3229aa163df",
+          "text": "Mental retardation",
+          "correct": false
+        },
+        {
+          "id": "8505af24-c98a-486f-a054-bc8e89311128",
+          "text": "Growth retardation",
+          "correct": false
+        },
+        {
+          "id": "659c8d69-ea81-431d-b834-b9becd09f758",
+          "text": "Both A and B",
+          "correct": true
+        },
+        {
+          "id": "e7867905-7a82-477b-b2c6-4cef5037cad0",
+          "text": "Neither A nor B",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "a351fb23-44fc-4884-a8af-15bb067d728c",
+      "question": "Which of the following electrolytes is decreased in a rare autosomal recessive genetic disorder characterized by a defect in the thiazide-sensitive sodium-chloride cotransporter in the distal convoluted tubules of the kidneys?",
+      "answers": [
+        {
+          "id": "8ea45288-5192-4da6-9024-018b484efaeb",
+          "text": "K+",
+          "correct": true
+        },
+        {
+          "id": "1858bb2d-f77d-4891-832f-058c128b0c77",
+          "text": "Na+",
+          "correct": false
+        },
+        {
+          "id": "2f84ed43-8aa5-417c-a8e0-ecafbff233c8",
+          "text": "PO43-",
+          "correct": false
+        },
+        {
+          "id": "1eedaced-2267-44d9-aba9-37751a32a583",
+          "text": "Ca2+",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "47f9618c-ed7e-421f-8efb-88ff8825b603",
+      "question": "What is the expected ventilation-perfusion (V/Q) relationship during pulmonary embolism?",
+      "answers": [
+        {
+          "id": "8eefeb13-de00-4c50-9d53-bf0ab5ef203b",
+          "text": "V/Q = 0.8",
+          "correct": false
+        },
+        {
+          "id": "64c7b7a0-0584-43b2-8e0d-e76ba8d96cf0",
+          "text": "V/Q = 0",
+          "correct": false
+        },
+        {
+          "id": "fd732dbc-d60a-4427-90cb-71b5347de5f7",
+          "text": "V/Q = infinite",
+          "correct": true
+        },
+        {
+          "id": "ee85b75e-cba0-42bf-b163-08afe9d87556",
+          "text": "None of the above",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "74cd70ce-81e9-4711-bb6d-ae92285fa79a",
+      "question": "A hospitalized patient has an ejection fraction of 0.4, a heart rate of 95 beats/min, and a cardiac output of 3.5 L/min. What is the patient’s end- diastolic volume?",
+      "answers": [
+        {
+          "id": "81847133-bbb5-4b1a-9f1d-ec9d77a3565d",
+          "text": "14 mL",
+          "correct": false
+        },
+        {
+          "id": "dd0b623f-00e5-48c1-92a1-70e7b73e4459",
+          "text": "37 mL",
+          "correct": false
+        },
+        {
+          "id": "d1e76fbd-7c28-42f6-851b-5da0ef05ae1e",
+          "text": "55 mL",
+          "correct": false
+        },
+        {
+          "id": "14b84d87-aa57-48df-874f-67dae713cc05",
+          "text": "92 mL",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "faea2aa8-9729-419b-b34a-8566e7560c3a",
+      "question": "Which of the following autonomic drugs acts by stimulating adenylate cyclase?",
+      "answers": [
+        {
+          "id": "0244f245-5682-4454-be68-f21f45427c7d",
+          "text": "Atropine",
+          "correct": false
+        },
+        {
+          "id": "2550b5fd-75a1-47b4-bc02-e488a59dbb26",
+          "text": "Clonidine",
+          "correct": false
+        },
+        {
+          "id": "ca7437ec-d399-45e3-8646-ad6bdfe4269a",
+          "text": "Curare",
+          "correct": false
+        },
+        {
+          "id": "33d9034b-38e0-4acf-847a-938f3e4e5bfc",
+          "text": "Norepinephrine",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "eafe747a-ac5c-40e9-8a35-681c4d932408",
+      "question": "Complete transection of the spinal cord at the level of T1 would most likely result in",
+      "answers": [
+        {
+          "id": "5bbbe710-06c7-490e-b0c9-cc71e5787ce4",
+          "text": "Temporary loss of stretch reflexes below the lesion",
+          "correct": true
+        },
+        {
+          "id": "f1ae2e54-3b4d-4da9-a9ec-86cb4f2857cf",
+          "text": "Temporary loss of conscious proprioception below the lesion",
+          "correct": false
+        },
+        {
+          "id": "71d400ad-697a-4f9b-b9ac-6351dab2afd4",
+          "text": "Permanent loss of voluntary control of movement above the lesion",
+          "correct": false
+        },
+        {
+          "id": "ac5d8d99-2460-43e4-adbd-69002f201850",
+          "text": "Permanent loss of consciousness above the lesion",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "7fc644da-a224-4d18-b67f-b444efbd2dae",
+      "question": "If the heart rate is 70 beats/min, then the cardiac output of this ventricle is closest to:",
+      "answers": [
+        {
+          "id": "88799f05-dea4-4660-8237-52ee997a3d4b",
+          "text": "3.45 L/min",
+          "correct": false
+        },
+        {
+          "id": "7ce4f580-52ed-4396-b316-187fb2c4223f",
+          "text": "4.55 L/min",
+          "correct": false
+        },
+        {
+          "id": "e927d2b7-9420-4fa9-b72f-0c3880cb5cf6",
+          "text": "5.25 L/min",
+          "correct": true
+        },
+        {
+          "id": "55fa2189-2d0f-499a-8e01-c2b344ac2783",
+          "text": "8.00 L/min",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "d5fe23df-1277-4d93-94a4-650cb6a5ab3a",
+      "question": "In which red blood cell stage does the nucleoli disappear?",
+      "answers": [
+        {
+          "id": "6487b578-aed8-4919-9cf8-6d161a17d17e",
+          "text": "Basophilic erythroblast",
+          "correct": true
+        },
+        {
+          "id": "6a98d9f8-1c80-49d0-ab2b-2efd496edf66",
+          "text": "Orthochromatic erythroblast",
+          "correct": false
+        },
+        {
+          "id": "703faf17-4c62-481f-8560-58b8b4d44d4c",
+          "text": "Polychromatic erythroblast",
+          "correct": false
+        },
+        {
+          "id": "7bea9aea-2f4d-4d75-9f21-9bc4df847ebb",
+          "text": "Erythrocyte",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "c40b1684-b095-4224-a883-32e4b58d7e7e",
+      "question": "You are observing a male patient undergoing sleep EEG. What is the most likely EEG wave seen if the patient has penile erection?",
+      "answers": [
+        {
+          "id": "be04bbc6-b562-4790-a0ef-58cefb33c25d",
+          "text": "Alpha waves",
+          "correct": false
+        },
+        {
+          "id": "87c7e8ea-71ea-45ef-8354-176d87615f69",
+          "text": "Beta waves",
+          "correct": true
+        },
+        {
+          "id": "1d486f0f-b91f-4b2d-8e2c-e4fe900e7a1c",
+          "text": "Theta waves",
+          "correct": false
+        },
+        {
+          "id": "9801af3f-53d5-4dfb-a2ff-7b56dca3d797",
+          "text": "Delta waves",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "f191d790-1b37-4bb5-a86c-1b5e663529b7",
+      "question": "During the Christmas holiday season, you were tasked to babysit your 4-month old nephew when you observed that he was cold. You obtained his temperature and noted that he was hypothermic. Which of the following mechanisms will be utilized for hypothermia?",
+      "answers": [
+        {
+          "id": "55d7369d-2cbf-4927-944a-c7421d0d1525",
+          "text": "Shivering",
+          "correct": false
+        },
+        {
+          "id": "ee436abb-2d76-4be1-9417-07818e23f61e",
+          "text": "Skin vasodilation",
+          "correct": false
+        },
+        {
+          "id": "cf304d2c-55b9-4b3a-bb5b-bcdf34373e55",
+          "text": "Brown fat",
+          "correct": true
+        },
+        {
+          "id": "f4019101-3512-4d96-ab0a-af6f0599c943",
+          "text": "Radiation",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "33dfbdfe-7bd3-4e00-a8e2-7614a9021241",
+      "question": "Which of the following shortens during muscle contraction? I. H band II. I band III. A band",
+      "answers": [
+        {
+          "id": "df950902-dec4-40a2-8f78-4f839f5a1e96",
+          "text": "III only",
+          "correct": false
+        },
+        {
+          "id": "e1a16de2-f8fc-42aa-b334-89c84af11b7c",
+          "text": "I and II",
+          "correct": true
+        },
+        {
+          "id": "1a2cb446-1d8a-4840-a0b4-9530b5b7b0cd",
+          "text": "II and III",
+          "correct": false
+        },
+        {
+          "id": "8dc850f7-b808-4a08-a0d9-c2bed2827d29",
+          "text": "I, II and III",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "bc898ec7-94dc-436c-a2c2-15e383053e45",
+      "question": "Jonny Kim is a physician-astronaut and is set to undergo his journey in space and will be stationed in the ISS for a year. What findings will you expect when he comes home after his expedition?",
+      "answers": [
+        {
+          "id": "10480f4f-83df-44f5-806a-a4ed2ab1680f",
+          "text": "Increased blood volume",
+          "correct": false
+        },
+        {
+          "id": "064cf441-8d64-4f5e-817d-cb25b335d323",
+          "text": "Increased RBC count",
+          "correct": false
+        },
+        {
+          "id": "f057c262-0a13-449e-b2dd-924a2d0c5712",
+          "text": "Loss of phosphate from bones",
+          "correct": true
+        },
+        {
+          "id": "1f478474-90c0-42c7-95c1-34917b40ec2b",
+          "text": "Increased maximum cardiac output",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "af801681-9fc9-44ea-993e-529cf15e709a",
+      "question": "Which clotting factor belongs on the extrinsic pathway?",
+      "answers": [
+        {
+          "id": "04b3b006-3677-49b6-8427-becdd6717a74",
+          "text": "III",
+          "correct": true
+        },
+        {
+          "id": "2a5eccc5-2606-4652-9eb5-341f68c4035b",
+          "text": "XIII",
+          "correct": false
+        },
+        {
+          "id": "14547107-b6e6-4fe2-830d-559c9dea41f4",
+          "text": "VIII",
+          "correct": false
+        },
+        {
+          "id": "f7fef798-4350-4f03-9139-946532d49ef9",
+          "text": "V",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "c297bb2e-de90-46d1-b5a1-b6226a88167b",
+      "question": "This cytokine is used to reduce neutropenia after chemotherapy for tumors in patients with AIDS after antiretroviral therapy.",
+      "answers": [
+        {
+          "id": "aba8494f-0d0c-428a-b74f-98dce57f2bcc",
+          "text": "Interferon-⍺",
+          "correct": false
+        },
+        {
+          "id": "6cfa77d2-0ca2-4e11-8ff7-0870bf1c23bb",
+          "text": "Interleukin 8",
+          "correct": false
+        },
+        {
+          "id": "aee9f8ff-f3ca-45ef-bdab-9b9a20a92cac",
+          "text": "GM CSF",
+          "correct": true
+        },
+        {
+          "id": "84dfc0a4-e296-4dce-8410-6bb85f7c1afb",
+          "text": "Lymphotoxin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "9270a64d-4de3-49ab-bb9f-94818d52033d",
+      "question": "Activation of mast cells and basophils are mediated by the following complements in the complement system EXCEPT:",
+      "answers": [
+        {
+          "id": "da2745b7-136c-4fde-939f-885370fa85a9",
+          "text": "C5a",
+          "correct": false
+        },
+        {
+          "id": "caeb7dc0-237a-48d4-8c79-0be50a9d13d1",
+          "text": "C3b",
+          "correct": true
+        },
+        {
+          "id": "8d367f99-396e-4443-bb3c-4a69fa1c88ed",
+          "text": "C42 + C4a",
+          "correct": false
+        },
+        {
+          "id": "30aa49b6-39bc-41e0-9093-4d9e23159cba",
+          "text": "C3a",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "516dbc7c-aaf5-46ef-8f93-fc2033c3ef61",
+      "question": "Which of the following in the blood has the LEAST influence in the binding of oxygen to hemoglobin?",
+      "answers": [
+        {
+          "id": "2b5ebade-53b0-459c-a19f-f30fcd37ff8f",
+          "text": "Oxygen",
+          "correct": false
+        },
+        {
+          "id": "2d6a0be6-d227-4b1e-8c6f-e182333781cf",
+          "text": "Carbon Dioxide",
+          "correct": false
+        },
+        {
+          "id": "b13e9d49-f504-4c30-8da3-b29bd3278f61",
+          "text": "Myoglobin",
+          "correct": true
+        },
+        {
+          "id": "7187f03a-2c63-47a3-8ee7-56935f127bb4",
+          "text": "Hemoglobin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "6903580f-0306-4234-8b7d-319a65c61c66",
+      "question": "This step in thyroid hormone synthesis and secretion is catalyzed by the enzyme peroxidase:",
+      "answers": [
+        {
+          "id": "c3450555-f147-4cb0-ad35-ab6e45b10ec5",
+          "text": "Hydrolysis of of T3 and T4 where they enter the circulation",
+          "correct": false
+        },
+        {
+          "id": "f7b2996f-c652-475a-9bf7-0e67ee48797d",
+          "text": "Synthesis of thyroglobulin (TG) and extrusion into follicular lumen",
+          "correct": false
+        },
+        {
+          "id": "320ef80c-7568-4ed4-a81e-e707df96615e",
+          "text": "Na+-I- symporter (NIS), a form of secondary active transport, causes Iodide (I-) uptake",
+          "correct": false
+        },
+        {
+          "id": "480ffc1b-8ee8-420f-80c3-1dc0153563d6",
+          "text": "Transport of Iodide (I-) to the follicular lumen using pendrin where I- is oxidized to Diiodine (I2)",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "a4710000-80eb-42e0-8c61-9bfc1faf5cd7",
+      "question": "Which of the following serves as the main trigger of central chemoreceptors?",
+      "answers": [
+        {
+          "id": "32490e5f-97d0-4e17-892e-cda7876a4555",
+          "text": "Low oxygen",
+          "correct": false
+        },
+        {
+          "id": "dc38a9b2-acf0-4817-b60a-16259c701009",
+          "text": "Decreased PaCO2",
+          "correct": false
+        },
+        {
+          "id": "da50b683-f273-4731-8e3f-2bafd1331380",
+          "text": "Decreased pH of CSF",
+          "correct": true
+        },
+        {
+          "id": "ae1c015b-874d-4e04-94b6-83f69455e66d",
+          "text": "Intravenous lactic acid",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "3c83b378-5a78-4ccb-8edf-5ee098723cd6",
+      "question": "Which of the following factors would exhibit NO EFFECT on the patient’s filtration fraction?",
+      "answers": [
+        {
+          "id": "5ae7b2b9-8693-4752-b4f1-89db93fd3981",
+          "text": "Vasoconstriction of efferent arteriole",
+          "correct": false
+        },
+        {
+          "id": "98adea8c-0505-497f-94db-28771cdf7aae",
+          "text": "Vasoconstriction of afferent arteriole",
+          "correct": true
+        },
+        {
+          "id": "09d91ff1-ca21-47f0-af7c-8213a1322d28",
+          "text": "Increased plasma protein",
+          "correct": false
+        },
+        {
+          "id": "bbd71b05-ac6a-4b22-9223-90821edcd4bb",
+          "text": "Presence of ureteral stone",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "59e28387-9c56-47ef-a14f-8c9c7323243f",
+      "question": "A right shift in the hemoglobin-oxygen dissociation curve could be possibly caused by which of the following conditions?",
+      "answers": [
+        {
+          "id": "46514063-8cf5-4514-9f94-a9622d09f892",
+          "text": "Increased pH",
+          "correct": false
+        },
+        {
+          "id": "fbec6ed4-dfe9-4c89-bd21-3f6daf941af8",
+          "text": "Strenuous exercise",
+          "correct": true
+        },
+        {
+          "id": "e937ae39-7422-483d-87c8-eebfd67766fe",
+          "text": "Fetal hemoglobin",
+          "correct": false
+        },
+        {
+          "id": "da0d8574-e22f-4965-b2a6-1bc1e3d3ae51",
+          "text": "Carbon monoxide poisoning",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "f23aabbd-e9a5-45f5-b26d-2e98f9cde5e9",
+      "question": "On increased levels, the following endogenous molecule causes vasoconstriction of afferent arterioles in the nephrons.",
+      "answers": [
+        {
+          "id": "a7e608ae-653e-441a-b1be-e7c7eb7bd9bb",
+          "text": "Dopamine",
+          "correct": false
+        },
+        {
+          "id": "4a8702eb-9f4f-42ff-9e93-509592fce62d",
+          "text": "Nitric Oxide",
+          "correct": false
+        },
+        {
+          "id": "5e9d0a81-c7e2-4dff-9ad7-fc5770f45fba",
+          "text": "Adenosine",
+          "correct": true
+        },
+        {
+          "id": "a0c3a0c8-ed5a-4980-8185-7c317a9623f3",
+          "text": "Prostaglandin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "4ee2e281-4902-49d5-9cf4-b4fe05378d10",
+      "question": "This innervation of the gastrointestinal tract is located between the inner circular and outer longitudinal muscle layer.. I. Submucosal plexus II. Myenteric plexus III. Meissner plexus",
+      "answers": [
+        {
+          "id": "453b0e27-e57b-4625-b30f-15ae0744b347",
+          "text": "II only",
+          "correct": true
+        },
+        {
+          "id": "b26d9810-d0e3-4708-b7a8-e32496755ce7",
+          "text": "I and II",
+          "correct": false
+        },
+        {
+          "id": "8024c25a-17e8-4c41-a35f-b760a8860490",
+          "text": "II and III",
+          "correct": false
+        },
+        {
+          "id": "b974d2f8-dfdf-403c-a699-bfae6217b007",
+          "text": "I, II and III",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "7347bcd9-6607-43db-bead-50f908d3606e",
+      "question": "This lung volume is the maximum volume of air that can be exhaled after a relaxed expiration.",
+      "answers": [
+        {
+          "id": "76e2eaec-0280-4da5-b12f-56a60552e6f9",
+          "text": "Vital capacity",
+          "correct": false
+        },
+        {
+          "id": "fd49c43b-9334-4c19-a173-5a3b168b0e5f",
+          "text": "Inspiratory capacity",
+          "correct": false
+        },
+        {
+          "id": "30529ecd-0aa5-407d-a666-f7cd7972903b",
+          "text": "Residual volume",
+          "correct": false
+        },
+        {
+          "id": "8a3f82e3-0a30-41e5-bcdb-b8b73935848b",
+          "text": "Expiratory reserve volume",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "de8e56f5-795a-4d10-bece-702efbb01903",
+      "question": "T cell production among humans occurs in which part of the body?",
+      "answers": [
+        {
+          "id": "a97d6523-9b1b-403d-854a-909d92f2c404",
+          "text": "Spleen",
+          "correct": false
+        },
+        {
+          "id": "0397d0ac-6c92-44fd-9dfc-842ffad88328",
+          "text": "Bone marrow",
+          "correct": true
+        },
+        {
+          "id": "50458c30-d8cb-4645-a318-3127624a1018",
+          "text": "Lymph nodes",
+          "correct": false
+        },
+        {
+          "id": "89cd5d51-7404-410a-b361-51d4507528b4",
+          "text": "Thymus",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "e4633780-055d-482d-9619-e5c2c1e06a7a",
+      "question": "This overall effect is observed upon the action of calcitonin.",
+      "answers": [
+        {
+          "id": "afc4b360-68b2-4030-b02d-c79ebde4dd09",
+          "text": "Increased serum calcium",
+          "correct": false
+        },
+        {
+          "id": "0b7ff3e4-5cbe-4e63-9208-920c1007b849",
+          "text": "Increased serum phosphate",
+          "correct": false
+        },
+        {
+          "id": "33a49c47-d9f7-4ea9-9fa8-16b09e7bac4f",
+          "text": "Increased bone resorption",
+          "correct": false
+        },
+        {
+          "id": "223eae5f-7bca-4123-b661-1f72adb1f9dc",
+          "text": "Decreased bone resorption",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "93ecdb7d-e3d2-4685-a888-e9d88f218b20",
+      "question": "The parathyroid hormone maintains the normal ionized serum calcium concentration by which of the following mechanisms on the bone? I. Inhibition of bone mineralization II. Increase formation of new osteoclasts III. Increase osteoblast-initiated recruitment of osteocytes",
+      "answers": [
+        {
+          "id": "66c665d6-6eaf-443b-8eda-859bef5610f2",
+          "text": "III only",
+          "correct": false
+        },
+        {
+          "id": "6c8a0aa0-5275-47e6-aec6-ff1a711ff1b9",
+          "text": "I and II",
+          "correct": false
+        },
+        {
+          "id": "372a5aa2-019d-4faf-9802-a00bd592cf06",
+          "text": "II and III",
+          "correct": true
+        },
+        {
+          "id": "35bd6810-fadb-42e0-bf6a-4f6dc5286b62",
+          "text": "I, II and III",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "92e340c9-5892-494c-93da-0c2eca5a2062",
+      "question": "Which part of the ear responds to low frequency sounds?",
+      "answers": [
+        {
+          "id": "e1861f88-0421-4b10-b097-23e7386f0710",
+          "text": "Base: Inner hair cells near the oval and round windows",
+          "correct": false
+        },
+        {
+          "id": "bf156aaa-0c57-4001-a928-0a90979d60e4",
+          "text": "Base: Inner hair cells near the helicotrema",
+          "correct": false
+        },
+        {
+          "id": "c77496e6-2ce2-4daa-9408-c69110e6716f",
+          "text": "Apex: Inner hair cells near the oval and round windows",
+          "correct": false
+        },
+        {
+          "id": "c45e3ee8-f754-4154-9dbc-e505c7151fa0",
+          "text": "Apex: Inner hair cells near the helicotrema",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "065e0991-91c2-423d-85d7-96d2796c0dd8",
+      "question": "What is the most common direction of hip dislocation?",
+      "answers": [
+        {
+          "id": "f0d1e9c3-2036-427c-9a46-e229c6246ea4",
+          "text": "Anterior",
+          "correct": false
+        },
+        {
+          "id": "45b4942f-de85-4224-a23a-e7ada6822833",
+          "text": "Posterior",
+          "correct": true
+        },
+        {
+          "id": "10b9b933-82e5-4683-a7ed-767f28d25f69",
+          "text": "Inferior",
+          "correct": false
+        },
+        {
+          "id": "27e4c7e7-e1f2-40dd-839a-4f3d21029215",
+          "text": "Superior",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "9f874f13-4225-4679-95b4-f0a42110d2e2",
+      "question": "Which nerve roots are most commonly affected by a posterior hip dislocation?",
+      "answers": [
+        {
+          "id": "1cf2f176-ca7a-4e3d-a5ca-1a34ef2d342a",
+          "text": "L1-L2",
+          "correct": false
+        },
+        {
+          "id": "bddcc581-d52e-48a5-b4b7-6bd2814683e7",
+          "text": "L2-L4",
+          "correct": false
+        },
+        {
+          "id": "3a5cdf18-1523-471f-9b71-c2b23bf0ca7b",
+          "text": "L4-S3",
+          "correct": true
+        },
+        {
+          "id": "f41e1fd4-8b03-4196-a6d5-111a86e4cc37",
+          "text": "S2-S4",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "c0094a18-c04d-4196-a466-b10e1e377591",
+      "question": "What is the primary site of maturation for T-cells in mammals?",
+      "answers": [
+        {
+          "id": "2aa146d6-37c6-4a02-910c-c70a848b92d9",
+          "text": "Bone marrow",
+          "correct": false
+        },
+        {
+          "id": "4817bbb9-9d75-408d-b0d1-9cd3d6fa848a",
+          "text": "Thymus",
+          "correct": true
+        },
+        {
+          "id": "f21a2b4b-56d5-4488-8728-c9fc6e5c22cf",
+          "text": "Spleen",
+          "correct": false
+        },
+        {
+          "id": "197be9eb-c963-4845-8e5c-ad36f7adb3ff",
+          "text": "Lymph nodes",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "227a93dc-92e4-46bf-bc61-28e41de8b6e7",
+      "question": "Which of the following is NOT a function related to parathyroid hormone?",
+      "answers": [
+        {
+          "id": "f5c51f26-3c45-48eb-9f0b-2b2ac3ffc5a4",
+          "text": "Increases bone resorption",
+          "correct": false
+        },
+        {
+          "id": "b47138af-2e02-45f9-b11c-ed64f2e8e031",
+          "text": "Enhances renal phosphate reabsorption",
+          "correct": true
+        },
+        {
+          "id": "b7d70388-344d-468e-a775-852ace80e9b2",
+          "text": "Increases renal calcium reabsorption",
+          "correct": false
+        },
+        {
+          "id": "896669db-1b9b-4552-9f58-6d247b368b83",
+          "text": "Increases intestinal calcium absorption",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "ad7bc5a6-514c-4204-901c-6299d961d6a5",
+      "question": "Which of the following is NOT an extrinsic pathway factor?",
+      "answers": [
+        {
+          "id": "35e60270-0063-4557-9f7f-cd8cb8187aa8",
+          "text": "Factor VII",
+          "correct": false
+        },
+        {
+          "id": "a05b1f09-64e0-48bc-9435-e06c5e337cc4",
+          "text": "Factor X",
+          "correct": false
+        },
+        {
+          "id": "20bcde3f-79b6-4ec8-b4f0-2eb566d665ab",
+          "text": "Factor V",
+          "correct": false
+        },
+        {
+          "id": "040ba79d-aaeb-4ad2-a265-ed9db764ff1e",
+          "text": "Factor VIII",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "57fe8c17-d89e-4730-88e5-c94c38fdc1e0",
+      "question": "Which of the following drugs is commonly used in the treatment of myasthenia gravis?",
+      "answers": [
+        {
+          "id": "d09e2111-c712-4020-b2fc-829e56b6e051",
+          "text": "Pyridostigmine",
+          "correct": true
+        },
+        {
+          "id": "966bc899-9bdf-4d9d-b45a-4111ab6b91c2",
+          "text": "Pancuronium",
+          "correct": false
+        },
+        {
+          "id": "fbb8ee08-a26d-4656-9642-2c4933514894",
+          "text": "Paromomycin",
+          "correct": false
+        },
+        {
+          "id": "1de302b8-c803-4525-84a9-7b78a68c6f77",
+          "text": "Galantamine",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "e01ebc04-dc18-48a7-8fbd-757dceeba2c0",
+      "question": "Blood levels of which of the following substances is decreased in Grave disease?",
+      "answers": [
+        {
+          "id": "608ff919-171c-4255-abbe-1b343ba7805a",
+          "text": "Triiodothyronine (T3)",
+          "correct": false
+        },
+        {
+          "id": "808a65ab-4019-4c63-9d56-d48179aa3813",
+          "text": "Thyroxine (T4)",
+          "correct": false
+        },
+        {
+          "id": "4ec2bbfc-45a0-4928-9a08-b55dfdaf203d",
+          "text": "Thyroid-stimulating immunoglobulins (TSI)",
+          "correct": false
+        },
+        {
+          "id": "1209cfe2-6267-4c06-ade3-09e5ae2e02df",
+          "text": "Thyroid-stimulating hormone (TSH)",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "d3a5dcd6-2c1f-4e16-90c4-b39a503bf1c4",
+      "question": "A 2-year-old presents with episodes of cyanosis, especially during feeding or crying. On examination, there is a systolic ejection murmur and a \"\"boot-shaped\"\" heart is observed on chest X-ray. What is the most likely diagnosis?",
+      "answers": [
+        {
+          "id": "f196130d-f3bd-4010-98e7-1f511f4d6ccc",
+          "text": "Atrial septal defect",
+          "correct": false
+        },
+        {
+          "id": "7c9eb328-e527-4eb0-9fb7-dfa6640cf939",
+          "text": "Tetralogy of Fallot",
+          "correct": true
+        },
+        {
+          "id": "041be291-0241-43bb-9697-4f5f885d5074",
+          "text": "Ventricular septal defect",
+          "correct": false
+        },
+        {
+          "id": "c01979d3-d870-42fa-937b-55173de7ea64",
+          "text": "Coarctation of the aorta",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "ec16c871-0c41-4bb9-965e-8101bf7f4c63",
+      "question": "What term describes the lung volume remaining after maximal expiration?",
+      "answers": [
+        {
+          "id": "39c2e34b-43f3-4c17-83ef-e5dccaa26381",
+          "text": "Functional residual capacity",
+          "correct": false
+        },
+        {
+          "id": "f507f867-e15c-468f-8192-dab479801e15",
+          "text": "Expiratory reserve volume",
+          "correct": false
+        },
+        {
+          "id": "86052d95-b660-44c7-997c-05eb01e5426d",
+          "text": "Residual volume",
+          "correct": true
+        },
+        {
+          "id": "8a49a0be-fabe-474c-b05a-03097098175e",
+          "text": "Vital capacity",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "4f5c48c0-4243-41fd-a3f5-7b768a9fdde4",
+      "question": "Which of the following is NOT true about Michaelis- Menten kinetics:",
+      "answers": [
+        {
+          "id": "73fd47dd-05f9-4302-bd80-03a926e54bd2",
+          "text": "Km is inversely related to the affinity of the enzyme for its substrate.",
+          "correct": false
+        },
+        {
+          "id": "f230b369-cb0a-40d9-afc5-bd02a288b296",
+          "text": "Vmax is directly proportional to the enzyme concentration.",
+          "correct": false
+        },
+        {
+          "id": "07e5a8f9-b442-4f7b-a64e-865b12ddbfaa",
+          "text": "Most enzymatic reactions follow a sigmoid curve",
+          "correct": true
+        },
+        {
+          "id": "8d47d7bc-1d17-4dd2-998e-84acad35dd2d",
+          "text": "Enzymatic reactions that exhibit a sigmoid curve usually indicate cooperative kinetics.",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "0321bec0-1d79-4034-a96c-ba66344aa150",
+      "question": "Which of the following statements is NOT true about the Lineweaver-Burk plot?",
+      "answers": [
+        {
+          "id": "f59131d3-4bc2-4a34-acf5-fea996c5d809",
+          "text": "Irreversible competitive inhibitors decrease Vmax",
+          "correct": false
+        },
+        {
+          "id": "a9cab77a-d44f-4829-abac-53728a97d0c9",
+          "text": "Noncompetitive inhibitors have no effect on Km",
+          "correct": false
+        },
+        {
+          "id": "7be50ffd-ce8e-4616-8dd5-cbf093e2b6e9",
+          "text": "Reversible competitive inhibitors increase Km",
+          "correct": false
+        },
+        {
+          "id": "0690d3ed-fa34-4bf3-8579-27c3f6e1470c",
+          "text": "Reversible competitive inhibitors increase Vmax",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "2e654185-0ad6-447a-af33-559a382c1f62",
+      "question": "How does urolithiasis affect the glomerular filtration rate?",
+      "answers": [
+        {
+          "id": "743a6484-ad22-47b3-acc7-cd6ba94cc015",
+          "text": "Decrease glomerular capillary hydrostatic pressure",
+          "correct": false
+        },
+        {
+          "id": "0f159452-5e44-4ce8-854c-a0d8eeb50e7f",
+          "text": "Increase bowman space hydrostatic space",
+          "correct": true
+        },
+        {
+          "id": "320d380c-256b-4b00-972c-a23376aa18d0",
+          "text": "Decrease glomerular capillary oncotic pressure",
+          "correct": false
+        },
+        {
+          "id": "b0a9e906-4479-4628-8b5b-128cb4b06dc1",
+          "text": "Increase bowman space oncotic pressure",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "45549c8e-80da-4282-a933-f7074126fff2",
+      "question": "Plasma renin activity is lower than normal in patients with:",
+      "answers": [
+        {
+          "id": "23508781-d92a-4d53-9e67-545283d7dc5b",
+          "text": "Hemorrhagic shock",
+          "correct": false
+        },
+        {
+          "id": "805ff4d1-c19f-4887-90e6-4bc613272b4c",
+          "text": "Essential hypertension",
+          "correct": true
+        },
+        {
+          "id": "690ba567-ce30-46db-b90e-ef589ffc1b1d",
+          "text": "Congestive heart failure",
+          "correct": false
+        },
+        {
+          "id": "2236e9d5-b2ca-47d4-91d0-79c8ff62252f",
+          "text": "Hypertension caused by aortic constriction above the renal arteries",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "8b265bb7-dd3f-460d-9219-78fc5c35717f",
+      "question": "Which ion has the most influence on the resting membrane potential?",
+      "answers": [
+        {
+          "id": "0bb2478a-1d21-4e36-ab80-81bdc9e126f8",
+          "text": "Na+",
+          "correct": false
+        },
+        {
+          "id": "2f0ec14c-8b4f-4e7b-886e-55e7daefea10",
+          "text": "K+",
+          "correct": true
+        },
+        {
+          "id": "bca4ef57-3e91-4343-b233-f779325162d6",
+          "text": "Cl-",
+          "correct": false
+        },
+        {
+          "id": "799b788e-6ceb-4b8f-be65-48487b0d5a16",
+          "text": "Mg2+",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "3b837dae-f531-44c2-a54f-b3582b64b4f5",
+      "question": "Which of the following explains the suppression of lactation during pregnancy?",
+      "answers": [
+        {
+          "id": "db95abc1-a355-4a7e-8771-09aa012b8932",
+          "text": "Blood prolactin levels are too low for milk production to occur",
+          "correct": false
+        },
+        {
+          "id": "7f5f5814-e4e7-4cfe-bbe6-5610e00c7aee",
+          "text": "Human placental lactogen levels are too low for milk production to occur",
+          "correct": false
+        },
+        {
+          "id": "bef6f8b6-a5df-47a0-abb0-87e856f73213",
+          "text": "The fetal adrenal gland does not produce sufficient estriol",
+          "correct": false
+        },
+        {
+          "id": "95dfa4f7-ae4c-4f4a-9210-8c2cf0ca3950",
+          "text": "Blood levels of estrogen and progesterone are high",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "2ccb5a57-b196-4c14-ab8f-58cc3e95eb33",
+      "question": "Which of the following acute phase reactants is upregulated during inflammation?",
+      "answers": [
+        {
+          "id": "cab6307e-5dc8-4e0f-97c6-5c605c70d0f3",
+          "text": "Ferritin",
+          "correct": true
+        },
+        {
+          "id": "22c0808c-68ce-4f81-91b5-99a6fcbbae95",
+          "text": "Albumin",
+          "correct": false
+        },
+        {
+          "id": "d0357a60-9f6a-48ad-ac9b-e151dff54f14",
+          "text": "Transferrin",
+          "correct": false
+        },
+        {
+          "id": "4371ba9c-ea17-4725-b32a-26c1c82ba234",
+          "text": "Transthyretin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "3829e0f9-81ac-485d-b07c-d23785bd33cf",
+      "question": "Which of the following causes WBC chemotaxis?",
+      "answers": [
+        {
+          "id": "a9111f6e-54da-4c36-a72d-e7bccedd7c45",
+          "text": "C3a",
+          "correct": false
+        },
+        {
+          "id": "6abaeff2-eb05-4640-affd-b89c2d307cd6",
+          "text": "C3b",
+          "correct": false
+        },
+        {
+          "id": "508f8fcf-0eb9-4282-a5b1-3a6a0a5ae923",
+          "text": "C5a",
+          "correct": true
+        },
+        {
+          "id": "71014252-a34e-47d3-a894-444ac25a0d29",
+          "text": "C5b-C9",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "0319fde8-cc8b-451d-90eb-86b12754f3e4",
+      "question": "A sawtooth appearance in an ECG indicates what pathology?",
+      "answers": [
+        {
+          "id": "65e9d6f5-e0b3-456d-b080-534108a72907",
+          "text": "Ventricular fibrillation",
+          "correct": false
+        },
+        {
+          "id": "64a0ad0f-c5de-40ba-9b4c-40d107c76c0c",
+          "text": "Ventricular tachycardia",
+          "correct": false
+        },
+        {
+          "id": "2a1b538a-6670-4870-8fc1-01ae1d2a6fea",
+          "text": "Atrial fibrillation",
+          "correct": false
+        },
+        {
+          "id": "7e788895-1bbb-4983-83f6-569312d6a73a",
+          "text": "Atrial flutter",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "4a411b4c-e159-495f-a385-32f073c18c70",
+      "question": "What is the stimulus for parathyroid hormone (PTH) secretion?",
+      "answers": [
+        {
+          "id": "69db3b59-9b64-417a-ad41-24d83c462cee",
+          "text": "Decreased serum calcium",
+          "correct": true
+        },
+        {
+          "id": "879da29d-dff5-44c1-bc34-1f6930f680c9",
+          "text": "Increased serum calcium",
+          "correct": false
+        },
+        {
+          "id": "b6b591f9-2581-4afc-9c90-702ca1967b25",
+          "text": "Decreased serum phosphate",
+          "correct": false
+        },
+        {
+          "id": "364a1033-e3db-43b9-8c37-c7cb761226bd",
+          "text": "Increased serum phosphate",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "0868479d-76aa-4a3d-8eb6-5086932c2946",
+      "question": "Which cytokine causes chemotaxis of neutrophils, basophils, and T cells?",
+      "answers": [
+        {
+          "id": "a32e7592-9011-4587-a0b3-1a999176a9f9",
+          "text": "IL-1",
+          "correct": false
+        },
+        {
+          "id": "1b40f745-7fb2-4212-835b-c075082a8c91",
+          "text": "TGF-β",
+          "correct": false
+        },
+        {
+          "id": "b1deb83b-4231-44f4-97e9-59834b07b0b8",
+          "text": "IL-5",
+          "correct": false
+        },
+        {
+          "id": "1b3b80de-f8a4-4765-bdc5-d148aecca884",
+          "text": "IL-8",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "a2247d82-e117-4214-8d88-b5e6ccae856a",
+      "question": "Which structure is impaired in a patient with ataxia?",
+      "answers": [
+        {
+          "id": "0cce47d3-5711-477b-9511-ea64e53bacb4",
+          "text": "Motor cortex",
+          "correct": false
+        },
+        {
+          "id": "d976d6eb-87f3-4db8-953a-6f9188055a7c",
+          "text": "Cerebellum",
+          "correct": true
+        },
+        {
+          "id": "d647fdd5-52b4-435e-90e1-661728588774",
+          "text": "Sensory cortex",
+          "correct": false
+        },
+        {
+          "id": "94793ebc-6427-446a-9cc0-833fbb967336",
+          "text": "Basal ganglia",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "794b0b2b-0e92-4582-a4e3-d4ac4b103765",
+      "question": "The following describe the type of information gleaned from an ECG, EXCEPT:",
+      "answers": [
+        {
+          "id": "c5dcf880-ff48-4620-be02-e385bbeaf0db",
+          "text": "Biochemical",
+          "correct": false
+        },
+        {
+          "id": "6e5b1995-068f-406f-8065-8c8b3de5e1f9",
+          "text": "Mechanical",
+          "correct": true
+        },
+        {
+          "id": "f9d1bcb3-01e7-466b-be53-70aeacd4941e",
+          "text": "Electrical",
+          "correct": false
+        },
+        {
+          "id": "fea4be5d-8363-4321-b4b1-2183358391bb",
+          "text": "Functional",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "d8bc3839-3128-4747-98de-968809947ad7",
+      "question": "What is the deficient protein in Duchenne muscular dystrophy?",
+      "answers": [
+        {
+          "id": "122535d7-95c4-4d79-8064-565c785a62f3",
+          "text": "Actinin",
+          "correct": false
+        },
+        {
+          "id": "127e78d0-bbf9-4d24-bc9b-fff9cc2968bd",
+          "text": "Desmin",
+          "correct": false
+        },
+        {
+          "id": "61dc559e-dcd0-451b-ae8a-371312a8ba98",
+          "text": "Dystrophin",
+          "correct": true
+        },
+        {
+          "id": "8ac78922-2c07-48d4-8673-4091765ebb14",
+          "text": "Nebulin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "953898b2-0c30-4307-89cb-5c7bec8f5d6f",
+      "question": "What do you call the phenomenon of increased force generated by atrial contraction during atrial systole?",
+      "answers": [
+        {
+          "id": "5458afd5-a47a-4b9a-a285-cc990e36b775",
+          "text": "Atrial surge",
+          "correct": false
+        },
+        {
+          "id": "de57f454-1d0e-4138-bc81-0fa9df58753d",
+          "text": "Atrial punch",
+          "correct": false
+        },
+        {
+          "id": "5f02f084-b09c-4645-b97b-c2e2cfd94a96",
+          "text": "Atrial kick",
+          "correct": true
+        },
+        {
+          "id": "5f134c96-40a8-480d-85a7-ba4fda7fba81",
+          "text": "Atrial fibrillation",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "aa0de845-f3cb-4a71-8e8a-6e49050603b3",
+      "question": "A 25-year-old woman came in with eczema, recurrent infections, and thrombocytopenia. What is the most likely diagnosis?",
+      "answers": [
+        {
+          "id": "3417b4db-dd23-424e-b9fa-e1954badba00",
+          "text": "Bruton agammaglobulinemia",
+          "correct": false
+        },
+        {
+          "id": "9d1a4864-44bc-4a96-a098-9c145bee37a0",
+          "text": "Wiskott-Aldrich syndrome",
+          "correct": true
+        },
+        {
+          "id": "68173cc7-0520-4ebe-a3b2-60097dbba607",
+          "text": "Churg-Strauss syndrome",
+          "correct": false
+        },
+        {
+          "id": "2f17a81d-ab02-4804-b629-3f7e1018a068",
+          "text": "Alport syndrome",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "47441e37-8130-4828-9587-ebb896512a75",
+      "question": "What is the effect when Brodmann area 22 is damaged?",
+      "answers": [
+        {
+          "id": "8527a001-250c-4ebf-aec8-31b89b8aa992",
+          "text": "Broca aphasia",
+          "correct": false
+        },
+        {
+          "id": "2f5dd8c4-723a-4ad3-af9b-225a2d2abe1a",
+          "text": "Gerstmann syndrome",
+          "correct": false
+        },
+        {
+          "id": "c9da90c0-cfb6-4289-8532-2547bcb8276e",
+          "text": "Wernicke aphasia",
+          "correct": true
+        },
+        {
+          "id": "068361d0-2376-4087-b7d1-4f7a9d0b155b",
+          "text": "Global aphasia",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "409237c8-7aa1-477e-8505-cd7ed3c738d5",
+      "question": "Which neurotransmitter is reduced in a person with depression?",
+      "answers": [
+        {
+          "id": "8a83bc06-4415-43ea-8067-c5d20993cb54",
+          "text": "Acetylcholine",
+          "correct": false
+        },
+        {
+          "id": "9c810867-f9ef-4e71-8b4d-8da6d08de421",
+          "text": "Dopamine",
+          "correct": false
+        },
+        {
+          "id": "4df2bc61-e800-42e4-8f11-eb0dbf85dcee",
+          "text": "Serotonin",
+          "correct": true
+        },
+        {
+          "id": "035d18bb-4a11-4ab4-b201-262990040daa",
+          "text": "Norepinephrine",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "b8334e96-db29-4b83-8e54-9828ff6c66f7",
+      "question": "Which of the following is NOT a component of tetralogy of Fallot (TOF)?",
+      "answers": [
+        {
+          "id": "a36ce538-b63c-4b5c-97c6-3446601c56a2",
+          "text": "Right ventricular inflow tract obstruction",
+          "correct": true
+        },
+        {
+          "id": "e062b216-3c24-4abf-a6c8-661bfce651e6",
+          "text": "Large VSD",
+          "correct": false
+        },
+        {
+          "id": "462d00c0-2ba7-4bdc-bfd3-ec3e1306fd88",
+          "text": "Aorta overriding the VSD",
+          "correct": false
+        },
+        {
+          "id": "c88081aa-767f-4a69-a765-e5ed0ff320b6",
+          "text": "None of the above",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "9f2d1b32-2d0d-4313-9ace-033f9745e164",
+      "question": "Which hormone relaxes the sphincter of Oddi?",
+      "answers": [
+        {
+          "id": "ecbf4cb3-b4a1-493b-abe0-5ee772c5aa23",
+          "text": "Gastrin",
+          "correct": false
+        },
+        {
+          "id": "52da0983-4c10-4d5b-877a-344e3e444455",
+          "text": "CCK",
+          "correct": true
+        },
+        {
+          "id": "a04c9692-7437-4451-86ce-42ee664b90ef",
+          "text": "Secretin",
+          "correct": false
+        },
+        {
+          "id": "e285712a-020a-48e1-af3c-f28185a39573",
+          "text": "Motilin",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "53088df6-def8-4202-a45e-eb22f1e71e7c",
+      "question": "Which of the following is/are true about the small and large intestines?",
+      "answers": [
+        {
+          "id": "12caba98-4ede-4d7d-9976-dc8e4da81a02",
+          "text": "The large intestine has plicae circulares",
+          "correct": false
+        },
+        {
+          "id": "ad99d153-3e3a-40bd-8fb2-a0045427ec2d",
+          "text": "The small intestine has valves of Houston",
+          "correct": false
+        },
+        {
+          "id": "4ca5da34-d475-4793-bc36-6ae801f4b59f",
+          "text": "The large intestine has appendices epiploicae",
+          "correct": true
+        },
+        {
+          "id": "e3ffa191-30e9-4950-9dc1-00081014faaf",
+          "text": "All of the above",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "f090601b-c3d9-46bb-a5d4-3e7e8edc56d1",
+      "question": "Which of the following is an effect of hypothyroidism?",
+      "answers": [
+        {
+          "id": "af60fccf-ad42-45a2-89e7-1b831a93c401",
+          "text": "Mental retardation",
+          "correct": true
+        },
+        {
+          "id": "2c414a92-6cad-4c01-aa22-fa01ab2acc9d",
+          "text": "Weight loss",
+          "correct": false
+        },
+        {
+          "id": "19630553-407f-4db7-a704-b74fa9323e56",
+          "text": "Heat intolerance",
+          "correct": false
+        },
+        {
+          "id": "0ce8877f-fd6a-4866-9728-bb22ed5b0e70",
+          "text": "Exophthalmos",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "aa5f441f-0d30-47dc-8c98-b7112a2d5253",
+      "question": "Which hormone causes growth of the prostate gland?",
+      "answers": [
+        {
+          "id": "f54db0ad-9a3a-429a-ac0b-08c76db1e29f",
+          "text": "Dihydrotestosterone",
+          "correct": true
+        },
+        {
+          "id": "9bf59a18-c713-48f9-9771-158faa33aa49",
+          "text": "Testosterone",
+          "correct": false
+        },
+        {
+          "id": "2205dd52-45df-492a-a59b-6a01301877c3",
+          "text": "Follicle-stimulating hormone",
+          "correct": false
+        },
+        {
+          "id": "709f318b-1f3a-45d0-b509-5bca71bbce85",
+          "text": "Luteinizing hormone",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "6dccf0ab-c29b-47c1-ad01-e7188e7800ac",
+      "question": "What is described by the Nernst equation?",
+      "answers": [
+        {
+          "id": "70b18901-586d-4e4b-bf53-82fc758bd7f1",
+          "text": "Action potential",
+          "correct": false
+        },
+        {
+          "id": "79d469bb-5720-4f79-b0ae-198ab354772b",
+          "text": "Resting membrane potential",
+          "correct": false
+        },
+        {
+          "id": "e0007c2a-7667-4f27-ad06-27c209fc00cf",
+          "text": "Diffusion potential",
+          "correct": false
+        },
+        {
+          "id": "e9221dc8-6275-41e5-a684-d574274d46cb",
+          "text": "Equilibrium potential",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "7d4d624e-5efe-4b3b-a87d-549c952f85c3",
+      "question": "Which of the following is/are true about nitric oxide?",
+      "answers": [
+        {
+          "id": "bb2aa478-f8be-4ab2-8674-b436a1ab7cd3",
+          "text": "It is a potent vasoconstrictor",
+          "correct": false
+        },
+        {
+          "id": "3c240b39-feba-4e62-bf2f-e112fca5f94f",
+          "text": "It uses guanylate cyclase and cGMP to transmit signals intracellularly",
+          "correct": true
+        },
+        {
+          "id": "a9f70e16-8d40-4199-a642-f3f95e6ae39d",
+          "text": "Both of the above",
+          "correct": false
+        },
+        {
+          "id": "7b272157-94c1-42cc-af1d-a53bb74efc70",
+          "text": "None of the above",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "2c01a487-67b9-4da9-b53c-3accb20e1d78",
+      "question": "What happens to osmotic pressure if you increase the concentration of solutes to twice its original amount?",
+      "answers": [
+        {
+          "id": "b7f129e1-65db-43c7-bc4d-7863dcb40bec",
+          "text": "No change",
+          "correct": false
+        },
+        {
+          "id": "781312b1-2c15-4335-a3ff-f6a4e0179608",
+          "text": "Decreased by half",
+          "correct": false
+        },
+        {
+          "id": "070519b7-ec61-4147-a0ea-00db5addbf9c",
+          "text": "Doubled",
+          "correct": true
+        },
+        {
+          "id": "7419fee9-3ffe-49b1-9aa0-7b1a295916fc",
+          "text": "Quadrupled",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "2d7826e3-964f-45c6-95c4-27d48c5ad613",
+      "question": "What channel is defective in cystic fibrosis?",
+      "answers": [
+        {
+          "id": "6c4a3a53-0ca1-4795-b259-31b8a211d2ba",
+          "text": "Potassium",
+          "correct": false
+        },
+        {
+          "id": "c3af3894-28bd-48bb-804f-d1c3f5ec9174",
+          "text": "Sodium",
+          "correct": false
+        },
+        {
+          "id": "4074426c-f032-4bea-b198-87e33fed4bae",
+          "text": "Chloride",
+          "correct": true
+        },
+        {
+          "id": "e869b7cc-686e-425c-8389-7c0ec9ea5e67",
+          "text": "Calcium",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "8d0d8c5d-3894-44cc-b8ae-fc53f9949c57",
+      "question": "Where can the vasomotor center be found?",
+      "answers": [
+        {
+          "id": "1eede126-b4b9-4349-8964-1cbdbf0af680",
+          "text": "Thalamus",
+          "correct": false
+        },
+        {
+          "id": "57798b58-1721-4696-987d-72ae6bc3103e",
+          "text": "Hypothalamus",
+          "correct": false
+        },
+        {
+          "id": "f15e9ce9-b847-49b2-b24d-15f7540c51f7",
+          "text": "Pons",
+          "correct": false
+        },
+        {
+          "id": "92d64874-ee49-423a-8e41-a3b404faeb54",
+          "text": "Medulla",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "15a4c69b-cd22-47b2-938c-3ab3fe9d8dfb",
+      "question": "The following most commonly cause bilious vomiting, EXCEPT:",
+      "answers": [
+        {
+          "id": "757f642e-44e0-4a11-bf3d-0b354516930d",
+          "text": "Adhesions",
+          "correct": false
+        },
+        {
+          "id": "2d0d1963-8845-4390-b070-2545f480855f",
+          "text": "Intussusception",
+          "correct": false
+        },
+        {
+          "id": "4c231930-0d06-4902-b941-37a60ea6e30e",
+          "text": "Volvulus",
+          "correct": false
+        },
+        {
+          "id": "874df766-3946-4a89-b2a3-53c7c5612f66",
+          "text": "Pyloric stenosis",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "id": "00573b8c-893b-48f2-9599-09d1f68fc39c",
+      "question": "Which drug below is a nondepolarizing ganglionic blocker?",
+      "answers": [
+        {
+          "id": "a9cfc967-1228-4394-8eca-a528442a17f0",
+          "text": "Nicotine",
+          "correct": false
+        },
+        {
+          "id": "873bd65b-396f-49c2-8084-05bbdc4c435a",
+          "text": "Curare",
+          "correct": false
+        },
+        {
+          "id": "e91730c0-1ad0-4d8a-9f16-618fc3707b2b",
+          "text": "Hexamethonium",
+          "correct": true
+        },
+        {
+          "id": "9c232a8d-2c65-4fd5-af87-75594c05c286",
+          "text": "Atropine",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "033f1d63-e593-49a3-a77e-997c54fad3b1",
+      "question": "In which part of the nephron does furosemide act upon?",
+      "answers": [
+        {
+          "id": "ac1e9e8b-1cec-4e40-97ff-c47ac2e9366d",
+          "text": "Loop of Henle",
+          "correct": true
+        },
+        {
+          "id": "1707fd80-ae4a-423d-b7d7-0616e42e8041",
+          "text": "Proximal convoluted tubule",
+          "correct": false
+        },
+        {
+          "id": "4e15a9fd-d1be-42f0-98f9-fd12568c6ec7",
+          "text": "Distal tubule",
+          "correct": false
+        },
+        {
+          "id": "d12eda52-f530-4574-9fd6-98917e0c8a8b",
+          "text": "Collecting duct",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "104d490c-cbac-439a-a1bd-0aeb7ac151b5",
+      "question": "Excess nitrogen is mainly excreted in humans as:",
+      "answers": [
+        {
+          "id": "cc51a527-4611-4c78-a522-7c875a2d9a2d",
+          "text": "Ammonia",
+          "correct": false
+        },
+        {
+          "id": "b6055d72-c952-4cc9-bd0a-d81415129c10",
+          "text": "Urea",
+          "correct": true
+        },
+        {
+          "id": "38ef8ebf-da4f-4b3a-ac7f-f749fedd3bb4",
+          "text": "Uric acid",
+          "correct": false
+        },
+        {
+          "id": "3acaffe1-91b7-463f-a59f-0c5d3abd7b2e",
+          "text": "All of the above",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "c8804a82-a175-4588-bbfc-0f1e07ce3455",
+      "question": "Which of the following is/are true about the anterior cruciate ligament?",
+      "answers": [
+        {
+          "id": "5b573944-d6e9-4d46-9297-5b63a26cb92d",
+          "text": "It prevents backward sliding of the tibia on the femur",
+          "correct": false
+        },
+        {
+          "id": "c9d912fd-660b-446a-9b6b-28567c427faf",
+          "text": "It passes upward, backward, and laterally to attach to the lateral femoral condyle",
+          "correct": true
+        },
+        {
+          "id": "47278f90-fdd6-4994-a925-cabe8d5d9bce",
+          "text": "It is taut during knee flexion",
+          "correct": false
+        },
+        {
+          "id": "e222e2da-51c6-49db-92c1-8343dbb86ceb",
+          "text": "All of the above",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "d4cf8d49-6d93-428f-8ffa-807c6667110d",
+      "question": "Which drug inhibits IL-1 and IL-2 receptors, blocking T cell activation and is used in posttransplant patients?",
+      "answers": [
+        {
+          "id": "df12a0b4-474d-4e66-8538-71f3f2016a8b",
+          "text": "Azathioprine",
+          "correct": false
+        },
+        {
+          "id": "674a2cf4-9b7c-4ac6-9df6-0c97d50e14c9",
+          "text": "Cyclosporine",
+          "correct": true
+        },
+        {
+          "id": "442a25cb-9782-410f-9664-d5452a481a14",
+          "text": "Mycophenolate mofetil",
+          "correct": false
+        },
+        {
+          "id": "756e09fd-4690-4c6a-bbe3-9c1cd74e7ed5",
+          "text": "Etanercept",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "1e56baed-43c5-4818-af15-abefe2344930",
+      "question": "In which phase of the cardiac cycle can the closure of semilunar valves be heard?",
+      "answers": [
+        {
+          "id": "9203b00f-e891-4e4f-b555-842d45661ab4",
+          "text": "Isovolumic contraction",
+          "correct": false
+        },
+        {
+          "id": "3b50c8cd-a14c-4d6f-8c97-0d81605f0162",
+          "text": "Rapid ventricular ejection",
+          "correct": false
+        },
+        {
+          "id": "2b3ace32-95c3-44d4-b7a5-538bbd338ae5",
+          "text": "Isovolumic relaxation",
+          "correct": true
+        },
+        {
+          "id": "554187a2-89ed-4785-ac62-a8eb57f7cfe8",
+          "text": "Atrial contraction",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "1b9d8a45-d5bc-460f-8ed4-e8fd1032be6f",
+      "question": "Which of the following diseases is/are due to a single base pair mutation?",
+      "answers": [
+        {
+          "id": "7f4c3eac-b5d3-4684-9c26-a6357fc49be2",
+          "text": "Sickle cell disease",
+          "correct": true
+        },
+        {
+          "id": "27c99f3b-35f9-4d8d-a5aa-4aa177c5f632",
+          "text": "⍺ thalassemia",
+          "correct": false
+        },
+        {
+          "id": "4073bfa2-71af-4dff-9034-a4c9a6c645c7",
+          "text": "Xeroderma pigmentosum",
+          "correct": false
+        },
+        {
+          "id": "4b2c6ca4-297a-437c-9b50-b5f89431c2c1",
+          "text": "All of the above",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "feee0ef9-906c-4ed5-a6ee-a5286d3f7fb4",
+      "question": "Which of the following is/are true of calcitonin?",
+      "answers": [
+        {
+          "id": "c519b93b-c187-4152-b9d2-bd82a518ef78",
+          "text": "Its action leads to a decrease in bone resorption",
+          "correct": true
+        },
+        {
+          "id": "84f6bf59-df8f-42a4-96f4-2f765aeeaa01",
+          "text": "Its action causes an increase in the number and activity of osteoclasts",
+          "correct": false
+        },
+        {
+          "id": "ef28f390-4481-4fc3-9b63-d1977c7d2a41",
+          "text": "Both of the above",
+          "correct": false
+        },
+        {
+          "id": "e76b35ed-9495-48f9-a913-6a2184f47031",
+          "text": "None of the above",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "id": "05737794-7f19-417e-b1c8-355e366366b9",
+      "question": "In which part of the nephron does ethacrynic acid act upon?",
+      "answers": [
+        {
+          "id": "9a254157-c29f-4d21-b9a3-ea0564556aba",
+          "text": "Proximal convoluted tubule",
+          "correct": false
+        },
+        {
+          "id": "46b482e9-d697-4ba5-89f0-a4c5ff792cd4",
+          "text": "Loop of Henle",
+          "correct": true
+        },
+        {
+          "id": "5c7c6df6-a232-4239-abb0-5948be8eb631",
+          "text": "Collecting duct",
+          "correct": false
+        },
+        {
+          "id": "ec53a96d-1273-415f-a006-4dbe67fd9065",
+          "text": "Distal tubule",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

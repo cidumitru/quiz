@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import * as z from 'zod';
-import { questionBankScheme, IQuestionBank, IQuestion, IAnswer } from '../src/app/features/question-bank/question-bank.models';
+import { questionBankScheme, IQuestionBank, IQuestion, IAnswer } from '../../src/app/features/question-bank/question-bank.models';
 
 // Get filename from command line arguments
 const args = process.argv.slice(2);
@@ -28,23 +28,23 @@ function parseQuestionFromHtml(htmlContent: string, correctAnswerLetter: string)
     // Extract question text (everything before the first <br><br>)
     const questionMatch = htmlContent.match(/^(.*?)<br><br>/);
     const questionText = questionMatch ? questionMatch[1].trim() : htmlContent;
-    
+
     // Extract answer options
     const answerRegex = /([A-D])\.\s*(.*?)(?=<br>|$)/g;
     const answers: IAnswer[] = [];
     let match;
-    
+
     while ((match = answerRegex.exec(htmlContent)) !== null) {
         const letter = match[1];
         const text = match[2].trim();
-        
+
         answers.push({
             id: uuidv4(),
             text: text,
             correct: letter === correctAnswerLetter.toUpperCase()
         });
     }
-    
+
     return {
         id: uuidv4(),
         question: questionText,
@@ -55,9 +55,9 @@ function parseQuestionFromHtml(htmlContent: string, correctAnswerLetter: string)
 function parseQuestionsFile(filePath: string): IQuestionBank {
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     const lines = fileContent.split('\n').filter(line => line.trim());
-    
+
     const questions: IQuestion[] = [];
-    
+
     // Skip header lines
     let startIndex = 0;
     for (let i = 0; i < lines.length; i++) {
@@ -66,30 +66,30 @@ function parseQuestionsFile(filePath: string): IQuestionBank {
             break;
         }
     }
-    
+
     // Parse each question line
     for (let i = startIndex; i < lines.length; i++) {
         const line = lines[i];
         const parts = line.split('\t');
-        
+
         if (parts.length >= 2) {
             let htmlContent = parts[0].trim();
             let correctAnswer = parts[1].trim();
-            
+
             // Remove leading/trailing quotes if present
             if (htmlContent.startsWith('"') && htmlContent.endsWith('"')) {
                 htmlContent = htmlContent.slice(1, -1);
             }
-            
+
             // Extract just the letter from the correct answer (handle cases like "C anatomy")
             const letterMatch = correctAnswer.match(/^([A-D])/);
             if (letterMatch) {
                 correctAnswer = letterMatch[1];
             }
-            
+
             // Skip empty lines
             if (!htmlContent || !correctAnswer) continue;
-            
+
             try {
                 const question = parseQuestionFromHtml(htmlContent, correctAnswer);
                 questions.push(question);
@@ -98,12 +98,12 @@ function parseQuestionsFile(filePath: string): IQuestionBank {
             }
         }
     }
-    
+
     // Create question bank
     const questionBankName = path.basename(filePath, path.extname(filePath))
         .replace(/[-_]/g, ' ')
         .replace(/\b\w/g, l => l.toUpperCase());
-    
+
     const questionBank: IQuestionBank = {
         id: uuidv4(),
         createdAt: new Date().toISOString(),
@@ -111,30 +111,30 @@ function parseQuestionsFile(filePath: string): IQuestionBank {
         isDeleted: false,
         questions: questions
     };
-    
+
     return questionBank;
 }
 
 // Main execution
 try {
     console.log(`Parsing file: ${absoluteInputPath}`);
-    
+
     const questionBank = parseQuestionsFile(absoluteInputPath);
-    
+
     // Validate against schema
     const validationResult = questionBankScheme.safeParse(questionBank);
-    
+
     if (!validationResult.success) {
         console.error('Validation failed:', validationResult.error.errors);
         process.exit(1);
     }
-    
+
     // Write to output file
     fs.writeFileSync(outputFilePath, JSON.stringify(questionBank, null, 2));
-    
+
     console.log(`Successfully parsed ${questionBank.questions.length} questions`);
     console.log(`Output saved to: ${outputFilePath}`);
-    
+
 } catch (error) {
     console.error('Error parsing file:', error);
     process.exit(1);
