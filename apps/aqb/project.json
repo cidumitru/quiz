@@ -21,7 +21,11 @@
             "input": "apps/aqb/public"
           }
         ],
-        "styles": ["apps/aqb/src/styles.scss"]
+        "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+          "./node_modules/billboard.js/dist/billboard.css",
+          "apps/aqb/src/styles.scss"
+        ]
       },
       "configurations": {
         "production": {

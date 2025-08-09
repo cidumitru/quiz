@@ -62,7 +62,7 @@ export class QuizListComponent implements AfterViewInit {
     @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
     public quizHistoryDataSource: MatTableDataSource<QuizViewModel> = new MatTableDataSource<QuizViewModel>();
 
-    public tableColumnOptions: IColumn[] = DEFAULT_COLUMNS.map(c => ({...c, visible: this.columns.getStoredColumnsForTable(TABLE_NAME)?.find(sc => sc.name === c.name)?.visible ?? c.visible}))
+    public tableColumnOptions: IColumn[] = [];
     // TODO: Update on change
     public get displayedColumns() {
         return this.tableColumnOptions.filter(o => o.visible).map(o => o.name);
@@ -74,6 +74,12 @@ export class QuizListComponent implements AfterViewInit {
     private columns = inject(ColumnsPersistenceService);
 
     constructor() {
+        // Initialize table column options after services are injected
+        this.tableColumnOptions = DEFAULT_COLUMNS.map(c => ({
+            ...c, 
+            visible: this.columns.getStoredColumnsForTable(TABLE_NAME)?.find(sc => sc.name === c.name)?.visible ?? c.visible
+        }));
+
         this.questionBanks = this.qb.questionBankArr().map(qb => ({id: qb.id, name: qb.name}));
     }
     

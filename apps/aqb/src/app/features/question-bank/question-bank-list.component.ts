@@ -72,7 +72,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
     public questionBankFilter = new FormControl("");
     public questionBanksDs = new MatTableDataSource();
-    public tableColumnOptions: IColumn[] = DEFAULT_COLUMNS.map(c => ({...c, visible: this.columns.getStoredColumnsForTable(TABLE_NAME)?.find(sc => sc.name === c.name)?.visible ?? c.visible}))
+    public tableColumnOptions: IColumn[] = [];
     // TODO: Update on change
     public get displayedColumns() {
         return this.tableColumnOptions.filter(o => o.visible).map(o => o.name);
@@ -92,6 +92,12 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     private columns = inject(ColumnsPersistenceService);
 
     constructor() {
+        // Initialize table column options after services are injected
+        this.tableColumnOptions = DEFAULT_COLUMNS.map(c => ({
+            ...c, 
+            visible: this.columns.getStoredColumnsForTable(TABLE_NAME)?.find(sc => sc.name === c.name)?.visible ?? c.visible
+        }));
+
         this._qbSubscription = this.questionBank.questionBankArr$.pipe(
             switchMap(questionBanks => this.questionBankFilter.valueChanges.pipe(
                     debounceTime(300),

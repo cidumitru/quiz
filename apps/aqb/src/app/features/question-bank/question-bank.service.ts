@@ -35,11 +35,6 @@ export class QuestionBankService {
         effect(() => {
             this._questionBanksSubject.next(this._questionBanks());
         });
-    }
-
-    async init() {
-        const quizzes = await localForage.getItem("questionBanks");
-        this._questionBanks.set(JSON.parse(quizzes as string) || {});
         
         // Auto-save to localStorage whenever state changes
         effect(() => {
@@ -48,6 +43,11 @@ export class QuestionBankService {
                 localForage.setItem("questionBanks", JSON.stringify(currentState));
             }
         });
+    }
+
+    async init() {
+        const quizzes = await localForage.getItem("questionBanks");
+        this._questionBanks.set(JSON.parse(quizzes as string) || {});
     }
 
     create(): string {
