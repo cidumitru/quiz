@@ -2,7 +2,16 @@
   "name": "@aqb/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "nx build aqb",
+    "start": "nx serve aqb",
+    "dev": "nx serve aqb",
+    "test": "nx test aqb",
+    "test:watch": "nx test aqb --watch",
+    "lint": "nx lint aqb",
+    "lint:fix": "nx lint aqb --fix",
+    "e2e": "nx e2e aqb-e2e"
+  },
   "private": true,
   "dependencies": {
     "@angular/common": "~20.1.0",
@@ -11,7 +20,17 @@
     "@angular/forms": "~20.1.0",
     "@angular/platform-browser": "~20.1.0",
     "@angular/router": "~20.1.0",
+    "@angular/cdk": "~20.1.0",
+    "@angular/material": "~20.1.0",
+    "@angular/platform-browser-dynamic": "~20.1.0",
+    "billboard.js": "^3.14.0",
+    "date-fns": "^4.1.0",
+    "export-from-json": "^1.7.4",
+    "localforage": "^1.10.0",
+    "lodash": "^4.17.21",
     "rxjs": "~7.8.0",
+    "uuid": "^11.0.4",
+    "zod": "^3.24.1",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
@@ -56,6 +75,8 @@
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.29.0",
     "vite": "^6.0.0",
-    "vitest": "^3.0.0"
+    "vitest": "^3.0.0",
+    "@types/lodash": "^4.17.13",
+    "@types/uuid": "^10.0.0"
   }
 }
