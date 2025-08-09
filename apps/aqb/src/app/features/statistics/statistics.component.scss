@@ -1,0 +1,117 @@
+// Statistics container
+.statistics-container {
+  padding: 0;
+}
+
+.stats-section {
+  margin-bottom: 32px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Section headings
+h1 {
+  color: var(--mat-sys-on-background);
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.5px;
+}
+
+// Chart containers
+.chart-container {
+  background-color: var(--mat-sys-surface-container-low);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Chart styling
+#barChart_1, #questionBanks {
+  min-height: 400px;
+  width: 100%;
+  
+  // Billboard.js chart styling overrides
+  :global(.bb-chart) {
+    background-color: transparent;
+  }
+  
+  :global(.bb-axis) {
+    stroke: var(--mat-sys-on-surface-variant);
+  }
+  
+  :global(.bb-axis-x .tick line),
+  :global(.bb-axis-y .tick line) {
+    stroke: var(--mat-sys-outline-variant);
+  }
+  
+  :global(.bb-axis-x .tick text),
+  :global(.bb-axis-y .tick text) {
+    fill: var(--mat-sys-on-surface-variant);
+    font-size: 12px;
+  }
+  
+  :global(.bb-grid line) {
+    stroke: var(--mat-sys-outline-variant);
+    stroke-dasharray: 2, 2;
+  }
+  
+  // Bar styling
+  :global(.bb-bar) {
+    &.bb-bar-answers {
+      fill: var(--mat-sys-primary);
+    }
+    
+    &.bb-bar-correct {
+      fill: var(--mat-sys-tertiary);
+    }
+    
+    &.bb-bar-answered {
+      fill: var(--mat-sys-primary);
+    }
+  }
+  
+  // Data labels
+  :global(.bb-text) {
+    fill: var(--mat-sys-on-surface);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  // Legend styling
+  :global(.bb-legend-item) {
+    color: var(--mat-sys-on-surface);
+  }
+  
+  :global(.bb-legend-item-tile) {
+    stroke-width: 0;
+  }
+  
+  // Tooltip styling
+  :global(.bb-tooltip) {
+    background-color: var(--mat-sys-surface-container-high) !important;
+    border: 1px solid var(--mat-sys-outline-variant) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    color: var(--mat-sys-on-surface) !important;
+  }
+  
+  :global(.bb-tooltip th) {
+    background-color: var(--mat-sys-primary-container) !important;
+    color: var(--mat-sys-on-primary-container) !important;
+    border: none !important;
+  }
+  
+  :global(.bb-tooltip td) {
+    border: none !important;
+    color: var(--mat-sys-on-surface) !important;
+  }
+}
