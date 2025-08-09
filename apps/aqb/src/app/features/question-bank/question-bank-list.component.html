@@ -1,18 +1,15 @@
-<div class="action-bar">
-    <div>
-    <span style="font-size: 1.5rem">
-      Question banks
-    </span>
-    </div>
-    <div class="context-buttons">
+<div class="page-container">
+    <div class="page-header">
+        <h1>Question Banks</h1>
+        <div class="header-actions">
         <button mat-button appearance="outlined" (click)="uploadQuestionBank()">
             Import<mat-icon>upload_file</mat-icon>
         </button>
         <button mat-button appearance="filled" color="primary" (click)="newQuestionBank()">
             New<mat-icon>add</mat-icon>
         </button>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>settings</mat-icon>
+        <button mat-button appearance="outlined" [matMenuTriggerFor]="menu">
+            <mat-icon>settings</mat-icon> Columns
         </button>
         <mat-menu #menu="matMenu">
             <mat-selection-list (selectionChange)="onColumnToggle($event)">
@@ -23,11 +20,11 @@
                 }
             </mat-selection-list>
         </mat-menu>
+        </div>
     </div>
-</div>
 
-<div class="mat-elevation-z8 table-container">
-    <table [dataSource]="questionBanksDs" mat-table matSort>
+    <div class="table-container">
+        <table [dataSource]="questionBanksDs" mat-table matSort>
 
         <ng-container matColumnDef="id">
             <th *matHeaderCellDef mat-header-cell>Id.</th>
@@ -124,5 +121,6 @@
         <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
         <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
     </table>
-    <mat-paginator #questionBankPaginator [pageSizeOptions]="[15, 30, 50]"></mat-paginator>
+        <mat-paginator #questionBankPaginator [pageSizeOptions]="[15, 30, 50]"></mat-paginator>
+    </div>
 </div>

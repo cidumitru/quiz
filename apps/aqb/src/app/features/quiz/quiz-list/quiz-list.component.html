@@ -1,16 +1,13 @@
-<div class="action-bar">
-    <div>
-        <span style="font-size: 1.5rem">
-          Quiz history
-        </span>
-    </div>
-    <div>
-        <button mat-button appearance="filled" color="warn" style="margin-right: 1rem;">
-            <mat-icon>delete</mat-icon> Clear history
-        </button>
-        <button mat-button appearance="outlined" [matMenuTriggerFor]="menu">
-            <mat-icon>settings</mat-icon> Columns
-        </button>
+<div class="page-container">
+    <div class="page-header">
+        <h1>Quiz History</h1>
+        <div class="header-actions">
+            <button mat-button appearance="filled" color="warn">
+                <mat-icon>delete</mat-icon> Clear history
+            </button>
+            <button mat-button appearance="outlined" [matMenuTriggerFor]="menu">
+                <mat-icon>settings</mat-icon> Columns
+            </button>
         <mat-menu #menu="matMenu">
             <mat-selection-list (selectionChange)="onColumnToggle($event)">
                 @for (column of tableColumnOptions; track column) {
@@ -19,11 +16,12 @@
                     </mat-list-option>
                 }
             </mat-selection-list>
-        </mat-menu>
+            </mat-menu>
+        </div>
     </div>
-</div>
-<div class="mat-elevation-z8 table-container">
-    <table [dataSource]="quizHistoryDataSource" class="mat-elevation-z8" mat-table>
+
+    <div class="table-container">
+        <table [dataSource]="quizHistoryDataSource" mat-table>
 
         <ng-container matColumnDef="id">
             <th *matHeaderCellDef mat-header-cell>Id.</th>
@@ -88,5 +86,6 @@
         <tr *matRowDef="let row; columns: displayedColumns;"
             mat-row></tr>
     </table>
-    <mat-paginator #quizHistoryPaginator [pageSizeOptions]="[15, 30, 50]"></mat-paginator>
+        <mat-paginator #quizHistoryPaginator [pageSizeOptions]="[15, 30, 50]"></mat-paginator>
+    </div>
 </div>

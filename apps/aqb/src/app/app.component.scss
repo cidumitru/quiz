@@ -267,23 +267,47 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  height: 100vh;
   overflow: hidden;
   
   .content-container {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 32px 24px;
+    padding: 32px 24px 24px;
     width: 100%;
+    
+    // Better scrolling
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mat-sys-outline-variant) transparent;
+    
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--mat-sys-outline-variant);
+      border-radius: 3px;
+      
+      &:hover {
+        background-color: var(--mat-sys-outline);
+      }
+    }
     
     @media (max-width: 1280px) {
       margin: 0;
-      padding: 32px 24px;
+      padding: 32px 24px 24px;
     }
     
     @media (max-width: 768px) {
-      padding: 24px 16px;
+      padding: 24px 16px 16px;
     }
   }
   
@@ -312,7 +336,27 @@
   .content-container {
     flex: 1;
     overflow-y: auto;
-    padding: 24px 16px;
+    overflow-x: hidden;
+    padding: 24px 16px 16px;
+    
+    // Better mobile scrolling
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mat-sys-outline-variant) transparent;
+    
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--mat-sys-outline-variant);
+      border-radius: 2px;
+    }
   }
   
   .build-info {

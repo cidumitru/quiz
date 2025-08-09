@@ -10,18 +10,18 @@
   }
 }
 
-.context-buttons {
-  display: flex;
-  gap: 1rem;
-}
-
-
+// Table container with Material 3 styling
 .table-container {
-  width: 100%;
-  overflow: auto;
-
+  background-color: var(--mat-sys-surface-container-low);
+  border-radius: 16px;
+  padding: 0;
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  
   mat-table {
     width: 100%;
+    background: transparent;
   }
 }
 
