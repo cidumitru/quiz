@@ -37,6 +37,10 @@ const routes = [
         loadComponent: () => import("./app/features/quiz/quiz-list/quiz-list.component").then(m => m.QuizListComponent)
     },
     {
+        path: "quizzes/practice/:quizId",
+        loadComponent: () => import("./app/features/quiz/quiz-practice/quiz.component").then(m => m.QuizComponent)
+    },
+    {
         path: "quizzes/practice",
         loadComponent: () => import("./app/features/quiz/quiz-practice/quiz.component").then(m => m.QuizComponent)
     },
