@@ -37,50 +37,51 @@ const routes = [
     },
     {
         path: "",
-        component: QuestionBankListComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "quizzes",
-        loadComponent: () => import("./app/features/quiz/quiz-list/quiz-list.component").then(m => m.QuizListComponent),
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "quizzes/practice/:quizId",
-        loadComponent: () => import("./app/features/quiz/quiz-practice/quiz.component").then(m => m.QuizComponent),
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "quizzes/practice",
-        loadComponent: () => import("./app/features/quiz/quiz-practice/quiz.component").then(m => m.QuizComponent),
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "statistics",
-        component: StatisticsComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "banks/:id",
-        loadComponent: () => import("./app/features/question-bank/question-bank-edit/question-bank-edit.component").then(m => m.QuestionBankEditComponent),
+        loadComponent: () => import("./app/layouts/main-layout.component").then(m => m.MainLayoutComponent),
         canActivate: [AuthGuard],
         children: [
             {
-                path: "questions",
-                loadComponent: () => import("./app/features/question-bank/question-bank-edit/question-list-edit/question-list-edit.component").then(m => m.QuestionListEditComponent)
-            },
-            {
-                path: "add",
-                loadComponent: () => import("./app/features/question-bank/question-bank-edit/question-add/question-add.component").then(m => m.QuestionAddComponent)
-            },
-            {
-                path: "import",
-                loadComponent: () => import("./app/features/question-bank/question-bank-edit/question-import/question-import.component").then(m => m.QuestionImportComponent)
-            },
-            {
                 path: "",
-                redirectTo: "questions",
-                pathMatch: "full" as const
+                component: QuestionBankListComponent
+            },
+            {
+                path: "quizzes",
+                loadComponent: () => import("./app/features/quiz/quiz-list/quiz-list.component").then(m => m.QuizListComponent)
+            },
+            {
+                path: "quizzes/practice/:quizId",
+                loadComponent: () => import("./app/features/quiz/quiz-practice/quiz.component").then(m => m.QuizComponent)
+            },
+            {
+                path: "quizzes/practice",
+                loadComponent: () => import("./app/features/quiz/quiz-practice/quiz.component").then(m => m.QuizComponent)
+            },
+            {
+                path: "statistics",
+                component: StatisticsComponent
+            },
+            {
+                path: "banks/:id",
+                loadComponent: () => import("./app/features/question-bank/question-bank-edit/question-bank-edit.component").then(m => m.QuestionBankEditComponent),
+                children: [
+                    {
+                        path: "questions",
+                        loadComponent: () => import("./app/features/question-bank/question-bank-edit/question-list-edit/question-list-edit.component").then(m => m.QuestionListEditComponent)
+                    },
+                    {
+                        path: "add",
+                        loadComponent: () => import("./app/features/question-bank/question-bank-edit/question-add/question-add.component").then(m => m.QuestionAddComponent)
+                    },
+                    {
+                        path: "import",
+                        loadComponent: () => import("./app/features/question-bank/question-bank-edit/question-import/question-import.component").then(m => m.QuestionImportComponent)
+                    },
+                    {
+                        path: "",
+                        redirectTo: "questions",
+                        pathMatch: "full" as const
+                    }
+                ]
             }
         ]
     }
