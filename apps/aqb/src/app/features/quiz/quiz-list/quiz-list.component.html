@@ -1,0 +1,104 @@
+<div class="page-container">
+    <div class="page-header">
+        <h1>Quiz History</h1>
+        <div class="header-actions">
+            <button mat-button appearance="filled" color="warn">
+                <mat-icon>delete</mat-icon> Clear history
+            </button>
+        </div>
+    </div>
+
+    <div class="filter-section">
+        <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Filter by Question Bank</mat-label>
+            <mat-select [formControl]="questionBankFilter">
+                <mat-option value="">All Question Banks</mat-option>
+                @for (questionBank of questionBanks; track questionBank.id) {
+                    <mat-option [value]="questionBank">{{questionBank.name}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div class="quiz-timeline">
+        @if (quizHistoryDataSource.data.length === 0) {
+            <div class="no-data-card">
+                <mat-card>
+                    <mat-card-content>
+                        <div class="no-data-content">
+                            <mat-icon>quiz</mat-icon>
+                            <h3>No quiz history yet</h3>
+                            <p>Your completed and in-progress quizzes will appear here</p>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        } @else {
+            @for (quiz of quizHistoryDataSource.data; track quiz.id) {
+                <mat-card class="quiz-card">
+                    <mat-card-header>
+                        <div class="quiz-header-content">
+                            <div class="quiz-title-section">
+                                <mat-card-title class="quiz-bank-name">{{quiz.questionBankName}}</mat-card-title>
+                                <mat-card-subtitle class="quiz-date">{{quiz.startedAt | date: 'MMM d, y • h:mm a'}}</mat-card-subtitle>
+                            </div>
+                            <div class="quiz-status">
+                                @if (quiz.finishedAt) {
+                                    <span class="status-badge completed">
+                                        <mat-icon>check_circle</mat-icon>
+                                        Completed
+                                    </span>
+                                } @else {
+                                    <span class="status-badge in-progress">
+                                        <mat-icon>schedule</mat-icon>
+                                        In Progress
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </mat-card-header>
+                    
+                    <mat-card-content>
+                        <div class="quiz-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">{{quiz.questions.length}}</div>
+                                <div class="stat-label">Questions</div>
+                            </div>
+                            <div class="stat-separator">•</div>
+                            <div class="stat-item">
+                                <div class="stat-value score" [class.high-score]="quiz.correctRatio >= 80" [class.medium-score]="quiz.correctRatio >= 60 && quiz.correctRatio < 80" [class.low-score]="quiz.correctRatio < 60">{{quiz.correctRatio | number}}%</div>
+                                <div class="stat-label">Score</div>
+                            </div>
+                            <div class="stat-separator">•</div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{quiz.duration}}</div>
+                                <div class="stat-label">Duration</div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-bar-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" [style.width.%]="quiz.correctRatio"></div>
+                            </div>
+                            <div class="score-details">{{quiz.correctAnswers}} of {{quiz.questions.length}} correct</div>
+                        </div>
+                    </mat-card-content>
+                    
+                    <mat-card-actions>
+                        @if (quiz.finishedAt) {
+                            <button mat-button appearance="outlined" routerLink="./practice/{{quiz.id}}">
+                                <mat-icon>visibility</mat-icon>
+                                Review
+                            </button>
+                        } @else {
+                            <button mat-button appearance="filled" color="primary" routerLink="./practice/{{quiz.id}}">
+                                <mat-icon>play_arrow</mat-icon>
+                                Continue
+                            </button>
+                        }
+                    </mat-card-actions>
+                </mat-card>
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,133 @@
+<!-- Quiz Header with Progress -->
+<div class="quiz-header">
+    <div class="quiz-info">
+        <h1 class="quiz-title">
+            Practice Test: <span class="bank-name" routerLink="../questions">{{questionBank.name}}</span>
+        </h1>
+        <p class="quiz-subtitle">Started {{created | date: 'MMM d, y • h:mm a'}}</p>
+    </div>
+    
+    <!-- Progress Bar -->
+    <div class="progress-section">
+        <div class="progress-stats">
+            <span class="progress-text">{{answeredCount}} of {{quiz.questions.length}} answered</span>
+            <span class="accuracy-text">{{accuracyPercentage}}% accuracy</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Quiz Content -->
+<div class="quiz-container" [formGroup]="formGroup">
+    @if (quiz.questions.length === 0) {
+        <div class="no-questions-card">
+            <mat-card>
+                <mat-card-content>
+                    <div class="no-questions-content">
+                        <mat-icon>quiz</mat-icon>
+                        <h3>No questions available</h3>
+                        <p>No questions match the selected criteria</p>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    } @else {
+        <div class="questions-list">
+            @for (question of quiz.questions; track question.id; let i = $index) {
+                <div class="question-wrapper">
+                    <!-- Floating Question Number Badge -->
+                    <div class="floating-question-number" 
+                         [ngClass]="{
+                           'answered': isQuestionAnswered(question.id),
+                           'correct': isQuestionCorrect(question.id),
+                           'incorrect': isQuestionIncorrect(question.id),
+                           'unanswered': !isQuestionAnswered(question.id)
+                         }">
+                        {{i + 1}}
+                    </div>
+                    
+                    <mat-card class="question-card" 
+                             #questionCard
+                             [attr.data-question-index]="i"
+                             [ngClass]="{
+                               'answered': isQuestionAnswered(question.id),
+                               'correct': isQuestionCorrect(question.id),
+                               'incorrect': isQuestionIncorrect(question.id),
+                               'unanswered': !isQuestionAnswered(question.id)
+                             }">
+                        
+                        <!-- Question Header -->
+                        <mat-card-header class="question-header">
+                            <div class="question-content">
+                                <mat-card-title class="question-text">
+                                    {{question.question}}
+                                </mat-card-title>
+                                @if (!question.rightAnswer) {
+                                    <mat-card-subtitle class="no-answer-warning">
+                                        <mat-icon>warning</mat-icon>
+                                        No correct answer provided
+                                    </mat-card-subtitle>
+                                }
+                            </div>
+                        </mat-card-header>
+                    
+                    <!-- Answer Options -->
+                    <mat-card-content class="answers-section">
+                        <div class="answers-grid">
+                            @for (option of question.answers; track option.id; let optionIndex = $index) {
+                                <div class="answer-card" 
+                                     [ngClass]="{
+                                       'selected': getSelectedAnswerId(question.id) === option.id,
+                                       'correct-answer': option.id === question?.rightAnswer?.id && isQuestionAnswered(question.id),
+                                       'user-incorrect': getSelectedAnswerId(question.id) === option.id && !option.correct && isQuestionAnswered(question.id),
+                                       'disabled': isQuestionAnswered(question.id)
+                                     }"
+                                     (click)="selectAnswer(question.id, option.id, i)"
+                                     [attr.aria-disabled]="isQuestionAnswered(question.id)"
+                                     [style.cursor]="isQuestionAnswered(question.id) ? 'not-allowed' : 'pointer'">
+                                    
+                                    <div class="answer-content">
+                                        <div class="answer-label">{{getAnswerLabel(optionIndex)}}</div>
+                                        <div class="answer-text">{{option.text}}</div>
+                                    </div>
+                                    
+                                    <div class="answer-indicator">
+                                        @if (getSelectedAnswerId(question.id) === option.id) {
+                                            <mat-icon class="selected-icon">radio_button_checked</mat-icon>
+                                        } @else {
+                                            <mat-icon class="unselected-icon">radio_button_unchecked</mat-icon>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        
+                        <!-- Hidden radio group for form validation -->
+                        <mat-radio-group [formControlName]="question.id" style="display: none;">
+                            @for (option of question.answers; track option.id) {
+                                <mat-radio-button [value]="option.id"></mat-radio-button>
+                            }
+                        </mat-radio-group>
+                    </mat-card-content>
+                </mat-card>
+                </div>
+            }
+        </div>
+    }
+</div>
+<div class="stats">
+    <div>
+    <span style="font-size: 4rem"><span>{{stats.total}}</span> / <span class="correct">{{stats.correct}}</span> / <span
+            class="incorrect">{{stats.incorrect}}</span></span>
+    </div>
+    <div style="margin-top: 2rem">
+        <button mat-button appearance="filled" color="primary" routerLink="/">GO HOME</button>
+        @if (hasFinished) {
+            <button mat-button appearance="outlined" color="accent" (click)="retry()" style="margin-left: 1rem">
+                GENERATE NEW
+            </button>
+        }
+    </div>
+</div>

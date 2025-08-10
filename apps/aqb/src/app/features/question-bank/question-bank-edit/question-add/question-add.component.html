@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="column">
+        <h1>Builder</h1>
+        <mat-form-field appearance="fill" style="width: 100%">
+            <mat-label>Question</mat-label>
+            <input [formControl]="newQuestionForm.controls.question" matInput placeholder="Question" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width: 100%">
+            <mat-label>Answer</mat-label>
+            <input [formControl]="newQuestionForm.controls.answer" matInput placeholder="Answer" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width: 100%">
+            <mat-label>Wrong answer</mat-label>
+            <input [formControl]="newQuestionForm.controls.wrongAnswer" matInput placeholder="Wrong answer" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width: 100%">
+            <mat-label>Wrong answer</mat-label>
+            <input [formControl]="newQuestionForm.controls.wrongAnswer2" matInput placeholder="Wrong answer" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width: 100%">
+            <mat-label>Wrong answer</mat-label>
+            <input [formControl]="newQuestionForm.controls.wrongAnswer3" matInput placeholder="Wrong answer" required>
+        </mat-form-field>
+        <button mat-button appearance="filled" color="primary" (click)="addQuestion()">Add question</button>
+    </div>
+    <div class="column">
+        <h1>Preview</h1>
+        <mat-card style="margin-bottom: 1rem;">
+            <mat-card-header>
+                <mat-card-title>
+                    {{newQuestionForm.controls.question.value}}
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-radio-group>
+                    @if (newQuestionForm.controls.answer.value; as answer) {
+                        <mat-radio-button [value]="answer">{{answer}}</mat-radio-button>
+                    }
+                    @if (newQuestionForm.controls.wrongAnswer.value; as wrongAnswer) {
+                        <mat-radio-button [value]="wrongAnswer">{{wrongAnswer}}</mat-radio-button>
+                    }
+                    @if (newQuestionForm.controls.wrongAnswer2.value; as wrongAnswer2) {
+                        <mat-radio-button [value]="wrongAnswer2">{{wrongAnswer2}}</mat-radio-button>
+                    }
+                    @if (newQuestionForm.controls.wrongAnswer3.value; as wrongAnswer3) {
+                        <mat-radio-button [value]="wrongAnswer3">{{wrongAnswer3}}</mat-radio-button>
+                    }
+                </mat-radio-group>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

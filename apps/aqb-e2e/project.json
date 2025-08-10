@@ -1,0 +1,9 @@
+{
+  "name": "aqb-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/aqb-e2e/src",
+  "implicitDependencies": ["aqb"],
+  "// targets": "to see all targets run: nx show project aqb-e2e --web",
+  "targets": {}
+}

@@ -1,0 +1,127 @@
+<div class="page-container">
+    <div class="page-header">
+        <h1>Question Banks</h1>
+        <div class="header-actions">
+        <button mat-button appearance="outlined" (click)="uploadQuestionBank()">
+            Import<mat-icon>upload_file</mat-icon>
+        </button>
+        <button mat-button appearance="filled" color="primary" (click)="newQuestionBank()">
+            New<mat-icon>add</mat-icon>
+        </button>
+        <button mat-button appearance="outlined" [matMenuTriggerFor]="menu">
+            <mat-icon>settings</mat-icon> Columns
+        </button>
+        <mat-menu #menu="matMenu">
+            <mat-selection-list (selectionChange)="onColumnToggle($event)">
+                @for (column of tableColumnOptions; track column) {
+                    <mat-list-option [value]="column" [selected]="column.visible" (click)="$event.stopPropagation()">
+                        {{column.name}}
+                    </mat-list-option>
+                }
+            </mat-selection-list>
+        </mat-menu>
+        </div>
+    </div>
+
+    <div class="cards-container">
+        @if (questionBanksDs.data.length === 0) {
+            <div class="no-data-card">
+                <mat-card>
+                    <mat-card-content>
+                        <div class="no-data-content">
+                            <mat-icon>quiz</mat-icon>
+                            <h3>No question banks</h3>
+                            <p>Create your first question bank to get started</p>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        } @else {
+            @for (element of questionBanksDs.data; track element.id) {
+                <mat-card class="question-bank-card">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <span class="bank-name" routerLink="banks/{{element.id}}">
+                                {{element.name}}
+                            </span>
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            {{element.questions}} questions • Updated {{(element.updatedAt | date: "short") ?? "Never"}}
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    
+                    <mat-card-content>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-label">Coverage</div>
+                                <div class="stat-value primary">{{element.coverage | number}}%</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Avg Score</div>
+                                <div class="stat-value">{{element.averageScore | number}}%</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Today</div>
+                                <div class="stat-value">{{element.averageScoreToday | number}}%</div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                    
+                    <mat-card-actions>
+                        <button [disabled]="element.questions === 0"
+                                (click)="practiceQuizDefault(element.id)"
+                                mat-button
+                                appearance="filled"
+                                color="accent"
+                                class="primary-action">
+                            <mat-icon>school</mat-icon>
+                            Practice
+                        </button>
+                        
+                        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="More actions">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #actionsMenu="matMenu">
+                            <button mat-menu-item [matMenuTriggerFor]="practiceOptionsMenu">
+                                <mat-icon>school</mat-icon>
+                                <span>Practice Options</span>
+                            </button>
+                            <mat-divider></mat-divider>
+                            <button mat-menu-item (click)="downloadQuestionBank(element.id);">
+                                <mat-icon>download</mat-icon>
+                                <span>Download</span>
+                            </button>
+                            <button mat-menu-item (click)="deleteQuiz(element.id);" class="delete-action">
+                                <mat-icon>delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                        </mat-menu>
+                        
+                        <mat-menu #practiceOptionsMenu="matMenu">
+                            <div class="practice-options-menu">
+                                <div class="menu-section-title">Priority Mode</div>
+                                <mat-selection-list [multiple]="false" #selectionList>
+                                    @for (priority of questionPriorityOptions; track priority) {
+                                        <mat-list-option (click)="$event.stopPropagation()" 
+                                                         [value]="priority" 
+                                                         [selected]="priority === questionPriorityOptions[0]">
+                                            {{priority.name}}
+                                        </mat-list-option>
+                                    }
+                                </mat-selection-list>
+                                <mat-divider></mat-divider>
+                                <div class="menu-section-title">Number of Questions</div>
+                                @for (size of [25, 50, 100]; track size) {
+                                    <button (click)="practiceQuiz(element.id, size, selectionList.selectedOptions.selected)"
+                                            mat-menu-item>
+                                        <span>{{size}} Questions</span>
+                                    </button>
+                                }
+                            </div>
+                        </mat-menu>
+                    </mat-card-actions>
+                </mat-card>
+            }
+        }
+    </div>
+</div>
