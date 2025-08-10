@@ -33,6 +33,19 @@
       mat-icon {
         font-size: 24px;
       }
+      
+      .app-fab-logo {
+        width: 32px;
+        height: 32px;
+        
+        &.logo-dark {
+          display: none;
+        }
+        
+        &.logo-light {
+          display: block;
+        }
+      }
     }
   }
   
@@ -227,6 +240,19 @@
         font-size: 28px;
         color: var(--mat-sys-on-primary);
       }
+      
+      .mobile-logo {
+        width: 32px;
+        height: 32px;
+        
+        &.logo-dark {
+          display: none;
+        }
+        
+        &.logo-light {
+          display: block;
+        }
+      }
     }
     
     h2 {
@@ -333,6 +359,41 @@
       color: var(--mat-sys-on-surface-variant);
       font-size: 12px;
       opacity: 0.7;
+    }
+  }
+}
+
+// Dark theme support for logos
+@media (prefers-color-scheme: dark) {
+  .navigation-rail {
+    .nav-header {
+      .app-fab {
+        .app-fab-logo {
+          &.logo-light {
+            display: none;
+          }
+          
+          &.logo-dark {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+  
+  .mobile-drawer {
+    .mobile-nav-header {
+      .mobile-app-logo {
+        .mobile-logo {
+          &.logo-light {
+            display: none;
+          }
+          
+          &.logo-dark {
+            display: block;
+          }
+        }
+      }
     }
   }
 }

@@ -37,7 +37,8 @@ import {CommonModule} from "@angular/common";
             <!-- App FAB -->
             <div class="nav-header">
                 <button mat-fab class="app-fab" routerLink="/" matTooltip="AQB Home" matTooltipPosition="right">
-                    <mat-icon>quiz</mat-icon>
+                    <img src="/logo-light.svg" alt="AQB Logo" class="app-fab-logo logo-light">
+                    <img src="/logo-dark.svg" alt="AQB Logo" class="app-fab-logo logo-dark">
                 </button>
             </div>
             
@@ -124,10 +125,11 @@ import {CommonModule} from "@angular/common";
                 <mat-sidenav #mobileDrawer mode="over" class="mobile-drawer">
                     <div class="mobile-nav-header">
                         <div class="mobile-app-logo">
-                            <mat-icon>quiz</mat-icon>
+                            <img src="/logo-light.svg" alt="AQB Logo" class="mobile-logo logo-light">
+                            <img src="/logo-dark.svg" alt="AQB Logo" class="mobile-logo logo-dark">
                         </div>
                         <h2>AQB</h2>
-                        <p>Question Bank</p>
+                        <p>Aly's Question Bank</p>
                     </div>
                     
                     <mat-divider></mat-divider>
@@ -189,7 +191,7 @@ export class MainLayoutComponent implements OnDestroy {
     protected themeService = inject(ThemeService);
     protected authService = inject(AuthService);
 
-    title = signal('quizz');
+    title = signal('AQB - Aly\'s Question Bank');
     mobileQuery: MediaQueryList;
     private _mobileQueryListener: () => void;
 
