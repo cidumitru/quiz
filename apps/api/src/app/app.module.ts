@@ -29,9 +29,9 @@ import { User, OtpCode } from './entities';
         type: 'postgres',
         url: configService.get('DATABASE_URL'),
         entities: [User, OtpCode],
-        synchronize: configService.get('NODE_ENV') === 'development',
-        migrations: [__dirname + '/migrations/*{.ts,.js}'],
-        migrationsRun: true,
+        synchronize: true, // Enable for production setup - consider using migrations later
+        migrations: [],
+        migrationsRun: false,
         ssl: configService.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
       }),
       inject: [ConfigService],
