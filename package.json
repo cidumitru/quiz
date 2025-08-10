@@ -11,7 +11,7 @@
     "lint": "nx lint aqb",
     "lint:fix": "nx lint aqb --fix",
     "e2e": "nx e2e aqb-e2e",
-    "api:build": "tree .  && echo \"PWD: $PWD\" && echo \"WORKSPACE FILES: $(ls -la | grep -E '(nx.json|package.json|tsconfig)')\" && echo \"NX WORKSPACE ROOT: $PWD\" && NX_WORKSPACE_ROOT=$PWD NX_PROJECT_GRAPH_CACHE_DIRECTORY=$PWD/.nx/cache npx nx build api --verbose",
+    "api:build": "echo \"PWD: $PWD\" && echo \"ALL FILES:\" && ls -la && echo \"SUBDIRS:\" && ls -la */. 2>/dev/null || echo 'no subdirs' && echo \"WORKSPACE FILES: $(ls -la | grep -E '(nx.json|package.json|tsconfig)')\" && NX_WORKSPACE_ROOT=$PWD NX_PROJECT_GRAPH_CACHE_DIRECTORY=$PWD/.nx/cache npx nx build api --verbose",
     "api:serve": "nx serve api",
     "api:dev": "nx serve api",
     "api:start": "node dist/api/main.js",
