@@ -5,40 +5,15 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
+      "executor": "nx:run-commands",
       "options": {
-        "platform": "node",
-        "outputPath": "dist/api",
-        "format": ["cjs"],
-        "bundle": false,
-        "main": "apps/api/src/main.ts",
-        "tsConfig": "apps/api/tsconfig.app.json",
-        "assets": ["apps/api/src/assets"],
-        "generatePackageJson": true,
-        "esbuildOptions": {
-          "sourcemap": true,
-          "outExtension": {
-            ".js": ".js"
-          }
-        }
+        "command": "webpack-cli build",
+        "cwd": "apps/api",
+        "args": ["--node-env=production"]
       },
       "configurations": {
         "development": {
-          "esbuildOptions": {
-            "sourcemap": true,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
-        },
-        "production": {
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
+          "args": ["--node-env=development"]
         }
       }
     },
