@@ -30,7 +30,7 @@ jobs:
         run: npm ci
 
       - name: Build AQB application
-        run: npx nx build aqb --configuration=production
+        run: npx nx build aqb --configuration=production --base-href=/quiz/
 
       - name: Replace build number
         uses: actions/github-script@v7
