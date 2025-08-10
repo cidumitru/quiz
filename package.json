@@ -11,6 +11,7 @@
     "lint": "nx lint aqb",
     "lint:fix": "nx lint aqb --fix",
     "e2e": "nx e2e aqb-e2e",
+    "api:build2": "nx build api",
     "api:build": "nx build api",
     "api:serve": "nx serve api",
     "api:dev": "nx serve api",
