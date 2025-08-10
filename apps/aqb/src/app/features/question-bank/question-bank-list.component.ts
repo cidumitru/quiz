@@ -25,19 +25,7 @@ import {QuestionBankViewModel} from "./question-bank-view.model";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatListModule, MatListOption, MatSelectionListChange} from "@angular/material/list";
 import {MatSelectModule} from "@angular/material/select";
-import {ColumnsPersistenceService, IColumn} from "../../core/services/columns-persistence.service";
 
-const TABLE_NAME = "QuestionBanksTable";
-const DEFAULT_COLUMNS = [
-    {name: 'name', visible: true},
-    {name: 'questions', visible: true},
-    {name: 'stats', visible: true},
-    {name: 'coverage', visible: true},
-    {name: 'averageScore', visible: true},
-    {name: 'averageScoreToday', visible: true},
-    {name: 'updatedAt', visible: true},
-    {name: 'actions', visible: true}
-]
 @Component({
     selector: 'app-quiz-list',
     templateUrl: './question-bank-list.component.html',
@@ -72,11 +60,6 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
     public questionBankFilter = new FormControl("");
     public questionBanksDs = new MatTableDataSource<QuestionBankViewModel>();
-    public tableColumnOptions: IColumn[] = [];
-    // TODO: Update on change
-    public get displayedColumns() {
-        return this.tableColumnOptions.filter(o => o.visible).map(o => o.name);
-    }
     public questionPriorityOptions = [
         {name: 'All', value: QuizMode.All },
         {name: 'Mistakes', value: QuizMode.Mistakes },
@@ -89,15 +72,7 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
     private snackbar = inject(MatSnackBar);
     public quiz = inject(QuizService);
     private stats = inject(StatisticsService);
-    private columns = inject(ColumnsPersistenceService);
-
     constructor() {
-        // Initialize table column options after services are injected
-        this.tableColumnOptions = DEFAULT_COLUMNS.map(c => ({
-            ...c, 
-            visible: this.columns.getStoredColumnsForTable(TABLE_NAME)?.find(sc => sc.name === c.name)?.visible ?? c.visible
-        }));
-
         this._qbSubscription = this.questionBank.questionBankArr$.pipe(
             switchMap(questionBanks => this.questionBankFilter.valueChanges.pipe(
                     debounceTime(300),
@@ -143,12 +118,23 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
             const files: File[] = Array.from(input.files ?? []);
             const file = first(files);
 
-            const content = await file?.text();
-            const obj = JSON.parse(content ?? "");
-            const parsed = await questionBankScheme.safeParseAsync(obj);
+            if (!file) return;
 
-            if (parsed.success) this.questionBank.insertQuestionBank(parsed.data);
-            else this.snackbar.open("Invalid file", "Close", {duration: 5000});
+            try {
+                const content = await file.text();
+                const obj = JSON.parse(content ?? "");
+                const parsed = await questionBankScheme.safeParseAsync(obj);
+
+                if (parsed.success) {
+                    await this.questionBank.insertQuestionBank(parsed.data);
+                    this.snackbar.open(`Successfully imported "${parsed.data.name}"`, "Close", {duration: 3000});
+                } else {
+                    this.snackbar.open("Invalid file format", "Close", {duration: 5000});
+                }
+            } catch (error) {
+                console.error('Failed to upload question bank:', error);
+                this.snackbar.open("Failed to import file. Please check the file format.", "Close", {duration: 5000});
+            }
 
             input.remove();
         };
@@ -187,20 +173,6 @@ export class QuestionBankListComponent implements AfterViewInit, OnDestroy {
 
     ngOnDestroy(): void {
         this._qbSubscription.unsubscribe();
-    }
-
-    async onColumnToggle(selection: MatSelectionListChange): Promise<void> {
-        const updated = this.tableColumnOptions.map(o => {
-            const updated = selection.options.find(s => s.value.name === o.name);
-
-            return {
-                ...o,
-                visible: isBoolean(updated?.selected) ? updated?.selected!! : o.visible
-            }
-        });
-
-        this.tableColumnOptions = updated;
-        await this.columns.updateColumnsForTable(TABLE_NAME, updated);
     }
 }
 

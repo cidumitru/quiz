@@ -8,18 +8,6 @@
         <button mat-button appearance="filled" color="primary" (click)="newQuestionBank()">
             New<mat-icon>add</mat-icon>
         </button>
-        <button mat-button appearance="outlined" [matMenuTriggerFor]="menu">
-            <mat-icon>settings</mat-icon> Columns
-        </button>
-        <mat-menu #menu="matMenu">
-            <mat-selection-list (selectionChange)="onColumnToggle($event)">
-                @for (column of tableColumnOptions; track column) {
-                    <mat-list-option [value]="column" [selected]="column.visible" (click)="$event.stopPropagation()">
-                        {{column.name}}
-                    </mat-list-option>
-                }
-            </mat-selection-list>
-        </mat-menu>
         </div>
     </div>
 

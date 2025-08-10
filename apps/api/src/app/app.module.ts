@@ -21,7 +21,7 @@ import { QuestionBankModule } from './question-bank/question-bank.module';
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
-        limit: 10,
+        limit: 20,
       },
     ]),
     TypeOrmModule.forRootAsync({
