@@ -1,7 +1,7 @@
 import {bootstrapApplication} from '@angular/platform-browser';
 import {AppComponent} from './app/app.component';
 import {provideRouter, withHashLocation, withInMemoryScrolling} from '@angular/router';
-import {APP_INITIALIZER, importProvidersFrom} from '@angular/core';
+import {APP_INITIALIZER, importProvidersFrom, inject} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -10,7 +10,6 @@ import {StatisticsComponent} from './app/features/statistics/statistics.componen
 import {QuestionBankService} from './app/features/question-bank/question-bank.service';
 import {QuizService} from './app/features/quiz/quiz.service';
 import {AppConfig} from './app/core/services/app-config.service';
-import {ColumnsPersistenceService} from './app/core/services/columns-persistence.service';
 import {MockDataLoader} from './app/core/mock/mock-data.loader';
 import {ThemeService} from './app/core/services/theme.service';
 import {AuthInterceptor} from './app/core/interceptors/auth.interceptor';
@@ -18,11 +17,8 @@ import {ApiBaseInterceptor} from './app/core/interceptors/api-base.interceptor';
 import {AuthGuard} from './app/core/guards/auth.guard';
 import {AuthService} from './app/core/services/auth.service';
 
-export const bootstrapFactory = (appConfig: AppConfig, questionBank: QuestionBankService, quiz: QuizService, columns: ColumnsPersistenceService, mockDataLoader: MockDataLoader, authService: AuthService) => async () => {
+export const bootstrapFactory = (appConfig: AppConfig, questionBank: QuestionBankService, quiz: QuizService, mockDataLoader: MockDataLoader, authService: AuthService) => async () => {
     await appConfig.init();
-  questionBank.init();
-  quiz.init();
-    await columns.init();
 
   // if (questionBank.questionBankArr.length || localStorage.getItem("firstVisit")) return;
 
@@ -39,6 +35,12 @@ const routes = [
         path: "",
         loadComponent: () => import("./app/layouts/main-layout.component").then(m => m.MainLayoutComponent),
         canActivate: [AuthGuard],
+      resolve: {
+        preload: () => {
+          inject(QuestionBankService).init()
+          inject(QuizService).init()
+        }
+      },
         children: [
             {
                 path: "",
@@ -100,14 +102,13 @@ bootstrapApplication(AppComponent, {
         QuestionBankService,
         QuizService,
         AppConfig,
-        ColumnsPersistenceService,
         MockDataLoader,
         ThemeService,
         AuthService,
         {
             provide: APP_INITIALIZER,
             useFactory: bootstrapFactory,
-            deps: [AppConfig, QuestionBankService, QuizService, ColumnsPersistenceService, MockDataLoader, AuthService],
+          deps: [AppConfig, QuestionBankService, QuizService, MockDataLoader, AuthService],
             multi: true
         },
         {
