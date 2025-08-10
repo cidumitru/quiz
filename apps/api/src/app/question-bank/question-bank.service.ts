@@ -1,14 +1,13 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { QuestionBank, Question, Answer } from '../entities';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
+import {Answer, Question, QuestionBank} from '../entities';
 import {
-  CreateQuestionBankDto,
-  UpdateQuestionBankDto,
-  CreateQuestionDto,
   AddQuestionsDto,
-  SetCorrectAnswerDto,
+  CreateQuestionBankDto,
   ImportQuestionBankDto,
+  SetCorrectAnswerDto,
+  UpdateQuestionBankDto,
 } from '../dto/question-bank.dto';
 
 @Injectable()
@@ -53,7 +52,7 @@ export class QuestionBankService {
       order: { createdAt: 'DESC' },
     });
 
-    return { 
+    return {
       questionBanks: questionBanks.map(qb => this.transformQuestionBank(qb))
     };
   }
@@ -101,33 +100,51 @@ export class QuestionBankService {
   }
 
   async import(userId: string, dto: ImportQuestionBankDto) {
+    // Check if a question bank with this ID already exists for this user
     const existingQuestionBank = await this.questionBankRepository.findOne({
       where: { id: dto.id, userId },
     });
 
     let questionBank: QuestionBank;
-    
+
     if (existingQuestionBank) {
+      // If it exists for this user, create a copy with a new ID
       questionBank = this.questionBankRepository.create({
         name: `${dto.name} (copy)`,
         userId,
         questions: [],
       });
     } else {
-      questionBank = this.questionBankRepository.create({
-        id: dto.id,
-        name: dto.name,
-        userId,
-        createdAt: new Date(dto.createdAt),
-        questions: [],
+      // Check if this ID exists for any other user (collision scenario)
+      const idCollision = await this.questionBankRepository.findOne({
+        where: {id: dto.id},
       });
+
+      if (idCollision) {
+        // If there's a collision with another user's question bank, generate new ID
+        questionBank = this.questionBankRepository.create({
+          name: dto.name,
+          userId,
+          questions: [],
+        });
+      } else {
+        // No collision, use the original ID
+        questionBank = this.questionBankRepository.create({
+          id: dto.id,
+          name: dto.name,
+          userId,
+          createdAt: new Date(dto.createdAt),
+          questions: [],
+        });
+      }
     }
 
     const savedQuestionBank = await this.questionBankRepository.save(questionBank);
+    const shouldGenerateNewIds = existingQuestionBank || savedQuestionBank.id !== dto.id;
 
     for (const questionDto of dto.questions) {
       const question = this.questionRepository.create({
-        id: existingQuestionBank ? undefined : questionDto.id,
+        id: shouldGenerateNewIds ? undefined : questionDto.id,
         question: questionDto.question,
         questionBankId: savedQuestionBank.id,
         answers: [],
@@ -137,7 +154,7 @@ export class QuestionBankService {
 
       for (const answerDto of questionDto.answers) {
         const answer = this.answerRepository.create({
-          id: existingQuestionBank ? undefined : answerDto.id,
+          id: shouldGenerateNewIds ? undefined : answerDto.id,
           text: answerDto.text,
           isCorrect: answerDto.correct || false,
           questionId: savedQuestion.id,
