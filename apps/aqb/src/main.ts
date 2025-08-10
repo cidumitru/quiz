@@ -14,6 +14,7 @@ import { ColumnsPersistenceService } from './app/core/services/columns-persisten
 import { MockDataLoader } from './app/core/mock/mock-data.loader';
 import { ThemeService } from './app/core/services/theme.service';
 import { AuthInterceptor } from './app/core/interceptors/auth.interceptor';
+import { ApiBaseInterceptor } from './app/core/interceptors/api-base.interceptor';
 import { AuthGuard } from './app/core/guards/auth.guard';
 import { AuthService } from './app/core/services/auth.service';
 import { APP_INITIALIZER } from '@angular/core';
@@ -106,6 +107,11 @@ bootstrapApplication(AppComponent, {
             provide: APP_INITIALIZER,
             useFactory: bootstrapFactory,
             deps: [AppConfig, QuestionBankService, QuizService, ColumnsPersistenceService, MockDataLoader, AuthService],
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ApiBaseInterceptor,
             multi: true
         },
         {
