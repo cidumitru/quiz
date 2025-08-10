@@ -19,24 +19,24 @@ import {
   ImportQuestionBankDto,
 } from '../dto/question-bank.dto';
 
-@Controller('api/question-banks')
+@Controller('question-banks')
 @UseGuards(JwtAuthGuard)
 export class QuestionBankController {
   constructor(private readonly questionBankService: QuestionBankService) {}
 
   @Post()
   create(@Request() req, @Body() dto?: CreateQuestionBankDto) {
-    return this.questionBankService.create(req.user.userId, dto);
+    return this.questionBankService.create(req.user.id, dto);
   }
 
   @Get()
   findAll(@Request() req) {
-    return this.questionBankService.findAll(req.user.userId);
+    return this.questionBankService.findAll(req.user.id);
   }
 
   @Get(':id')
   findOne(@Request() req, @Param('id') id: string) {
-    return this.questionBankService.findOne(req.user.userId, id);
+    return this.questionBankService.findOne(req.user.id, id);
   }
 
   @Put(':id')
@@ -45,17 +45,17 @@ export class QuestionBankController {
     @Param('id') id: string,
     @Body() dto: UpdateQuestionBankDto,
   ) {
-    return this.questionBankService.update(req.user.userId, id, dto);
+    return this.questionBankService.update(req.user.id, id, dto);
   }
 
   @Delete(':id')
   remove(@Request() req, @Param('id') id: string) {
-    return this.questionBankService.remove(req.user.userId, id);
+    return this.questionBankService.remove(req.user.id, id);
   }
 
   @Post('import')
   import(@Request() req, @Body() dto: ImportQuestionBankDto) {
-    return this.questionBankService.import(req.user.userId, dto);
+    return this.questionBankService.import(req.user.id, dto);
   }
 
   @Post(':id/questions')
@@ -64,7 +64,7 @@ export class QuestionBankController {
     @Param('id') id: string,
     @Body() dto: AddQuestionsDto,
   ) {
-    return this.questionBankService.addQuestions(req.user.userId, id, dto);
+    return this.questionBankService.addQuestions(req.user.id, id, dto);
   }
 
   @Delete(':id/questions/:questionId')
@@ -73,7 +73,7 @@ export class QuestionBankController {
     @Param('id') id: string,
     @Param('questionId') questionId: string,
   ) {
-    return this.questionBankService.deleteQuestion(req.user.userId, id, questionId);
+    return this.questionBankService.deleteQuestion(req.user.id, id, questionId);
   }
 
   @Put(':id/questions/:questionId/correct-answer')
@@ -84,7 +84,7 @@ export class QuestionBankController {
     @Body() dto: SetCorrectAnswerDto,
   ) {
     return this.questionBankService.setCorrectAnswer(
-      req.user.userId,
+      req.user.id,
       id,
       questionId,
       dto,

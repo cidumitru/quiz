@@ -23,7 +23,7 @@ export class QuestionBank {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column('uuid')
+  @Column('uuid', { nullable: false })
   userId: string;
 
   @Column({ default: false })

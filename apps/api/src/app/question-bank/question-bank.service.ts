@@ -22,6 +22,20 @@ export class QuestionBankService {
     private answerRepository: Repository<Answer>,
   ) {}
 
+  private transformQuestionBank(questionBank: QuestionBank) {
+    return {
+      ...questionBank,
+      questions: questionBank.questions.map(question => ({
+        ...question,
+        answers: question.answers.map(answer => ({
+          id: answer.id,
+          text: answer.text,
+          correct: answer.isCorrect, // Map isCorrect to correct
+        })),
+      })),
+    };
+  }
+
   async create(userId: string, dto?: CreateQuestionBankDto) {
     const questionBank = this.questionBankRepository.create({
       name: dto?.name || `NEW QUESTION BANK: ${new Date().toISOString()}`,
@@ -39,7 +53,9 @@ export class QuestionBankService {
       order: { createdAt: 'DESC' },
     });
 
-    return { questionBanks };
+    return { 
+      questionBanks: questionBanks.map(qb => this.transformQuestionBank(qb))
+    };
   }
 
   async findOne(userId: string, id: string) {
@@ -51,7 +67,7 @@ export class QuestionBankService {
       throw new NotFoundException('Question bank not found');
     }
 
-    return { questionBank };
+    return { questionBank: this.transformQuestionBank(questionBank) };
   }
 
   async update(userId: string, id: string, dto: UpdateQuestionBankDto) {
