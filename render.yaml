@@ -3,7 +3,7 @@ services:
     name: aqb-api
     runtime: node
     plan: free
-    buildCommand: npm install && npm run api:build
+    buildCommand: npm install && npm install nx@21.3.11 && npm run api:build
     startCommand: npm run api:start
     healthCheckPath: /api/health
     envVars:
