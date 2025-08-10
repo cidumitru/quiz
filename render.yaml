@@ -1,10 +1,10 @@
 services:
   - type: web
     name: aqb-api
-    runtime: node
+    runtime: docker
     plan: free
-    buildCommand: npm cache clean --force && npm install && npm install --force nx@21.3.11 @nx/workspace@21.3.11 && npm run api:build
-    startCommand: npm run api:start
+    dockerfilePath: apps/api/Dockerfile
+    dockerContext: .
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
