@@ -137,7 +137,6 @@ export class QuestionBankService {
     }
 
     async insertQuestionBank(questionBank: IQuestionBank): Promise<void> {
-        this._loading.set(true);
         this._error.set(null);
 
       try {
@@ -152,8 +151,6 @@ export class QuestionBankService {
             this._error.set('Failed to insert question bank');
             console.error('Failed to insert question bank:', error);
             throw error;
-        } finally {
-            this._loading.set(false);
         }
     }
 
@@ -204,7 +201,6 @@ export class QuestionBankService {
     }
 
     async delete(id: string): Promise<void> {
-        this._loading.set(true);
         this._error.set(null);
 
       try {
@@ -215,8 +211,6 @@ export class QuestionBankService {
             this._error.set('Failed to delete question bank');
             console.error('Failed to delete question bank:', error);
             throw error;
-        } finally {
-            this._loading.set(false);
         }
     }
 
