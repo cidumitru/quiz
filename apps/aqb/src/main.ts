@@ -1,6 +1,6 @@
 import {bootstrapApplication} from '@angular/platform-browser';
 import {AppComponent} from './app/app.component';
-import {provideRouter, withHashLocation} from '@angular/router';
+import {provideRouter, withHashLocation, withInMemoryScrolling} from '@angular/router';
 import {APP_INITIALIZER, importProvidersFrom} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -89,7 +89,9 @@ const routes = [
 
 bootstrapApplication(AppComponent, {
     providers: [
-        provideRouter(routes, withHashLocation()),
+      provideRouter(routes, withHashLocation(), withInMemoryScrolling({
+        scrollPositionRestoration: 'top'
+      })),
         importProvidersFrom(
             BrowserAnimationsModule,
             HttpClientModule,
