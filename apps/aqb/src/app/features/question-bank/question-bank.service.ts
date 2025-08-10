@@ -37,6 +37,10 @@ export class QuestionBankService {
     }
 
     async init() {
+      // TODO: Reconsider
+      if (this.questionBankArr().length > 0 && !this.loading()) {
+        return;
+      }
         this._loading.set(true);
         this._error.set(null);
 

@@ -52,11 +52,17 @@ const routes = [
             },
             {
                 path: "quizzes/practice/:quizId",
-                loadComponent: () => import("./app/features/quiz/quiz-practice/quiz.component").then(m => m.QuizComponent)
+              loadComponent: () => import("./app/features/quiz/quiz-practice/quiz.component").then(m => m.QuizComponent),
+              resolve: {
+                preload: () => inject(QuestionBankService).init()
+              }
             },
             {
                 path: "quizzes/practice",
-                loadComponent: () => import("./app/features/quiz/quiz-practice/quiz.component").then(m => m.QuizComponent)
+              loadComponent: () => import("./app/features/quiz/quiz-practice/quiz.component").then(m => m.QuizComponent),
+              resolve: {
+                preload: () => inject(QuestionBankService).init()
+              }
             },
             {
                 path: "statistics",
