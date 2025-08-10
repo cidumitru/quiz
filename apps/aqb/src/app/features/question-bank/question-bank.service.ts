@@ -1,7 +1,6 @@
 import {computed, effect, inject, Injectable, signal} from "@angular/core";
 import {BehaviorSubject, firstValueFrom, map, Observable, tap} from "rxjs";
 import {omit, values} from "lodash";
-import * as localForage from "localforage";
 import {IQuestionBank, IQuestionCreate} from "./question-bank.models";
 import {QuestionBankApiService} from "@aqb/data-access";
 
@@ -53,41 +52,41 @@ export class QuestionBankService {
         this._questionBanks.set(banks);
 
         // Check if there's local data to migrate
-            const localData = await localForage.getItem("questionBanks");
-            if (localData) {
-                const localBanks = JSON.parse(localData as string) as Record<string, IQuestionBank>;
-
-              // Migrate each local question bank to the database
-                for (const bank of Object.values(localBanks)) {
-                    if (!banks[bank.id]) {
-                        try {
-                            await firstValueFrom(this.api.insert(bank));
-                        } catch (error) {
-                            console.error('Failed to migrate question bank:', bank.id, error);
-                        }
-                    }
-                }
-
-              // Clear local storage after successful migration
-                await localForage.removeItem("questionBanks");
-
-              // Reload from API to get migrated data
-                const updatedResponse = await firstValueFrom(this.api.list());
-                const updatedBanks: Record<string, IQuestionBank> = {};
-
-              updatedResponse.questionBanks.forEach(bank => {
-                    updatedBanks[bank.id] = bank;
-                });
-
-              this._questionBanks.set(updatedBanks);
-            }
+        //     const localData = await localForage.getItem("questionBanks");
+        //     if (localData) {
+        //         const localBanks = JSON.parse(localData as string) as Record<string, IQuestionBank>;
+        //
+        //       // Migrate each local question bank to the database
+        //         for (const bank of Object.values(localBanks)) {
+        //             if (!banks[bank.id]) {
+        //                 try {
+        //                     await firstValueFrom(this.api.insert(bank));
+        //                 } catch (error) {
+        //                     console.error('Failed to migrate question bank:', bank.id, error);
+        //                 }
+        //             }
+        //         }
+        //
+        //       // Clear local storage after successful migration
+        //         await localForage.removeItem("questionBanks");
+        //
+        //       // Reload from API to get migrated data
+        //         const updatedResponse = await firstValueFrom(this.api.list());
+        //         const updatedBanks: Record<string, IQuestionBank> = {};
+        //
+        //       updatedResponse.questionBanks.forEach(bank => {
+        //             updatedBanks[bank.id] = bank;
+        //         });
+        //
+        //       this._questionBanks.set(updatedBanks);
+        //     }
         } catch (error) {
             this._error.set('Failed to load question banks');
             console.error('Failed to load question banks:', error);
 
         // Fallback to local storage if API fails
-            const localData = await localForage.getItem("questionBanks");
-            this._questionBanks.set(JSON.parse(localData as string) || {});
+        //     const localData = await localForage.getItem("questionBanks");
+        //     this._questionBanks.set(JSON.parse(localData as string) || {});
         } finally {
             this._loading.set(false);
         }
