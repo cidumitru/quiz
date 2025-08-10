@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
-import { provideRouter } from '@angular/router';
+import {provideRouter, withHashLocation} from '@angular/router';
 import { importProvidersFrom } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -90,7 +90,7 @@ const routes = [
 
 bootstrapApplication(AppComponent, {
     providers: [
-        provideRouter(routes),
+        provideRouter(routes, withHashLocation()),
         importProvidersFrom(
             BrowserAnimationsModule,
             HttpClientModule,
