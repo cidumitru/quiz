@@ -28,7 +28,7 @@ services:
       - key: RESEND_API_KEY
         sync: false
       - key: EMAIL_FROM
-        value: AQB <onboarding@resend.dev>
+        value: AQB <onboarding@yanki.space>
 
 databases:
   - name: aqb-postgres
