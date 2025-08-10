@@ -30,13 +30,13 @@ export class AuthService {
     const existingOtpCount = await this.otpRepository.count({
       where: {
         user: { email },
-        createdAt: MoreThan(new Date(Date.now() - 15 * 60 * 1000)),
+        createdAt: MoreThan(new Date(Date.now() - 2 * 60 * 1000)), // 2 minutes instead of 15
       },
     });
 
-    if (existingOtpCount >= 3) {
+    if (existingOtpCount >= 10) { // 10 attempts instead of 3 for testing
       throw new BadRequestException(
-        'Too many OTP requests. Please wait 15 minutes.',
+        'Too many OTP requests. Please wait 2 minutes.',
       );
     }
 
