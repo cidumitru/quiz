@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  computed,
+  inject,
+  signal,
+  ViewChild
+} from '@angular/core';
 import {QuestionBankService} from "./question-bank.service";
 import {Router, RouterModule} from "@angular/router";
 import exportFromJSON from "export-from-json";
@@ -24,6 +32,7 @@ import {QuestionBankViewModel} from "./question-bank-view.model";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatListModule, MatListOption} from "@angular/material/list";
 import {MatSelectModule} from "@angular/material/select";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @Component({
     selector: 'app-quiz-list',
@@ -50,7 +59,8 @@ import {MatSelectModule} from "@angular/material/select";
         MatCheckboxModule,
         FormsModule,
         MatListModule,
-        MatSelectModule
+      MatSelectModule,
+      MatProgressSpinnerModule
     ]
 })
 export class QuestionBankListComponent {
@@ -63,6 +73,8 @@ export class QuestionBankListComponent {
         {name: 'Mistakes', value: QuizMode.Mistakes },
         {name: 'Discovery', value: QuizMode.Discovery },
     ]
+
+  public isImporting = signal<boolean>(false);
 
   public questionBanks = computed(() => this.questionBank.questionBankArr().map(qb => new QuestionBankViewModel(qb, this.stats)))
     public questionBank = inject(QuestionBankService);
@@ -104,6 +116,8 @@ export class QuestionBankListComponent {
 
             if (!file) return;
 
+          this.isImporting.set(true);
+
             try {
                 const content = await file.text();
                 const obj = JSON.parse(content ?? "");
@@ -127,6 +141,8 @@ export class QuestionBankListComponent {
             } catch (error) {
                 console.error('Failed to upload question bank:', error);
                 this.snackbar.open("Failed to import file. Please check the file format.", "Close", {duration: 5000});
+            } finally {
+              this.isImporting.set(false);
             }
 
             input.remove();

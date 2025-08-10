@@ -1,163 +1,173 @@
 <div class="page-container">
-    <div class="page-header">
-        <h1>Question Banks</h1>
-        <div class="header-actions">
-        <button mat-button appearance="outlined" (click)="uploadQuestionBank()">
-            Import<mat-icon>upload_file</mat-icon>
-        </button>
-        <button mat-button appearance="filled" color="primary" (click)="newQuestionBank()">
-            New<mat-icon>add</mat-icon>
-        </button>
+  <div class="page-header">
+    <h1>Question Banks</h1>
+    <div class="header-actions">
+      <button (click)="uploadQuestionBank()" appearance="outlined" mat-button style="display:flex">
+        <div style="display: flex; align-items: center;">
+            <span style="margin-right: 10px">
+              @if (isImporting()) {
+                <mat-spinner diameter="15"/>
+              } @else {
+                <mat-icon>upload_file</mat-icon>
+              }
+            </span>
+          <span>Import</span>
         </div>
+      </button>
+      <button (click)="newQuestionBank()" appearance="filled" color="primary" mat-button>
+        New
+        <mat-icon>add</mat-icon>
+      </button>
     </div>
+  </div>
 
-    <div class="cards-container">
-      @if (questionBank.loading()) {
-        <!-- Skeleton loading cards -->
-        @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9]; track i) {
-          <mat-card class="question-bank-card skeleton-card">
-            <mat-card-header>
-              <mat-card-title>
-                <div class="skeleton-text skeleton-title"></div>
-              </mat-card-title>
-              <mat-card-subtitle>
-                <div class="skeleton-text skeleton-subtitle"></div>
-              </mat-card-subtitle>
-            </mat-card-header>
+  <div class="cards-container">
+    @if (questionBank.loading()) {
+      <!-- Skeleton loading cards -->
+      @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9]; track i) {
+        <mat-card class="question-bank-card skeleton-card">
+          <mat-card-header>
+            <mat-card-title>
+              <div class="skeleton-text skeleton-title"></div>
+            </mat-card-title>
+            <mat-card-subtitle>
+              <div class="skeleton-text skeleton-subtitle"></div>
+            </mat-card-subtitle>
+          </mat-card-header>
 
-            <mat-card-content>
-              <div class="stats-grid">
-                <div class="stat-item">
-                  <div class="stat-label">
-                    <div class="skeleton-text skeleton-stat-label"></div>
-                  </div>
-                  <div class="stat-value">
-                    <div class="skeleton-text skeleton-stat-value"></div>
-                  </div>
+          <mat-card-content>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-label">
+                  <div class="skeleton-text skeleton-stat-label"></div>
                 </div>
-                <div class="stat-item">
-                  <div class="stat-label">
-                    <div class="skeleton-text skeleton-stat-label"></div>
-                  </div>
-                  <div class="stat-value">
-                    <div class="skeleton-text skeleton-stat-value"></div>
-                  </div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-label">
-                    <div class="skeleton-text skeleton-stat-label"></div>
-                  </div>
-                  <div class="stat-value">
-                    <div class="skeleton-text skeleton-stat-value"></div>
-                  </div>
+                <div class="stat-value">
+                  <div class="skeleton-text skeleton-stat-value"></div>
                 </div>
               </div>
-            </mat-card-content>
-
-            <mat-card-actions>
-              <div class="skeleton-button skeleton-primary-button"></div>
-              <div class="skeleton-button skeleton-icon-button"></div>
-            </mat-card-actions>
-          </mat-card>
-        }
-      } @else if (questionBanks().length === 0) {
-            <div class="no-data-card">
-                <mat-card>
-                    <mat-card-content>
-                        <div class="no-data-content">
-                            <mat-icon>quiz</mat-icon>
-                            <h3>No question banks</h3>
-                            <p>Create your first question bank to get started</p>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
+              <div class="stat-item">
+                <div class="stat-label">
+                  <div class="skeleton-text skeleton-stat-label"></div>
+                </div>
+                <div class="stat-value">
+                  <div class="skeleton-text skeleton-stat-value"></div>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">
+                  <div class="skeleton-text skeleton-stat-label"></div>
+                </div>
+                <div class="stat-value">
+                  <div class="skeleton-text skeleton-stat-value"></div>
+                </div>
+              </div>
             </div>
-        } @else {
-        @for (element of questionBanks(); track element.id) {
-                <mat-card class="question-bank-card">
-                    <mat-card-header>
-                        <mat-card-title>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <div class="skeleton-button skeleton-primary-button"></div>
+            <div class="skeleton-button skeleton-icon-button"></div>
+          </mat-card-actions>
+        </mat-card>
+      }
+    } @else if (questionBanks().length === 0) {
+      <div class="no-data-card">
+        <mat-card>
+          <mat-card-content>
+            <div class="no-data-content">
+              <mat-icon>quiz</mat-icon>
+              <h3>No question banks</h3>
+              <p>Create your first question bank to get started</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    } @else {
+      @for (element of questionBanks(); track element.id) {
+        <mat-card class="question-bank-card">
+          <mat-card-header>
+            <mat-card-title>
                             <span class="bank-name" routerLink="banks/{{element.id}}">
-                                {{element.name}}
+                                {{ element.name }}
                             </span>
-                        </mat-card-title>
-                        <mat-card-subtitle>
-                            {{element.questions}} questions • Updated {{(element.updatedAt | date: "short") ?? "Never"}}
-                        </mat-card-subtitle>
-                    </mat-card-header>
+            </mat-card-title>
+            <mat-card-subtitle>
+              {{ element.questions }} questions • Updated {{ (element.updatedAt | date: "short") ?? "Never" }}
+            </mat-card-subtitle>
+          </mat-card-header>
 
-                    <mat-card-content>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-label">Coverage</div>
-                                <div class="stat-value primary">{{element.coverage | number}}%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Avg Score</div>
-                                <div class="stat-value">{{element.averageScore | number}}%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Today</div>
-                                <div class="stat-value">{{element.averageScoreToday | number}}%</div>
-                            </div>
-                        </div>
-                    </mat-card-content>
+          <mat-card-content>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-label">Coverage</div>
+                <div class="stat-value primary">{{ element.coverage | number }}%</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">Avg Score</div>
+                <div class="stat-value">{{ element.averageScore | number }}%</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">Today</div>
+                <div class="stat-value">{{ element.averageScoreToday | number }}%</div>
+              </div>
+            </div>
+          </mat-card-content>
 
-                  <mat-card-actions>
-                        <button [disabled]="element.questions === 0"
-                                (click)="practiceQuizDefault(element.id)"
-                                mat-button
-                                appearance="filled"
-                                color="accent"
-                                class="primary-action">
-                            <mat-icon>school</mat-icon>
-                            Practice
-                        </button>
+          <mat-card-actions>
+            <button [disabled]="element.questions === 0"
+                    (click)="practiceQuizDefault(element.id)"
+                    mat-button
+                    appearance="filled"
+                    color="accent"
+                    class="primary-action">
+              <mat-icon>school</mat-icon>
+              Practice
+            </button>
 
-                    <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="More actions">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                        <mat-menu #actionsMenu="matMenu">
-                            <button mat-menu-item [matMenuTriggerFor]="practiceOptionsMenu">
-                                <mat-icon>school</mat-icon>
-                                <span>Practice Options</span>
-                            </button>
-                            <mat-divider></mat-divider>
-                            <button mat-menu-item (click)="downloadQuestionBank(element.id);">
-                                <mat-icon>download</mat-icon>
-                                <span>Download</span>
-                            </button>
-                            <button mat-menu-item (click)="deleteQuiz(element.id);" class="delete-action">
-                                <mat-icon>delete</mat-icon>
-                                <span>Delete</span>
-                            </button>
-                        </mat-menu>
+            <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="More actions">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #actionsMenu="matMenu">
+              <button mat-menu-item [matMenuTriggerFor]="practiceOptionsMenu">
+                <mat-icon>school</mat-icon>
+                <span>Practice Options</span>
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="downloadQuestionBank(element.id);">
+                <mat-icon>download</mat-icon>
+                <span>Download</span>
+              </button>
+              <button mat-menu-item (click)="deleteQuiz(element.id);" class="delete-action">
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
 
-                    <mat-menu #practiceOptionsMenu="matMenu">
-                            <div class="practice-options-menu">
-                                <div class="menu-section-title">Priority Mode</div>
-                                <mat-selection-list [multiple]="false" #selectionList>
-                                    @for (priority of questionPriorityOptions; track priority) {
-                                      <mat-list-option (click)="$event.stopPropagation()"
-                                                       [value]="priority"
-                                                         [selected]="priority === questionPriorityOptions[0]">
-                                            {{priority.name}}
-                                        </mat-list-option>
-                                    }
-                                </mat-selection-list>
-                                <mat-divider></mat-divider>
-                                <div class="menu-section-title">Number of Questions</div>
-                                @for (size of [25, 50, 100]; track size) {
-                                    <button (click)="practiceQuiz(element.id, size, selectionList.selectedOptions.selected)"
-                                            mat-menu-item>
-                                        <span>{{size}} Questions</span>
-                                    </button>
-                                }
-                            </div>
-                        </mat-menu>
-                    </mat-card-actions>
-                </mat-card>
-            }
-        }
-    </div>
+            <mat-menu #practiceOptionsMenu="matMenu">
+              <div class="practice-options-menu">
+                <div class="menu-section-title">Priority Mode</div>
+                <mat-selection-list [multiple]="false" #selectionList>
+                  @for (priority of questionPriorityOptions; track priority) {
+                    <mat-list-option (click)="$event.stopPropagation()"
+                                     [value]="priority"
+                                     [selected]="priority === questionPriorityOptions[0]">
+                      {{ priority.name }}
+                    </mat-list-option>
+                  }
+                </mat-selection-list>
+                <mat-divider></mat-divider>
+                <div class="menu-section-title">Number of Questions</div>
+                @for (size of [25, 50, 100]; track size) {
+                  <button (click)="practiceQuiz(element.id, size, selectionList.selectedOptions.selected)"
+                          mat-menu-item>
+                    <span>{{ size }} Questions</span>
+                  </button>
+                }
+              </div>
+            </mat-menu>
+          </mat-card-actions>
+        </mat-card>
+      }
+    }
+  </div>
 </div>
