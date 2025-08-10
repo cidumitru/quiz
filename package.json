@@ -11,7 +11,7 @@
     "lint": "nx lint aqb",
     "lint:fix": "nx lint aqb --fix",
     "e2e": "nx e2e aqb-e2e",
-    "api:build": "echo \"NX MODULES CHECK:\" && ls -la node_modules/@nx && echo \"NODE_MODULES/.bin/nx:\" && ls -la node_modules/.bin/nx && echo \"CURRENT NODE_PATH: $NODE_PATH\" && NODE_PATH=$PWD/node_modules NX_WORKSPACE_ROOT=$PWD npx nx build api --verbose",
+    "api:build": "npx nx build api",
     "api:serve": "nx serve api",
     "api:dev": "nx serve api",
     "api:start": "node dist/api/main.js",
