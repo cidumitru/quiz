@@ -1,29 +1,24 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as nodemailer from 'nodemailer';
-import { Transporter } from 'nodemailer';
+import { Resend } from 'resend';
 
 @Injectable()
 export class EmailService {
-  private transporter: Transporter;
+  private resend: Resend;
   private readonly logger = new Logger(EmailService.name);
 
   constructor(private configService: ConfigService) {
-    this.transporter = nodemailer.createTransport({
-      host: this.configService.get<string>('EMAIL_HOST'),
-      port: this.configService.get<number>('EMAIL_PORT'),
-      secure: false,
-      auth: {
-        user: this.configService.get<string>('EMAIL_USER'),
-        pass: this.configService.get<string>('EMAIL_PASS'),
-      },
-    });
+    const resendApiKey = this.configService.get<string>('RESEND_API_KEY');
+    if (!resendApiKey) {
+      throw new Error('RESEND_API_KEY is required');
+    }
+    this.resend = new Resend(resendApiKey);
   }
 
   async sendOtpEmail(email: string, code: string): Promise<void> {
     try {
-      const mailOptions = {
-        from: this.configService.get<string>('EMAIL_FROM'),
+      const { error } = await this.resend.emails.send({
+        from: this.configService.get<string>('EMAIL_FROM') || 'onboarding@resend.dev',
         to: email,
         subject: 'Your AQB Verification Code',
         html: `
@@ -37,9 +32,12 @@ export class EmailService {
             <p>If you didn't request this code, please ignore this email.</p>
           </div>
         `,
-      };
+      });
 
-      await this.transporter.sendMail(mailOptions);
+      if (error) {
+        throw error;
+      }
+
       this.logger.log(`OTP sent successfully to ${email}`);
     } catch (error) {
       this.logger.error(`Failed to send OTP to ${email}`, error);
