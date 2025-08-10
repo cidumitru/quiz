@@ -15,7 +15,7 @@ import { User, OtpCode } from './entities';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: ['.env', 'apps/api/.env'],
     }),
     ThrottlerModule.forRoot([
       {

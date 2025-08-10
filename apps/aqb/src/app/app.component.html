@@ -36,6 +36,15 @@
             
             <!-- Bottom Actions -->
             <div class="nav-bottom">
+                @if (authService.isLoggedIn$ | async) {
+                    <button class="nav-item secondary-action" 
+                            (click)="onLogout()"
+                            matTooltip="Logout"
+                            matTooltipPosition="right">
+                        <mat-icon>logout</mat-icon>
+                    </button>
+                }
+                
                 <button class="nav-item theme-toggle secondary-action" 
                         (click)="themeService.toggleTheme()"
                         [matTooltip]="themeService.getThemeLabel()"
@@ -105,6 +114,12 @@
                             <span matListItemTitle>Statistics</span>
                         </a>
                         <mat-divider></mat-divider>
+                        @if (authService.isLoggedIn$ | async) {
+                            <a mat-list-item (click)="onLogout(); mobileDrawer.close()">
+                                <mat-icon matListItemIcon>logout</mat-icon>
+                                <span matListItemTitle>Logout</span>
+                            </a>
+                        }
                         <a mat-list-item (click)="themeService.toggleTheme(); mobileDrawer.close()">
                             <mat-icon matListItemIcon>{{themeService.getThemeIcon()}}</mat-icon>
                             <span matListItemTitle>{{themeService.getThemeLabel()}}</span>
