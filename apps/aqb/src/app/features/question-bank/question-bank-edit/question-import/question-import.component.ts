@@ -32,7 +32,7 @@ export class QuestionImportComponent {
     private quiz = inject(QuestionBankService);
     private activatedRoute = inject(ActivatedRoute);
     private snackbar = inject(MatSnackBar);
-    
+
     public id: string = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
     public control = new FormControl("");
     public isImporting = signal<boolean>(false);
@@ -50,16 +50,21 @@ export class QuestionImportComponent {
     )
 
     async import() {
-        const dto = this.parsedQuestions?.map(question => ({
-            question: question.question,
-            answers: question.options.map(option => ({text: option}))
-        }));
+      const dto = this.parsedQuestions
+        ?.filter(question => question.question && question.question.trim() !== '')
+        ?.map(question => ({
+          question: question.question.trim(),
+          answers: question.options
+            .filter(option => option && option.trim() !== '')
+            .map(option => ({text: option.trim()}))
+        }))
+        ?.filter(question => question.answers.length > 0);
 
         if (!dto || dto.length === 0) {
-            this.snackbar.open('No questions to import', 'Close', { duration: 3000 });
+          this.snackbar.open('No valid questions to import', 'Close', {duration: 3000});
             return;
         }
-        
+
         this.isImporting.set(true);
         try {
             await this.quiz.addQuestion(this.id, dto);

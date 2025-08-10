@@ -12,7 +12,7 @@
     </div>
 
     <div class="cards-container">
-        @if (questionBanksDs.data.length === 0) {
+      @if (questionBanks().length === 0) {
             <div class="no-data-card">
                 <mat-card>
                     <mat-card-content>
@@ -25,7 +25,7 @@
                 </mat-card>
             </div>
         } @else {
-            @for (element of questionBanksDs.data; track element.id) {
+        @for (element of questionBanks(); track element.id) {
                 <mat-card class="question-bank-card">
                     <mat-card-header>
                         <mat-card-title>
@@ -37,7 +37,7 @@
                             {{element.questions}} questions • Updated {{(element.updatedAt | date: "short") ?? "Never"}}
                         </mat-card-subtitle>
                     </mat-card-header>
-                    
+
                     <mat-card-content>
                         <div class="stats-grid">
                             <div class="stat-item">
@@ -54,8 +54,8 @@
                             </div>
                         </div>
                     </mat-card-content>
-                    
-                    <mat-card-actions>
+
+                  <mat-card-actions>
                         <button [disabled]="element.questions === 0"
                                 (click)="practiceQuizDefault(element.id)"
                                 mat-button
@@ -65,8 +65,8 @@
                             <mat-icon>school</mat-icon>
                             Practice
                         </button>
-                        
-                        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="More actions">
+
+                    <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="More actions">
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #actionsMenu="matMenu">
@@ -84,14 +84,14 @@
                                 <span>Delete</span>
                             </button>
                         </mat-menu>
-                        
-                        <mat-menu #practiceOptionsMenu="matMenu">
+
+                    <mat-menu #practiceOptionsMenu="matMenu">
                             <div class="practice-options-menu">
                                 <div class="menu-section-title">Priority Mode</div>
                                 <mat-selection-list [multiple]="false" #selectionList>
                                     @for (priority of questionPriorityOptions; track priority) {
-                                        <mat-list-option (click)="$event.stopPropagation()" 
-                                                         [value]="priority" 
+                                      <mat-list-option (click)="$event.stopPropagation()"
+                                                       [value]="priority"
                                                          [selected]="priority === questionPriorityOptions[0]">
                                             {{priority.name}}
                                         </mat-list-option>

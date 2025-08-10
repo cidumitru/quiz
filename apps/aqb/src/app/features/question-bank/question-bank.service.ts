@@ -1,33 +1,31 @@
-import { computed, effect, Injectable, signal, inject } from "@angular/core";
-import { BehaviorSubject, map, Observable, firstValueFrom, tap } from "rxjs";
-import { v4 as uuidv4 } from 'uuid';
-import { omit, values } from "lodash";
+import {computed, effect, inject, Injectable, signal} from "@angular/core";
+import {BehaviorSubject, firstValueFrom, map, Observable, tap} from "rxjs";
+import {omit, values} from "lodash";
 import * as localForage from "localforage";
-import { IAnswer, IQuestionBank, QuestionType, IQuestionCreate } from "./question-bank.models";
-import { QuestionBankApiService } from "@aqb/data-access";
+import {IQuestionBank, IQuestionCreate} from "./question-bank.models";
+import {QuestionBankApiService} from "@aqb/data-access";
 
 @Injectable()
 export class QuestionBankService {
     private readonly api = inject(QuestionBankApiService);
-    
-    // Signals for modern state management
+
+  // Signals for modern state management
     private _questionBanks = signal<Record<string, IQuestionBank>>({});
     private _loading = signal<boolean>(false);
     private _error = signal<string | null>(null);
-    
-    // Computed values
+
+  // Computed values
     public questionBanks = computed(() => this._questionBanks());
     public questionBankArr = computed(() => values(this._questionBanks()));
     public loading = computed(() => this._loading());
     public error = computed(() => this._error());
-    
-    // Getter for backward compatibility
+  // Keep RxJS compatibility for now
+    private _questionBanksSubject = new BehaviorSubject<Record<string, IQuestionBank>>({});
+
+  // Getter for backward compatibility
     public get questionBanksValue() {
         return this._questionBanks();
     }
-    
-    // Keep RxJS compatibility for now
-    private _questionBanksSubject = new BehaviorSubject<Record<string, IQuestionBank>>({});
     public questionBankArr$ = this._questionBanksSubject.asObservable().pipe(
         map(quizzes => values(quizzes)),
     );
@@ -42,24 +40,24 @@ export class QuestionBankService {
     async init() {
         this._loading.set(true);
         this._error.set(null);
-        
-        try {
+
+      try {
             // First, try to load from API
             const response = await firstValueFrom(this.api.list());
             const banks: Record<string, IQuestionBank> = {};
-            
-            response.questionBanks.forEach(bank => {
+
+        response.questionBanks.forEach(bank => {
                 banks[bank.id] = bank;
             });
-            
-            this._questionBanks.set(banks);
-            
-            // Check if there's local data to migrate
+
+        this._questionBanks.set(banks);
+
+        // Check if there's local data to migrate
             const localData = await localForage.getItem("questionBanks");
             if (localData) {
                 const localBanks = JSON.parse(localData as string) as Record<string, IQuestionBank>;
-                
-                // Migrate each local question bank to the database
+
+              // Migrate each local question bank to the database
                 for (const bank of Object.values(localBanks)) {
                     if (!banks[bank.id]) {
                         try {
@@ -69,25 +67,25 @@ export class QuestionBankService {
                         }
                     }
                 }
-                
-                // Clear local storage after successful migration
+
+              // Clear local storage after successful migration
                 await localForage.removeItem("questionBanks");
-                
-                // Reload from API to get migrated data
+
+              // Reload from API to get migrated data
                 const updatedResponse = await firstValueFrom(this.api.list());
                 const updatedBanks: Record<string, IQuestionBank> = {};
-                
-                updatedResponse.questionBanks.forEach(bank => {
+
+              updatedResponse.questionBanks.forEach(bank => {
                     updatedBanks[bank.id] = bank;
                 });
-                
-                this._questionBanks.set(updatedBanks);
+
+              this._questionBanks.set(updatedBanks);
             }
         } catch (error) {
             this._error.set('Failed to load question banks');
             console.error('Failed to load question banks:', error);
-            
-            // Fallback to local storage if API fails
+
+        // Fallback to local storage if API fails
             const localData = await localForage.getItem("questionBanks");
             this._questionBanks.set(JSON.parse(localData as string) || {});
         } finally {
@@ -98,17 +96,17 @@ export class QuestionBankService {
     async create(): Promise<string> {
         this._loading.set(true);
         this._error.set(null);
-        
-        try {
+
+      try {
             const response = await firstValueFrom(this.api.create());
             const questionBank = response.questionBank;
-            
-            this._questionBanks.update(current => ({
+
+        this._questionBanks.update(current => ({
                 ...current,
                 [questionBank.id]: questionBank
             }));
-            
-            return questionBank.id;
+
+        return questionBank.id;
         } catch (error) {
             this._error.set('Failed to create question bank');
             console.error('Failed to create question bank:', error);
@@ -121,11 +119,11 @@ export class QuestionBankService {
     async updateQuestionBank(id: string, name: string): Promise<void> {
         this._loading.set(true);
         this._error.set(null);
-        
-        try {
+
+      try {
             await firstValueFrom(this.api.update({ id, name }));
-            
-            this._questionBanks.update(current => ({
+
+        this._questionBanks.update(current => ({
                 ...current,
                 [id]: { ...current[id], name }
             }));
@@ -141,12 +139,12 @@ export class QuestionBankService {
     async insertQuestionBank(questionBank: IQuestionBank): Promise<void> {
         this._loading.set(true);
         this._error.set(null);
-        
-        try {
+
+      try {
             const response = await firstValueFrom(this.api.insert(questionBank));
             const insertedBank = response.questionBank;
-            
-            this._questionBanks.update(current => ({
+
+        this._questionBanks.update(current => ({
                 ...current,
                 [insertedBank.id]: insertedBank
             }));
@@ -162,18 +160,18 @@ export class QuestionBankService {
     async addQuestion(questionBankId: string, question: IQuestionCreate | IQuestionCreate[]): Promise<void> {
         this._loading.set(true);
         this._error.set(null);
-        
-        try {
+
+      try {
             await firstValueFrom(this.api.addQuestion({
                 questionBankId,
                 questions: question
             }));
-            
-            // Reload the question bank to get updated data
+
+        // Reload the question bank to get updated data
             const response = await firstValueFrom(this.api.get(questionBankId));
             const updatedBank = response.questionBank;
-            
-            this._questionBanks.update(current => ({
+
+        this._questionBanks.update(current => ({
                 ...current,
                 [questionBankId]: updatedBank
             }));
@@ -201,18 +199,18 @@ export class QuestionBankService {
                 console.error('Failed to fetch question bank:', error);
             }
         });
-        
-        return this._questionBanksSubject.pipe(map(banks => banks[id]));
+
+      return this._questionBanksSubject.pipe(map(banks => banks[id]));
     }
 
     async delete(id: string): Promise<void> {
         this._loading.set(true);
         this._error.set(null);
-        
-        try {
+
+      try {
             await firstValueFrom(this.api.delete({ id }));
-            
-            this._questionBanks.update(current => omit(current, id));
+
+        this._questionBanks.update(current => omit(current, id));
         } catch (error) {
             this._error.set('Failed to delete question bank');
             console.error('Failed to delete question bank:', error);
@@ -225,15 +223,15 @@ export class QuestionBankService {
     async setCorrectAnswer(questionBankId: string, questionId: string, correctAnswerId: string): Promise<void> {
         this._loading.set(true);
         this._error.set(null);
-        
-        try {
+
+      try {
             await firstValueFrom(this.api.setCorrectAnswer({
                 questionBankId,
                 questionId,
                 correctAnswerId
             }));
-            
-            // Update local state optimistically
+
+        // Update local state optimistically
             this._questionBanks.update(current => ({
                 ...current,
                 [questionBankId]: {
@@ -265,14 +263,14 @@ export class QuestionBankService {
     async deleteQuestion(questionBankId: string, questionId: string): Promise<void> {
         this._loading.set(true);
         this._error.set(null);
-        
-        try {
+
+      try {
             await firstValueFrom(this.api.deleteQuestion({
                 questionBankId,
                 questionId
             }));
-            
-            // Update local state optimistically
+
+        // Update local state optimistically
             this._questionBanks.update(current => ({
                 ...current,
                 [questionBankId]: {
