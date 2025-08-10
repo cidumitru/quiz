@@ -18,7 +18,7 @@ export class EmailService {
   async sendOtpEmail(email: string, code: string): Promise<void> {
     try {
       const { error } = await this.resend.emails.send({
-        from: this.configService.get<string>('EMAIL_FROM') || 'onboarding@resend.dev',
+        from: this.configService.get<string>('EMAIL_FROM') || 'AQB <onboarding@resend.dev>',
         to: email,
         subject: 'Your AQB Verification Code',
         html: `

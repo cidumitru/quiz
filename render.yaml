@@ -24,7 +24,7 @@ services:
       - key: RESEND_API_KEY
         sync: false
       - key: EMAIL_FROM
-        sync: false
+        value: AQB <onboarding@resend.dev>
 
 databases:
   - name: aqb-postgres
