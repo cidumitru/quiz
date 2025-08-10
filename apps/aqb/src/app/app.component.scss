@@ -21,22 +21,25 @@
   flex-shrink: 0;
   z-index: 100;
   
-  // App FAB at top
+  // App Logo at top
   .nav-header {
-    margin-bottom: 16px;
+    margin-bottom: 24px;
     
-    .app-fab {
-      width: 56px !important;
-      height: 56px !important;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12) !important;
+    .app-logo-link {
+      display: block;
+      width: 56px;
+      height: 56px;
+      cursor: pointer;
+      transition: transform 200ms ease;
       
-      mat-icon {
-        font-size: 24px;
+      &:hover {
+        transform: scale(1.05);
       }
       
-      .app-fab-logo {
-        width: 32px;
-        height: 32px;
+      .app-logo {
+        width: 100%;
+        height: 100%;
+        display: block;
         
         &.logo-dark {
           display: none;
@@ -242,8 +245,8 @@
       }
       
       .mobile-logo {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
         
         &.logo-dark {
           display: none;
@@ -367,8 +370,8 @@
 @media (prefers-color-scheme: dark) {
   .navigation-rail {
     .nav-header {
-      .app-fab {
-        .app-fab-logo {
+      .app-logo-link {
+        .app-logo {
           &.logo-light {
             display: none;
           }

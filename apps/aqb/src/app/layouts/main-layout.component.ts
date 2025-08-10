@@ -34,12 +34,12 @@ import {CommonModule} from "@angular/common";
     <!-- Material 3 Navigation Rail (Desktop) -->
     @if (!mobileQuery.matches) {
         <nav class="navigation-rail">
-            <!-- App FAB -->
+            <!-- App Logo -->
             <div class="nav-header">
-                <button mat-fab class="app-fab" routerLink="/" matTooltip="AQB Home" matTooltipPosition="right">
-                    <img src="/logo-light.svg" alt="AQB Logo" class="app-fab-logo logo-light">
-                    <img src="/logo-dark.svg" alt="AQB Logo" class="app-fab-logo logo-dark">
-                </button>
+                <a routerLink="/" class="app-logo-link" matTooltip="AQB Home" matTooltipPosition="right">
+                    <img src="/logo-light.svg" alt="AQB Logo" class="app-logo logo-light">
+                    <img src="/logo-dark.svg" alt="AQB Logo" class="app-logo logo-dark">
+                </a>
             </div>
             
             <!-- Navigation Items -->

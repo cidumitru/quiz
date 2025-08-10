@@ -1,49 +1,71 @@
-name: CI / CD for Angular
+name: Deploy to GitHub Pages
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up node.js
-        uses: actions/setup-node@v3.3.0
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build:prod
+      - name: Build AQB application
+        run: npx nx build aqb --configuration=production
         
       - name: Replace build number
-        uses: actions/github-script@v5
+        uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            const filePath = './dist/assets/app-config.json';
+            const path = require('path');
+            const distPath = './dist/apps/aqb/browser';
+            const configPath = path.join(distPath, 'assets', 'app-config.json');
 
             console.log('Updating build date...');
-            fs.readFile(filePath, 'utf8', function (err, data) {
-                if (err) return console.log(err);
+            
+            // Check if the config file exists
+            if (fs.existsSync(configPath)) {
+              fs.readFile(configPath, 'utf8', function (err, data) {
+                  if (err) {
+                    console.log('Config file not found, skipping build date update');
+                    return;
+                  }
 
-                const result = data.replace("$BUILD_DATE$", new Date().toISOString());
+                  const result = data.replace("$BUILD_DATE$", new Date().toISOString());
 
-                fs.writeFile(filePath, result, 'utf8', function (err) {
-                    if (err) return console.log(err);
-                });
-            });
+                  fs.writeFile(configPath, result, 'utf8', function (err) {
+                      if (err) return console.log(err);
+                      console.log('Build date updated successfully');
+                  });
+              });
+            } else {
+              console.log('Config file not found at:', configPath);
+            }
 
       - name: Deploy to GitHub Pages
-        uses: crazy-max/ghaction-github-pages@v3
+        uses: crazy-max/ghaction-github-pages@v4
         with:
           target_branch: gh-pages
-          build_dir: dist
+          build_dir: dist/apps/aqb/browser
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
