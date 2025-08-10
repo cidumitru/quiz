@@ -1,7 +1,8 @@
 services:
   - type: web
     name: aqb-api
-    env: node
+    runtime: node
+    plan: free
     buildCommand: npm install && npm run api:build
     startCommand: npm run api:start
     healthCheckPath: /api/health
@@ -33,3 +34,4 @@ databases:
   - name: aqb-postgres
     databaseName: aqb_production
     user: aqb_user
+    plan: free
