@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
   IQuestionBankCreateRequest,
@@ -22,50 +23,54 @@ import {
   providedIn: 'root'
 })
 export class QuestionBankApiService {
+  private readonly http = inject(HttpClient);
   private readonly baseUrl = '/api/question-banks';
 
   create(request?: IQuestionBankCreateRequest): Observable<IQuestionBankCreateResponse> {
-    // TODO: Replace with actual HTTP call
-    throw new Error('Method not implemented - replace with HTTP client call to POST ' + this.baseUrl);
+    return this.http.post<IQuestionBankCreateResponse>(this.baseUrl, request || {});
   }
 
   update(request: IQuestionBankUpdateRequest): Observable<IQuestionBankUpdateResponse> {
-    // TODO: Replace with actual HTTP call
-    throw new Error(`Method not implemented - replace with HTTP client call to PUT ${this.baseUrl}/${request.id}`);
+    const { id, ...body } = request;
+    return this.http.put<IQuestionBankUpdateResponse>(`${this.baseUrl}/${id}`, body);
   }
 
   list(): Observable<IQuestionBankListResponse> {
-    // TODO: Replace with actual HTTP call
-    throw new Error('Method not implemented - replace with HTTP client call to GET ' + this.baseUrl);
+    return this.http.get<IQuestionBankListResponse>(this.baseUrl);
   }
 
   get(id: string): Observable<IQuestionBankGetResponse> {
-    // TODO: Replace with actual HTTP call
-    throw new Error(`Method not implemented - replace with HTTP client call to GET ${this.baseUrl}/${id}`);
+    return this.http.get<IQuestionBankGetResponse>(`${this.baseUrl}/${id}`);
   }
 
   delete(request: IQuestionBankDeleteRequest): Observable<IQuestionBankDeleteResponse> {
-    // TODO: Replace with actual HTTP call
-    throw new Error(`Method not implemented - replace with HTTP client call to DELETE ${this.baseUrl}/${request.id}`);
+    return this.http.delete<IQuestionBankDeleteResponse>(`${this.baseUrl}/${request.id}`);
   }
 
   insert(questionBank: IQuestionBank): Observable<IQuestionBankCreateResponse> {
-    // TODO: Replace with actual HTTP call
-    throw new Error('Method not implemented - replace with HTTP client call to POST ' + this.baseUrl + '/import');
+    return this.http.post<IQuestionBankCreateResponse>(`${this.baseUrl}/import`, questionBank);
   }
 
   addQuestion(request: IQuestionAddRequest): Observable<IQuestionAddResponse> {
-    // TODO: Replace with actual HTTP call
-    throw new Error(`Method not implemented - replace with HTTP client call to POST ${this.baseUrl}/${request.questionBankId}/questions`);
+    const { questionBankId, questions } = request;
+    return this.http.post<IQuestionAddResponse>(
+      `${this.baseUrl}/${questionBankId}/questions`,
+      { questions }
+    );
   }
 
   deleteQuestion(request: IQuestionDeleteRequest): Observable<IQuestionDeleteResponse> {
-    // TODO: Replace with actual HTTP call
-    throw new Error(`Method not implemented - replace with HTTP client call to DELETE ${this.baseUrl}/${request.questionBankId}/questions/${request.questionId}`);
+    const { questionBankId, questionId } = request;
+    return this.http.delete<IQuestionDeleteResponse>(
+      `${this.baseUrl}/${questionBankId}/questions/${questionId}`
+    );
   }
 
   setCorrectAnswer(request: IAnswerSetCorrectRequest): Observable<IAnswerSetCorrectResponse> {
-    // TODO: Replace with actual HTTP call
-    throw new Error(`Method not implemented - replace with HTTP client call to PUT ${this.baseUrl}/${request.questionBankId}/questions/${request.questionId}/correct-answer`);
+    const { questionBankId, questionId, correctAnswerId } = request;
+    return this.http.put<IAnswerSetCorrectResponse>(
+      `${this.baseUrl}/${questionBankId}/questions/${questionId}/correct-answer`,
+      { correctAnswerId }
+    );
   }
 }

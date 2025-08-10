@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ApiBaseInterceptor implements HttpInterceptor {
-  private readonly apiBaseUrl = 'https://aqb-api.onrender.com';
+  // private readonly apiBaseUrl = 'https://aqb-api.onrender.com';
+  private readonly apiBaseUrl = 'http://localhost:3000';
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
     // Only intercept requests that start with /api
@@ -14,7 +15,7 @@ export class ApiBaseInterceptor implements HttpInterceptor {
       });
       return next.handle(modifiedRequest);
     }
-    
+
     return next.handle(request);
   }
 }

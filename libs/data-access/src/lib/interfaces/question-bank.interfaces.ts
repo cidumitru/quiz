@@ -40,10 +40,7 @@ export interface IQuestionBankCreateRequest {
 }
 
 export interface IQuestionBankCreateResponse {
-    id: string;
-    name: string;
-    createdAt: string;
-    questions: IQuestion[];
+    questionBank: IQuestionBank;
 }
 
 export interface IQuestionBankUpdateRequest {

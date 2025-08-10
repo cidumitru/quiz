@@ -9,7 +9,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { HealthController } from './health/health.controller';
-import { User, OtpCode } from './entities';
+import { User, OtpCode, QuestionBank, Question, Answer } from './entities';
+import { QuestionBankModule } from './question-bank/question-bank.module';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { User, OtpCode } from './entities';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get('DATABASE_URL'),
-        entities: [User, OtpCode],
+        entities: [User, OtpCode, QuestionBank, Question, Answer],
         synchronize: true, // Enable for production setup - consider using migrations later
         migrations: [],
         migrationsRun: false,
@@ -38,6 +39,7 @@ import { User, OtpCode } from './entities';
     }),
     AuthModule,
     UserModule,
+    QuestionBankModule,
   ],
   controllers: [AppController, HealthController],
   providers: [
