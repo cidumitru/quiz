@@ -37,8 +37,8 @@ import {CommonModule} from "@angular/common";
             <!-- App Logo -->
             <div class="nav-header">
                 <a routerLink="/" class="app-logo-link" matTooltip="AQB Home" matTooltipPosition="right">
-                    <img src="/logo-light.svg" alt="AQB Logo" class="app-logo logo-light">
-                    <img src="/logo-dark.svg" alt="AQB Logo" class="app-logo logo-dark">
+                    <img src="logo-light.svg" alt="AQB Logo" class="app-logo logo-light">
+                    <img src="logo-dark.svg" alt="AQB Logo" class="app-logo logo-dark">
                 </a>
             </div>
             
@@ -125,8 +125,8 @@ import {CommonModule} from "@angular/common";
                 <mat-sidenav #mobileDrawer mode="over" class="mobile-drawer">
                     <div class="mobile-nav-header">
                         <div class="mobile-app-logo">
-                            <img src="/logo-light.svg" alt="AQB Logo" class="mobile-logo logo-light">
-                            <img src="/logo-dark.svg" alt="AQB Logo" class="mobile-logo logo-dark">
+                            <img src="logo-light.svg" alt="AQB Logo" class="mobile-logo logo-light">
+                            <img src="logo-dark.svg" alt="AQB Logo" class="mobile-logo logo-dark">
                         </div>
                         <h2>AQB</h2>
                         <p>Aly's Question Bank</p>
