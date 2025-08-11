@@ -1,5 +1,6 @@
 import {inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
+import {firstValueFrom} from "rxjs";
 
 export interface IAppConfig {
     build_date: string;
@@ -13,17 +14,16 @@ export class AppConfig {
 
     private _config!: IAppConfig;
 
-    get config() {
-        return this._config;
+  get build_date() {
+    return this._config.build_date ?? 'unknown';
     }
 
-    init(): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-          this._config = {
-            ...this._config,
-            build_date: new Date().toISOString()
-          }
-          resolve()
-        });
+  async init(): Promise<void> {
+    try {
+      this._config = await firstValueFrom(this.httpClient.get<IAppConfig>('./public/app-config.json'));
+    } catch (error) {
+      console.error('App config load failed:', error);
+      throw error;
+    }
     }
 }

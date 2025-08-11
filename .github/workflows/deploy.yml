@@ -39,7 +39,7 @@ jobs:
             const fs = require('fs');
             const path = require('path');
             const distPath = './dist/apps/aqb/browser';
-            const configPath = path.join(distPath, 'assets', 'app-config.json');
+            const configPath = path.join(distPath, 'public', 'app-config.json');
 
             console.log('Updating build date...');
 

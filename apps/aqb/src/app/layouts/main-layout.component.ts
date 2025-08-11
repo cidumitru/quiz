@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, inject, OnDestroy, signal} from '@angular/core';
 import {AppConfig} from "../core/services/app-config.service";
 import {MediaMatcher} from "@angular/cdk/layout";
-import {RouterOutlet, RouterLink, RouterLinkActive, Router} from "@angular/router";
+import {Router, RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
@@ -41,51 +41,51 @@ import {CommonModule} from "@angular/common";
                     <img src="logo-dark.svg" alt="AQB Logo" class="app-logo logo-dark">
                 </a>
             </div>
-            
+
             <!-- Navigation Items -->
             <div class="nav-items">
-                <button class="nav-item" 
-                        routerLink="/" 
-                        routerLinkActive="active" 
+              <button class="nav-item"
+                      routerLink="/"
+                      routerLinkActive="active"
                         [routerLinkActiveOptions]="{exact: true}">
                     <mat-icon>quiz</mat-icon>
                     <span class="nav-label">Banks</span>
                 </button>
-                
-                <button class="nav-item" 
-                        routerLink="/quizzes" 
+
+              <button class="nav-item"
+                      routerLink="/quizzes"
                         routerLinkActive="active">
                     <mat-icon>assignment</mat-icon>
                     <span class="nav-label">Quizzes</span>
                 </button>
-                
-                <button class="nav-item" 
-                        routerLink="/statistics" 
+
+              <button class="nav-item"
+                      routerLink="/statistics"
                         routerLinkActive="active">
                     <mat-icon>analytics</mat-icon>
                     <span class="nav-label">Stats</span>
                 </button>
             </div>
-            
+
             <!-- Bottom Actions -->
             <div class="nav-bottom">
                 @if (authService.isLoggedIn$ | async) {
-                    <button class="nav-item secondary-action" 
+                  <button class="nav-item secondary-action"
                             (click)="onLogout()"
                             matTooltip="Logout"
                             matTooltipPosition="right">
                         <mat-icon>logout</mat-icon>
                     </button>
                 }
-                
-                <button class="nav-item theme-toggle secondary-action" 
+
+              <button class="nav-item theme-toggle secondary-action"
                         (click)="themeService.toggleTheme()"
                         [matTooltip]="themeService.getThemeLabel()"
                         matTooltipPosition="right">
                     <mat-icon>{{themeService.getThemeIcon()}}</mat-icon>
                 </button>
-                
-                <button class="nav-item secondary-action" 
+
+              <button class="nav-item secondary-action"
                         (click)="openGitHub()"
                         matTooltip="GitHub"
                         matTooltipPosition="right">
@@ -93,14 +93,14 @@ import {CommonModule} from "@angular/common";
                 </button>
             </div>
         </nav>
-        
-        <!-- Desktop Main Content -->
+
+      <!-- Desktop Main Content -->
         <main class="main-content">
             <div class="content-container">
                 <router-outlet></router-outlet>
             </div>
             <footer class="build-info">
-                <small>Build: {{appConfig.config.build_date}}</small>
+              <small>Build: {{ appConfig.build_date }}</small>
             </footer>
         </main>
     }
@@ -119,8 +119,8 @@ import {CommonModule} from "@angular/common";
                     <mat-icon>{{themeService.getThemeIcon()}}</mat-icon>
                 </button>
             </mat-toolbar>
-            
-            <!-- Mobile Navigation Drawer -->
+
+          <!-- Mobile Navigation Drawer -->
             <mat-sidenav-container class="mobile-container">
                 <mat-sidenav #mobileDrawer mode="over" class="mobile-drawer">
                     <div class="mobile-nav-header">
@@ -131,10 +131,10 @@ import {CommonModule} from "@angular/common";
                         <h2>AQB</h2>
                         <p>Aly's Question Bank</p>
                     </div>
-                    
-                    <mat-divider></mat-divider>
-                    
-                    <mat-nav-list class="mobile-nav-list">
+
+                  <mat-divider></mat-divider>
+
+                  <mat-nav-list class="mobile-nav-list">
                         <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="mobileDrawer.close()">
                             <mat-icon matListItemIcon>quiz</mat-icon>
                             <span matListItemTitle>Question Banks</span>
@@ -164,15 +164,15 @@ import {CommonModule} from "@angular/common";
                         </a>
                     </mat-nav-list>
                 </mat-sidenav>
-                
-                <mat-sidenav-content>
+
+              <mat-sidenav-content>
                     <!-- Mobile Content -->
                     <main class="mobile-content">
                         <div class="content-container">
                             <router-outlet></router-outlet>
                         </div>
                         <footer class="build-info">
-                            <small>Build: {{appConfig.config.build_date}}</small>
+                          <small>Build: {{ appConfig.build_date }}</small>
                         </footer>
                     </main>
                 </mat-sidenav-content>
@@ -204,8 +204,8 @@ export class MainLayoutComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.mobileQuery.removeListener(this._mobileQueryListener);
     }
-    
-    openGitHub() {
+
+  openGitHub() {
         window.open('https://github.com/cidumitru/quiz', '_blank');
     }
 
