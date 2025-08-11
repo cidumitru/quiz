@@ -65,7 +65,7 @@ export class QuestionViewModel {
 
     return {
       'selected': isSelected,
-      'correct-answer': !!(isAnswered && answer?.isCorrect && isSelected),
+      'correct-answer': !!(isAnswered && answer?.isCorrect),
       'user-incorrect': isSelected && !answer?.isCorrect && isAnswered,
       'disabled': isAnswered
     };

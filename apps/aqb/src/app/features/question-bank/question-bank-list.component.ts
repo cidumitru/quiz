@@ -84,7 +84,7 @@ export class QuestionBankListComponent implements OnInit {
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    this.questionBank.init();
+    this.questionBank.reload();
   }
 
   newQuestionBank(): void {

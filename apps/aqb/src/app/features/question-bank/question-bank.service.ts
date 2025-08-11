@@ -28,11 +28,7 @@ export class QuestionBankService {
     return this.api.get(id).pipe(map(r => r.questionBank))
   }
 
-  async init() {
-    // TODO: Reconsider
-    if (this.questionBankArr().length > 0 && !this.loading()) {
-      return;
-    }
+  async reload() {
     this._loading.set(true);
     this._error.set(null);
 
@@ -48,10 +44,6 @@ export class QuestionBankService {
     } catch (error) {
       this._error.set('Failed to load question banks');
       console.error('Failed to load question banks:', error);
-
-      // Fallback to local storage if API fails
-      //     const localData = await localForage.getItem("questionBanks");
-      //     this._questionBanks.set(JSON.parse(localData as string) || {});
     } finally {
       this._loading.set(false);
     }
