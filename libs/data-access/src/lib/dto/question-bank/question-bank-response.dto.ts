@@ -23,9 +23,9 @@ export const questionBankScheme = z.object({
   questions: z.array(questionScheme)
 });
 
-export type IAnswer = z.infer<typeof answerScheme>;
-export type IQuestion = z.infer<typeof questionScheme>;
-export type IQuestionBank = z.infer<typeof questionBankScheme>;
+export type ParsedAnswer = z.infer<typeof answerScheme>;
+export type ParsedQuestion = z.infer<typeof questionScheme>;
+export type ParsedQuestionBank = z.infer<typeof questionBankScheme>;
 
 export enum QuestionType {
   MultipleChoice = "MultipleChoice"
@@ -34,7 +34,7 @@ export enum QuestionType {
 // Request/Response DTOs for API endpoints
 export interface IQuestionCreate {
   question: string;
-  answers: Pick<IAnswer, 'text' | 'correct'>[];
+  answers: Pick<ParsedAnswer, 'text' | 'correct'>[];
 }
 
 export interface QuestionCountResult {

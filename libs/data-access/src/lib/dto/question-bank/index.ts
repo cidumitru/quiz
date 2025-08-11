@@ -30,9 +30,9 @@ export {
 } from './question-bank-response.dto';
 
 export type {
-  IAnswer,
-  IQuestion,
-  IQuestionBank,
+  ParsedAnswer,
+  ParsedQuestion,
+  ParsedQuestionBank,
   IQuestionCreate,
   // API Response interfaces
   QuestionCountResult,
