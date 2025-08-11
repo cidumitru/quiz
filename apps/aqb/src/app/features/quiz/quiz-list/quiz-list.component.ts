@@ -12,11 +12,6 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {toSignal} from "@angular/core/rxjs-interop";
 import {map} from "rxjs/operators";
 
-interface QuestionBankSelectOption {
-  id: string;
-  name: string;
-}
-
 
 @Component({
   selector: 'app-quiz-list',
@@ -37,7 +32,10 @@ interface QuestionBankSelectOption {
 })
 export class QuizListComponent {
   private quiz = inject(QuizService);
-  public quizList = toSignal(this.quiz.quizzes$.pipe(map(quizzes => quizzes.map(q => new QuizListItemViewModel(q)))))
+  public quizList = toSignal(this.quiz.quizzes$.pipe(map(quizzes => quizzes.map(q => new QuizListItemViewModel(q)))), {
+    initialValue: []
+  });
+  public quizLoading = toSignal(this.quiz.loading$, {initialValue: false});
 
   constructor() {
     this.quiz.reload();

@@ -9,7 +9,51 @@
     </div>
 
     <div class="quiz-timeline">
-      @if (quizList().length === 0) {
+      @if (quizLoading()) {
+        <!-- Skeleton loading cards -->
+        @for (i of [1, 2, 3, 4, 5]; track i) {
+          <mat-card class="quiz-card skeleton-card">
+            <mat-card-header>
+              <div class="quiz-header-content">
+                <div class="quiz-title-section">
+                  <mat-card-title class="quiz-bank-name">
+                    <div class="skeleton-text skeleton-title"></div>
+                  </mat-card-title>
+                  <mat-card-subtitle class="quiz-date">
+                    <div class="skeleton-text skeleton-subtitle"></div>
+                  </mat-card-subtitle>
+                </div>
+                <div class="quiz-status">
+                  <div class="skeleton-text skeleton-status"></div>
+                </div>
+              </div>
+            </mat-card-header>
+
+            <mat-card-content>
+              <div class="quiz-stats">
+                <div class="stat-item">
+                  <div class="skeleton-text skeleton-stat-value"></div>
+                  <div class="skeleton-text skeleton-stat-label"></div>
+                </div>
+                <div class="stat-separator">•</div>
+                <div class="stat-item">
+                  <div class="skeleton-text skeleton-stat-value"></div>
+                  <div class="skeleton-text skeleton-stat-label"></div>
+                </div>
+                <div class="stat-separator">•</div>
+                <div class="stat-item">
+                  <div class="skeleton-text skeleton-stat-value"></div>
+                  <div class="skeleton-text skeleton-stat-label"></div>
+                </div>
+              </div>
+            </mat-card-content>
+
+            <mat-card-actions>
+              <div class="skeleton-button skeleton-primary-button"></div>
+            </mat-card-actions>
+          </mat-card>
+        }
+      } @else if (quizList().length === 0) {
             <div class="no-data-card">
                 <mat-card>
                     <mat-card-content>

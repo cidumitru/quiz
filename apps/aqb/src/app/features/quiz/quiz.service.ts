@@ -17,6 +17,7 @@ export class QuizService {
 
   private _quizzes = new BehaviorSubject<Record<string, QuizListItem>>({});
   public quizzes$ = this._quizzes.asObservable().pipe(map(quizMap => values(quizMap)));
+  public loading$ = this._loading.asObservable();
   public get quizzes() {
     return this._quizzes.getValue();
   }
