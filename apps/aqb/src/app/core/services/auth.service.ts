@@ -1,13 +1,8 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
-import { 
-  AuthApiService, 
-  IAuthRequestOtpRequest,
-  IAuthVerifyOtpRequest,
-  IAuthVerifyOtpResponse,
-  IUserProfileResponse
-} from '@aqb/data-access';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {AuthApiService} from '@aqb/data-access/angular';
+import {RequestOtpRequest, UserProfileResponse, VerifyOtpRequest, VerifyOtpResponse} from '@aqb/data-access';
 
 export interface User {
   id: string;
@@ -21,7 +16,7 @@ export interface User {
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
-  
+
   public currentUser$ = this.currentUserSubject.asObservable();
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
@@ -29,18 +24,8 @@ export class AuthService {
     this.initializeAuth();
   }
 
-  private initializeAuth(): void {
-    const token = this.getToken();
-    const user = this.getStoredUser();
-    
-    if (token && user) {
-      this.currentUserSubject.next(user);
-      this.isLoggedInSubject.next(true);
-    }
-  }
-
   requestOtp(email: string): Observable<{ message: string }> {
-    const request: IAuthRequestOtpRequest = { email };
+    const request: RequestOtpRequest = {email};
     return this.authApiService.requestOtp(request).pipe(
       catchError(error => {
         console.error('Request OTP failed:', error);
@@ -49,8 +34,8 @@ export class AuthService {
     );
   }
 
-  verifyOtp(email: string, code: string): Observable<IAuthVerifyOtpResponse> {
-    const request: IAuthVerifyOtpRequest = { email, code };
+  verifyOtp(email: string, code: string): Observable<VerifyOtpResponse> {
+    const request: VerifyOtpRequest = {email, code};
     return this.authApiService.verifyOtp(request).pipe(
       tap(response => {
         this.setAuthData(response);
@@ -62,7 +47,7 @@ export class AuthService {
     );
   }
 
-  refreshToken(): Observable<IAuthVerifyOtpResponse> {
+  refreshToken(): Observable<VerifyOtpResponse> {
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
       return throwError(() => new Error('No refresh token available'));
@@ -80,7 +65,7 @@ export class AuthService {
     );
   }
 
-  getUserProfile(): Observable<IUserProfileResponse> {
+  getUserProfile(): Observable<UserProfileResponse> {
     return this.authApiService.getUserProfile().pipe(
       catchError(error => {
         console.error('Get user profile failed:', error);
@@ -90,6 +75,16 @@ export class AuthService {
         return throwError(() => error);
       })
     );
+  }
+
+  private initializeAuth(): void {
+    const token = this.getToken();
+    const user = this.getStoredUser();
+
+    if (token && user) {
+      this.currentUserSubject.next(user);
+      this.isLoggedInSubject.next(true);
+    }
   }
 
   logout(): void {
@@ -125,11 +120,11 @@ export class AuthService {
     return !!token && !this.isTokenExpired(token);
   }
 
-  private setAuthData(response: IAuthVerifyOtpResponse): void {
+  private setAuthData(response: VerifyOtpResponse): void {
     localStorage.setItem('accessToken', response.accessToken);
     localStorage.setItem('refreshToken', response.refreshToken);
     localStorage.setItem('user', JSON.stringify(response.user));
-    
+
     this.currentUserSubject.next(response.user);
     this.isLoggedInSubject.next(true);
   }

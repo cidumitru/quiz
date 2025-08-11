@@ -8,51 +8,44 @@
                     <mat-icon>quiz</mat-icon>
                 </button>
             </div>
-            
+
             <!-- Navigation Items -->
             <div class="nav-items">
-                <button class="nav-item" 
-                        routerLink="/" 
-                        routerLinkActive="active" 
+              <button class="nav-item"
+                      routerLink="/"
+                      routerLinkActive="active"
                         [routerLinkActiveOptions]="{exact: true}">
                     <mat-icon>quiz</mat-icon>
                     <span class="nav-label">Banks</span>
                 </button>
-                
-                <button class="nav-item" 
-                        routerLink="/quizzes" 
+
+              <button class="nav-item"
+                      routerLink="/quizzes"
                         routerLinkActive="active">
                     <mat-icon>assignment</mat-icon>
                     <span class="nav-label">Quizzes</span>
                 </button>
-                
-                <button class="nav-item" 
-                        routerLink="/statistics" 
-                        routerLinkActive="active">
-                    <mat-icon>analytics</mat-icon>
-                    <span class="nav-label">Stats</span>
-                </button>
             </div>
-            
+
             <!-- Bottom Actions -->
             <div class="nav-bottom">
                 @if (authService.isLoggedIn$ | async) {
-                    <button class="nav-item secondary-action" 
+                  <button class="nav-item secondary-action"
                             (click)="onLogout()"
                             matTooltip="Logout"
                             matTooltipPosition="right">
                         <mat-icon>logout</mat-icon>
                     </button>
                 }
-                
-                <button class="nav-item theme-toggle secondary-action" 
+
+              <button class="nav-item theme-toggle secondary-action"
                         (click)="themeService.toggleTheme()"
                         [matTooltip]="themeService.getThemeLabel()"
                         matTooltipPosition="right">
                     <mat-icon>{{themeService.getThemeIcon()}}</mat-icon>
                 </button>
-                
-                <button class="nav-item secondary-action" 
+
+              <button class="nav-item secondary-action"
                         (click)="openGitHub()"
                         matTooltip="GitHub"
                         matTooltipPosition="right">
@@ -60,8 +53,8 @@
                 </button>
             </div>
         </nav>
-        
-        <!-- Desktop Main Content -->
+
+      <!-- Desktop Main Content -->
         <main class="main-content">
             <div class="content-container">
                 <router-outlet></router-outlet>
@@ -86,8 +79,8 @@
                     <mat-icon>{{themeService.getThemeIcon()}}</mat-icon>
                 </button>
             </mat-toolbar>
-            
-            <!-- Mobile Navigation Drawer -->
+
+          <!-- Mobile Navigation Drawer -->
             <mat-sidenav-container class="mobile-container">
                 <mat-sidenav #mobileDrawer mode="over" class="mobile-drawer">
                     <div class="mobile-nav-header">
@@ -97,10 +90,10 @@
                         <h2>AQB</h2>
                         <p>Question Bank</p>
                     </div>
-                    
-                    <mat-divider></mat-divider>
-                    
-                    <mat-nav-list class="mobile-nav-list">
+
+                  <mat-divider></mat-divider>
+
+                  <mat-nav-list class="mobile-nav-list">
                         <a mat-list-item routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="mobileDrawer.close()">
                             <mat-icon matListItemIcon>quiz</mat-icon>
                             <span matListItemTitle>Question Banks</span>
@@ -108,10 +101,6 @@
                         <a mat-list-item routerLink="/quizzes" routerLinkActive="active" (click)="mobileDrawer.close()">
                             <mat-icon matListItemIcon>assignment</mat-icon>
                             <span matListItemTitle>Quizzes</span>
-                        </a>
-                        <a mat-list-item routerLink="/statistics" routerLinkActive="active" (click)="mobileDrawer.close()">
-                            <mat-icon matListItemIcon>analytics</mat-icon>
-                            <span matListItemTitle>Statistics</span>
                         </a>
                         <mat-divider></mat-divider>
                         @if (authService.isLoggedIn$ | async) {
@@ -130,8 +119,8 @@
                         </a>
                     </mat-nav-list>
                 </mat-sidenav>
-                
-                <mat-sidenav-content>
+
+              <mat-sidenav-content>
                     <!-- Mobile Content -->
                     <main class="mobile-content">
                         <div class="content-container">

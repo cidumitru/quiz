@@ -1,82 +1,288 @@
-# Aqb
+# AQB - Adaptive Question Bank
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+A modern quiz and question bank management application built with Angular and NestJS, designed for creating, managing, and practicing with custom question banks.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+## 🚀 Features
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+- **Question Bank Management**: Create and manage collections of questions with multiple-choice answers
+- **Quiz Practice Mode**: Interactive quiz interface with instant feedback
+- **Import/Export**: Bulk import questions and export question banks
+- **User Authentication**: Secure JWT-based authentication with email verification
+- **Statistics Tracking**: Track quiz performance and view detailed statistics
+- **Dark/Light Theme**: Toggle between dark and light modes for comfortable viewing
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
 
-## Finish your CI setup
+## 🛠️ Tech Stack
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/YDbbMMRPgf)
+### Frontend
 
+- **Angular 20.1** - Modern web application framework
+- **Angular Material** - Material Design UI components
+- **RxJS** - Reactive programming
+- **Vite** - Fast build tool
+- **TypeScript** - Type-safe JavaScript
 
-## Run tasks
+### Backend
 
-To run the dev server for your app, use:
+- **NestJS 11** - Progressive Node.js framework
+- **TypeORM** - Object-relational mapping
+- **PostgreSQL** - Relational database
+- **JWT** - JSON Web Token authentication
+- **Bcrypt** - Password hashing
+- **Resend** - Email service
 
-```sh
-npx nx serve aqb
+### Development Tools
+
+- **Nx** - Monorepo management and build system
+- **Docker** - Containerization
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **Playwright** - E2E testing
+- **Vitest** - Unit testing
+
+## 📦 Project Structure
+
+```
+aqb/
+├── apps/
+│   ├── aqb/              # Angular frontend application
+│   │   └── src/
+│   │       ├── app/
+│   │       │   ├── core/         # Core services, guards, interceptors
+│   │       │   ├── features/     # Feature modules
+│   │       │   │   ├── auth/     # Authentication
+│   │       │   │   ├── question-bank/  # Question bank management
+│   │       │   │   ├── quiz/     # Quiz practice
+│   │       │   │   └── statistics/     # Performance statistics
+│   │       │   └── layouts/      # Layout components
+│   │       └── styles.scss       # Global styles
+│   ├── api/              # NestJS backend API
+│   │   └── src/
+│   │       └── app/
+│   │           ├── auth/         # Authentication module
+│   │           ├── dto/          # Data transfer objects
+│   │           ├── entities/     # Database entities
+│   │           ├── question-bank/  # Question bank module
+│   │           └── user/         # User module
+│   └── aqb-e2e/          # E2E tests
+├── libs/
+│   └── data-access/      # Shared data access library
+│       └── src/
+│           └── lib/
+│               ├── api-services/  # API service interfaces
+│               └── interfaces/    # Shared interfaces
+├── docker-compose.yml    # Docker configuration
+└── nx.json              # Nx workspace configuration
 ```
 
-To create a production bundle:
+## 🚀 Getting Started
 
-```sh
-npx nx build aqb
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Docker (optional, for database)
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd aqb
 ```
 
-To see all available targets to run for a project, run:
+2. Install dependencies:
 
-```sh
-npx nx show project aqb
+```bash
+npm install
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+3. Set up environment variables:
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/angular:app demo
+```bash
+cp .env.example .env
 ```
 
-To generate a new library, use:
+4. Start the PostgreSQL database:
 
-```sh
-npx nx g @nx/angular:lib mylib
+```bash
+npm run docker:db
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+5. Run database migrations (if any):
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+npm run migration:run
+```
 
+### Development
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Start both frontend and backend in development mode:
 
-## Install Nx Console
+```bash
+# Terminal 1 - Start the backend API
+npm run api:dev
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+# Terminal 2 - Start the frontend
+npm run dev
+```
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Access the applications:
 
-## Useful links
+- Frontend: http://localhost:4200
+- Backend API: http://localhost:3000
+- pgAdmin: http://localhost:5050 (if using Docker)
 
-Learn more:
+## 📝 Available Scripts
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Frontend
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- `npm run dev` - Start frontend dev server
+- `npm run build` - Build frontend for production
+- `npm run test` - Run frontend tests
+- `npm run lint` - Lint frontend code
+- `npm run e2e` - Run E2E tests
+
+### Backend
+
+- `npm run api:dev` - Start backend dev server
+- `npm run api:build` - Build backend for production
+- `npm run api:start` - Start production backend
+- `npm run start:prod` - Start production server
+
+### Docker
+
+- `npm run docker:db` - Start PostgreSQL database only
+- `npm run docker:up` - Start all services with Docker
+- `npm run docker:down` - Stop all Docker services
+- `npm run docker:logs` - View Docker logs
+- `npm run docker:rebuild` - Rebuild Docker images
+
+## 🐳 Docker Setup
+
+For a complete Docker setup including PostgreSQL and pgAdmin:
+
+```bash
+# Start all services
+npm run docker:up
+
+# View logs
+npm run docker:logs
+
+# Stop services
+npm run docker:down
+```
+
+See [README-DOCKER.md](./README-DOCKER.md) for detailed Docker instructions.
+
+## 🧪 Testing
+
+```bash
+# Run unit tests
+npm run test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run E2E tests
+npm run e2e
+```
+
+## 📊 Database Schema
+
+The application uses the following main entities:
+
+- **User** - User accounts with authentication
+- **QuestionBank** - Collections of questions
+- **Question** - Individual questions
+- **Answer** - Multiple choice answers
+- **OTPCode** - One-time password codes for email verification
+
+## 🔐 Authentication
+
+The application uses JWT-based authentication with:
+
+- Email/password registration
+- Email verification with OTP codes
+- JWT access tokens
+- Protected API routes
+
+## 🎨 Features in Detail
+
+### Question Bank Management
+
+- Create and edit question banks
+- Add multiple-choice questions
+- Set correct answers
+- Import questions in bulk
+- Export question banks
+
+### Quiz Practice
+
+- Practice with any question bank
+- Real-time answer feedback
+- Progress tracking
+- Performance statistics
+- Keyboard navigation support
+
+### Statistics
+
+- Track quiz attempts
+- View success rates
+- Analyze performance over time
+- Export statistics data
+
+## 🚢 Deployment
+
+### Production Build
+
+```bash
+# Build both frontend and backend
+npm run build
+npm run api:build
+
+# Start production server
+npm run start:prod
+```
+
+### Environment Variables
+
+Key environment variables for production:
+
+```env
+# Database
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_NAME=aqb_production
+DATABASE_USER=postgres
+DATABASE_PASSWORD=<secure-password>
+
+# JWT
+JWT_SECRET=<secure-secret>
+JWT_EXPIRES_IN=7d
+
+# Email (Resend)
+RESEND_API_KEY=<your-resend-api-key>
+EMAIL_FROM=noreply@yourdomain.com
+
+# Application
+NODE_ENV=production
+PORT=3000
+```
+
+## 📄 License
+
+MIT
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📧 Support
+
+For issues and questions, please use the GitHub issue tracker.

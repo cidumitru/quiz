@@ -1,8 +1,8 @@
 // Re-export from data-access library
 export {
     QuizMode,
-    type IAnsweredQuestion,
-    type IQuiz,
-    type ICreateQuiz,
-    type IGetQuizzesParams
+  type Quiz,
+  type QuizQuestion,
+  type CreateQuizDto,
+  type QuizListQueryDto
 } from '@aqb/data-access';

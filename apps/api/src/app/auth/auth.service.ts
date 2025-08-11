@@ -1,16 +1,17 @@
+import {BadRequestException, Injectable, UnauthorizedException,} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {MoreThan, Repository} from 'typeorm';
+import {JwtService} from '@nestjs/jwt';
+import {ConfigService} from '@nestjs/config';
+import {OtpCode, User} from '../entities';
+import {EmailService} from './email.service';
 import {
-  Injectable,
-  BadRequestException,
-  UnauthorizedException,
-  ConflictException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, MoreThan } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { User, OtpCode } from '../entities';
-import { EmailService } from './email.service';
-import { RequestOtpDto, VerifyOtpDto, AuthResponseDto } from '../dto/auth.dto';
+  RefreshTokenResponse,
+  RequestOtpDto,
+  RequestOtpResponse,
+  VerifyOtpDto,
+  VerifyOtpResponse
+} from '@aqb/data-access';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
     private emailService: EmailService,
   ) {}
 
-  async requestOtp(requestOtpDto: RequestOtpDto): Promise<{ message: string }> {
+  async requestOtp(requestOtpDto: RequestOtpDto): Promise<RequestOtpResponse> {
     const { email } = requestOtpDto;
 
     const existingOtpCount = await this.otpRepository.count({
@@ -66,7 +67,7 @@ export class AuthService {
     return { message: 'OTP sent to your email' };
   }
 
-  async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<AuthResponseDto> {
+  async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<VerifyOtpResponse> {
     const { email, code } = verifyOtpDto;
 
     const user = await this.userRepository.findOne({ where: { email } });
@@ -105,7 +106,7 @@ export class AuthService {
     };
   }
 
-  async refreshToken(refreshToken: string): Promise<AuthResponseDto> {
+  async refreshToken(refreshToken: string): Promise<RefreshTokenResponse> {
     try {
       const payload = this.jwtService.verify(refreshToken, {
         secret: this.configService.get<string>('JWT_REFRESH_SECRET'),

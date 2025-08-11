@@ -4,6 +4,8 @@ import {
   Component,
   computed,
   inject,
+  OnInit,
+  Signal,
   signal,
   ViewChild
 } from '@angular/core';
@@ -24,7 +26,6 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {QuizMode, QuizService} from "../quiz/quiz.service";
 import {MatSort, MatSortModule} from "@angular/material/sort";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {StatisticsService} from "../statistics/statistics.service";
 import {MatInputModule} from "@angular/material/input";
 import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatMenuModule} from "@angular/material/menu";
@@ -33,152 +34,142 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatListModule, MatListOption} from "@angular/material/list";
 import {MatSelectModule} from "@angular/material/select";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {firstValueFrom} from "rxjs";
 
 @Component({
-    selector: 'app-quiz-list',
-    templateUrl: './question-bank-list.component.html',
-    styleUrls: ['./question-bank-list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        CommonModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatButtonModule,
-        MatTableModule,
-        MatCardModule,
-        MatRadioModule,
-        MatSnackBarModule,
-        RouterModule,
-        MatTooltipModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        MatMenuModule,
-        MatCheckboxModule,
-        FormsModule,
-        MatListModule,
-      MatSelectModule,
-      MatProgressSpinnerModule
-    ]
+  selector: 'app-quiz-list',
+  templateUrl: './question-bank-list.component.html',
+  styleUrls: ['./question-bank-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTableModule,
+    MatCardModule,
+    MatRadioModule,
+    MatSnackBarModule,
+    RouterModule,
+    MatTooltipModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatMenuModule,
+    MatCheckboxModule,
+    FormsModule,
+    MatListModule,
+    MatSelectModule,
+    MatProgressSpinnerModule
+  ]
 })
-export class QuestionBankListComponent {
-
-    @ViewChild(MatSort) sort!: MatSort;
-    @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
-    public questionBankFilter = new FormControl("");
-    public questionPriorityOptions = [
-        {name: 'All', value: QuizMode.All },
-        {name: 'Mistakes', value: QuizMode.Mistakes },
-        {name: 'Discovery', value: QuizMode.Discovery },
-    ]
+export class QuestionBankListComponent implements OnInit {
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
+  public questionBankFilter = new FormControl("");
+  public questionPriorityOptions = [
+    {name: 'All', value: QuizMode.All},
+    {name: 'Mistakes', value: QuizMode.Mistakes},
+    {name: 'Discovery', value: QuizMode.Discovery},
+  ]
 
   public isImporting = signal<boolean>(false);
-
-  public questionBanks = computed(() => this.questionBank.questionBankArr().map(qb => new QuestionBankViewModel(qb, this.stats)))
-    public questionBank = inject(QuestionBankService);
-    private router = inject(Router);
-    private snackbar = inject(MatSnackBar);
-    public quiz = inject(QuizService);
-    private stats = inject(StatisticsService);
+  public questionBank = inject(QuestionBankService);
+  public questionBanks: Signal<QuestionBankViewModel[]> = computed(() => this.questionBank.questionBankArr().map(qb => new QuestionBankViewModel(qb)))
+  public quiz = inject(QuizService);
+  private router = inject(Router);
+  private snackbar = inject(MatSnackBar);
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
-    newQuestionBank(): void {
-        const newQuizId = this.questionBank.create();
-        this.router.navigate([newQuizId]).then()
-    }
+  ngOnInit(): void {
+    this.questionBank.init();
+  }
 
-    deleteQuiz(id: string): void {
-        const result = confirm(`Are you sure?`);
-        if (result.valueOf()) this.questionBank.delete(id);
-    }
+  newQuestionBank(): void {
+    const newQuizId = this.questionBank.create();
+    this.router.navigate([newQuizId]).then()
+  }
 
-    downloadQuestionBank(id: string): void {
-        const targetQuestionBank = this.questionBank.questionBanksValue[id];
-        return exportFromJSON({
-            data: targetQuestionBank,
-            fileName: `${targetQuestionBank.name} - ${targetQuestionBank.questions.length} Questions`,
-            exportType: "json"
-        });
-    }
+  deleteQuiz(id: string): void {
+    const result = confirm(`Are you sure?`);
+    if (result.valueOf()) this.questionBank.delete(id);
+  }
 
-    async uploadQuestionBank(): Promise<void> {
-        const input = document.createElement('input');
+  async downloadQuestionBank(id: string): Promise<void> {
+    const targetQuestionBank = await firstValueFrom(this.questionBank.getQuestionBank(id))
 
-        input.type = 'file';
-        input.accept = ".json";
-        input.multiple = false;
+    return exportFromJSON({
+      data: targetQuestionBank,
+      fileName: `${targetQuestionBank.name} - ${targetQuestionBank.questions.length} Questions`,
+      exportType: "json"
+    });
+  }
 
-        input.onchange = async () => {
-            const files: File[] = Array.from(input.files ?? []);
-            const file = first(files);
+  async uploadQuestionBank(): Promise<void> {
+    const input = document.createElement('input');
 
-            if (!file) return;
+    input.type = 'file';
+    input.accept = ".json";
+    input.multiple = false;
 
-          this.isImporting.set(true);
+    input.onchange = async () => {
+      const files: File[] = Array.from(input.files ?? []);
+      const file = first(files);
 
-            try {
-                const content = await file.text();
-                const obj = JSON.parse(content ?? "");
+      if (!file) return;
 
-              // Validate and clean the question bank data
-              const cleanedData = await this.validateAndCleanQuestionBank(obj);
+      this.isImporting.set(true);
 
-              if (cleanedData) {
-                await this.questionBank.insertQuestionBank(cleanedData.questionBank);
+      try {
+        const content = await file.text();
+        const obj = JSON.parse(content ?? "");
 
-                // Show detailed import results
-                const message = cleanedData.invalidCount > 0
-                  ? `Imported "${cleanedData.questionBank.name}" with ${cleanedData.validCount} questions (${cleanedData.invalidCount} invalid questions skipped)`
-                  : `Successfully imported "${cleanedData.questionBank.name}" with ${cleanedData.validCount} questions`;
+        // Validate and clean the question bank data
+        const cleanedData = await this.validateAndCleanQuestionBank(obj);
 
-                this.snackbar.open(message, "Close", {duration: 5000});
-                this.cdr.detectChanges();
-                } else {
-                this.snackbar.open("Invalid file format - unable to import", "Close", {duration: 5000});
-                }
-            } catch (error) {
-                console.error('Failed to upload question bank:', error);
-                this.snackbar.open("Failed to import file. Please check the file format.", "Close", {duration: 5000});
-            } finally {
-              this.isImporting.set(false);
-            }
+        if (cleanedData) {
+          await this.questionBank.insertQuestionBank(cleanedData.questionBank);
 
-            input.remove();
-        };
+          // Show detailed import results
+          const message = cleanedData.invalidCount > 0
+            ? `Imported "${cleanedData.questionBank.name}" with ${cleanedData.validCount} questions (${cleanedData.invalidCount} invalid questions skipped)`
+            : `Successfully imported "${cleanedData.questionBank.name}" with ${cleanedData.validCount} questions`;
 
-        input.click();
-    }
+          this.snackbar.open(message, "Close", {duration: 5000});
+          this.cdr.detectChanges();
+        } else {
+          this.snackbar.open("Invalid file format - unable to import", "Close", {duration: 5000});
+        }
+      } catch (error) {
+        console.error('Failed to upload question bank:', error);
+        this.snackbar.open("Failed to import file. Please check the file format.", "Close", {duration: 5000});
+      } finally {
+        this.isImporting.set(false);
+      }
 
-    clearQuizHistory() {
-        const result = confirm(`Are you sure?`);
-        if (result.valueOf()) this.quiz.clear();
-    }
+      input.remove();
+    };
 
+    input.click();
+  }
 
-    practiceQuizDefault(questionBankId: string): void {
-        // Default: All questions, 25 count
-        this.router.navigate(['quizzes', 'practice'], {
-            queryParams: {
-                size: 25,
-                questionBankId: questionBankId,
-                mode: QuizMode.All
-            }
-        }).then();
-    }
+  async practiceQuizDefault(questionBankId: string): Promise<void> {
+    await this.practiceQuiz(questionBankId);
+  }
 
-    practiceQuiz(questionBankId: string, quizSize: number, questionPrioritySelection: MatListOption[]): void {
-        if (isNaN(quizSize)) return;
+  async practiceQuiz(questionBankId: string, quizSize: number = 25, questionPrioritySelection?: MatListOption[]): Promise<void> {
+    if (isNaN(quizSize)) return;
 
-        this.router.navigate(['quizzes', 'practice'], {
-            queryParams: {
-                size: quizSize,
-                questionBankId: questionBankId,
-                mode: first(questionPrioritySelection)?.value?.value ?? QuizMode.All
-            }
-        }).then();
-    }
+    const newQuiz = await this.quiz.startQuiz({
+      questionsCount: quizSize,
+      questionBankId: questionBankId,
+      mode: first(questionPrioritySelection)?.value?.value ?? QuizMode.All
+    });
+
+    await this.router.navigate(['quizzes', 'practice', newQuiz.id]);
+  }
 
   private async validateAndCleanQuestionBank(obj: any): Promise<{
     questionBank: any;
@@ -264,6 +255,6 @@ export class QuestionBankListComponent {
       console.error('Error validating question bank:', error);
       return null;
     }
-    }
+  }
 }
 

@@ -1,9 +1,7 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, inject} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {QuizViewModel} from "./quiz-view.model";
+import {AfterViewInit, ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
+import {QuizListItemViewModel} from "./quiz-list-item-view.model";
 import {QuizService} from "../quiz.service";
 import {startWith, tap} from "rxjs";
-import {QuestionBankService} from "../../question-bank/question-bank.service";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {MatSelectModule} from "@angular/material/select";
@@ -14,60 +12,58 @@ import {MatCardModule} from "@angular/material/card";
 import {MatFormFieldModule} from "@angular/material/form-field";
 
 interface QuestionBankSelectOption {
-    id: string;
-    name: string;
+  id: string;
+  name: string;
 }
 
 
 @Component({
-    selector: 'app-quiz-list',
-    standalone: true,
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatSelectModule,
-        MatButtonModule,
-        MatIconModule,
-        RouterLink,
-        MatCardModule,
-        MatFormFieldModule
-    ],
-    templateUrl: './quiz-list.component.html',
-    styleUrls: ['./quiz-list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-quiz-list',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    RouterLink,
+    MatCardModule,
+    MatFormFieldModule
+  ],
+  templateUrl: './quiz-list.component.html',
+  styleUrls: ['./quiz-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizListComponent implements AfterViewInit {
+  questionBankFilter = new FormControl<QuestionBankSelectOption | undefined>(undefined);
+  public quizList = signal<QuizListItemViewModel[]>([]);
+  private quiz = inject(QuizService);
 
-    questionBankFilter = new FormControl<QuestionBankSelectOption | undefined>(undefined);
-    questionBanks: QuestionBankSelectOption[] = [];
-    public quizHistoryDataSource: MatTableDataSource<QuizViewModel> = new MatTableDataSource<QuizViewModel>();
+  constructor() {
+    this.loadQuizzes();
+  }
 
-    private quiz = inject(QuizService);
-    private qb = inject(QuestionBankService);
+  ngAfterViewInit(): void {
+    this.questionBankFilter.valueChanges.pipe(
+      startWith(undefined),
+      tap(() => this.loadQuizzes())
+    ).subscribe();
+  }
 
-    constructor() {
-        this.questionBanks = this.qb.questionBankArr().map(qb => ({id: qb.id, name: qb.name}));
-        this.loadQuizzes();
-    }
+  clearHistory() {
+    this.quiz.clear();
+  }
 
-    ngAfterViewInit(): void {
-        this.questionBankFilter.valueChanges.pipe(
-            startWith(undefined),
-            tap(() => this.loadQuizzes())
-        ).subscribe();
-    }
+  private async loadQuizzes(): Promise<void> {
+    const selectedQuestionBank = this.questionBankFilter.value;
+    const allQuizzes = await this.quiz.getQuizzes({
+      questionBankId: selectedQuestionBank?.id,
+      skip: 0,
+      take: 100 // Get all quizzes since we're not paginating
+    });
 
-    private loadQuizzes(): void {
-        const selectedQuestionBank = this.questionBankFilter.value;
-        const allQuizzes = this.quiz.getQuizzes({ 
-            questionBankId: selectedQuestionBank?.id,
-            skip: 0,
-            take: 1000 // Get all quizzes since we're not paginating
-        });
-
-        this.quizHistoryDataSource.data = allQuizzes.items.map(q => 
-            new QuizViewModel(q, this.qb.questionBanksValue[q.questionBankId]?.name)
-        );
-    }
-
+    this.quizList.set(allQuizzes.items.map((q) =>
+      new QuizListItemViewModel(q)
+    ));
+  }
 }

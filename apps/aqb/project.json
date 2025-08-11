@@ -12,7 +12,10 @@
       "options": {
         "outputPath": "dist/apps/aqb",
         "browser": "apps/aqb/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js",
+          "reflect-metadata"
+        ],
         "tsConfig": "apps/aqb/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [

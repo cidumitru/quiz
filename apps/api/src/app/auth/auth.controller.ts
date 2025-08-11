@@ -1,11 +1,13 @@
-import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import {Body, Controller, Post, ValidationPipe} from '@nestjs/common';
+import {AuthService} from './auth.service';
 import {
-  RequestOtpDto,
-  VerifyOtpDto,
   RefreshTokenDto,
-  AuthResponseDto,
-} from '../dto/auth.dto';
+  RefreshTokenResponse,
+  RequestOtpDto,
+  RequestOtpResponse,
+  VerifyOtpDto,
+  VerifyOtpResponse,
+} from '@aqb/data-access';
 
 @Controller('auth')
 export class AuthController {
@@ -14,21 +16,21 @@ export class AuthController {
   @Post('request-otp')
   async requestOtp(
     @Body(ValidationPipe) requestOtpDto: RequestOtpDto,
-  ): Promise<{ message: string }> {
+  ): Promise<RequestOtpResponse> {
     return this.authService.requestOtp(requestOtpDto);
   }
 
   @Post('verify-otp')
   async verifyOtp(
     @Body(ValidationPipe) verifyOtpDto: VerifyOtpDto,
-  ): Promise<AuthResponseDto> {
+  ): Promise<VerifyOtpResponse> {
     return this.authService.verifyOtp(verifyOtpDto);
   }
 
   @Post('refresh')
   async refreshToken(
     @Body(ValidationPipe) refreshTokenDto: RefreshTokenDto,
-  ): Promise<AuthResponseDto> {
+  ): Promise<RefreshTokenResponse> {
     return this.authService.refreshToken(refreshTokenDto.refreshToken);
   }
 }

@@ -1,111 +1,137 @@
 import {inject, Injectable} from "@angular/core";
-import {IAnswer, IQuestion} from "../question-bank/question-bank.models";
-import {IAnsweredQuestion, IQuiz, QuizMode, ICreateQuiz, IGetQuizzesParams} from "./quiz.models";
+import {BehaviorSubject, firstValueFrom} from "rxjs";
+import {QuizApiService} from '@aqb/data-access/angular';
+import {CreateQuizDto, Quiz, QuizListItem, QuizListQueryDto, QuizListResponse} from '@aqb/data-access';
 
 // Re-export the interfaces for backward compatibility
 export {QuizMode} from "./quiz.models";
-export type {IAnsweredQuestion, IQuiz, ICreateQuiz, IGetQuizzesParams} from "./quiz.models";
-
-import * as localForage from "localforage";
-import {BehaviorSubject, map, skip} from "rxjs";
-import {sampleSize, uniqBy, values} from "lodash";
-import {v4 as uuidv4} from 'uuid';
-import {QuestionBankService} from "../question-bank/question-bank.service";
 
 @Injectable({
-    providedIn: "root"
+  providedIn: "root"
 })
 export class QuizService {
-    private questionBanks = inject(QuestionBankService);
+  private quizApi = inject(QuizApiService);
+  private _loading = new BehaviorSubject<boolean>(false);
 
-    private _quizzes = new BehaviorSubject<Record<string, IQuiz>>({});
+  private _quizzes = new BehaviorSubject<Record<string, QuizListItem>>({});
 
-    public quizzesArr$ = this._quizzes.asObservable().pipe(
-        map(quizzes => values(quizzes).sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime())),
-    );
+  public get quizzes() {
+    return this._quizzes.getValue();
+  }
 
-    public get quizzes() {
-        return this._quizzes.getValue();
+  public get quizzesArr() {
+    return Object.values(this.quizzes).sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
+  }
+
+  async init() {
+    // Load quizzes from backend instead of localStorage
+    this._loading.next(true);
+    try {
+      const response = await firstValueFrom(this.quizApi.list({take: 100, skip: 0}));
+      const quizzesMap = response.items.reduce((acc, quiz) => {
+        acc[quiz.id] = quiz;
+        return acc;
+      }, {} as Record<string, QuizListItem>);
+      this._quizzes.next(quizzesMap);
+    } catch (error) {
+      console.error('Failed to load quizzes:', error);
+      this._quizzes.next({});
+    } finally {
+      this._loading.next(false);
     }
+  }
 
-    public get quizzesArr() {
-        return Object.values(this.quizzes).sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
+  async startQuiz(options: CreateQuizDto): Promise<Quiz> {
+    this._loading.next(true);
+    try {
+      const response = await firstValueFrom(this.quizApi.create({
+        questionBankId: options.questionBankId,
+        questionsCount: options.questionsCount,
+        mode: options.mode
+      }));
+
+      return response.quiz;
+    } catch (error) {
+      console.error('Failed to start quiz:', error);
+      throw error;
+    } finally {
+      this._loading.next(false);
     }
+  }
 
-    async init() {
-        const storageKey = "quizzes";
-        const quizzes = await localForage.getItem(storageKey);
-        this._quizzes.next(JSON.parse(quizzes as string) || {});
-        this._quizzes.pipe(skip(1)).subscribe(() => localForage.setItem(storageKey, JSON.stringify(this.quizzes)));
+  async markQuizAsFinished(quizId: string): Promise<void> {
+    this._loading.next(true);
+    try {
+      await firstValueFrom(this.quizApi.finish(quizId));
+      // Update the quiz list item with finished status
+      const quiz = this.quizzes[quizId];
+      if (quiz) {
+        this._quizzes.next({...this.quizzes, [quizId]: {...quiz, finishedAt: new Date()}});
+      }
+    } catch (error) {
+      console.error('Failed to finish quiz:', error);
+      throw error;
+    } finally {
+      this._loading.next(false);
     }
+  }
 
-    startQuiz(options: ICreateQuiz): IQuiz {
-        let questions;
-        switch (options.mode) {
-            case QuizMode.Mistakes:
-                const questionAnswerMap = this.quizzesArr.filter(q => q.questionBankId === options.questionBankId).reduce((acc, quiz) => {
-                    quiz.questions.forEach(question => {
-                        if (question.answer) acc[question.id] = [...(acc[question.id] ?? []), !!question.answer?.correct];
-                    });
-                    return acc;
-                }, {} as Record<string, boolean[]>);
+  async setQuizAnswers(quizId: string, answers: { questionId: string, answerId: string }[]): Promise<void> {
+    // Just send to backend - quiz list items don't have questions detail
+    this.quizApi.setAnswers(quizId, {answers}).subscribe({
+      error: (error) => console.error('Failed to save answers:', error)
+    });
+  }
 
-                questions = this.questionBanks.questionBanksValue[options.questionBankId].questions.filter(question => {
-                    const answers = questionAnswerMap[question.id];
-                    return answers?.length && answers.filter(answer => answer).length / answers.length < 0.7;
-                });
-                break;
-            case QuizMode.Discovery:
-                const answeredQuestionsSet = new Set(this.quizzesArr.filter(q => q.questionBankId === options.questionBankId).map(quiz => quiz.questions).flat().filter(q => q.answer).map(question => question.id));
-
-                questions = this.questionBanks.questionBanksValue[options.questionBankId].questions.filter(question => !answeredQuestionsSet.has(question.id));
-                break;
-            default:
-                questions = this.questionBanks.questionBanksValue[options.questionBankId].questions;
-        }
-        const newQuiz: IQuiz = {
-            id: uuidv4(),
-            mode: options.mode,
-            questionBankId: options.questionBankId,
-            startedAt: new Date().toString(),
-            questions: sampleSize(questions, options.questionsCount),
-        }
-
-        this._quizzes.next({...this.quizzes, [newQuiz.id]: newQuiz});
-
-        return newQuiz;
+  async getQuiz(id: string): Promise<Quiz> {
+    // Fetch full quiz details from backend
+    this._loading.next(true);
+    try {
+      const response = await firstValueFrom(this.quizApi.get(id));
+      return response.quiz;
+    } catch (error) {
+      console.error('Failed to get quiz:', error);
+      throw error;
+    } finally {
+      this._loading.next(false);
     }
+  }
 
-    markQuizAsFinished(quizId: string) {
-        const quiz = this.quizzes[quizId];
-        this._quizzes.next({...this.quizzes, [quizId]: {...quiz, finishedAt: new Date().toString()}});
-    }
+  async getQuizzes({skip, take, questionBankId}: QuizListQueryDto): Promise<QuizListResponse> {
+    this._loading.next(true);
+    try {
+      const response = await firstValueFrom(this.quizApi.list({take, skip, questionBankId}));
 
-    setQuizAnswers(quizId: string, answers: { questionId: string, answerId: string }[]): void {
-        const quiz = this.quizzes[quizId];
-        const questions = quiz.questions.map(question => {
-            const userAnswer = answers.find(answer => answer.questionId === question.id);
-            return {
-                ...question,
-                answer: question.answers.find(answer => answer.id === userAnswer?.answerId)
-            }
-        });
-        this._quizzes.next({...this.quizzes, [quizId]: {...quiz, questions}});
-    }
+      // Update local cache with fetched quizzes
+      const quizzesMap = response.items.reduce((acc, quiz) => {
+        acc[quiz.id] = quiz;
+        return acc;
+      }, {} as Record<string, QuizListItem>);
+      this._quizzes.next({...this.quizzes, ...quizzesMap});
 
-    getQuiz(id: string) {
-        return this.quizzes[id];
+      return {
+        items: response.items,
+        total: response.total
+      };
+    } catch (error) {
+      console.error('Failed to get quizzes:', error);
+      throw error;
+    } finally {
+      this._loading.next(false);
     }
+  }
 
-    getQuizzes({skip, take, questionBankId}: IGetQuizzesParams): { items: IQuiz[], total: number } {
-        if (questionBankId) {
-            const filteredQuizzes = this.quizzesArr.filter(quiz => quiz.questionBankId === questionBankId);
-            return { items: filteredQuizzes.slice(skip, skip + take), total: filteredQuizzes.length}
-        }
-        return { items: this.quizzesArr.slice(skip, skip + take), total: this.quizzesArr.length}
+  async clear(): Promise<void> {
+    this._loading.next(true);
+    try {
+      await firstValueFrom(this.quizApi.clear());
+      this._quizzes.next({});
+    } catch (error) {
+      console.error('Failed to clear quizzes:', error);
+      throw error;
+    } finally {
+      this._loading.next(false);
     }
+  }
 
-    clear() {
-        this._quizzes.next({});
-    }
 }

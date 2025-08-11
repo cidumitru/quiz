@@ -1,16 +1,17 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { APP_GUARD, APP_PIPE } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { HealthController } from './health/health.controller';
-import { User, OtpCode, QuestionBank, Question, Answer } from './entities';
-import { QuestionBankModule } from './question-bank/question-bank.module';
+import {Module, ValidationPipe} from '@nestjs/common';
+import {ConfigModule, ConfigService} from '@nestjs/config';
+import {TypeOrmModule} from '@nestjs/typeorm';
+import {ThrottlerGuard, ThrottlerModule} from '@nestjs/throttler';
+import {APP_GUARD, APP_PIPE} from '@nestjs/core';
+import {AppController} from './app.controller';
+import {AppService} from './app.service';
+import {AuthModule} from './auth/auth.module';
+import {UserModule} from './user/user.module';
+import {HealthController} from './health/health.controller';
+import {Answer, OtpCode, Question, QuestionBank, Quiz, QuizQuestion, QuizStatistics, User} from './entities';
+import {QuestionBankModule} from './question-bank/question-bank.module';
+import {QuizModule} from './quiz/quiz.module';
+import {StatisticsModule} from './statistics/statistics.module';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { QuestionBankModule } from './question-bank/question-bank.module';
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
-        limit: 20,
+        limit: 50,
       },
     ]),
     TypeOrmModule.forRootAsync({
@@ -29,7 +30,7 @@ import { QuestionBankModule } from './question-bank/question-bank.module';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get('DATABASE_URL'),
-        entities: [User, OtpCode, QuestionBank, Question, Answer],
+        entities: [User, OtpCode, QuestionBank, Question, Answer, Quiz, QuizQuestion, QuizStatistics],
         synchronize: true, // Enable for production setup - consider using migrations later
         migrations: [],
         migrationsRun: false,
@@ -40,6 +41,8 @@ import { QuestionBankModule } from './question-bank/question-bank.module';
     AuthModule,
     UserModule,
     QuestionBankModule,
+    QuizModule,
+    StatisticsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [

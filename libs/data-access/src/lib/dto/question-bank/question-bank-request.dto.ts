@@ -1,5 +1,5 @@
-import { IsString, IsUUID, IsArray, IsBoolean, IsOptional, ValidateNested, IsNotEmpty } from 'class-validator';
-import { Type } from 'class-transformer';
+import {IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, IsUUID, ValidateNested} from 'class-validator';
+import {Type} from 'class-transformer';
 
 export class CreateAnswerDto {
   @IsString()
@@ -17,7 +17,7 @@ export class CreateQuestionDto {
   question: string;
 
   @IsArray()
-  @ValidateNested({ each: true })
+  @ValidateNested({each: true})
   @Type(() => CreateAnswerDto)
   answers: CreateAnswerDto[];
 }
@@ -35,7 +35,7 @@ export class UpdateQuestionBankDto {
 }
 
 export class AddQuestionsDto {
-  @ValidateNested({ each: true })
+  @ValidateNested({each: true})
   @Type(() => CreateQuestionDto)
   questions: CreateQuestionDto | CreateQuestionDto[];
 }
@@ -65,7 +65,7 @@ export class ImportQuestionBankDto {
   isDeleted?: boolean;
 
   @IsArray()
-  @ValidateNested({ each: true })
+  @ValidateNested({each: true})
   @Type(() => QuestionDto)
   questions: QuestionDto[];
 }
@@ -92,7 +92,16 @@ class QuestionDto {
   question: string;
 
   @IsArray()
-  @ValidateNested({ each: true })
+  @ValidateNested({each: true})
   @Type(() => AnswerDto)
   answers: AnswerDto[];
 }
+
+// Type exports for frontend usage
+export type CreateAnswerRequest = CreateAnswerDto;
+export type CreateQuestionRequest = CreateQuestionDto;
+export type CreateQuestionBankRequest = CreateQuestionBankDto;
+export type UpdateQuestionBankRequest = UpdateQuestionBankDto;
+export type AddQuestionsRequest = AddQuestionsDto;
+export type SetCorrectAnswerRequest = SetCorrectAnswerDto;
+export type ImportQuestionBankRequest = ImportQuestionBankDto;

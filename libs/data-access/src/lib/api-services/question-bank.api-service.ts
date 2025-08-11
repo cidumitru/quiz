@@ -1,23 +1,17 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {
-  IQuestionBankCreateRequest,
-  IQuestionBankCreateResponse,
-  IQuestionBankUpdateRequest,
-  IQuestionBankUpdateResponse,
-  IQuestionBankListResponse,
-  IQuestionBankGetResponse,
-  IQuestionBankDeleteRequest,
-  IQuestionBankDeleteResponse,
-  IQuestionAddRequest,
-  IQuestionAddResponse,
-  IQuestionDeleteRequest,
-  IQuestionDeleteResponse,
-  IAnswerSetCorrectRequest,
-  IAnswerSetCorrectResponse,
-  IQuestionBank
-} from '../interfaces/question-bank.interfaces';
+  AddQuestionsRequest,
+  CreateQuestionBankRequest,
+  CreateQuestionBankResponse,
+  ImportQuestionBankRequest,
+  QuestionBankDetailResponse,
+  QuestionBankListResponse,
+  QuestionBankSuccessResponse,
+  QuestionsAddedResponse,
+  UpdateQuestionBankRequest,
+} from '../dto';
 
 @Injectable({
   providedIn: 'root'
@@ -26,49 +20,45 @@ export class QuestionBankApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = '/api/question-banks';
 
-  create(request?: IQuestionBankCreateRequest): Observable<IQuestionBankCreateResponse> {
-    return this.http.post<IQuestionBankCreateResponse>(this.baseUrl, request || {});
+  create(request?: CreateQuestionBankRequest): Observable<CreateQuestionBankResponse> {
+    return this.http.post<CreateQuestionBankResponse>(this.baseUrl, request || {});
   }
 
-  update(request: IQuestionBankUpdateRequest): Observable<IQuestionBankUpdateResponse> {
-    const { id, ...body } = request;
-    return this.http.put<IQuestionBankUpdateResponse>(`${this.baseUrl}/${id}`, body);
+  update(id: string, request: UpdateQuestionBankRequest): Observable<QuestionBankSuccessResponse> {
+    return this.http.put<QuestionBankSuccessResponse>(`${this.baseUrl}/${id}`, request);
   }
 
-  list(): Observable<IQuestionBankListResponse> {
-    return this.http.get<IQuestionBankListResponse>(this.baseUrl);
+  list(): Observable<QuestionBankListResponse> {
+    return this.http.get<QuestionBankListResponse>(this.baseUrl);
   }
 
-  get(id: string): Observable<IQuestionBankGetResponse> {
-    return this.http.get<IQuestionBankGetResponse>(`${this.baseUrl}/${id}`);
+  get(id: string): Observable<QuestionBankDetailResponse> {
+    return this.http.get<QuestionBankDetailResponse>(`${this.baseUrl}/${id}`);
   }
 
-  delete(request: IQuestionBankDeleteRequest): Observable<IQuestionBankDeleteResponse> {
-    return this.http.delete<IQuestionBankDeleteResponse>(`${this.baseUrl}/${request.id}`);
+  delete(id: string): Observable<QuestionBankSuccessResponse> {
+    return this.http.delete<QuestionBankSuccessResponse>(`${this.baseUrl}/${id}`);
   }
 
-  insert(questionBank: IQuestionBank): Observable<IQuestionBankCreateResponse> {
-    return this.http.post<IQuestionBankCreateResponse>(`${this.baseUrl}/import`, questionBank);
+  insert(questionBank: ImportQuestionBankRequest): Observable<CreateQuestionBankResponse> {
+    return this.http.post<CreateQuestionBankResponse>(`${this.baseUrl}/import`, questionBank);
   }
 
-  addQuestion(request: IQuestionAddRequest): Observable<IQuestionAddResponse> {
-    const { questionBankId, questions } = request;
-    return this.http.post<IQuestionAddResponse>(
+  addQuestion(questionBankId: string, questions: AddQuestionsRequest): Observable<QuestionsAddedResponse> {
+    return this.http.post<QuestionsAddedResponse>(
       `${this.baseUrl}/${questionBankId}/questions`,
-      { questions }
+      questions
     );
   }
 
-  deleteQuestion(request: IQuestionDeleteRequest): Observable<IQuestionDeleteResponse> {
-    const { questionBankId, questionId } = request;
-    return this.http.delete<IQuestionDeleteResponse>(
+  deleteQuestion(questionBankId: string, questionId: string): Observable<QuestionBankSuccessResponse> {
+    return this.http.delete<QuestionBankSuccessResponse>(
       `${this.baseUrl}/${questionBankId}/questions/${questionId}`
     );
   }
 
-  setCorrectAnswer(request: IAnswerSetCorrectRequest): Observable<IAnswerSetCorrectResponse> {
-    const { questionBankId, questionId, correctAnswerId } = request;
-    return this.http.put<IAnswerSetCorrectResponse>(
+  setCorrectAnswer(questionBankId: string, questionId: string, correctAnswerId: string): Observable<QuestionBankSuccessResponse> {
+    return this.http.put<QuestionBankSuccessResponse>(
       `${this.baseUrl}/${questionBankId}/questions/${questionId}/correct-answer`,
       { correctAnswerId }
     );

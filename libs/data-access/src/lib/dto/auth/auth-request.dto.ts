@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
+import {IsEmail, IsNotEmpty, IsString, Length} from 'class-validator';
 
 export class RequestOtpDto {
   @IsEmail()
@@ -22,12 +22,7 @@ export class RefreshTokenDto {
   refreshToken: string;
 }
 
-export class AuthResponseDto {
-  accessToken: string;
-  refreshToken: string;
-  user: {
-    id: string;
-    email: string;
-    isVerified: boolean;
-  };
-}
+// Type exports for frontend usage
+export type RequestOtpRequest = RequestOtpDto;
+export type VerifyOtpRequest = VerifyOtpDto;
+export type RefreshTokenRequest = RefreshTokenDto;

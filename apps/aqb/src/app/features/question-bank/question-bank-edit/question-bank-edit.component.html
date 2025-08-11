@@ -1,6 +1,8 @@
 <mat-form-field appearance="fill" style="width: 100%">
     <mat-label>Your question bank name</mat-label>
-    <input (ngModelChange)="updateName($event)" [ngModel]="(questionBank$ | async)?.name" matInput
+  <input (ngModelChange)="updateName($event)" [ngModelOptions]="{ updateOn: 'blur' }"
+         [ngModel]="(questionBank$ | async)?.name"
+         matInput
            placeholder="Your question bank name" required>
 </mat-form-field>
 

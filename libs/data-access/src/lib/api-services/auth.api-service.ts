@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {
-  IAuthRequestOtpRequest,
-  IAuthRequestOtpResponse,
-  IAuthVerifyOtpRequest,
-  IAuthVerifyOtpResponse,
-  IAuthRefreshRequest,
-  IAuthRefreshResponse,
-  IUserProfileResponse,
-} from '../interfaces/auth.interfaces';
+  DeleteUserResponse,
+  RefreshTokenRequest,
+  RefreshTokenResponse,
+  RequestOtpRequest,
+  RequestOtpResponse,
+  UserProfileResponse,
+  VerifyOtpRequest,
+  VerifyOtpResponse,
+} from '../dto';
 
 @Injectable({
   providedIn: 'root'
@@ -20,23 +21,23 @@ export class AuthApiService {
 
   constructor(private http: HttpClient) {}
 
-  requestOtp(request: IAuthRequestOtpRequest): Observable<IAuthRequestOtpResponse> {
-    return this.http.post<IAuthRequestOtpResponse>(`${this.baseUrl}/request-otp`, request);
+  requestOtp(request: RequestOtpRequest): Observable<RequestOtpResponse> {
+    return this.http.post<RequestOtpResponse>(`${this.baseUrl}/request-otp`, request);
   }
 
-  verifyOtp(request: IAuthVerifyOtpRequest): Observable<IAuthVerifyOtpResponse> {
-    return this.http.post<IAuthVerifyOtpResponse>(`${this.baseUrl}/verify-otp`, request);
+  verifyOtp(request: VerifyOtpRequest): Observable<VerifyOtpResponse> {
+    return this.http.post<VerifyOtpResponse>(`${this.baseUrl}/verify-otp`, request);
   }
 
-  refreshToken(request: IAuthRefreshRequest): Observable<IAuthRefreshResponse> {
-    return this.http.post<IAuthRefreshResponse>(`${this.baseUrl}/refresh`, request);
+  refreshToken(request: RefreshTokenRequest): Observable<RefreshTokenResponse> {
+    return this.http.post<RefreshTokenResponse>(`${this.baseUrl}/refresh`, request);
   }
 
-  getUserProfile(): Observable<IUserProfileResponse> {
-    return this.http.get<IUserProfileResponse>(`${this.userUrl}/profile`);
+  getUserProfile(): Observable<UserProfileResponse> {
+    return this.http.get<UserProfileResponse>(`${this.userUrl}/profile`);
   }
 
-  deleteUserProfile(): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.userUrl}/profile`);
+  deleteUserProfile(): Observable<DeleteUserResponse> {
+    return this.http.delete<DeleteUserResponse>(`${this.userUrl}/profile`);
   }
 }

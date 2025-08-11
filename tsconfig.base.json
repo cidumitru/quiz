@@ -14,8 +14,20 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": false,
     "paths": {
-      "@aqb/data-access": ["libs/data-access/src/index.ts"]
+      "@aqb/data-access": [
+        "libs/data-access/src/index.ts"
+      ],
+      "@aqb/data-access/angular": [
+        "libs/data-access/src/angular.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
