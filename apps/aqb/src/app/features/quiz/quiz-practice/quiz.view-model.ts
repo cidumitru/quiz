@@ -5,7 +5,7 @@ import {Quiz} from "@aqb/data-access";
 export class QuizViewModel {
   readonly id: string;
   readonly questionBankId: string;
-  readonly questionBankName?: string;
+  readonly questionBankName: string;
   readonly startedAt: Date;
   readonly finishedAt?: Date;
   readonly questions: QuestionViewModel[];
@@ -54,6 +54,8 @@ export class QuizViewModel {
     this.questions = quiz.questions.map(q =>
       new QuestionViewModel(q, initialAnswers[q.questionId!])
     );
+
+    this.questionBankName = quiz.questionBankName;
 
     // Create question map for quick lookup
     this.questionMap = this.questions.reduce((map, q) => {
