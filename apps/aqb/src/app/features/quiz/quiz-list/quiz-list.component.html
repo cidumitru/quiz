@@ -8,18 +8,6 @@
         </div>
     </div>
 
-  <!--    <div class="filter-section">-->
-  <!--        <mat-form-field appearance="outline" class="filter-field">-->
-  <!--            <mat-label>Filter by Question Bank</mat-label>-->
-  <!--            <mat-select [formControl]="questionBankFilter">-->
-  <!--                <mat-option value="">All Question Banks</mat-option>-->
-  <!--                @for (questionBank of questionBanks; track questionBank.id) {-->
-  <!--                    <mat-option [value]="questionBank">{{questionBank.name}}</mat-option>-->
-  <!--                }-->
-  <!--            </mat-select>-->
-  <!--        </mat-form-field>-->
-  <!--    </div>-->
-
     <div class="quiz-timeline">
       @if (quizList().length === 0) {
             <div class="no-data-card">
@@ -74,13 +62,6 @@
                                 <div class="stat-value">{{quiz.duration}}</div>
                                 <div class="stat-label">Duration</div>
                             </div>
-                        </div>
-
-                    <div class="progress-bar-container">
-                            <div class="progress-bar">
-                                <div class="progress-fill" [style.width.%]="quiz.correctRatio"></div>
-                            </div>
-                      <div class="score-details">{{ quiz.correctAnswers }} of {{ quiz.questionsCount }} correct</div>
                         </div>
                     </mat-card-content>
 

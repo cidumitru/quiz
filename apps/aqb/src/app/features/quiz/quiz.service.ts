@@ -2,6 +2,8 @@ import {inject, Injectable} from "@angular/core";
 import {BehaviorSubject, firstValueFrom} from "rxjs";
 import {QuizApiService} from '@aqb/data-access/angular';
 import {CreateQuizDto, Quiz, QuizListItem, QuizListQueryDto, QuizListResponse} from '@aqb/data-access';
+import {map} from "rxjs/operators";
+import {values} from "lodash";
 
 // Re-export the interfaces for backward compatibility
 export {QuizMode} from "./quiz.models";
@@ -14,16 +16,12 @@ export class QuizService {
   private _loading = new BehaviorSubject<boolean>(false);
 
   private _quizzes = new BehaviorSubject<Record<string, QuizListItem>>({});
-
+  public quizzes$ = this._quizzes.asObservable().pipe(map(quizMap => values(quizMap)));
   public get quizzes() {
     return this._quizzes.getValue();
   }
 
-  public get quizzesArr() {
-    return Object.values(this.quizzes).sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
-  }
-
-  async init() {
+  async reload() {
     // Load quizzes from backend instead of localStorage
     this._loading.next(true);
     try {
