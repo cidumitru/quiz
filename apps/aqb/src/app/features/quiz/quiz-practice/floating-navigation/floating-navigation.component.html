@@ -14,27 +14,25 @@
   </div>
 
   <!-- Navigation buttons -->
-  <div class="nav-buttons">
-    <button
-      (click)="onNavigateUp()"
-      [disabled]="!canNavigateUp"
-      class="nav-button up"
-      color="primary"
-      mat-fab
-      matTooltip="Previous question"
-      matTooltipPosition="left">
-      <mat-icon>keyboard_arrow_up</mat-icon>
-    </button>
+  <button
+    (click)="onNavigateUp()"
+    [disabled]="!canNavigateUp"
+    class="nav-button up"
+    color="primary"
+    mat-fab
+    matTooltip="Previous question"
+    matTooltipPosition="above">
+    <mat-icon>keyboard_arrow_up</mat-icon>
+  </button>
 
-    <button
-      (click)="onNavigateDown()"
-      [disabled]="!canNavigateDown"
-      class="nav-button down"
-      color="primary"
-      mat-fab
-      matTooltip="Next question"
-      matTooltipPosition="left">
-      <mat-icon>keyboard_arrow_down</mat-icon>
-    </button>
-  </div>
+  <button
+    (click)="onNavigateDown()"
+    [disabled]="!canNavigateDown"
+    class="nav-button down"
+    color="primary"
+    mat-fab
+    matTooltip="Next question"
+    matTooltipPosition="above">
+    <mat-icon>keyboard_arrow_down</mat-icon>
+  </button>
 </div>

@@ -109,33 +109,44 @@
     }
   }
 
-  // Mobile responsive adjustments
+  // Mobile responsive adjustments - move to bottom on mobile
   @media (max-width: 768px) {
-    right: 16px;
-    gap: 12px;
+    // Switch to bottom-fixed positioning
+    right: 50%;
+    bottom: 20px;
+    top: auto;
+    transform: translateX(50%);
+    flex-direction: row;
+    gap: 16px;
 
     .progress-circle {
       width: 40px;
       height: 40px;
-      margin-bottom: 4px;
+      margin-bottom: 0;
+      order: 2; // Put progress in center
 
       .progress-text {
         font-size: 12px;
       }
     }
 
-    .nav-buttons {
-      gap: 8px;
+    // Direct button styling since buttons are now direct children
+    .nav-button {
+      width: 48px !important;
+      height: 48px !important;
 
-      .nav-button {
-        width: 48px !important;
-        height: 48px !important;
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
 
-        mat-icon {
-          font-size: 24px;
-          width: 24px;
-          height: 24px;
-        }
+      &.up {
+        order: 1;
+      }
+
+      &.down {
+        order: 3; // Put after progress circle
       }
     }
   }
@@ -172,10 +183,11 @@
   }
 }
 
-// Hide on very small screens (mobile portrait)
+// Further adjustments for very small screens
 @media (max-width: 480px) {
   .floating-navigation {
-    right: 12px;
+    bottom: 16px;
+    gap: 12px;
 
     .progress-circle {
       width: 36px;
@@ -186,7 +198,7 @@
       }
     }
 
-    .nav-buttons .nav-button {
+    .nav-button {
       width: 44px !important;
       height: 44px !important;
 
