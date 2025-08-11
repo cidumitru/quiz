@@ -20,7 +20,7 @@ export class AppConfig {
 
   async init(): Promise<void> {
     try {
-      this._config = await firstValueFrom(this.httpClient.get<IAppConfig>('./public/app-config.json'));
+      this._config = await firstValueFrom(this.httpClient.get<IAppConfig>('./assets/app-config.json'));
     } catch (error) {
       console.error('App config load failed:', error);
       throw error;
