@@ -22,7 +22,16 @@
     </mat-card>
   </div>
 } @else if (quizViewModel()) {
-<!-- Quiz Header with Progress -->
+
+  <!-- Floating Navigation Component -->
+  <app-floating-navigation
+    [currentQuestionIndex]="currentQuestionIndex()"
+    [totalQuestions]="quizViewModel()?.totalQuestions || 0"
+    (navigateUp)="navigateUp()"
+    (navigateDown)="navigateDown()">
+  </app-floating-navigation>
+
+  <!-- Quiz Header with Progress -->
 <div class="quiz-header">
     <div class="quiz-info">
         <h1 class="quiz-title">

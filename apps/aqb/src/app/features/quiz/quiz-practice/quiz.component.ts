@@ -1,4 +1,4 @@
-import {Component, effect, inject, input, signal} from '@angular/core';
+import {Component, effect, HostListener, inject, input, OnDestroy, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, Router, RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {MatToolbarModule} from "@angular/material/toolbar";
@@ -8,6 +8,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {QuizService} from "../quiz.service";
 import {QuizViewModel} from "./quiz.view-model";
+import {FloatingNavigationComponent} from './floating-navigation/floating-navigation.component';
 
 @Component({
   selector: 'app-quiz-practice',
@@ -22,12 +23,15 @@ import {QuizViewModel} from "./quiz.view-model";
     MatCardModule,
     RouterModule,
     MatTooltipModule,
+    FloatingNavigationComponent,
   ]
 })
-export class QuizComponent {
+export class QuizComponent implements OnInit, OnDestroy {
   loading = signal(false);
   error = signal<string | null>(null);
   currentQuestionIndex = signal(0);
+
+  private intersectionObserver?: IntersectionObserver;
 
   // The reactive view model - contains all state and computations
   quizViewModel = input.required<QuizViewModel>()
@@ -56,6 +60,129 @@ export class QuizComponent {
       if (!viewModel.finishedAt && viewModel?.isComplete()) {
         this.quizService.markQuizAsFinished(viewModel.id);
       }
+    });
+  }
+  // Touch gesture support for mobile
+  private touchStartY = 0;
+  private touchStartTime = 0;
+
+  ngOnInit(): void {
+    // Setup intersection observer after view initialization
+    setTimeout(() => {
+      this.setupIntersectionObserver();
+    }, 100);
+  }
+
+  ngOnDestroy(): void {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+    }
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent): void {
+    // Only handle keyboard navigation when quiz is active and not typing in inputs
+    if (event.target && ['input', 'textarea', 'select'].includes((event.target as HTMLElement).tagName.toLowerCase())) {
+      return;
+    }
+
+    const viewModel = this.quizViewModel();
+    if (!viewModel || !viewModel.hasAnyQuestions()) return;
+
+    switch (event.key) {
+      case 'ArrowUp':
+      case 'PageUp':
+        event.preventDefault();
+        this.navigateUp();
+        break;
+      case 'ArrowDown':
+      case 'PageDown':
+        event.preventDefault();
+        this.navigateDown();
+        break;
+    }
+  }
+
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(event: TouchEvent): void {
+    if (event.target && this.isInteractiveElement(event.target as HTMLElement)) {
+      return; // Don't handle swipes on interactive elements
+    }
+
+    this.touchStartY = event.touches[0].clientY;
+    this.touchStartTime = Date.now();
+  }
+
+  @HostListener('touchend', ['$event'])
+  onTouchEnd(event: TouchEvent): void {
+    if (event.target && this.isInteractiveElement(event.target as HTMLElement)) {
+      return;
+    }
+
+    const touchEndY = event.changedTouches[0].clientY;
+    const touchEndTime = Date.now();
+    const touchDuration = touchEndTime - this.touchStartTime;
+    const touchDistance = Math.abs(touchEndY - this.touchStartY);
+    const touchVelocity = touchDistance / touchDuration;
+
+    // Only process quick swipes (avoid interfering with scrolling)
+    if (touchDuration < 300 && touchDistance > 50 && touchVelocity > 0.5) {
+      if (touchEndY < this.touchStartY) {
+        // Swipe up - go to next question
+        this.navigateDown();
+      } else {
+        // Swipe down - go to previous question
+        this.navigateUp();
+      }
+    }
+  }
+
+  navigateUp(): void {
+    const currentIndex = this.currentQuestionIndex();
+    if (currentIndex > 0) {
+      this.scrollToQuestion(currentIndex - 1);
+    }
+  }
+
+  navigateDown(): void {
+    const viewModel = this.quizViewModel();
+    const currentIndex = this.currentQuestionIndex();
+
+    if (viewModel && currentIndex < viewModel.totalQuestions - 1) {
+      this.scrollToQuestion(currentIndex + 1);
+    }
+  }
+
+  private isInteractiveElement(element: HTMLElement): boolean {
+    const interactiveTags = ['button', 'input', 'textarea', 'select', 'a'];
+    const interactiveClasses = ['answer-card', 'mat-button', 'mat-fab'];
+
+    return interactiveTags.includes(element.tagName.toLowerCase()) ||
+      interactiveClasses.some(className => element.classList.contains(className)) ||
+      element.closest('.answer-card') !== null ||
+      element.closest('button') !== null;
+  }
+
+  private setupIntersectionObserver(): void {
+    this.intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+            const questionIndex = parseInt(entry.target.getAttribute('data-question-index') || '0');
+            this.currentQuestionIndex.set(questionIndex);
+          }
+        });
+      },
+      {
+        rootMargin: '-20% 0px -20% 0px', // Only consider questions in the center area
+        threshold: [0.6]
+      }
+    );
+
+    // Observe all question cards
+    const questionCards = document.querySelectorAll('[data-question-index]');
+    questionCards.forEach(card => {
+      this.intersectionObserver!.observe(card);
     });
   }
 
@@ -109,6 +236,10 @@ export class QuizComponent {
     const questionElement = document.querySelector(`[data-question-index="${questionIndex}"]`) as HTMLElement;
 
     if (questionElement) {
+      // Update current index immediately for responsive UI
+      this.currentQuestionIndex.set(questionIndex);
+
+      // Simple scroll into view with center positioning
       questionElement.scrollIntoView({
         behavior: 'smooth',
         block: 'center',

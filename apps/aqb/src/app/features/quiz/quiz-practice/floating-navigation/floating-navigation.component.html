@@ -1,0 +1,40 @@
+<div [class.visible]="totalQuestions() > 1" class="floating-navigation">
+  <!-- Progress indicator -->
+  <div class="progress-circle">
+    <svg class="progress-svg" viewBox="0 0 36 36">
+      <circle class="progress-background" cx="18" cy="18" r="15.915"/>
+      <circle
+        [style.stroke-dasharray]="currentProgress + ' 100'"
+        class="progress-foreground"
+        cx="18"
+        cy="18"
+        r="15.915"/>
+    </svg>
+    <div class="progress-text">{{ currentQuestionIndex() + 1 }}</div>
+  </div>
+
+  <!-- Navigation buttons -->
+  <div class="nav-buttons">
+    <button
+      (click)="onNavigateUp()"
+      [disabled]="!canNavigateUp"
+      class="nav-button up"
+      color="primary"
+      mat-fab
+      matTooltip="Previous question"
+      matTooltipPosition="left">
+      <mat-icon>keyboard_arrow_up</mat-icon>
+    </button>
+
+    <button
+      (click)="onNavigateDown()"
+      [disabled]="!canNavigateDown"
+      class="nav-button down"
+      color="primary"
+      mat-fab
+      matTooltip="Next question"
+      matTooltipPosition="left">
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+  </div>
+</div>

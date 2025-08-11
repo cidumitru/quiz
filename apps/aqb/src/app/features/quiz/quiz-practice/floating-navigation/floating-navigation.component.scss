@@ -1,0 +1,209 @@
+.floating-navigation {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  // Progress circle indicator
+  .progress-circle {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 8px;
+
+    .progress-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+
+      .progress-background {
+        fill: none;
+        stroke: var(--mat-sys-outline-variant);
+        stroke-width: 2;
+        opacity: 0.3;
+      }
+
+      .progress-foreground {
+        fill: none;
+        stroke: var(--mat-sys-primary);
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        transition: stroke-dasharray 400ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--mat-sys-on-surface);
+      text-align: center;
+      line-height: 1;
+    }
+  }
+
+  // Navigation buttons container
+  .nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .nav-button {
+      width: 56px !important;
+      height: 56px !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+      &:hover:not(:disabled) {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+      }
+
+      &:active:not(:disabled) {
+        transform: scale(0.95);
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+      }
+
+      mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+
+      &.up {
+        order: 1;
+      }
+
+      &.down {
+        order: 2;
+      }
+    }
+  }
+
+  // Hover effect for entire container
+  &:hover {
+    .progress-circle {
+      transform: scale(1.05);
+    }
+  }
+
+  // Mobile responsive adjustments
+  @media (max-width: 768px) {
+    right: 16px;
+    gap: 12px;
+
+    .progress-circle {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 4px;
+
+      .progress-text {
+        font-size: 12px;
+      }
+    }
+
+    .nav-buttons {
+      gap: 8px;
+
+      .nav-button {
+        width: 48px !important;
+        height: 48px !important;
+
+        mat-icon {
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+  }
+
+  // Animation for showing/hiding
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(-50%) translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+  }
+
+  @keyframes fadeOutDown {
+    from {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-50%) translateX(20px);
+    }
+  }
+
+  &.visible {
+    animation: fadeInUp 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &:not(.visible) {
+    animation: fadeOutDown 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+// Hide on very small screens (mobile portrait)
+@media (max-width: 480px) {
+  .floating-navigation {
+    right: 12px;
+
+    .progress-circle {
+      width: 36px;
+      height: 36px;
+
+      .progress-text {
+        font-size: 11px;
+      }
+    }
+
+    .nav-buttons .nav-button {
+      width: 44px !important;
+      height: 44px !important;
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+// Accessibility improvements
+@media (prefers-reduced-motion: reduce) {
+  .floating-navigation,
+  .floating-navigation * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
