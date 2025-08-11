@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -62,10 +62,34 @@ jobs:
               console.log('Config file not found at:', configPath);
             }
 
-      - name: Deploy to GitHub Pages
-        uses: crazy-max/ghaction-github-pages@v4
+      - name: Create CNAME file
+        run: echo "yanki.space" > ./dist/apps/aqb/browser/CNAME
+
+      - name: Verify CNAME file
+        run: |
+          if [ -f "./dist/apps/aqb/browser/CNAME" ]; then
+            echo "CNAME file created successfully"
+            cat ./dist/apps/aqb/browser/CNAME
+          else
+            echo "ERROR: CNAME file not found"
+            exit 1
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          target_branch: gh-pages
-          build_dir: dist/apps/aqb/browser
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          path: './dist/apps/aqb/browser'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
