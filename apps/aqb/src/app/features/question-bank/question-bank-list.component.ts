@@ -91,7 +91,7 @@ export class QuestionBankListComponent implements OnInit {
   async newQuestionBank(): Promise<void> {
     try {
       const newQuizId = await this.questionBank.create();
-      await this.router.navigate([newQuizId]);
+      await this.router.navigate(['banks', newQuizId]);
     } catch (error) {
       console.error('Failed to create question bank:', error);
     }

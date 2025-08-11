@@ -24,6 +24,6 @@ export class QuestionBankViewModel {
   }
 
   get averageScoreToday() {
-    return this.questionBank.statistics.averageScore;
+    return this.questionBank.statistics.averageScoreToday;
   }
 }
