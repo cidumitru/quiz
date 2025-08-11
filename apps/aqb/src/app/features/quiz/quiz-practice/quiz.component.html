@@ -26,7 +26,7 @@
   <!-- Floating Navigation Component -->
   <app-floating-navigation
     [currentQuestionIndex]="currentQuestionIndex()"
-    [totalQuestions]="quizViewModel()?.totalQuestions || 0"
+    [totalQuestions]="quizViewModel().totalQuestions || 0"
     (navigateUp)="navigateUp()"
     (navigateDown)="navigateDown()">
   </app-floating-navigation>
