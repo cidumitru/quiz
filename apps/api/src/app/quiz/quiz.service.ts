@@ -156,11 +156,10 @@ export class QuizService {
   async findAll(userId: string, query: QuizListQueryDto): Promise<QuizListResponse> {
     const {take = 10, skip = 0, questionBankId} = query;
 
+    // First query: Get quiz list with minimal relations
     const queryBuilder = this.quizRepository.createQueryBuilder('quiz')
       .where('quiz.userId = :userId', {userId})
       .leftJoinAndSelect('quiz.questionBank', 'qb')
-      .leftJoinAndSelect('quiz.quizQuestions', 'qq')
-      .leftJoinAndSelect('qq.userAnswer', 'ua')
       .orderBy('quiz.startedAt', 'DESC');
 
     if (questionBankId) {
@@ -172,6 +171,38 @@ export class QuizService {
       .skip(skip)
       .getManyAndCount();
 
+    // Second query: Batch load quiz questions with answers for scoring
+    if (items.length > 0) {
+      const quizIds = items.map(q => q.id);
+
+      // Get aggregated data for all quizzes in one query
+      const quizStats = await this.quizQuestionRepository
+        .createQueryBuilder('qq')
+        .select('qq.quizId', 'quizId')
+        .addSelect('COUNT(qq.id)', 'totalQuestions')
+        .addSelect('COUNT(qq.answerId)', 'answeredQuestions')
+        .addSelect('SUM(CASE WHEN ua.isCorrect = true THEN 1 ELSE 0 END)', 'correctAnswers')
+        .leftJoin('qq.userAnswer', 'ua')
+        .where('qq.quizId IN (:...quizIds)', {quizIds})
+        .groupBy('qq.quizId')
+        .getRawMany();
+
+      // Create a map for quick lookup
+      const statsMap = new Map(quizStats.map(s => [s.quizId, s]));
+
+      // Attach stats to quiz items
+      items.forEach(quiz => {
+        const stats = statsMap.get(quiz.id);
+        if (stats) {
+          (quiz as Quiz & { _stats?: any })['_stats'] = {
+            totalQuestions: parseInt(stats.totalQuestions),
+            answeredQuestions: parseInt(stats.answeredQuestions),
+            correctAnswers: parseInt(stats.correctAnswers || '0')
+          };
+        }
+      });
+    }
+
     const quizListItems = items.map(quiz => this.mapQuizToListItem(quiz));
 
     return {
@@ -181,13 +212,55 @@ export class QuizService {
   }
 
   async getQuizById(userId: string, quizId: string): Promise<QuizDetailResponse> {
-    const quiz = await this.quizRepository.findOne({
-      where: {id: quizId, userId},
-      relations: ['quizQuestions', 'quizQuestions.question', 'quizQuestions.question.answers', 'quizQuestions.userAnswer', 'questionBank'],
-    });
+    // Use query builder for better performance with selective loading
+    const quiz = await this.quizRepository
+      .createQueryBuilder('quiz')
+      .where('quiz.id = :quizId', {quizId})
+      .andWhere('quiz.userId = :userId', {userId})
+      .leftJoinAndSelect('quiz.questionBank', 'qb')
+      .leftJoinAndSelect('quiz.quizQuestions', 'qq')
+      .orderBy('qq.orderIndex', 'ASC')
+      .getOne();
 
     if (!quiz) {
       throw new NotFoundException('Quiz not found');
+    }
+
+    // Load questions and answers in a separate optimized query
+    if (quiz.quizQuestions && quiz.quizQuestions.length > 0) {
+      const questionIds = quiz.quizQuestions.map(qq => qq.questionId);
+
+      // Batch load all questions with their answers
+      const questions = await this.questionRepository
+        .createQueryBuilder('q')
+        .whereInIds(questionIds)
+        .leftJoinAndSelect('q.answers', 'a')
+        .getMany();
+
+      // Create a map for quick lookup
+      const questionMap = new Map(questions.map(q => [q.id, q]));
+
+      // Load user answers separately
+      const answerIds = quiz.quizQuestions
+        .filter(qq => qq.answerId)
+        .map(qq => qq.answerId);
+
+      let answerMap = new Map();
+      if (answerIds.length > 0) {
+        const userAnswers = await this.answerRepository
+          .createQueryBuilder('a')
+          .whereInIds(answerIds)
+          .getMany();
+        answerMap = new Map(userAnswers.map(a => [a.id, a]));
+      }
+
+      // Attach questions and answers to quiz questions
+      quiz.quizQuestions.forEach(qq => {
+        qq.question = questionMap.get(qq.questionId)!;
+        if (qq.answerId) {
+          qq.userAnswer = answerMap.get(qq.answerId);
+        }
+      });
     }
 
     return {quiz: await this.mapQuizToResponse(quiz, true)};
@@ -354,13 +427,26 @@ export class QuizService {
     await this.quizStatisticsRepository.save(stats);
   }
 
-  private mapQuizToListItem(quiz: Quiz): QuizListItem {
+  private mapQuizToListItem(quiz: Quiz & { _stats?: any }): QuizListItem {
     let score = 0;
-    const answerCount = quiz.quizQuestions.filter(qq => qq.userAnswer).length;
-    if (quiz.finishedAt && quiz.quizQuestions) {
-      const totalQuestions = quiz.quizQuestions.length;
-      const correctAnswers = quiz.quizQuestions.filter(qq => qq.userAnswer?.isCorrect).length;
-      score = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+    let answerCount = 0;
+    let questionCount = 0;
+
+    // Use pre-calculated stats if available (from optimized query)
+    if (quiz._stats) {
+      questionCount = quiz._stats.totalQuestions;
+      answerCount = quiz._stats.answeredQuestions;
+      if (quiz.finishedAt && quiz._stats.totalQuestions > 0) {
+        score = (quiz._stats.correctAnswers / quiz._stats.totalQuestions) * 100;
+      }
+    } else if (quiz.quizQuestions) {
+      // Fallback to direct calculation if stats not available
+      questionCount = quiz.quizQuestions.length;
+      answerCount = quiz.quizQuestions.filter(qq => qq.answerId).length;
+      if (quiz.finishedAt) {
+        const correctAnswers = quiz.quizQuestions.filter(qq => qq.userAnswer?.isCorrect).length;
+        score = questionCount > 0 ? (correctAnswers / questionCount) * 100 : 0;
+      }
     }
 
     return {
@@ -369,7 +455,7 @@ export class QuizService {
       startedAt: quiz.startedAt,
       finishedAt: quiz.finishedAt,
       answerCount,
-      questionCount: quiz.quizQuestions?.length || 0,
+      questionCount,
       questionBankName: quiz.questionBank?.name || '',
       score: Math.round(score),
     };
