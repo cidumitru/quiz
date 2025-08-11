@@ -134,11 +134,8 @@ export class QuestionBankService {
 
     const transformed = await this.transformQuestionBankFull(questionBank, userId);
 
-    if ('statistics' in transformed) {
-      return {questionBank: transformed};
-    } else {
-      throw new BadRequestException();
-    }
+    // Always return the transformed data, with or without statistics
+    return {questionBank: transformed as QuestionBankDetail};
   }
 
   async update(userId: string, id: string, dto: UpdateQuestionBankDto): Promise<QuestionBankSuccessResponse> {
@@ -334,7 +331,7 @@ export class QuestionBankService {
     return { success: true };
   }
 
-  private async transformQuestionBankFull(questionBank: QuestionBank, userId?: string): Promise<QuestionBankDetail | Omit<QuestionBankDetail, 'statistics'>> {
+  private async transformQuestionBankFull(questionBank: QuestionBank, userId?: string): Promise<QuestionBankDetail> {
     const baseData = {
       ...questionBank,
       questions: questionBank.questions.map(question => ({
@@ -347,28 +344,38 @@ export class QuestionBankService {
       })),
     };
 
-    // Add statistics if userId is provided
+    // Always include statistics, use defaults if not found
+    let statistics: QuestionBankStatistics = {
+      totalQuizzes: 0,
+      totalAnswers: 0,
+      correctAnswers: 0,
+      coverage: 0,
+      averageScore: 0,
+      averageScoreToday: 0,
+      lastQuizDate: null,
+    };
+
     if (userId) {
       const stats = await this.quizStatisticsRepository.findOne({
         where: {userId, questionBankId: questionBank.id},
       });
 
       if (stats) {
-        return {
-          ...baseData,
-          statistics: {
-            totalQuizzes: stats.totalQuizzes,
-            totalAnswers: stats.totalAnswers,
-            correctAnswers: stats.correctAnswers,
-            coverage: stats.coverage,
-            averageScore: stats.averageScore,
-            averageScoreToday: stats.averageScoreToday,
-            lastQuizDate: stats.lastQuizDate,
-          },
+        statistics = {
+          totalQuizzes: stats.totalQuizzes,
+          totalAnswers: stats.totalAnswers,
+          correctAnswers: stats.correctAnswers,
+          coverage: stats.coverage,
+          averageScore: stats.averageScore,
+          averageScoreToday: stats.averageScoreToday,
+          lastQuizDate: stats.lastQuizDate,
         };
       }
     }
 
-    return baseData;
+    return {
+      ...baseData,
+      statistics,
+    };
   }
 }

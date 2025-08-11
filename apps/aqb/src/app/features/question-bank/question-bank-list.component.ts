@@ -88,9 +88,13 @@ export class QuestionBankListComponent implements OnInit {
     this.questionBank.reload();
   }
 
-  newQuestionBank(): void {
-    const newQuizId = this.questionBank.create();
-    this.router.navigate([newQuizId]).then()
+  async newQuestionBank(): Promise<void> {
+    try {
+      const newQuizId = await this.questionBank.create();
+      await this.router.navigate([newQuizId]);
+    } catch (error) {
+      console.error('Failed to create question bank:', error);
+    }
   }
 
   deleteQuiz(id: string): void {
