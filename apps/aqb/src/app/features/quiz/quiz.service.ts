@@ -41,7 +41,6 @@ export class QuizService {
   }
 
   async startQuiz(options: CreateQuizDto): Promise<Quiz> {
-    this._loading.next(true);
     try {
       const response = await firstValueFrom(this.quizApi.create({
         questionBankId: options.questionBankId,
@@ -53,13 +52,10 @@ export class QuizService {
     } catch (error) {
       console.error('Failed to start quiz:', error);
       throw error;
-    } finally {
-      this._loading.next(false);
     }
   }
 
   async markQuizAsFinished(quizId: string): Promise<void> {
-    this._loading.next(true);
     try {
       await firstValueFrom(this.quizApi.finish(quizId));
       // Update the quiz list item with finished status
@@ -70,8 +66,6 @@ export class QuizService {
     } catch (error) {
       console.error('Failed to finish quiz:', error);
       throw error;
-    } finally {
-      this._loading.next(false);
     }
   }
 
@@ -83,16 +77,12 @@ export class QuizService {
   }
 
   async getQuiz(id: string): Promise<Quiz> {
-    // Fetch full quiz details from backend
-    this._loading.next(true);
     try {
       const response = await firstValueFrom(this.quizApi.get(id));
       return response.quiz;
     } catch (error) {
       console.error('Failed to get quiz:', error);
       throw error;
-    } finally {
-      this._loading.next(false);
     }
   }
 
