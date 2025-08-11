@@ -187,7 +187,7 @@ export class QuizComponent implements OnInit, OnDestroy {
   }
 
   // Simple helper methods
-  selectAnswer(questionId: string, answerId: string, questionIndex: number): void {
+  selectAnswer(questionId: string, answerId: string): void {
     const viewModel = this.quizViewModel();
     if (!viewModel) return;
 
@@ -199,12 +199,12 @@ export class QuizComponent implements OnInit, OnDestroy {
     // Update answer in view model (which triggers reactive updates)
     viewModel.selectAnswer(questionId, answerId);
 
-    // Auto-scroll to next question if answer is correct
+    // Auto-scroll to next question if answer is correct using new navigation
     setTimeout(() => {
       if (viewModel.isQuestionCorrect(questionId)) {
-        this.scrollToNextQuestion(questionIndex);
+        this.navigateDown();
       }
-    }, 300);
+    }, 500);
   }
 
   retry(): void {
@@ -219,18 +219,6 @@ export class QuizComponent implements OnInit, OnDestroy {
     });
   }
 
-
-  private scrollToNextQuestion(currentIndex: number): void {
-    const viewModel = this.quizViewModel();
-    const nextIndex = currentIndex + 1;
-
-    if (!viewModel || nextIndex >= viewModel.totalQuestions) {
-      return;
-    }
-
-    this.currentQuestionIndex.set(nextIndex);
-    this.scrollToQuestion(nextIndex);
-  }
 
   private scrollToQuestion(questionIndex: number): void {
     const questionElement = document.querySelector(`[data-question-index="${questionIndex}"]`) as HTMLElement;

@@ -103,7 +103,7 @@
                           @for (answer of question.answers; track answer.id) {
                             <div class="answer-card"
                                  [ngClass]="question.getAnswerCssClasses(answer.id)"
-                                 (click)="selectAnswer(question.id, answer.id, i)"
+                                 (click)="selectAnswer(question.id, answer.id)"
                                  [attr.aria-disabled]="question.isAnswered()"
                                  [style.cursor]="question.isAnswered() ? 'not-allowed' : 'pointer'">
 
