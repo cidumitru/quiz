@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards,} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Put, Query, Request, UseGuards,} from '@nestjs/common';
 import {Throttle} from '@nestjs/throttler';
 import {JwtAuthGuard} from '../auth/jwt-auth.guard';
 import {QuestionBankService} from './question-bank.service';
@@ -11,6 +11,7 @@ import {
   QuestionBankListResponse,
   QuestionBankSuccessResponse,
   QuestionsAddedResponse,
+  QuestionsPaginatedResponse,
   SetCorrectAnswerDto,
   UpdateQuestionBankDto,
 } from '@aqb/data-access';
@@ -88,5 +89,17 @@ export class QuestionBankController {
       questionId,
       dto,
     );
+  }
+
+  @Get(':id/questions')
+  getQuestions(
+    @Request() req: AuthenticatedRequest,
+    @Param('id') id: string,
+    @Query('offset') offset = '0',
+    @Query('limit') limit = '50',
+  ): Promise<QuestionsPaginatedResponse> {
+    const offsetNum = parseInt(offset, 10);
+    const limitNum = parseInt(limit, 10);
+    return this.questionBankService.getQuestions(req.user.id, id, offsetNum, limitNum);
   }
 }

@@ -5,7 +5,8 @@ export type {
   Question,
   QuestionBankDetail,
   QuestionBankSummary,
-  IQuestionCreate
+  IQuestionCreate,
+  QuestionsPaginatedResponse
 } from '@aqb/data-access';
 
 // Keep schemas only for validation during import

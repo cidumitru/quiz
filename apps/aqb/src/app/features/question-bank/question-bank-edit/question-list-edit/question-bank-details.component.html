@@ -1,8 +1,11 @@
-@if (questionBank$ | async; as questionBank) {
+@if (questionBank(); as questionBank) {
   <app-question-list
-    [questions]="questionBank.questions"
+    [questions]="questionsArray()"
+    [totalItems]="totalCount()"
     (editQuestion)="onEditQuestion($event)"
     (deleteQuestion)="onDeleteQuestion($event)"
-    (createQuestion)="onCreateQuestion()">
+    (createQuestion)="onCreateQuestion()"
+    (rangeChanged)="onRangeChanged($event)"
+    [isLoading]="isLoading()">
   </app-question-list>
 }

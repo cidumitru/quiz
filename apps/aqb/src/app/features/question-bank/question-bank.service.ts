@@ -1,7 +1,12 @@
 import {computed, inject, Injectable, signal} from "@angular/core";
 import {firstValueFrom, map, Observable} from "rxjs";
 import {omit, values} from "lodash";
-import {IQuestionCreate, QuestionBankDetail, QuestionBankSummary} from "./question-bank.models";
+import {
+  IQuestionCreate,
+  QuestionBankDetail,
+  QuestionBankSummary,
+  QuestionsPaginatedResponse
+} from "./question-bank.models";
 import {QuestionBankApiService} from "@aqb/data-access/angular";
 
 
@@ -26,6 +31,10 @@ export class QuestionBankService {
 
   getQuestionBank(id: string): Observable<QuestionBankDetail> {
     return this.api.get(id).pipe(map(r => r.questionBank))
+  }
+
+  getQuestions(questionBankId: string, offset: number = 0, limit: number = 50): Observable<QuestionsPaginatedResponse> {
+    return this.api.getQuestions(questionBankId, offset, limit);
   }
 
   async reload() {

@@ -45,5 +45,6 @@ export type {
   QuestionBankDetailResponse,
   CreateQuestionBankResponse,
   QuestionBankSuccessResponse,
-  QuestionsAddedResponse
+  QuestionsAddedResponse,
+  QuestionsPaginatedResponse
 } from './question-bank-response.dto';

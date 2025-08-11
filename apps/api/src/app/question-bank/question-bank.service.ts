@@ -12,6 +12,7 @@ import {
   QuestionBankStatistics,
   QuestionBankSuccessResponse,
   QuestionsAddedResponse,
+  QuestionsPaginatedResponse,
   SetCorrectAnswerDto,
   UpdateQuestionBankDto,
 } from '@aqb/data-access';
@@ -136,6 +137,50 @@ export class QuestionBankService {
 
     // Always return the transformed data, with or without statistics
     return {questionBank: transformed as QuestionBankDetail};
+  }
+
+  async getQuestions(userId: string, questionBankId: string, offset: number, limit: number): Promise<QuestionsPaginatedResponse> {
+
+    // First verify the user owns this question bank
+    const questionBank = await this.questionBankRepository.findOne({
+      where: {id: questionBankId, userId, isDeleted: false},
+    });
+
+    if (!questionBank) {
+      throw new NotFoundException('Question bank not found');
+    }
+
+    // Get total count of questions
+    const totalItems = await this.questionRepository.count({
+      where: {questionBankId}
+    });
+
+    // Get paginated questions with answers
+    const questions = await this.questionRepository.find({
+      where: {questionBankId},
+      relations: ['answers'],
+      skip: offset,
+      take: limit,
+      order: {createdAt: 'ASC'} // Consistent ordering
+    });
+
+    // Transform questions to match frontend interface
+    const transformedQuestions = questions.map(question => ({
+      id: question.id,
+      question: question.question,
+      answers: question.answers.map(answer => ({
+        id: answer.id,
+        text: answer.text,
+        correct: answer.isCorrect
+      }))
+    }));
+
+    return {
+      questions: transformedQuestions,
+      totalItems,
+      offset,
+      limit
+    };
   }
 
   async update(userId: string, id: string, dto: UpdateQuestionBankDto): Promise<QuestionBankSuccessResponse> {

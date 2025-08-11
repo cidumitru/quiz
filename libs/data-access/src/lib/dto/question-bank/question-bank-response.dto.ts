@@ -104,3 +104,10 @@ export interface QuestionsAddedResponse {
   success: boolean;
   questionsAdded: number;
 }
+
+export interface QuestionsPaginatedResponse {
+  questions: Question[];
+  totalItems: number;
+  offset: number;
+  limit: number;
+}

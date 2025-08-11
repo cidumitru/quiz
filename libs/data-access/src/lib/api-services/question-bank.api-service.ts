@@ -10,6 +10,7 @@ import {
   QuestionBankListResponse,
   QuestionBankSuccessResponse,
   QuestionsAddedResponse,
+  QuestionsPaginatedResponse,
   UpdateQuestionBankRequest,
 } from '../dto';
 
@@ -61,6 +62,17 @@ export class QuestionBankApiService {
     return this.http.put<QuestionBankSuccessResponse>(
       `${this.baseUrl}/${questionBankId}/questions/${questionId}/correct-answer`,
       { correctAnswerId }
+    );
+  }
+
+  getQuestions(questionBankId: string, offset: number = 0, limit: number = 50): Observable<QuestionsPaginatedResponse> {
+    const params = new URLSearchParams({
+      offset: offset.toString(),
+      limit: limit.toString()
+    });
+
+    return this.http.get<QuestionsPaginatedResponse>(
+      `${this.baseUrl}/${questionBankId}/questions?${params.toString()}`
     );
   }
 }
