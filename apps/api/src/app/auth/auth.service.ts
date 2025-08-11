@@ -28,6 +28,13 @@ export class AuthService {
   async requestOtp(requestOtpDto: RequestOtpDto): Promise<RequestOtpResponse> {
     const { email } = requestOtpDto;
 
+    // Only allow Gmail accounts
+    if (!this.isGmailAccount(email)) {
+      throw new BadRequestException(
+        'Only Gmail accounts are allowed for registration'
+      );
+    }
+
     const existingOtpCount = await this.otpRepository.count({
       where: {
         user: { email },
@@ -137,6 +144,12 @@ export class AuthService {
 
   private generateOtpCode(): string {
     return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  private isGmailAccount(email: string): boolean {
+    const emailLower = email.toLowerCase().trim();
+    // Check for standard gmail.com domain and googlemail.com (alternative Gmail domain)
+    return emailLower.endsWith('@gmail.com') || emailLower.endsWith('@googlemail.com');
   }
 
   private async generateTokens(user: User) {

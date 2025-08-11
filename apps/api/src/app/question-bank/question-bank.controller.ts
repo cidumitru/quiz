@@ -1,4 +1,5 @@
 import {Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards,} from '@nestjs/common';
+import {Throttle} from '@nestjs/throttler';
 import {JwtAuthGuard} from '../auth/jwt-auth.guard';
 import {QuestionBankService} from './question-bank.service';
 import {
@@ -50,11 +51,13 @@ export class QuestionBankController {
   }
 
   @Post('import')
+  @Throttle({default: {limit: 5, ttl: 60000}})
   import(@Request() req: AuthenticatedRequest, @Body() dto: ImportQuestionBankDto): Promise<CreateQuestionBankResponse> {
     return this.questionBankService.import(req.user.id, dto);
   }
 
   @Post(':id/questions')
+  @Throttle({default: {limit: 10, ttl: 60000}})
   addQuestions(
     @Request() req: AuthenticatedRequest,
     @Param('id') id: string,

@@ -1,4 +1,5 @@
 import {Body, Controller, Post, ValidationPipe} from '@nestjs/common';
+import {Throttle} from '@nestjs/throttler';
 import {AuthService} from './auth.service';
 import {
   RefreshTokenDto,
@@ -10,10 +11,12 @@ import {
 } from '@aqb/data-access';
 
 @Controller('auth')
+@Throttle({default: {limit: 5, ttl: 60000}})
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('request-otp')
+  @Throttle({default: {limit: 3, ttl: 60000}})
   async requestOtp(
     @Body(ValidationPipe) requestOtpDto: RequestOtpDto,
   ): Promise<RequestOtpResponse> {
@@ -21,6 +24,7 @@ export class AuthController {
   }
 
   @Post('verify-otp')
+  @Throttle({default: {limit: 5, ttl: 60000}})
   async verifyOtp(
     @Body(ValidationPipe) verifyOtpDto: VerifyOtpDto,
   ): Promise<VerifyOtpResponse> {

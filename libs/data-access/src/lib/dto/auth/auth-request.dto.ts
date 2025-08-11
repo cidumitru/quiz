@@ -1,8 +1,10 @@
 import {IsEmail, IsNotEmpty, IsString, Length} from 'class-validator';
+import {IsGmailOnly} from '../../validators/gmail-only.validator';
 
 export class RequestOtpDto {
   @IsEmail()
   @IsNotEmpty()
+  @IsGmailOnly()
   email: string;
 }
 
