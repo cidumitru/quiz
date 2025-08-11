@@ -21,7 +21,6 @@ import {MatTableModule} from "@angular/material/table";
 import {MatCardModule} from "@angular/material/card";
 import {MatRadioModule} from "@angular/material/radio";
 import {CommonModule} from "@angular/common";
-import {answerScheme, questionBankScheme, questionScheme} from "./question-bank.models";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {QuizMode, QuizService} from "../quiz/quiz.service";
 import {MatSort, MatSortModule} from "@angular/material/sort";
@@ -35,6 +34,7 @@ import {MatListModule, MatListOption} from "@angular/material/list";
 import {MatSelectModule} from "@angular/material/select";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {firstValueFrom} from "rxjs";
+import {QuestionBankImportService} from "../../core/services/question-bank-import.service";
 
 @Component({
   selector: 'app-quiz-list',
@@ -83,6 +83,7 @@ export class QuestionBankListComponent implements OnInit {
   private router = inject(Router);
   private snackbar = inject(MatSnackBar);
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+  private importService = inject(QuestionBankImportService);
 
   ngOnInit(): void {
     this.questionBank.reload();
@@ -129,23 +130,36 @@ export class QuestionBankListComponent implements OnInit {
 
       try {
         const content = await file.text();
-        const obj = JSON.parse(content ?? "");
 
-        // Validate and clean the question bank data
-        const cleanedData = await this.validateAndCleanQuestionBank(obj);
+        // Use the import service to validate and process the file
+        const importResult = await this.importService.importFromFile(content);
 
-        if (cleanedData) {
-          await this.questionBank.insertQuestionBank(cleanedData.questionBank);
+        if (importResult.success && importResult.questionBank) {
+          // Insert the validated question bank
+          await this.questionBank.insertQuestionBank(importResult.questionBank);
 
-          // Show detailed import results
-          const message = cleanedData.invalidCount > 0
-            ? `Imported "${cleanedData.questionBank.name}" with ${cleanedData.validCount} questions (${cleanedData.invalidCount} invalid questions skipped)`
-            : `Successfully imported "${cleanedData.questionBank.name}" with ${cleanedData.validCount} questions`;
-
+          // Show detailed import results using the service's summary
+          const message = this.importService.getImportSummary(importResult);
           this.snackbar.open(message, "Close", {duration: 5000});
+
+          // Show warnings if any
+          if (importResult.warnings.length > 0) {
+            console.warn('Import warnings:', importResult.warnings);
+          }
+
           this.cdr.detectChanges();
         } else {
-          this.snackbar.open("Invalid file format - unable to import", "Close", {duration: 5000});
+          // Show error messages
+          const errorMessage = importResult.errors.length > 0
+            ? importResult.errors[0]
+            : "Invalid file format - unable to import";
+
+          this.snackbar.open(errorMessage, "Close", {duration: 5000});
+
+          // Log detailed errors for debugging
+          if (importResult.errors.length > 0) {
+            console.error('Import errors:', importResult.errors);
+          }
         }
       } catch (error) {
         console.error('Failed to upload question bank:', error);
@@ -189,92 +203,6 @@ export class QuestionBankListComponent implements OnInit {
           this.cdr.detectChanges();
         }
       }, 500);
-    }
-  }
-
-  private async validateAndCleanQuestionBank(obj: any): Promise<{
-    questionBank: any;
-    validCount: number;
-    invalidCount: number;
-  } | null> {
-    try {
-      // First validate the basic question bank structure without questions
-      const basicBankStructure = {
-        id: obj.id,
-        createdAt: obj.createdAt,
-        editedAt: obj.editedAt,
-        name: obj.name,
-        isDeleted: obj.isDeleted,
-        questions: [] // We'll validate questions separately
-      };
-
-      // Validate basic structure
-      const basicValidation = await questionBankScheme.safeParseAsync(basicBankStructure);
-      if (!basicValidation.success) {
-        console.error('Invalid question bank structure:', basicValidation.error);
-        return null;
-      }
-
-      // Now validate each question individually and filter out invalid ones
-      const validQuestions: any[] = [];
-      const originalQuestions = Array.isArray(obj.questions) ? obj.questions : [];
-
-      for (const question of originalQuestions) {
-        try {
-          // Skip questions with empty or whitespace-only text
-          if (!question.question || typeof question.question !== 'string' || question.question.trim() === '') {
-            continue;
-          }
-
-          // Validate each answer in the question
-          const validAnswers: any[] = [];
-          const originalAnswers = Array.isArray(question.answers) ? question.answers : [];
-
-          for (const answer of originalAnswers) {
-            // Skip answers with empty or whitespace-only text
-            if (!answer.text || typeof answer.text !== 'string' || answer.text.trim() === '') {
-              continue;
-            }
-
-            const answerValidation = await answerScheme.safeParseAsync(answer);
-            if (answerValidation.success) {
-              validAnswers.push(answerValidation.data);
-            }
-          }
-
-          // Only include question if it has at least one valid answer
-          if (validAnswers.length > 0) {
-            const questionToValidate = {
-              ...question,
-              answers: validAnswers
-            };
-
-            const questionValidation = await questionScheme.safeParseAsync(questionToValidate);
-            if (questionValidation.success) {
-              validQuestions.push(questionValidation.data);
-            }
-          }
-        } catch (error) {
-          // Skip invalid questions
-          console.warn('Skipping invalid question:', question, error);
-        }
-      }
-
-      // Create the cleaned question bank
-      const cleanedQuestionBank = {
-        ...basicValidation.data,
-        questions: validQuestions
-      };
-
-      return {
-        questionBank: cleanedQuestionBank,
-        validCount: validQuestions.length,
-        invalidCount: originalQuestions.length - validQuestions.length
-      };
-
-    } catch (error) {
-      console.error('Error validating question bank:', error);
-      return null;
     }
   }
 }

@@ -11,7 +11,6 @@ import {AppModule} from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bodyParser: true,
-    logger: ['error', 'warn', 'log', 'debug', 'verbose'],
   });
 
   // Payload size limits - prevent large payloads that could cause high memory usage
