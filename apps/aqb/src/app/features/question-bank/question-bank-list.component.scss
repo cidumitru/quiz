@@ -186,20 +186,35 @@
       color: white !important;
     }
 
-    &:hover {
+    mat-spinner {
+      margin-right: 10px !important;
+      margin-left: 0 !important;
+    }
+
+    &:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4) !important;
       background: linear-gradient(135deg, #5CBF60, #4CAF50) !important;
     }
 
     &:disabled {
-      opacity: 0.6;
+      opacity: 0.8 !important;
       transform: none !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-      background: #9E9E9E !important;
+      cursor: not-allowed !important;
+
+      &:not(:has(mat-spinner)) {
+        background: #9E9E9E !important;
+      }
 
       mat-icon {
         color: rgba(255, 255, 255, 0.7) !important;
+      }
+
+      mat-spinner {
+        ::ng-deep circle {
+          stroke: white !important;
+        }
       }
     }
   }
@@ -322,6 +337,21 @@
 
   button[mat-menu-item] {
     font-size: 14px;
+
+    mat-spinner {
+      margin-right: 8px !important;
+    }
+
+    &:disabled {
+      opacity: 0.6 !important;
+      cursor: not-allowed !important;
+
+      mat-spinner {
+        ::ng-deep circle {
+          stroke: var(--mat-sys-on-surface-variant) !important;
+        }
+      }
+    }
   }
 }
 

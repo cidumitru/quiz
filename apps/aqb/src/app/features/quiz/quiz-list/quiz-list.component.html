@@ -1,129 +1,150 @@
 <div class="page-container">
-    <div class="page-header">
-        <h1>Quiz History</h1>
-        <div class="header-actions">
-          <button (click)="clearHistory()" appearance="filled" color="warn" mat-button>
-                <mat-icon>delete</mat-icon> Clear history
-            </button>
-        </div>
+  <div class="page-header">
+    <h1>Quiz History</h1>
+    <div class="header-actions">
+      <button (click)="clearHistory()" appearance="filled" color="warn" mat-button>
+        <mat-icon>delete</mat-icon>
+        Clear history
+      </button>
     </div>
+  </div>
 
-    <div class="quiz-timeline">
-      @if (quizLoading()) {
-        <!-- Skeleton loading cards -->
-        @for (i of [1, 2, 3, 4, 5]; track i) {
-          <mat-card class="quiz-card skeleton-card">
-            <mat-card-header>
-              <div class="quiz-header-content">
-                <div class="quiz-title-section">
-                  <mat-card-title class="quiz-bank-name">
-                    <div class="skeleton-text skeleton-title"></div>
-                  </mat-card-title>
-                  <mat-card-subtitle class="quiz-date">
-                    <div class="skeleton-text skeleton-subtitle"></div>
-                  </mat-card-subtitle>
-                </div>
-                <div class="quiz-status">
-                  <div class="skeleton-text skeleton-status"></div>
-                </div>
+  <div class="quiz-timeline">
+    @if (quizLoading()) {
+      <!-- Skeleton loading cards -->
+      @for (i of [1, 2, 3, 4, 5]; track i) {
+        <mat-card class="quiz-card skeleton-card">
+          <mat-card-header>
+            <div class="quiz-header-content">
+              <div class="quiz-title-section">
+                <mat-card-title class="quiz-bank-name">
+                  <div class="skeleton-text skeleton-title"></div>
+                </mat-card-title>
+                <mat-card-subtitle class="quiz-date">
+                  <div class="skeleton-text skeleton-subtitle"></div>
+                </mat-card-subtitle>
               </div>
-            </mat-card-header>
-
-            <mat-card-content>
-              <div class="quiz-stats">
-                <div class="stat-item">
-                  <div class="skeleton-text skeleton-stat-value"></div>
-                  <div class="skeleton-text skeleton-stat-label"></div>
-                </div>
-                <div class="stat-separator">•</div>
-                <div class="stat-item">
-                  <div class="skeleton-text skeleton-stat-value"></div>
-                  <div class="skeleton-text skeleton-stat-label"></div>
-                </div>
-                <div class="stat-separator">•</div>
-                <div class="stat-item">
-                  <div class="skeleton-text skeleton-stat-value"></div>
-                  <div class="skeleton-text skeleton-stat-label"></div>
-                </div>
+              <div class="quiz-status">
+                <div class="skeleton-text skeleton-status"></div>
               </div>
-            </mat-card-content>
-
-            <mat-card-actions>
-              <div class="skeleton-button skeleton-primary-button"></div>
-            </mat-card-actions>
-          </mat-card>
-        }
-      } @else if (quizList().length === 0) {
-            <div class="no-data-card">
-                <mat-card>
-                    <mat-card-content>
-                        <div class="no-data-content">
-                            <mat-icon>quiz</mat-icon>
-                            <h3>No quiz history yet</h3>
-                            <p>Your completed and in-progress quizzes will appear here</p>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
             </div>
-        } @else {
-        @for (quiz of quizList(); track quiz.id) {
-                <mat-card class="quiz-card">
-                    <mat-card-header>
-                        <div class="quiz-header-content">
-                            <div class="quiz-title-section">
-                                <mat-card-title class="quiz-bank-name">{{quiz.questionBankName}}</mat-card-title>
-                                <mat-card-subtitle class="quiz-date">{{quiz.startedAt | date: 'MMM d, y • h:mm a'}}</mat-card-subtitle>
-                            </div>
-                            <div class="quiz-status">
-                                @if (quiz.finishedAt) {
-                                    <span class="status-badge completed">
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="quiz-stats">
+              <div class="stat-item">
+                <div class="skeleton-text skeleton-stat-value"></div>
+                <div class="skeleton-text skeleton-stat-label"></div>
+              </div>
+              <div class="stat-separator">•</div>
+              <div class="stat-item">
+                <div class="skeleton-text skeleton-stat-value"></div>
+                <div class="skeleton-text skeleton-stat-label"></div>
+              </div>
+              <div class="stat-separator">•</div>
+              <div class="stat-item">
+                <div class="skeleton-text skeleton-stat-value"></div>
+                <div class="skeleton-text skeleton-stat-label"></div>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <div class="skeleton-button skeleton-primary-button"></div>
+          </mat-card-actions>
+        </mat-card>
+      }
+    } @else if (quizList().length === 0) {
+      <div class="no-data-card">
+        <mat-card>
+          <mat-card-content>
+            <div class="no-data-content">
+              <mat-icon>quiz</mat-icon>
+              <h3>No quiz history yet</h3>
+              <p>Your completed and in-progress quizzes will appear here</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    } @else {
+      @for (quiz of quizList(); track quiz.id) {
+        <mat-card class="quiz-card">
+          <mat-card-header>
+            <div class="quiz-header-content">
+              <div class="quiz-title-section">
+                <mat-card-title class="quiz-bank-name">{{ quiz.questionBankName }}</mat-card-title>
+                <mat-card-subtitle class="quiz-date">{{ quiz.startedAt | date: 'MMM d, y • h:mm a' }}
+                </mat-card-subtitle>
+              </div>
+              <div class="quiz-status">
+                @if (quiz.finishedAt) {
+                  <span class="status-badge completed">
                                         <mat-icon>check_circle</mat-icon>
                                         Completed
                                     </span>
-                                } @else {
-                                    <span class="status-badge in-progress">
+                } @else {
+                  <span class="status-badge in-progress">
                                         <mat-icon>schedule</mat-icon>
                                         In Progress
                                     </span>
-                                }
-                            </div>
-                        </div>
-                    </mat-card-header>
+                }
+              </div>
+            </div>
+          </mat-card-header>
 
-                  <mat-card-content>
-                        <div class="quiz-stats">
-                            <div class="stat-item">
-                              <div class="stat-value">{{ quiz.questionsCount }}</div>
-                                <div class="stat-label">Questions</div>
-                            </div>
-                            <div class="stat-separator">•</div>
-                            <div class="stat-item">
-                                <div class="stat-value score" [class.high-score]="quiz.correctRatio >= 80" [class.medium-score]="quiz.correctRatio >= 60 && quiz.correctRatio < 80" [class.low-score]="quiz.correctRatio < 60">{{quiz.correctRatio | number}}%</div>
-                                <div class="stat-label">Score</div>
-                            </div>
-                            <div class="stat-separator">•</div>
-                            <div class="stat-item">
-                                <div class="stat-value">{{quiz.duration}}</div>
-                                <div class="stat-label">Duration</div>
-                            </div>
-                        </div>
-                    </mat-card-content>
+          <mat-card-content>
+            <div class="quiz-stats">
+              <div class="stat-item">
+                <div class="stat-value">{{ quiz.questionsCount }}</div>
+                <div class="stat-label">Questions</div>
+              </div>
+              <div class="stat-separator">•</div>
+              <div class="stat-item">
+                <div class="stat-value score" [class.high-score]="quiz.correctRatio >= 80"
+                     [class.medium-score]="quiz.correctRatio >= 60 && quiz.correctRatio < 80"
+                     [class.low-score]="quiz.correctRatio < 60">{{ quiz.correctRatio | number }}%
+                </div>
+                <div class="stat-label">Score</div>
+              </div>
+              <div class="stat-separator">•</div>
+              <div class="stat-item">
+                <div class="stat-value">{{ quiz.duration }}</div>
+                <div class="stat-label">Duration</div>
+              </div>
+            </div>
+          </mat-card-content>
 
-                  <mat-card-actions>
-                        @if (quiz.finishedAt) {
-                            <button mat-button appearance="outlined" routerLink="./practice/{{quiz.id}}">
-                                <mat-icon>visibility</mat-icon>
-                                Review
-                            </button>
-                        } @else {
-                            <button mat-button appearance="filled" color="primary" routerLink="./practice/{{quiz.id}}">
-                                <mat-icon>play_arrow</mat-icon>
-                                Continue
-                            </button>
-                        }
-                    </mat-card-actions>
-                </mat-card>
+          <mat-card-actions>
+            @if (quiz.finishedAt) {
+              <button mat-button appearance="outlined"
+                      [disabled]="loadingQuizId === quiz.id"
+                      (click)="navigateToQuiz(quiz.id, $event)">
+                <div style="display: flex">
+                  @if (loadingQuizId === quiz.id) {
+                    <mat-spinner diameter="18"></mat-spinner>
+                  } @else {
+                    <mat-icon>visibility</mat-icon>
+                  }
+                  Review
+                </div>
+              </button>
+            } @else {
+              <button mat-button appearance="filled" color="primary"
+                      [disabled]="loadingQuizId === quiz.id"
+                      (click)="navigateToQuiz(quiz.id, $event)">
+                <div style="display: flex">
+                  @if (loadingQuizId === quiz.id) {
+                    <mat-spinner diameter="18"></mat-spinner>
+                  } @else {
+                    <mat-icon>play_arrow</mat-icon>
+                  }
+                  Continue
+                </div>
+              </button>
             }
-        }
-    </div>
+          </mat-card-actions>
+        </mat-card>
+      }
+    }
+  </div>
 </div>

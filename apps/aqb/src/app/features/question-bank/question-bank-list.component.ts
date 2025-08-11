@@ -76,6 +76,7 @@ export class QuestionBankListComponent implements OnInit {
   ]
 
   public isImporting = signal<boolean>(false);
+  public loadingQuizId: string | null = null;
   public questionBank = inject(QuestionBankService);
   public questionBanks: Signal<QuestionBankViewModel[]> = computed(() => this.questionBank.questionBankArr().map(qb => new QuestionBankViewModel(qb)))
   public quiz = inject(QuizService);
@@ -162,13 +163,29 @@ export class QuestionBankListComponent implements OnInit {
   async practiceQuiz(questionBankId: string, quizSize: number = 25, questionPrioritySelection?: MatListOption[]): Promise<void> {
     if (isNaN(quizSize)) return;
 
-    const newQuiz = await this.quiz.startQuiz({
-      questionsCount: quizSize,
-      questionBankId: questionBankId,
-      mode: first(questionPrioritySelection)?.value?.value ?? QuizMode.All
-    });
+    // Set loading state if not already set (for menu items)
+    if (this.loadingQuizId !== questionBankId) {
+      this.loadingQuizId = questionBankId;
+      this.cdr.detectChanges();
+    }
 
-    await this.router.navigate(['quizzes', 'practice', newQuiz.id]);
+    try {
+      const newQuiz = await this.quiz.startQuiz({
+        questionsCount: quizSize,
+        questionBankId: questionBankId,
+        mode: first(questionPrioritySelection)?.value?.value ?? QuizMode.All
+      });
+
+      await this.router.navigate(['quizzes', 'practice', newQuiz.id]);
+    } finally {
+      // Reset loading state after a short delay for menu items
+      setTimeout(() => {
+        if (this.loadingQuizId === questionBankId) {
+          this.loadingQuizId = null;
+          this.cdr.detectChanges();
+        }
+      }, 500);
+    }
   }
 
   private async validateAndCleanQuestionBank(obj: any): Promise<{

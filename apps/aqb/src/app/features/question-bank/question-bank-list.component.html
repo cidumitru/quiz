@@ -114,14 +114,20 @@
           </mat-card-content>
 
           <mat-card-actions>
-            <button [disabled]="element.questions === 0"
+            <button [disabled]="element.questions === 0 || loadingQuizId === element.id"
                     (click)="practiceQuizDefault(element.id)"
                     mat-button
                     appearance="filled"
                     color="accent"
                     class="primary-action">
-              <mat-icon>school</mat-icon>
-              Practice
+              <div style="display: flex">
+                @if (loadingQuizId === element.id) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                } @else {
+                  <mat-icon>school</mat-icon>
+                }
+                Practice
+              </div>
             </button>
 
             <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="More actions">
@@ -159,7 +165,11 @@
                 <div class="menu-section-title">Number of Questions</div>
                 @for (size of [25, 50, 100]; track size) {
                   <button (click)="practiceQuiz(element.id, size, selectionList.selectedOptions.selected)"
+                          [disabled]="loadingQuizId === element.id"
                           mat-menu-item>
+                    @if (loadingQuizId === element.id) {
+                      <mat-spinner diameter="16"></mat-spinner>
+                    }
                     <span>{{ size }} Questions</span>
                   </button>
                 }

@@ -302,10 +302,27 @@
           color: white !important;
         }
 
-        &:hover {
+        mat-spinner {
+          margin-right: 10px !important;
+          margin-left: 0 !important;
+        }
+
+        &:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4) !important;
           background: linear-gradient(135deg, #5CBF60, #4CAF50) !important;
+        }
+
+        &:disabled {
+          opacity: 0.8 !important;
+          transform: none !important;
+          cursor: not-allowed !important;
+
+          mat-spinner {
+            ::ng-deep circle {
+              stroke: white !important;
+            }
+          }
         }
       }
 
@@ -333,10 +350,27 @@
           height: 20px !important;
         }
 
-        &:hover {
+        mat-spinner {
+          margin-right: 10px !important;
+          margin-left: 0 !important;
+        }
+
+        &:hover:not(:disabled) {
           transform: translateY(-1px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           background-color: var(--mat-sys-primary-container) !important;
+        }
+
+        &:disabled {
+          opacity: 0.6 !important;
+          transform: none !important;
+          cursor: not-allowed !important;
+
+          mat-spinner {
+            ::ng-deep circle {
+              stroke: var(--mat-sys-primary) !important;
+            }
+          }
         }
       }
     }
