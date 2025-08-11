@@ -1,66 +1,109 @@
 import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
-import {combineLatestWith, map, Observable, startWith, switchMap} from "rxjs";
-import {QuestionBankService} from "../../question-bank.service";
-import {FormControl, ReactiveFormsModule} from "@angular/forms";
-import {ActivatedRoute} from "@angular/router";
-import {MatRadioChange, MatRadioModule} from "@angular/material/radio";
-import {MatCardModule} from "@angular/material/card";
-import {CommonModule} from "@angular/common";
-import {MatTooltipModule} from "@angular/material/tooltip";
-import {ScrollingModule} from "@angular/cdk/scrolling";
-import {MatButtonModule} from "@angular/material/button";
-import {MatIconModule} from "@angular/material/icon";
-import {MatInputModule} from "@angular/material/input";
-import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-import {Question, QuestionBankDetail} from "@aqb/data-access";
+import {CommonModule} from '@angular/common';
+import {Observable} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {QuestionBankService} from '../../question-bank.service';
+import {Question, QuestionBankDetail} from '@aqb/data-access';
+import {QuestionListComponent} from './question-list/question-list.component';
+import {
+  QuestionEditDialogComponent,
+  QuestionEditDialogData
+} from './dialogs/question-edit-dialog/question-edit-dialog.component';
 
 @Component({
-    selector: 'app-question-edit',
+  selector: 'app-question-bank-details',
   templateUrl: './question-bank-details.component.html',
   styleUrls: ['./question-bank-details.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        CommonModule,
-        MatRadioModule,
-        MatCardModule,
-        MatTooltipModule,
-        ScrollingModule,
-        MatButtonModule,
-        MatIconModule,
-        ReactiveFormsModule,
-        MatInputModule,
-        MatSlideToggleModule
-    ],
-    standalone: true
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    QuestionListComponent
+  ],
+  standalone: true
 })
 export class QuestionBankDetailsComponent {
-    private activatedRoute = inject(ActivatedRoute);
-    private questionBank = inject(QuestionBankService);
+  private activatedRoute = inject(ActivatedRoute);
+  public id: string = this.activatedRoute.parent?.snapshot.paramMap.get('id')!;
+  private questionBankService = inject(QuestionBankService);
+  public questionBank$: Observable<QuestionBankDetail> = this.questionBankService.getQuestionBank(this.id);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
-    public id: string = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
-  public questionBank$: Observable<QuestionBankDetail> = this.questionBank.getQuestionBank(this.id);
+  onEditQuestion(question: Question): void {
+    const dialogData: QuestionEditDialogData = {
+      question,
+      questionBankId: this.id,
+      mode: 'edit'
+    };
 
-    public control = new FormControl("");
-    public searchControl = new FormControl("", {nonNullable: true});
-    public questionsWithoutAnswerControl = new FormControl(false, {nonNullable: true});
+    const dialogRef = this.dialog.open(QuestionEditDialogComponent, {
+      data: dialogData,
+      width: '600px',
+      maxHeight: '80vh'
+    });
 
-    public questions$ = this.searchControl.valueChanges.pipe(
-        startWith(""),
-        combineLatestWith(this.questionsWithoutAnswerControl.valueChanges.pipe(startWith(false))),
-      switchMap(([searchText, onlyQuestionWithoutAnswer]) => this.questionBank$.pipe(
-            map(quiz => quiz.questions.filter(question => {
-                if (onlyQuestionWithoutAnswer && question.answers.find(a => a.correct) !== undefined) return false;
-                return question.question.toLowerCase().includes(searchText.toLowerCase());
-            }))
-        )));
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.question) {
+        this.updateQuestion(result.question, result.correctAnswerId);
+      }
+    });
+  }
 
-    setCorrectAnswer(id: string, $event: MatRadioChange) {
-        this.questionBank.setCorrectAnswer(this.id, id, $event.value);
+  onCreateQuestion(): void {
+    const dialogData: QuestionEditDialogData = {
+      questionBankId: this.id,
+      mode: 'create'
+    };
+
+    const dialogRef = this.dialog.open(QuestionEditDialogComponent, {
+      data: dialogData,
+      width: '600px',
+      maxHeight: '80vh'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.newQuestion) {
+        this.createQuestion(result.newQuestion);
+      }
+    });
+  }
+
+  onDeleteQuestion(question: Question): void {
+    this.deleteQuestion(question);
+  }
+
+  private async updateQuestion(question: Question, correctAnswerId: string): Promise<void> {
+    try {
+      // TODO: Backend doesn't support full question update yet
+      // For now, we can only update the correct answer
+      // Full question text and answers update would need backend API support
+      await this.questionBankService.setCorrectAnswer(this.id, question.id, correctAnswerId);
+      this.snackBar.open('Correct answer updated successfully', 'Close', {duration: 3000});
+    } catch (error) {
+      console.error('Failed to update question:', error);
+      this.snackBar.open('Failed to update question', 'Close', {duration: 5000});
     }
+  }
 
-  deleteQuestion(question: Question): void {
-        if (!confirm("Are you sure you want to delete this question?")) return;
-
-        this.questionBank.deleteQuestion(this.id, question.id);
+  private async createQuestion(question: any): Promise<void> {
+    try {
+      await this.questionBankService.addQuestion(this.id, question);
+      this.snackBar.open('Question created successfully', 'Close', {duration: 3000});
+    } catch (error) {
+      console.error('Failed to create question:', error);
+      this.snackBar.open('Failed to create question', 'Close', {duration: 5000});
     }
+  }
+
+  private async deleteQuestion(question: Question): Promise<void> {
+    try {
+      await this.questionBankService.deleteQuestion(this.id, question.id);
+      this.snackBar.open('Question deleted successfully', 'Close', {duration: 3000});
+    } catch (error) {
+      console.error('Failed to delete question:', error);
+      this.snackBar.open('Failed to delete question', 'Close', {duration: 5000});
+    }
+  }
 }

@@ -12,6 +12,7 @@ import {APP_INITIALIZER, importProvidersFrom, inject} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {QuestionBankListComponent} from './app/features/question-bank/question-bank-list.component';
 import {QuestionBankService} from './app/features/question-bank/question-bank.service';
 import {QuizService} from './app/features/quiz/quiz.service';
@@ -92,7 +93,8 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(
       BrowserAnimationsModule,
       HttpClientModule,
-      MatDialogModule
+      MatDialogModule,
+      MatSnackBarModule
     ),
     QuestionBankService,
     QuizService,

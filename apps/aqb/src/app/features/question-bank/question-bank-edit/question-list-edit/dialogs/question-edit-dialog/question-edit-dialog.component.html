@@ -1,0 +1,97 @@
+<h2 mat-dialog-title>{{ data.mode === 'create' ? 'Create New Question' : 'Edit Question' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="question-form">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Question</mat-label>
+      <textarea
+        cdkAutosizeMaxRows="5"
+        cdkAutosizeMinRows="2"
+        cdkTextareaAutosize
+        formControlName="question"
+        matInput
+        placeholder="Enter your question here..."
+        rows="3">
+      </textarea>
+      @if (form.controls.question.invalid && form.controls.question.touched) {
+        <mat-error>
+          @if (form.controls.question.errors?.['required']) {
+            Question is required
+          }
+          @if (form.controls.question.errors?.['minlength']) {
+            Question must be at least 3 characters long
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <div class="answers-section">
+      <div class="section-header">
+        <h3>Answers</h3>
+        <button
+          (click)="addAnswer()"
+          [disabled]="answers.length >= 6"
+          color="primary"
+          mat-mini-fab
+          matTooltip="Add Answer"
+          type="button">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      <mat-radio-group class="answers-list" formControlName="correctAnswerId">
+        @for (answer of answers.controls; track answer.value.id; let i = $index) {
+          <div class="answer-item" [formGroup]="answer">
+            <mat-radio-button [value]="data.mode === 'create' ? i.toString() : answer.controls.id.value"
+                              class="correct-radio">
+            </mat-radio-button>
+
+            <mat-form-field appearance="fill" class="answer-input">
+              <mat-label>Answer {{ i + 1 }}</mat-label>
+              <input
+                matInput
+                formControlName="text"
+                placeholder="Enter answer text...">
+              @if (answer.controls.text.invalid && answer.controls.text.touched) {
+                <mat-error>
+                  Answer text is required
+                </mat-error>
+              }
+            </mat-form-field>
+
+            <button
+              mat-icon-button
+              color="warn"
+              type="button"
+              (click)="removeAnswer(i)"
+              [disabled]="answers.length <= 2"
+              matTooltip="Remove Answer">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        }
+      </mat-radio-group>
+
+      @if (!form.controls.correctAnswerId.value && form.touched) {
+        <mat-error class="correct-answer-error">
+          Please select the correct answer
+        </mat-error>
+      }
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button (click)="onCancel()" [disabled]="isLoading" mat-button>Cancel</button>
+  <button
+    (click)="onSubmit()"
+    [disabled]="form.invalid || isLoading"
+    color="primary"
+    mat-raised-button>
+    @if (isLoading) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      {{ data.mode === 'create' ? 'Create Question' : 'Save Changes' }}
+    }
+  </button>
+</mat-dialog-actions>
