@@ -9,6 +9,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {QuizService} from "../quiz.service";
 import {QuizViewModel} from "./quiz.view-model";
 import {FloatingNavigationComponent} from './floating-navigation/floating-navigation.component';
+import {ConfettiService} from "../../../core/services/confetti.service";
 
 @Component({
   selector: 'app-quiz-practice',
@@ -39,6 +40,7 @@ export class QuizComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
   private quizService = inject(QuizService);
+  private confettiService = inject(ConfettiService);
 
   constructor() {
     // Auto-save answers when they change
@@ -59,6 +61,11 @@ export class QuizComponent implements OnInit, OnDestroy {
       const viewModel = this.quizViewModel();
       if (!viewModel.finishedAt && viewModel?.isComplete()) {
         this.quizService.markQuizAsFinished(viewModel.id);
+
+        // Trigger confetti celebration after a short delay
+        setTimeout(() => {
+          this.celebrateQuizCompletion(viewModel);
+        }, 500);
       }
     });
   }
@@ -233,6 +240,17 @@ export class QuizComponent implements OnInit, OnDestroy {
         block: 'center',
         inline: 'nearest'
       });
+    }
+  }
+
+  /**
+   * Celebrate quiz completion with confetti if score is 80% or higher
+   */
+  private celebrateQuizCompletion(viewModel: QuizViewModel): void {
+    const accuracyPercentage = viewModel.accuracyPercentage();
+
+    if (accuracyPercentage >= 80) {
+      this.confettiService.celebrateQuizCompletion(accuracyPercentage);
     }
   }
 }

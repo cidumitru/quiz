@@ -2,9 +2,10 @@ import {Module, ValidationPipe} from '@nestjs/common';
 import {ConfigModule, ConfigService} from '@nestjs/config';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {ThrottlerGuard, ThrottlerModule} from '@nestjs/throttler';
-import {APP_GUARD, APP_PIPE} from '@nestjs/core';
+import {APP_GUARD, APP_INTERCEPTOR, APP_PIPE} from '@nestjs/core';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
+import {LoggingInterceptor} from './interceptors/logging.interceptor';
 import {AuthModule} from './auth/auth.module';
 import {UserModule} from './user/user.module';
 import {HealthController} from './health/health.controller';
@@ -52,6 +53,10 @@ import {rateLimitConfig} from './middleware/rate-limit.config';
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
     },
   ],
 })

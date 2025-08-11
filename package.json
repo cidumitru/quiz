@@ -39,15 +39,18 @@
     "@nestjs/platform-express": "^11.0.0",
     "@nestjs/throttler": "^6.4.0",
     "@nestjs/typeorm": "^11.0.0",
+    "@types/canvas-confetti": "^1.9.0",
     "axios": "^1.6.0",
     "bcrypt": "^6.0.0",
     "billboard.js": "^3.14.0",
+    "canvas-confetti": "^1.9.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "date-fns": "^4.1.0",
     "export-from-json": "^1.7.4",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
+    "nx": "21.3.11",
     "passport-jwt": "^4.0.1",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.1.13",
@@ -56,8 +59,7 @@
     "typeorm": "^0.3.25",
     "uuid": "^11.0.4",
     "zod": "^3.24.1",
-    "zone.js": "~0.15.0",
-    "nx": "21.3.11"
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "~1.19.1",
