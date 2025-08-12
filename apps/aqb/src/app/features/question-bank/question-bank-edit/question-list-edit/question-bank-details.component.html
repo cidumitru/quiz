@@ -1,11 +1,7 @@
 @if (questionBank(); as questionBank) {
   <app-question-list
-    [questions]="questionsArray()"
-    [totalItems]="totalCount()"
     (editQuestion)="onEditQuestion($event)"
     (deleteQuestion)="onDeleteQuestion($event)"
-    (createQuestion)="onCreateQuestion()"
-    (rangeChanged)="onRangeChanged($event)"
-    [isLoading]="isLoading()">
+    (createQuestion)="onCreateQuestion()">
   </app-question-list>
 }

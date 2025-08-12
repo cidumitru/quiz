@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, input, output, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, OnDestroy, OnInit, output, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
@@ -10,7 +10,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {Question} from '@aqb/data-access';
-import {ListRange} from '@angular/cdk/collections';
+import {QuestionDataSource} from './question-data-source';
 
 @Component({
   selector: 'app-question-list',
@@ -31,45 +31,47 @@ import {ListRange} from '@angular/cdk/collections';
   styleUrls: ['./question-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class QuestionListComponent {
-  questions = input<(Question | null)[]>([]); // Sparse array support
-  totalItems = input<number>(0);
-  isLoading = input<boolean>(false);
+export class QuestionListComponent implements OnInit, OnDestroy {
+  // Data source for virtual scrolling
+  public dataSource = new QuestionDataSource();
 
+  // Outputs for parent communication
   editQuestion = output<Question>();
   deleteQuestion = output<Question>();
   createQuestion = output<void>();
-  rangeChanged = output<ListRange>();
 
   public searchText = signal('');
   public showOnlyWithoutAnswers = signal(false);
 
-  // For virtual scrolling, we work with indices rather than filtering
-  public filteredQuestions = computed(() => {
-    const questions = this.questions();
+  // Check if a question should be visible based on current filters
+  public shouldShowQuestion = computed(() => {
     const search = this.searchText().toLowerCase();
     const onlyWithoutAnswers = this.showOnlyWithoutAnswers();
 
-    // If no search or filter, return the sparse array as-is
-    if (!search && !onlyWithoutAnswers) {
-      return questions;
-    }
-
-    // For search/filter, we need to process only loaded questions
-    return questions.map((question, index) => {
-      if (!question) return null; // Keep null for unloaded items
+    // Return a function that can be called with a question
+    return (question: Question | undefined): boolean => {
+      if (!question) return true; // Always show skeleton for unloaded items
 
       if (onlyWithoutAnswers && question.answers.find(a => a.correct) !== undefined) {
-        return null; // Hide questions with correct answers
+        return false; // Hide questions with correct answers
       }
 
       if (search && !question.question.toLowerCase().includes(search)) {
-        return null; // Hide questions that don't match search
+        return false; // Hide questions that don't match search
       }
 
-      return question;
-    });
+      return true;
+    };
   });
+
+  ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    if (this.dataSource) {
+      this.dataSource.disconnect();
+    }
+  }
 
   onEditQuestion(question: Question): void {
     this.editQuestion.emit(question);
@@ -103,17 +105,15 @@ export class QuestionListComponent {
     this.searchText.set(target.value);
   }
 
-  onRangeChanged(range: any): void {
-    this.rangeChanged.emit(range as ListRange);
+  isQuestionLoading(index: number): boolean {
+    return this.dataSource?.isQuestionLoading(index) ?? false;
   }
 
-  isQuestionLoaded(index: number): boolean {
-    const questions = this.questions();
-    return questions[index] !== null && questions[index] !== undefined;
+  getTotalItems(): number {
+    return this.dataSource?.getTotalLength() ?? 0;
   }
 
-  getQuestionAtIndex(index: number): Question | null {
-    const questions = this.filteredQuestions();
-    return questions[index] || null;
+  trackByFn(index: number, item: Question | undefined): any {
+    return item ? item.id : index;
   }
 }
