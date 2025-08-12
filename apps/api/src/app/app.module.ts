@@ -13,6 +13,7 @@ import {Answer, OtpCode, Question, QuestionBank, Quiz, QuizQuestion, QuizStatist
 import {QuestionBankModule} from './question-bank/question-bank.module';
 import {QuizModule} from './quiz/quiz.module';
 import {StatisticsModule} from './statistics/statistics.module';
+import {CacheModule} from './cache/cache.module';
 import {rateLimitConfig} from './middleware/rate-limit.config';
 
 @Module({
@@ -35,6 +36,7 @@ import {rateLimitConfig} from './middleware/rate-limit.config';
       }),
       inject: [ConfigService],
     }),
+    CacheModule,
     AuthModule,
     UserModule,
     QuestionBankModule,
