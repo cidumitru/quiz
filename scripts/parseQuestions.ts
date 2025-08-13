@@ -1,8 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { v4 as uuidv4 } from 'uuid';
-import * as z from 'zod';
-import { questionBankScheme, IQuestionBank, IQuestion, IAnswer } from '../../src/app/features/question-bank/question-bank.models';
+import {v4 as uuidv4} from 'uuid';
+import {ParsedAnswer, ParsedQuestion, ParsedQuestionBank, questionBankScheme} from "../libs/data-access/src";
 
 // Get filename from command line arguments
 const args = process.argv.slice(2);
@@ -24,14 +23,14 @@ if (!fs.existsSync(absoluteInputPath)) {
 const outputFileName = path.basename(inputFilePath, path.extname(inputFilePath)) + '.json';
 const outputFilePath = path.join(path.dirname(absoluteInputPath), outputFileName);
 
-function parseQuestionFromHtml(htmlContent: string, correctAnswerLetter: string): IQuestion {
+function parseQuestionFromHtml(htmlContent: string, correctAnswerLetter: string): ParsedQuestion {
     // Extract question text (everything before the first <br><br>)
     const questionMatch = htmlContent.match(/^(.*?)<br><br>/);
     const questionText = questionMatch ? questionMatch[1].trim() : htmlContent;
 
     // Extract answer options
     const answerRegex = /([A-D])\.\s*(.*?)(?=<br>|$)/g;
-    const answers: IAnswer[] = [];
+  const answers: ParsedAnswer[] = [];
     let match;
 
     while ((match = answerRegex.exec(htmlContent)) !== null) {
@@ -52,11 +51,11 @@ function parseQuestionFromHtml(htmlContent: string, correctAnswerLetter: string)
     };
 }
 
-function parseQuestionsFile(filePath: string): IQuestionBank {
+function parseQuestionsFile(filePath: string): ParsedQuestionBank {
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     const lines = fileContent.split('\n').filter(line => line.trim());
 
-    const questions: IQuestion[] = [];
+  const questions: ParsedQuestion[] = [];
 
     // Skip header lines
     let startIndex = 0;
@@ -104,7 +103,7 @@ function parseQuestionsFile(filePath: string): IQuestionBank {
         .replace(/[-_]/g, ' ')
         .replace(/\b\w/g, l => l.toUpperCase());
 
-    const questionBank: IQuestionBank = {
+  const questionBank: ParsedQuestionBank = {
         id: uuidv4(),
         createdAt: new Date().toISOString(),
         name: `${questionBankName} Questions`,

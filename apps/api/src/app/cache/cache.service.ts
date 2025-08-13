@@ -93,7 +93,7 @@ export class CacheService {
   }
 
   // Generic get method
-  async get<T>(key: string): Promise<T | null> {
+  async get<T>(key: string): Promise<T | undefined> {
     return await this.cacheManager.get<T>(key);
   }
 
@@ -109,6 +109,6 @@ export class CacheService {
 
   // Reset all cache
   async reset(): Promise<void> {
-    await this.cacheManager.reset();
+    await this.cacheManager.clear();
   }
 }
