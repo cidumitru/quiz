@@ -17,6 +17,7 @@ import {
   UpdateQuestionBankDto,
 } from '@aqb/data-access';
 import {QuestionCountMap, QuestionCountRawResult} from '../types/common.types';
+import {CacheService} from '../cache/cache.service';
 
 @Injectable()
 export class QuestionBankService {
@@ -29,9 +30,16 @@ export class QuestionBankService {
     private answerRepository: Repository<Answer>,
     @InjectRepository(QuizStatistics)
     private quizStatisticsRepository: Repository<QuizStatistics>,
+    private cacheService: CacheService,
   ) {}
 
   async findAll(userId: string): Promise<QuestionBankListResponse> {
+    // Try to get from cache first
+    const cachedData = await this.cacheService.getQuestionBankList(userId);
+    if (cachedData) {
+      return cachedData;
+    }
+
     // Get question banks with basic info only (no questions loaded)
     const questionBanks = await this.questionBankRepository
       .createQueryBuilder('qb')
@@ -107,9 +115,14 @@ export class QuestionBankService {
       },
     }));
 
-    return {
+    const response = {
       questionBanks: simplifiedBanks
     };
+
+    // Cache the response
+    await this.cacheService.setQuestionBankList(userId, response);
+
+    return response;
   }
 
   async create(userId: string, dto?: CreateQuestionBankDto): Promise<QuestionBankDetailResponse> {
@@ -120,10 +133,20 @@ export class QuestionBankService {
     });
 
     const saved = await this.questionBankRepository.save(questionBank);
+
+    // Invalidate the list cache since we added a new question bank
+    await this.cacheService.invalidateQuestionBankList(userId);
+
     return this.findOne(userId, saved.id);
   }
 
   async findOne(userId: string, id: string): Promise<QuestionBankDetailResponse> {
+    // Try to get from cache first
+    const cachedData = await this.cacheService.getQuestionBankDetail(userId, id);
+    if (cachedData) {
+      return cachedData;
+    }
+
     const questionBank = await this.questionBankRepository.findOne({
       where: { id, userId, isDeleted: false },
       relations: ['questions', 'questions.answers'], // Load full data for single item
@@ -135,8 +158,12 @@ export class QuestionBankService {
 
     const transformed = await this.transformQuestionBankFull(questionBank, userId);
 
-    // Always return the transformed data, with or without statistics
-    return {questionBank: transformed as QuestionBankDetail};
+    const response = {questionBank: transformed as QuestionBankDetail};
+
+    // Cache the response
+    await this.cacheService.setQuestionBankDetail(userId, id, response);
+
+    return response;
   }
 
   async getQuestions(userId: string, questionBankId: string, offset: number, limit: number): Promise<QuestionsPaginatedResponse> {
@@ -195,6 +222,9 @@ export class QuestionBankService {
     questionBank.name = dto.name;
     await this.questionBankRepository.save(questionBank);
 
+    // Invalidate both detail and list caches
+    await this.cacheService.invalidateQuestionBankDetail(userId, id);
+
     return { success: true };
   }
 
@@ -209,6 +239,9 @@ export class QuestionBankService {
 
     questionBank.isDeleted = true;
     await this.questionBankRepository.save(questionBank);
+
+    // Invalidate both detail and list caches
+    await this.cacheService.invalidateQuestionBankDetail(userId, id);
 
     return { success: true };
   }
@@ -278,6 +311,9 @@ export class QuestionBankService {
       }
     }
 
+    // Invalidate the list cache since we added a new question bank
+    await this.cacheService.invalidateQuestionBankList(userId);
+
     return this.findOne(userId, savedQuestionBank.id);
   }
 
@@ -315,6 +351,9 @@ export class QuestionBankService {
       questionsAdded++;
     }
 
+    // Invalidate both detail and list caches since questions changed
+    await this.cacheService.invalidateQuestionBankDetail(userId, questionBankId);
+
     return { success: true, questionsAdded };
   }
 
@@ -336,6 +375,9 @@ export class QuestionBankService {
     }
 
     await this.questionRepository.remove(question);
+
+    // Invalidate both detail and list caches since questions changed
+    await this.cacheService.invalidateQuestionBankDetail(userId, questionBankId);
 
     return { success: true };
   }
@@ -372,6 +414,9 @@ export class QuestionBankService {
       answer.isCorrect = answer.id === dto.correctAnswerId;
       await this.answerRepository.save(answer);
     }
+
+    // Invalidate detail cache since answer correctness changed
+    await this.cacheService.invalidateQuestionBankDetail(userId, questionBankId);
 
     return { success: true };
   }
