@@ -113,7 +113,7 @@ jobs:
         run: npm ci
 
       - name: Run TypeScript compilation check
-        run: npx tsc --noEmit -p ./tsconfig.base.json
+        run: npx nx run-many --target=typecheck --all --parallel=3
 
   #  test:
   #    name: Unit Tests
@@ -382,7 +382,7 @@ jobs:
     name: PR Status Check
     runs-on: ubuntu-latest
     if: always()
-    needs: [ lint, typecheck, test, build, e2e ]
+    needs: [ lint, typecheck, build, e2e ]
     steps:
       - name: Check all job statuses
         uses: actions/github-script@v7
