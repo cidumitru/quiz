@@ -242,15 +242,14 @@ export class AchievementProcessor {
         : 0;
 
       // Get consecutive study days (simplified - count distinct days with quiz activity)
-      const recentQuizzes = await this.quizRepository.find({
-        where: { 
-          userId,
-          finishedAt: Not(null) as any
-        },
-        select: ['finishedAt'],
-        order: { finishedAt: 'DESC' },
-        take: 30 // Last 30 days
-      });
+      const recentQuizzes = await this.quizRepository
+        .createQueryBuilder('quiz')
+        .select(['quiz.finishedAt'])
+        .where('quiz.userId = :userId', { userId })
+        .andWhere('quiz.finishedAt IS NOT NULL')
+        .orderBy('quiz.finishedAt', 'DESC')
+        .limit(30)
+        .getMany();
 
       const consecutiveStudyDays = this.calculateConsecutiveStudyDays(recentQuizzes);
 
