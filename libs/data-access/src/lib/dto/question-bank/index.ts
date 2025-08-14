@@ -4,6 +4,8 @@ export {
   CreateQuestionDto,
   CreateQuestionBankDto,
   UpdateQuestionBankDto,
+  UpdateQuestionDto,
+  UpdateAnswerDto,
   AddQuestionsDto,
   SetCorrectAnswerDto,
   ImportQuestionBankDto,
@@ -15,9 +17,11 @@ export type {
   CreateQuestionRequest,
   CreateQuestionBankRequest,
   UpdateQuestionBankRequest,
+  UpdateQuestionRequest,
+  UpdateAnswerRequest,
   AddQuestionsRequest,
   SetCorrectAnswerRequest,
-  ImportQuestionBankRequest
+  ImportQuestionBankRequest,
 } from './question-bank-request.dto';
 
 // Response interfaces and schemas
@@ -45,5 +49,6 @@ export type {
   QuestionBankDetailResponse,
   CreateQuestionBankResponse,
   QuestionBankSuccessResponse,
-  QuestionsAddedResponse
+  QuestionsAddedResponse,
+  QuestionsPaginatedResponse,
 } from './question-bank-response.dto';

@@ -21,13 +21,11 @@
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
-      "@aqb/data-access": [
-        "libs/data-access/src/index.ts"
-      ],
-      "@aqb/data-access/angular": [
-        "libs/data-access/src/angular.ts"
-      ]
+      "@aqb/data-access": ["libs/data-access/src/index.ts"],
+      "@aqb/data-access/angular": ["libs/data-access/src/angular.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

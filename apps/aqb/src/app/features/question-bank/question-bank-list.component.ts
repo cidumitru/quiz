@@ -7,34 +7,34 @@ import {
   OnInit,
   Signal,
   signal,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
-import {QuestionBankService} from "./question-bank.service";
-import {Router, RouterModule} from "@angular/router";
-import exportFromJSON from "export-from-json";
-import {first} from "lodash";
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
-import {MatToolbarModule} from "@angular/material/toolbar";
-import {MatIconModule} from "@angular/material/icon";
-import {MatButtonModule} from "@angular/material/button";
-import {MatTableModule} from "@angular/material/table";
-import {MatCardModule} from "@angular/material/card";
-import {MatRadioModule} from "@angular/material/radio";
-import {CommonModule} from "@angular/common";
-import {MatTooltipModule} from "@angular/material/tooltip";
-import {QuizMode, QuizService} from "../quiz/quiz.service";
-import {MatSort, MatSortModule} from "@angular/material/sort";
-import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {MatInputModule} from "@angular/material/input";
-import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatMenuModule} from "@angular/material/menu";
-import {QuestionBankViewModel} from "./question-bank-view.model";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatListModule, MatListOption} from "@angular/material/list";
-import {MatSelectModule} from "@angular/material/select";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {firstValueFrom} from "rxjs";
-import {QuestionBankImportService} from "../../core/services/question-bank-import.service";
+import { QuestionBankService } from './question-bank.service';
+import { Router, RouterModule } from '@angular/router';
+import exportFromJSON from 'export-from-json';
+import { first } from 'lodash';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from '@angular/material/radio';
+import { CommonModule } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { QuizMode, QuizService } from '../quiz/quiz.service';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatInputModule } from '@angular/material/input';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatMenuModule } from '@angular/material/menu';
+import { QuestionBankViewModel } from './question-bank-view.model';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatListModule, MatListOption } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { firstValueFrom } from 'rxjs';
+import { QuestionBankImportService } from '../../core/services/question-bank-import.service';
 
 @Component({
   selector: 'app-quiz-list',
@@ -62,23 +62,27 @@ import {QuestionBankImportService} from "../../core/services/question-bank-impor
     FormsModule,
     MatListModule,
     MatSelectModule,
-    MatProgressSpinnerModule
-  ]
+    MatProgressSpinnerModule,
+  ],
 })
 export class QuestionBankListComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild("questionBankPaginator") questionBankPaginator!: MatPaginator;
-  public questionBankFilter = new FormControl("");
+  @ViewChild('questionBankPaginator') questionBankPaginator!: MatPaginator;
+  public questionBankFilter = new FormControl('');
   public questionPriorityOptions = [
-    {name: 'All', value: QuizMode.All},
-    {name: 'Mistakes', value: QuizMode.Mistakes},
-    {name: 'Discovery', value: QuizMode.Discovery},
-  ]
+    { name: 'All', value: QuizMode.All },
+    { name: 'Mistakes', value: QuizMode.Mistakes },
+    { name: 'Discovery', value: QuizMode.Discovery },
+  ];
 
   public isImporting = signal<boolean>(false);
   public loadingQuizId: string | null = null;
   public questionBank = inject(QuestionBankService);
-  public questionBanks: Signal<QuestionBankViewModel[]> = computed(() => this.questionBank.questionBankArr().map(qb => new QuestionBankViewModel(qb)))
+  public questionBanks: Signal<QuestionBankViewModel[]> = computed(() =>
+    this.questionBank
+      .questionBankArr()
+      .map((qb) => new QuestionBankViewModel(qb))
+  );
   public quiz = inject(QuizService);
   private router = inject(Router);
   private snackbar = inject(MatSnackBar);
@@ -104,12 +108,14 @@ export class QuestionBankListComponent implements OnInit {
   }
 
   async downloadQuestionBank(id: string): Promise<void> {
-    const targetQuestionBank = await firstValueFrom(this.questionBank.getQuestionBank(id))
+    const targetQuestionBank = await firstValueFrom(
+      this.questionBank.getQuestionBank(id)
+    );
 
     return exportFromJSON({
       data: targetQuestionBank,
       fileName: `${targetQuestionBank.name} - ${targetQuestionBank.questions.length} Questions`,
-      exportType: "json"
+      exportType: 'json',
     });
   }
 
@@ -117,7 +123,7 @@ export class QuestionBankListComponent implements OnInit {
     const input = document.createElement('input');
 
     input.type = 'file';
-    input.accept = ".json";
+    input.accept = '.json';
     input.multiple = false;
 
     input.onchange = async () => {
@@ -140,7 +146,7 @@ export class QuestionBankListComponent implements OnInit {
 
           // Show detailed import results using the service's summary
           const message = this.importService.getImportSummary(importResult);
-          this.snackbar.open(message, "Close", {duration: 5000});
+          this.snackbar.open(message, 'Close', { duration: 5000 });
 
           // Show warnings if any
           if (importResult.warnings.length > 0) {
@@ -150,11 +156,12 @@ export class QuestionBankListComponent implements OnInit {
           this.cdr.detectChanges();
         } else {
           // Show error messages
-          const errorMessage = importResult.errors.length > 0
-            ? importResult.errors[0]
-            : "Invalid file format - unable to import";
+          const errorMessage =
+            importResult.errors.length > 0
+              ? importResult.errors[0]
+              : 'Invalid file format - unable to import';
 
-          this.snackbar.open(errorMessage, "Close", {duration: 5000});
+          this.snackbar.open(errorMessage, 'Close', { duration: 5000 });
 
           // Log detailed errors for debugging
           if (importResult.errors.length > 0) {
@@ -163,7 +170,11 @@ export class QuestionBankListComponent implements OnInit {
         }
       } catch (error) {
         console.error('Failed to upload question bank:', error);
-        this.snackbar.open("Failed to import file. Please check the file format.", "Close", {duration: 5000});
+        this.snackbar.open(
+          'Failed to import file. Please check the file format.',
+          'Close',
+          { duration: 5000 }
+        );
       } finally {
         this.isImporting.set(false);
       }
@@ -178,7 +189,11 @@ export class QuestionBankListComponent implements OnInit {
     await this.practiceQuiz(questionBankId);
   }
 
-  async practiceQuiz(questionBankId: string, quizSize: number = 25, questionPrioritySelection?: MatListOption[]): Promise<void> {
+  async practiceQuiz(
+    questionBankId: string,
+    quizSize = 25,
+    questionPrioritySelection?: MatListOption[]
+  ): Promise<void> {
     if (isNaN(quizSize)) return;
 
     // Set loading state if not already set (for menu items)
@@ -191,7 +206,7 @@ export class QuestionBankListComponent implements OnInit {
       const newQuiz = await this.quiz.startQuiz({
         questionsCount: quizSize,
         questionBankId: questionBankId,
-        mode: first(questionPrioritySelection)?.value?.value ?? QuizMode.All
+        mode: first(questionPrioritySelection)?.value?.value ?? QuizMode.All,
       });
 
       await this.router.navigate(['quizzes', 'practice', newQuiz.id]);
@@ -206,4 +221,3 @@ export class QuestionBankListComponent implements OnInit {
     }
   }
 }
-

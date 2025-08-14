@@ -1,16 +1,20 @@
-import {BadRequestException, Injectable, UnauthorizedException,} from '@nestjs/common';
-import {InjectRepository} from '@nestjs/typeorm';
-import {MoreThan, Repository} from 'typeorm';
-import {JwtService} from '@nestjs/jwt';
-import {ConfigService} from '@nestjs/config';
-import {OtpCode, User} from '../entities';
-import {EmailService} from './email.service';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MoreThan, Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { OtpCode, User } from '../entities';
+import { EmailService } from './email.service';
 import {
   RefreshTokenResponse,
   RequestOtpDto,
   RequestOtpResponse,
   VerifyOtpDto,
-  VerifyOtpResponse
+  VerifyOtpResponse,
 } from '@aqb/data-access';
 
 @Injectable()
@@ -22,7 +26,7 @@ export class AuthService {
     private otpRepository: Repository<OtpCode>,
     private jwtService: JwtService,
     private configService: ConfigService,
-    private emailService: EmailService,
+    private emailService: EmailService
   ) {}
 
   async requestOtp(requestOtpDto: RequestOtpDto): Promise<RequestOtpResponse> {
@@ -42,9 +46,10 @@ export class AuthService {
       },
     });
 
-    if (existingOtpCount >= 10) { // 10 attempts instead of 3 for testing
+    if (existingOtpCount >= 10) {
+      // 10 attempts instead of 3 for testing
       throw new BadRequestException(
-        'Too many OTP requests. Please wait 2 minutes.',
+        'Too many OTP requests. Please wait 2 minutes.'
       );
     }
 
@@ -56,7 +61,7 @@ export class AuthService {
 
     await this.otpRepository.update(
       { userId: user.id, isUsed: false },
-      { isUsed: true },
+      { isUsed: true }
     );
 
     const code = this.generateOtpCode();
@@ -137,7 +142,7 @@ export class AuthService {
           isVerified: user.isVerified,
         },
       };
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
   }
@@ -149,7 +154,10 @@ export class AuthService {
   private isGmailAccount(email: string): boolean {
     const emailLower = email.toLowerCase().trim();
     // Check for standard gmail.com domain and googlemail.com (alternative Gmail domain)
-    return emailLower.endsWith('@gmail.com') || emailLower.endsWith('@googlemail.com');
+    return (
+      emailLower.endsWith('@gmail.com') ||
+      emailLower.endsWith('@googlemail.com')
+    );
   }
 
   private async generateTokens(user: User) {

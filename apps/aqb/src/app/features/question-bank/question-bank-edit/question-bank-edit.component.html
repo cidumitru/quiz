@@ -1,18 +1,28 @@
-<mat-form-field appearance="fill" style="width: 100%">
-    <mat-label>Your question bank name</mat-label>
-  <input (ngModelChange)="updateName($event)" [ngModelOptions]="{ updateOn: 'blur' }"
-         [ngModel]="(questionBank$ | async)?.name"
-         matInput
-           placeholder="Your question bank name" required>
-</mat-form-field>
+<div class="page-container">
+  <div class="page-header">
+    <h1>{{ questionBankName() || 'Loading...' }}</h1>
+    <div class="header-actions">
+      <button
+        (click)="createQuestion()"
+        appearance="filled"
+        color="primary"
+        mat-button
+      >
+        <mat-icon>add</mat-icon>
+        Add Question
+      </button>
+      <button (click)="openEditDialog()" appearance="outlined" mat-button>
+        <mat-icon>edit</mat-icon>
+        Edit Name
+      </button>
+    </div>
+  </div>
 
-<nav [tabPanel]="tabPanel" mat-tab-nav-bar>
-    <a #rla1="routerLinkActive" [active]="rla1.isActive" mat-tab-link routerLink="questions"
-       routerLinkActive>Questions ({{(questionBank$ | async)?.questions?.length ?? '0'}})</a>
-    <a #rla2="routerLinkActive" [active]="rla2.isActive" mat-tab-link routerLink="add" routerLinkActive>Add new
-        question</a>
-    <a #rla3="routerLinkActive" [active]="rla3.isActive" mat-tab-link routerLink="import" routerLinkActive>Import</a>
-</nav>
-<mat-tab-nav-panel #tabPanel>
-    <router-outlet></router-outlet>
-</mat-tab-nav-panel>
+  <div class="content-container">
+    <app-question-list
+      (editQuestion)="onEditQuestion($event)"
+      (deleteQuestion)="onDeleteQuestion($event)"
+      (createQuestion)="createQuestion()">
+    </app-question-list>
+  </div>
+</div>

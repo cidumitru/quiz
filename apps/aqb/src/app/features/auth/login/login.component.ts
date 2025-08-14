@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
@@ -20,31 +25,31 @@ import { AuthService } from '../../../core/services/auth.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   emailForm: FormGroup;
   otpForm: FormGroup;
-  
+
   showOtpForm = false;
   isLoading = false;
   email = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+
+  constructor() {
     this.emailForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
     });
 
     this.otpForm = this.fb.group({
-      code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]]
+      code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
     });
   }
 
@@ -61,9 +66,10 @@ export class LoginComponent {
         },
         error: (error) => {
           this.isLoading = false;
-          const message = error.error?.message || 'Failed to send OTP. Please try again.';
+          const message =
+            error.error?.message || 'Failed to send OTP. Please try again.';
           this.snackBar.open(message, 'Close', { duration: 5000 });
-        }
+        },
       });
     }
   }
@@ -74,17 +80,18 @@ export class LoginComponent {
       const code = this.otpForm.value.code;
 
       this.authService.verifyOtp(this.email, code).subscribe({
-        next: (response) => {
+        next: () => {
           this.isLoading = false;
           this.snackBar.open('Login successful!', 'Close', { duration: 3000 });
           this.router.navigate(['/']);
         },
         error: (error) => {
           this.isLoading = false;
-          const message = error.error?.message || 'Invalid or expired OTP. Please try again.';
+          const message =
+            error.error?.message || 'Invalid or expired OTP. Please try again.';
           this.snackBar.open(message, 'Close', { duration: 5000 });
           this.otpForm.get('code')?.reset();
-        }
+        },
       });
     }
   }

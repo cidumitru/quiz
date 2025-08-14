@@ -1,9 +1,18 @@
-import {computed, inject, Injectable, signal} from "@angular/core";
-import {firstValueFrom, map, Observable} from "rxjs";
-import {omit, values} from "lodash";
-import {IQuestionCreate, QuestionBankDetail, QuestionBankSummary} from "./question-bank.models";
-import {QuestionBankApiService} from "@aqb/data-access/angular";
-
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { firstValueFrom, map, Observable } from 'rxjs';
+import { omit, values } from 'lodash';
+import {
+  IQuestionCreate,
+  QuestionBankDetail,
+  QuestionBankSummary,
+  QuestionsPaginatedResponse,
+} from './question-bank.models';
+import {
+  ImportQuestionBankRequest,
+  QuestionBankSuccessResponse,
+  UpdateQuestionRequest,
+} from '@aqb/data-access';
+import { QuestionBankApiService } from '@aqb/data-access/angular';
 
 @Injectable()
 export class QuestionBankService {
@@ -25,7 +34,26 @@ export class QuestionBankService {
   }
 
   getQuestionBank(id: string): Observable<QuestionBankDetail> {
-    return this.api.get(id).pipe(map(r => r.questionBank))
+    return this.api.get(id).pipe(map((r) => r.questionBank));
+  }
+
+  getQuestions(
+    questionBankId: string,
+    offset = 0,
+    limit = 50,
+    search?: string
+  ): Observable<QuestionsPaginatedResponse> {
+    return this.api.getQuestions(questionBankId, offset, limit, search);
+  }
+
+  updateQuestion(
+    questionBankId: string,
+    questionId: string,
+    question: UpdateQuestionRequest
+  ): Promise<QuestionBankSuccessResponse> {
+    return firstValueFrom(
+      this.api.updateQuestion(questionBankId, questionId, question)
+    );
   }
 
   async reload() {
@@ -36,7 +64,7 @@ export class QuestionBankService {
       const response = await firstValueFrom(this.api.list());
       const banks: Record<string, QuestionBankSummary> = {};
 
-      response.questionBanks.forEach(bank => {
+      response.questionBanks.forEach((bank) => {
         banks[bank.id] = bank;
       });
 
@@ -57,9 +85,9 @@ export class QuestionBankService {
       const response = await firstValueFrom(this.api.create());
       const questionBank = response.questionBank;
 
-      this._questionBanks.update(current => ({
+      this._questionBanks.update((current) => ({
         ...current,
-        [questionBank.id]: toQuestionBankSummary(questionBank)
+        [questionBank.id]: toQuestionBankSummary(questionBank),
       }));
 
       return questionBank.id;
@@ -77,11 +105,11 @@ export class QuestionBankService {
     this._error.set(null);
 
     try {
-      await firstValueFrom(this.api.update(id, {name}));
+      await firstValueFrom(this.api.update(id, { name }));
 
-      this._questionBanks.update(current => ({
+      this._questionBanks.update((current) => ({
         ...current,
-        [id]: {...current[id], name}
+        [id]: { ...current[id], name },
       }));
     } catch (error) {
       this._error.set('Failed to update question bank');
@@ -92,15 +120,19 @@ export class QuestionBankService {
     }
   }
 
-  async insertQuestionBank(questionBankData: any): Promise<void> {
+  async insertQuestionBank(
+    questionBankData: ImportQuestionBankRequest
+  ): Promise<void> {
     this._error.set(null);
 
     try {
       const response = await firstValueFrom(this.api.insert(questionBankData));
 
-      this._questionBanks.update(current => ({
+      this._questionBanks.update((current) => ({
         ...current,
-        [response.questionBank.id]: toQuestionBankSummary(response.questionBank),
+        [response.questionBank.id]: toQuestionBankSummary(
+          response.questionBank
+        ),
       }));
     } catch (error) {
       this._error.set('Failed to insert question bank');
@@ -109,22 +141,27 @@ export class QuestionBankService {
     }
   }
 
-  async addQuestion(questionBankId: string, question: IQuestionCreate | IQuestionCreate[]): Promise<void> {
+  async addQuestion(
+    questionBankId: string,
+    question: IQuestionCreate | IQuestionCreate[]
+  ): Promise<void> {
     this._loading.set(true);
     this._error.set(null);
 
     try {
-      await firstValueFrom(this.api.addQuestion(questionBankId, {
-        questions: question
-      }));
+      await firstValueFrom(
+        this.api.addQuestion(questionBankId, {
+          questions: question,
+        })
+      );
 
       // Update the summary with new updatedAt timestamp
-      this._questionBanks.update(current => ({
+      this._questionBanks.update((current) => ({
         ...current,
         [questionBankId]: {
           ...current[questionBankId],
-          updatedAt: new Date()
-        }
+          updatedAt: new Date(),
+        },
       }));
     } catch (error) {
       this._error.set('Failed to add question');
@@ -141,7 +178,7 @@ export class QuestionBankService {
     try {
       await firstValueFrom(this.api.delete(id));
 
-      this._questionBanks.update(current => omit(current, id));
+      this._questionBanks.update((current) => omit(current, id));
     } catch (error) {
       this._error.set('Failed to delete question bank');
       console.error('Failed to delete question bank:', error);
@@ -149,20 +186,26 @@ export class QuestionBankService {
     }
   }
 
-  async setCorrectAnswer(questionBankId: string, questionId: string, correctAnswerId: string): Promise<void> {
+  async setCorrectAnswer(
+    questionBankId: string,
+    questionId: string,
+    correctAnswerId: string
+  ): Promise<void> {
     this._loading.set(true);
     this._error.set(null);
 
     try {
-      await firstValueFrom(this.api.setCorrectAnswer(questionBankId, questionId, correctAnswerId));
+      await firstValueFrom(
+        this.api.setCorrectAnswer(questionBankId, questionId, correctAnswerId)
+      );
 
       // Update summary timestamp
-      this._questionBanks.update(current => ({
+      this._questionBanks.update((current) => ({
         ...current,
         [questionBankId]: {
           ...current[questionBankId],
-          updatedAt: new Date()
-        }
+          updatedAt: new Date(),
+        },
       }));
     } catch (error) {
       this._error.set('Failed to set correct answer');
@@ -173,7 +216,10 @@ export class QuestionBankService {
     }
   }
 
-  async deleteQuestion(questionBankId: string, questionId: string): Promise<void> {
+  async deleteQuestion(
+    questionBankId: string,
+    questionId: string
+  ): Promise<void> {
     this._loading.set(true);
     this._error.set(null);
 
@@ -181,12 +227,12 @@ export class QuestionBankService {
       await firstValueFrom(this.api.deleteQuestion(questionBankId, questionId));
 
       // Update summary timestamp
-      this._questionBanks.update(current => ({
+      this._questionBanks.update((current) => ({
         ...current,
         [questionBankId]: {
           ...current[questionBankId],
-          updatedAt: new Date()
-        }
+          updatedAt: new Date(),
+        },
       }));
     } catch (error) {
       this._error.set('Failed to delete question');
@@ -198,13 +244,15 @@ export class QuestionBankService {
   }
 }
 
-export function toQuestionBankSummary(detail: QuestionBankDetail): QuestionBankSummary {
+export function toQuestionBankSummary(
+  detail: QuestionBankDetail
+): QuestionBankSummary {
   return {
     id: detail.id,
     name: detail.name,
     createdAt: detail.createdAt,
     updatedAt: detail.updatedAt,
     questionsCount: detail.questions.length,
-    statistics: detail.statistics
-  }
+    statistics: detail.statistics,
+  };
 }

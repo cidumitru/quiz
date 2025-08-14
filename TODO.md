@@ -1,4 +1,0 @@
-- [ ] Migrate quizzes and statistics to BE
-- [ ] On practice button click make a request which will create a new quiz from specific bank
-- [ ] Make small requests with answers for each question to have them for statistics
-- [ ] Simplify the question bank list to not contain everything, provide just list info with precomputed statistics from BE

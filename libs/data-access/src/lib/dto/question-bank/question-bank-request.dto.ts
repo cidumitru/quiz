@@ -1,5 +1,13 @@
-import {IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, IsUUID, ValidateNested} from 'class-validator';
-import {Type} from 'class-transformer';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateAnswerDto {
   @IsString()
@@ -17,7 +25,7 @@ export class CreateQuestionDto {
   question: string;
 
   @IsArray()
-  @ValidateNested({each: true})
+  @ValidateNested({ each: true })
   @Type(() => CreateAnswerDto)
   answers: CreateAnswerDto[];
 }
@@ -35,7 +43,7 @@ export class UpdateQuestionBankDto {
 }
 
 export class AddQuestionsDto {
-  @ValidateNested({each: true})
+  @ValidateNested({ each: true })
   @Type(() => CreateQuestionDto)
   questions: CreateQuestionDto | CreateQuestionDto[];
 }
@@ -43,6 +51,35 @@ export class AddQuestionsDto {
 export class SetCorrectAnswerDto {
   @IsUUID()
   correctAnswerId: string;
+}
+
+export class UpdateAnswerDto {
+  @IsUUID()
+  @IsOptional()
+  id?: string; // Optional for new answers
+
+  @IsString()
+  @IsNotEmpty()
+  text: string;
+
+  @IsBoolean()
+  @IsOptional()
+  correct?: boolean;
+}
+
+export class UpdateQuestionDto {
+  @IsString()
+  @IsNotEmpty()
+  question: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => UpdateAnswerDto)
+  answers: UpdateAnswerDto[];
+
+  @IsUUID()
+  @IsOptional()
+  correctAnswerId?: string; // For backward compatibility
 }
 
 export class ImportQuestionBankDto {
@@ -65,7 +102,7 @@ export class ImportQuestionBankDto {
   isDeleted?: boolean;
 
   @IsArray()
-  @ValidateNested({each: true})
+  @ValidateNested({ each: true })
   @Type(() => QuestionDto)
   questions: QuestionDto[];
 }
@@ -92,7 +129,7 @@ class QuestionDto {
   question: string;
 
   @IsArray()
-  @ValidateNested({each: true})
+  @ValidateNested({ each: true })
   @Type(() => AnswerDto)
   answers: AnswerDto[];
 }
@@ -104,4 +141,6 @@ export type CreateQuestionBankRequest = CreateQuestionBankDto;
 export type UpdateQuestionBankRequest = UpdateQuestionBankDto;
 export type AddQuestionsRequest = AddQuestionsDto;
 export type SetCorrectAnswerRequest = SetCorrectAnswerDto;
+export type UpdateQuestionRequest = UpdateQuestionDto;
+export type UpdateAnswerRequest = UpdateAnswerDto;
 export type ImportQuestionBankRequest = ImportQuestionBankDto;
