@@ -1,6 +1,6 @@
-<div [class.visible]="totalQuestions() > 1" class="floating-navigation">
+<div [class.visible]="totalQuestions() > 1" class="floating-navigation fixed right-6 top-1/2 -translate-y-1/2 z-[1000] flex flex-col items-center gap-4 opacity-0 invisible transition-all duration-300">
   <!-- Progress indicator -->
-  <div class="progress-circle">
+  <div class="progress-circle relative w-12 h-12 mb-2">
     <svg class="progress-svg" viewBox="0 0 36 36">
       <circle class="progress-background" cx="18" cy="18" r="15.915"/>
       <circle
