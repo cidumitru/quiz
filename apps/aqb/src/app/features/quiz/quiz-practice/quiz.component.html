@@ -1,22 +1,22 @@
 @if (loading()) {
-<div class="loading-container">
-  <mat-card>
+<div class="flex justify-center">
+  <mat-card class="w-full max-w-md">
     <mat-card-content>
-      <div style="text-align: center; padding: 2rem">
+      <div class="text-center p-8">
         <h3>Loading quiz...</h3>
       </div>
     </mat-card-content>
   </mat-card>
 </div>
 } @else if (error()) {
-<div class="error-container">
-  <mat-card>
+<div class="flex justify-center">
+  <mat-card class="w-full max-w-md">
     <mat-card-content>
-      <div style="text-align: center; padding: 2rem">
+      <div class="text-center p-8">
         <mat-icon color="warn">error</mat-icon>
         <h3>Error loading quiz</h3>
         <p>{{ error() }}</p>
-        <button mat-raised-button color="primary" routerLink="/">
+        <button mat-raised-button color="primary" routerLink="/" class="mt-4">
           Go back
         </button>
       </div>
@@ -35,33 +35,33 @@
 </app-floating-navigation>
 
 <!-- Quiz Header with Progress -->
-<div class="quiz-header">
-  <div class="quiz-info">
-    <h1 class="quiz-title">
+<div class="quiz-header bg-gradient-to-r from-[var(--mat-sys-surface-container-lowest)] to-[var(--mat-sys-surface-container)] rounded-3xl p-8 mb-8 border border-[var(--mat-sys-outline-variant)] shadow-md md:p-6 md:mb-6">
+  <div class="mb-6">
+    <h1 class="quiz-title text-3xl font-semibold mb-2 leading-tight md:text-2xl">
       Practice Test:
-      <span class="bank-name" routerLink="../questions">{{
+      <span class="bank-name cursor-pointer no-underline transition-colors duration-200" routerLink="../questions">{{
         quizViewModel().questionBankName || 'Quiz'
       }}</span>
     </h1>
-    <p class="quiz-subtitle">
+    <p class="quiz-subtitle text-sm opacity-80">
       Started {{ quizViewModel().startedAt | date : 'MMM d, y • h:mm a' }}
     </p>
   </div>
 
   <!-- Progress Bar -->
   <div class="progress-section">
-    <div class="progress-stats">
-      <span class="progress-text"
+    <div class="flex justify-between items-center mb-3 flex-col gap-2 items-stretch md:flex-row md:gap-0 md:items-center">
+      <span class="progress-text text-base font-semibold"
         >{{ quizViewModel().answeredCount() }} of
         {{ quizViewModel().totalQuestions }} answered</span
       >
-      <span class="accuracy-text"
+      <span class="accuracy-text text-sm font-medium py-1 px-3 rounded-2xl text-center md:text-left"
         >{{ quizViewModel().accuracyPercentage() }}% accuracy</span
       >
     </div>
-    <div class="progress-bar">
+    <div class="progress-bar h-3 rounded-md overflow-hidden border">
       <div
-        class="progress-fill"
+        class="progress-fill h-full rounded-md transition-all duration-500 ease-out relative"
         [style.width.%]="quizViewModel().progressPercentage()"
       ></div>
     </div>
@@ -71,44 +71,44 @@
 <!-- Quiz Content -->
 <div class="quiz-container">
   @if (!quizViewModel().hasAnyQuestions()) {
-  <div class="no-questions-card">
-    <mat-card>
+  <div class="col-span-full">
+    <mat-card class="text-center p-16 border-2 border-dashed border-[var(--mat-sys-outline-variant)] bg-gradient-to-br from-[var(--mat-sys-surface-container-lowest)] to-[var(--mat-sys-surface-container)] rounded-3xl">
       <mat-card-content>
-        <div class="no-questions-content">
-          <mat-icon>quiz</mat-icon>
-          <h3>No questions available</h3>
-          <p>No questions match the selected criteria</p>
+        <div class="no-questions-content space-y-6">
+          <mat-icon class="text-6xl w-16 h-16 opacity-60">quiz</mat-icon>
+          <h3 class="text-2xl font-semibold m-0">No questions available</h3>
+          <p class="text-base opacity-80 m-0">No questions match the selected criteria</p>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
   } @else {
-  <div class="questions-list">
+  <div class="flex flex-col gap-6">
     @for (question of quizViewModel()!.questions; track question.id; let i =
     $index) {
-    <div class="question-wrapper">
+    <div class="question-wrapper relative">
       <!-- Floating Question Number Badge -->
       <div
-        class="floating-question-number"
+        class="floating-question-number absolute -top-2 -left-2 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm z-10 border-2 shadow-md transition-all duration-300 ease-out md:w-7 md:h-7 md:text-xs md:-top-1.5 md:-left-1.5 md:border-2"
         [ngClass]="question.getCssClasses()"
       >
         {{ i + 1 }}
       </div>
 
       <mat-card
-        class="question-card"
+        class="question-card relative overflow-visible transition-all duration-300 ease-out"
         [attr.data-question-index]="i"
         [ngClass]="question.getCssClasses()"
       >
         <!-- Question Header -->
-        <mat-card-header class="question-header">
-          <div class="question-content">
-            <mat-card-title class="question-text">
+        <mat-card-header class="p-6 pb-4">
+          <div class="flex-1">
+            <mat-card-title class="question-text text-xl font-medium leading-6 m-0 -tracking-wide">
               {{ question.question }}
             </mat-card-title>
             @if (!question.hasCorrectAnswer) {
-            <mat-card-subtitle class="no-answer-warning">
-              <mat-icon>warning</mat-icon>
+            <mat-card-subtitle class="no-answer-warning flex items-center gap-2 text-sm mt-2 m-0">
+              <mat-icon class="text-lg w-4.5 h-4.5">warning</mat-icon>
               No correct answer provided
             </mat-card-subtitle>
             }
@@ -116,11 +116,11 @@
         </mat-card-header>
 
         <!-- Answer Options -->
-        <mat-card-content class="answers-section">
-          <div class="answers-grid">
+        <mat-card-content class="p-0 px-6 pb-6">
+          <div class="grid grid-cols-1 gap-3">
             @for (answer of question.answers; track answer.id) {
             <div
-              class="answer-card"
+              class="answer-card flex items-center justify-between p-4 px-5 rounded-2xl border-2 cursor-pointer transition-all duration-200 ease-out min-h-15"
               [ngClass]="question.getAnswerCssClasses(answer.id)"
               (click)="selectAnswer(question.id, answer.id)"
               (keydown.enter)="selectAnswer(question.id, answer.id)"
@@ -130,16 +130,16 @@
               [attr.role]="'button'"
               [style.cursor]="question.isAnswered() ? 'not-allowed' : 'pointer'"
             >
-              <div class="answer-content">
-                <div class="answer-label">{{ answer.label }}</div>
-                <div class="answer-text">{{ answer.text }}</div>
+              <div class="answer-content flex items-center gap-4 flex-1">
+                <div class="answer-label w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 transition-all duration-200 ease-out">{{ answer.label }}</div>
+                <div class="answer-text text-lg font-normal leading-6 tracking-wide">{{ answer.text }}</div>
               </div>
 
-              <div class="answer-indicator">
+              <div class="answer-indicator flex items-center">
                 @if (question.selectedAnswerId() === answer.id) {
-                <mat-icon class="selected-icon">radio_button_checked</mat-icon>
+                <mat-icon class="selected-icon text-2xl w-6 h-6">radio_button_checked</mat-icon>
                 } @else {
-                <mat-icon class="unselected-icon"
+                <mat-icon class="unselected-icon text-2xl w-6 h-6 opacity-60"
                   >radio_button_unchecked
                 </mat-icon>
                 }
@@ -154,22 +154,21 @@
   </div>
   }
 </div>
-<div class="stats">
+<div class="stats text-center mt-20 p-8 rounded-3xl border">
   <div>
-    <span style="font-size: 4rem">
+    <span class="text-6xl">
       <span>{{ quizViewModel().totalQuestions }}</span> /
       <span class="correct">{{ quizViewModel().correctCount() }}</span> /
       <span class="incorrect">{{ quizViewModel().incorrectCount() }}</span>
     </span>
   </div>
-  <div style="margin-top: 2rem">
+  <div class="mt-8 flex justify-center gap-4 flex-col sm:flex-row">
     <button mat-raised-button color="primary" routerLink="/">GO HOME</button>
     @if (quizViewModel().isComplete()) {
     <button
       mat-stroked-button
       color="accent"
       (click)="retry()"
-      style="margin-left: 1rem"
     >
       GENERATE NEW
     </button>

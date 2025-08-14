@@ -44,7 +44,7 @@ export class QuizViewModel {
     return this.totalQuestions > 0;
   });
 
-  constructor(quiz: Quiz, initialAnswers: Record<string, string> = {}) {
+  constructor(quiz: Quiz) {
     this.id = quiz.id;
     this.questionBankId = quiz.questionBankId;
     this.startedAt =
