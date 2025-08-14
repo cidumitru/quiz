@@ -59,7 +59,7 @@ export class QuizViewModel {
 
     // Create question view models with initial answers
     this.questions = quiz.questions.map(
-      (q) => new QuestionViewModel(q, initialAnswers[q.questionId || ''])
+      (q) => new QuestionViewModel(q)
     );
 
     this.questionBankName = quiz.questionBankName;

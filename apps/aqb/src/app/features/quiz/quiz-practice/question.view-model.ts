@@ -23,7 +23,7 @@ export class QuestionViewModel {
   });
   readonly selectedAnswerId = computed(() => this._selectedAnswerId());
 
-  constructor(question: QuizQuestion, initialAnswerId?: string) {
+  constructor(question: QuizQuestion) {
     this.id = question.questionId;
     this.question = question.question;
 
@@ -36,8 +36,8 @@ export class QuestionViewModel {
     this.hasCorrectAnswer = !!this.correctAnswer;
 
     // Initialize selection state
-    if (initialAnswerId) {
-      this._selectedAnswerId.set(initialAnswerId);
+    if (question.userAnswerId) {
+      this._selectedAnswerId.set(question.userAnswerId);
     }
   }
 
