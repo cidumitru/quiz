@@ -13,6 +13,8 @@ import {QuestionBank} from './question-bank.entity';
 
 @Entity('quiz_statistics')
 @Index(['userId', 'questionBankId'], {unique: true})
+@Index(['userId']) // For user-wide statistics queries
+@Index(['lastActivityDate']) // For activity-based queries
 export class QuizStatistics {
   @PrimaryGeneratedColumn('uuid')
   id: string;

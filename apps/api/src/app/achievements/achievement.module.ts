@@ -6,6 +6,8 @@ import {ScheduleModule} from '@nestjs/schedule';
 // Entities
 import {UserAchievement} from '../entities/user-achievement.entity';
 import {AchievementEvent} from '../entities/achievement-event.entity';
+import {Quiz} from '../entities/quiz.entity';
+import {QuizStatistics} from '../entities/quiz-statistics.entity';
 
 // Domain Services
 import {AchievementRegistry} from './domain/services/achievement-registry';
@@ -24,7 +26,7 @@ import {AchievementGateway} from './infrastructure/gateways/achievement.gateway'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserAchievement, AchievementEvent]),
+    TypeOrmModule.forFeature([UserAchievement, AchievementEvent, Quiz, QuizStatistics]),
     EventEmitterModule.forRoot(),
     ScheduleModule.forRoot()
   ],

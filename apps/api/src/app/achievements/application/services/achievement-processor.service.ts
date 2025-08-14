@@ -1,10 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, Not, Between } from 'typeorm';
 import { AchievementRegistry } from '../../domain/services/achievement-registry';
 import { UserAchievementRepository } from '../../infrastructure/repositories/user-achievement.repository';
 import { AchievementEventRepository } from '../../infrastructure/repositories/achievement-event.repository';
 import { AchievementEvaluationContext, UserStatistics, SessionStatistics } from '../../domain/value-objects/achievement-evaluation-context.vo';
 import { AchievementEvent } from '../../../entities/achievement-event.entity';
 import { UserAchievement } from '../../../entities/user-achievement.entity';
+import { Quiz } from '../../../entities/quiz.entity';
+import { QuizStatistics } from '../../../entities/quiz-statistics.entity';
 import { AchievementProcessingResultDto, AchievementNotificationDto } from '../dto/achievement.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
@@ -24,7 +28,11 @@ export class AchievementProcessor {
     private readonly achievementRegistry: AchievementRegistry,
     private readonly userAchievementRepository: UserAchievementRepository,
     private readonly achievementEventRepository: AchievementEventRepository,
-    private readonly eventEmitter: EventEmitter2
+    private readonly eventEmitter: EventEmitter2,
+    @InjectRepository(Quiz)
+    private readonly quizRepository: Repository<Quiz>,
+    @InjectRepository(QuizStatistics)
+    private readonly quizStatisticsRepository: Repository<QuizStatistics>
   ) {}
 
   async processAchievementEvent(event: AchievementEvent): Promise<AchievementProcessingResultDto> {
@@ -147,28 +155,11 @@ export class AchievementProcessor {
   }
 
   private async buildEvaluationContext(event: AchievementEvent): Promise<AchievementEvaluationContext> {
-    // TODO: Implement actual data fetching from repositories
-    // For now, using mock data structure
-    const userStats: UserStatistics = {
-      totalQuizzes: event.eventData.totalQuizzes || 0,
-      totalAnswers: event.eventData.totalAnswers || 0,
-      correctAnswers: event.eventData.correctAnswers || 0,
-      averageScore: event.eventData.averageScore || 0,
-      averageScoreToday: event.eventData.averageScoreToday || 0,
-      currentStreak: event.eventData.currentStreak || 0,
-      longestStreak: event.eventData.longestStreak || 0,
-      consecutiveStudyDays: event.eventData.consecutiveStudyDays || 0,
-      lastActivityDate: event.eventData.lastActivityDate || null,
-      dailyStats: event.eventData.dailyStats || {}
-    };
-
-    const sessionStats: SessionStatistics | null = event.eventData.session ? {
-      questionsAnswered: event.eventData.session.questionsAnswered || 0,
-      correctAnswers: event.eventData.session.correctAnswers || 0,
-      accuracy: event.eventData.session.accuracy || 0,
-      completionTime: event.eventData.session.completionTime || 0,
-      streakInSession: event.eventData.session.streakInSession || 0
-    } : null;
+    // Fetch real user statistics from database
+    const userStats = await this.getUserStatistics(event.userId);
+    
+    // Build session statistics from event data (this is real-time data)
+    const sessionStats: SessionStatistics | null = this.buildSessionStatistics(event);
 
     // Get recent events for pattern analysis
     const recentEvents = await this.achievementEventRepository.findRecentByUserId(
@@ -198,6 +189,154 @@ export class AchievementProcessor {
       })),
       event.occurredAt
     );
+  }
+
+  private async getUserStatistics(userId: string): Promise<UserStatistics> {
+    try {
+      // Get completed quizzes
+      const completedQuizzes = await this.quizRepository.count({
+        where: { userId, finishedAt: Not(null) } as any
+      });
+
+      // Get aggregated quiz statistics across all question banks for user
+      const statsQuery = await this.quizStatisticsRepository
+        .createQueryBuilder('stats')
+        .select([
+          'SUM(stats.totalAnswers) as totalAnswers',
+          'SUM(stats.correctAnswers) as correctAnswers', 
+          'AVG(stats.averageScore) as averageScore',
+          'MAX(stats.currentStreak) as currentStreak',
+          'MAX(stats.longestStreak) as longestStreak',
+          'MAX(stats.lastActivityDate) as lastActivityDate'
+        ])
+        .where('stats.userId = :userId', { userId })
+        .getRawOne();
+
+      const stats = statsQuery || {
+        totalAnswers: 0,
+        correctAnswers: 0,
+        averageScore: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        lastActivityDate: null
+      };
+
+      // Calculate daily stats for today
+      const today = new Date().toISOString().split('T')[0];
+      const todayStart = new Date(today + 'T00:00:00Z');
+      const todayEnd = new Date(today + 'T23:59:59Z');
+      
+      const todayQuizzes = await this.quizRepository.find({
+        where: { 
+          userId, 
+          finishedAt: Between(todayStart, todayEnd) as any,
+        }
+      });
+
+      // Calculate today's average score
+      const todayScores = todayQuizzes
+        .filter(q => q.score !== null && q.score !== undefined)
+        .map(q => q.score);
+      const averageScoreToday = todayScores.length > 0 
+        ? todayScores.reduce((sum, score) => sum + score, 0) / todayScores.length 
+        : 0;
+
+      // Get consecutive study days (simplified - count distinct days with quiz activity)
+      const recentQuizzes = await this.quizRepository.find({
+        where: { 
+          userId,
+          finishedAt: Not(null) as any
+        },
+        select: ['finishedAt'],
+        order: { finishedAt: 'DESC' },
+        take: 30 // Last 30 days
+      });
+
+      const consecutiveStudyDays = this.calculateConsecutiveStudyDays(recentQuizzes);
+
+      return {
+        totalQuizzes: completedQuizzes,
+        totalAnswers: parseInt(stats.totalAnswers) || 0,
+        correctAnswers: parseInt(stats.correctAnswers) || 0,
+        averageScore: parseFloat(stats.averageScore) || 0,
+        averageScoreToday,
+        currentStreak: parseInt(stats.currentStreak) || 0,
+        longestStreak: parseInt(stats.longestStreak) || 0,
+        consecutiveStudyDays,
+        lastActivityDate: stats.lastActivityDate || null,
+        dailyStats: {}
+      };
+    } catch (error) {
+      this.logger.error(`Error building user statistics for ${userId}:`, error);
+      // Return minimal stats if there's an error
+      return {
+        totalQuizzes: 0,
+        totalAnswers: 0,
+        correctAnswers: 0,
+        averageScore: 0,
+        averageScoreToday: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        consecutiveStudyDays: 0,
+        lastActivityDate: null,
+        dailyStats: {}
+      };
+    }
+  }
+
+  private buildSessionStatistics(event: AchievementEvent): SessionStatistics | null {
+    const eventData = event.eventData;
+    
+    if (!eventData || event.eventType !== 'answer_submitted') {
+      return null;
+    }
+
+    return {
+      questionsAnswered: eventData.totalAnswers || 0,
+      correctAnswers: eventData.correctAnswers || 0,
+      accuracy: eventData.accuracy || 0,
+      completionTime: eventData.completionTime || 0,
+      streakInSession: eventData.streakInSession || 0
+    };
+  }
+
+  private calculateConsecutiveStudyDays(quizzes: any[]): number {
+    if (!quizzes || quizzes.length === 0) return 0;
+
+    // Get unique study dates (YYYY-MM-DD format)
+    const studyDates = Array.from(new Set(
+      quizzes
+        .filter(q => q.finishedAt)
+        .map(q => new Date(q.finishedAt).toISOString().split('T')[0])
+    )).sort().reverse(); // Most recent first
+
+    if (studyDates.length === 0) return 0;
+
+    // Check if user studied today or yesterday to start counting
+    const today = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    
+    if (studyDates[0] !== today && studyDates[0] !== yesterday) {
+      return 0; // Streak broken if no activity today or yesterday
+    }
+
+    // Count consecutive days
+    let consecutiveDays = 0;
+    let expectedDate = studyDates[0] === today ? today : yesterday;
+    
+    for (const date of studyDates) {
+      if (date === expectedDate) {
+        consecutiveDays++;
+        // Move to previous day
+        const currentDate = new Date(expectedDate);
+        currentDate.setDate(currentDate.getDate() - 1);
+        expectedDate = currentDate.toISOString().split('T')[0];
+      } else {
+        break;
+      }
+    }
+
+    return consecutiveDays;
   }
 
   private async updateUserAchievement(

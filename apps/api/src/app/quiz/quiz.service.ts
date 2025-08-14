@@ -374,6 +374,7 @@ export class QuizService {
         // Calculate score and track streaks
         const totalQuestions = quiz.quizQuestions.length;
         let correctAnswers = 0;
+        let longestStreakInSession = 0;
         let currentStreak = 0;
 
         // Track individual answer correctness for streak calculation
@@ -393,20 +394,38 @@ export class QuizService {
                 if (isCorrect) {
                     correctAnswers++;
                     currentStreak++;
+                    longestStreakInSession = Math.max(longestStreakInSession, currentStreak);
                 } else {
                     currentStreak = 0;
                 }
-                
-                // Update streak in real-time for each answer
-                await this.achievementService.updateStreak(userId, isCorrect);
             }
+        }
+
+        // Update streak ONCE after processing all answers - this fixes the N+1 emissions
+        // Pass the FINAL result to properly reset streak on wrong answers
+        const lastAnswerCorrect = answerResults.length > 0 ? answerResults[answerResults.length - 1] : false;
+        let finalStreakUpdate = 0;
+        
+        try {
+            finalStreakUpdate = await this.achievementService.updateStreakBatch(
+                userId, 
+                answerResults, 
+                longestStreakInSession,
+                lastAnswerCorrect
+            );
+        } catch (error) {
+            console.error('Achievement streak update failed, continuing with quiz submission:', error);
+            // Continue with quiz submission even if achievement update fails
         }
 
         const score =
             totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
 
-        // Create achievement event for answer submission
-        await this.achievementService.createAchievementEvent({
+        // Create batched achievement events for better performance
+        const achievementEvents = [];
+
+        // Main answer submission event
+        achievementEvents.push({
             userId,
             eventType: 'answer_submitted',
             eventData: {
@@ -414,11 +433,38 @@ export class QuizService {
                 totalAnswers: totalQuestions,
                 correctAnswers,
                 accuracy: score,
-                streakInSession: currentStreak,
+                streakInSession: longestStreakInSession,
+                currentStreak: finalStreakUpdate,
                 answerResults,
                 sessionId: quiz.id
             }
         });
+
+        // Add session completion event if this is a partial or full completion
+        if (correctAnswers > 0) {
+            achievementEvents.push({
+                userId,
+                eventType: 'session_progress',
+                eventData: {
+                    quizId,
+                    totalQuestions,
+                    correctAnswers,
+                    accuracy: score,
+                    streakAchieved: longestStreakInSession,
+                    currentGlobalStreak: finalStreakUpdate,
+                    sessionId: quiz.id,
+                    timestamp: new Date()
+                }
+            });
+        }
+
+        // Batch create events for better performance - with error handling
+        try {
+            await this.achievementService.createAchievementEventBatch(achievementEvents);
+        } catch (error) {
+            console.error('Achievement event creation failed, continuing with quiz submission:', error);
+            // Continue with quiz submission even if achievement events fail
+        }
 
         // Update statistics
         await this.updateStatistics(userId, quiz.questionBankId);

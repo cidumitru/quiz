@@ -1,6 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {filter, take, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, filter, take, takeUntil} from 'rxjs/operators';
 import {WebSocketService} from './websocket.service';
 import {Achievement, ConfettiLevel, WebSocketConnectionState} from './types';
 
@@ -10,6 +10,11 @@ import {Achievement, ConfettiLevel, WebSocketConnectionState} from './types';
 export class AchievementWebSocketService implements OnDestroy {
     private destroy$ = new Subject<void>();
     private readonly DEBUG_MODE = false; // Set to true for debugging
+    
+    // Connection tracking to prevent duplicates
+    private isConnecting = false;
+    private currentUserId: string | null = null;
+    
     // Real-time data streams
     private currentStreakSubject = new BehaviorSubject<number>(0);
     // Public observables
@@ -35,25 +40,50 @@ export class AchievementWebSocketService implements OnDestroy {
      * Connect and authenticate for achievement events
      */
     connect(userId: string, token?: string): Observable<any> {
+        // Prevent duplicate connections for the same user
+        if (this.isConnecting && this.currentUserId === userId) {
+            if (this.DEBUG_MODE) {
+                console.log('Connection already in progress for user:', userId);
+            }
+            return this.webSocketService.connectionState$;
+        }
+
+        if (this.webSocketService.isReadyForEvents() && this.currentUserId === userId) {
+            if (this.DEBUG_MODE) {
+                console.log('Already connected for user:', userId);
+            }
+            return this.webSocketService.connectionState$;
+        }
+
+        this.isConnecting = true;
+        this.currentUserId = userId;
+
         // Connect to WebSocket
         const connection$ = this.webSocketService.connect(userId);
 
-        // Authenticate after connection (with take(1) to prevent duplicate auth)
+        // Use a single subscription with proper state management to prevent duplicates
         this.webSocketService.connectionState$.pipe(
-            filter(state => state.isConnected && !state.isAuthenticated),
-            take(1), // Prevent multiple authentication attempts
-            takeUntil(this.destroy$)
-        ).subscribe(() => {
-            this.webSocketService.authenticate(userId, token);
-        });
-
-        // Subscribe to achievements after authentication (with take(1))
-        this.webSocketService.connectionState$.pipe(
-            filter(state => state.isAuthenticated && !state.isSubscribed),
-            take(1), // Prevent multiple subscriptions
-            takeUntil(this.destroy$)
-        ).subscribe(() => {
-            this.webSocketService.subscribeToAchievements();
+            takeUntil(this.destroy$),
+            // Add distinctUntilChanged to prevent duplicate state processing
+            distinctUntilChanged((prev, curr) => 
+                prev.isConnected === curr.isConnected &&
+                prev.isAuthenticated === curr.isAuthenticated &&
+                prev.isSubscribed === curr.isSubscribed
+            )
+        ).subscribe(state => {
+            // State machine approach - handle each state transition once
+            if (state.isConnected && !state.isAuthenticated && this.currentUserId === userId) {
+                this.webSocketService.authenticate(userId, token);
+            } else if (state.isAuthenticated && !state.isSubscribed && this.currentUserId === userId) {
+                this.webSocketService.subscribeToAchievements();
+            } else if (state.isAuthenticated && state.isSubscribed) {
+                this.isConnecting = false; // Connection process complete
+            }
+            
+            // Reset connection state on disconnect
+            if (!state.isConnected) {
+                this.isConnecting = false;
+            }
         });
 
         return connection$;
@@ -64,6 +94,10 @@ export class AchievementWebSocketService implements OnDestroy {
      */
     disconnect(): void {
         this.webSocketService.disconnect();
+        this.isConnecting = false;
+        this.currentUserId = null;
+        // Reset all subjects to clean state
+        this.currentStreakSubject.next(0);
     }
 
     /**
@@ -91,14 +125,15 @@ export class AchievementWebSocketService implements OnDestroy {
      */
     private setupEventListeners(): void {
         // Authentication success - get current streak
+        // Remove take(1) to handle reconnection scenarios properly
         this.webSocketService.on('authentication-success').pipe(
-            take(1), // Only handle once per connection
             takeUntil(this.destroy$)
         ).subscribe((data) => {
             if (this.DEBUG_MODE) {
                 console.log('Achievement WebSocket authenticated:', data);
             }
-            this.currentStreakSubject.next(data.currentStreak);
+            // Update current streak on each successful authentication
+            this.currentStreakSubject.next(data.currentStreak || 0);
         });
 
         // Current streak response

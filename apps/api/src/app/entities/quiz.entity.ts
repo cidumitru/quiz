@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
@@ -11,14 +12,13 @@ import {
 import {User} from './user.entity';
 import {QuestionBank} from './question-bank.entity';
 import {QuizQuestion} from './quiz-question.entity';
+import {QuizMode} from "@aqb/data-access";
 
-export enum QuizMode {
-  All = 'all',
-  Mistakes = 'mistakes',
-  Discovery = 'discovery',
-}
 
 @Entity('quizzes')
+@Index(['userId', 'finishedAt']) // For completed quizzes by user
+@Index(['userId', 'createdAt']) // For user activity over time
+@Index(['finishedAt']) // For general completion queries
 export class Quiz {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -49,6 +49,9 @@ export class Quiz {
 
   @Column({type: 'timestamp', nullable: true})
   finishedAt: Date;
+
+  @Column('decimal', { precision: 5, scale: 2, nullable: true })
+  score: number;
 
   @OneToMany(() => QuizQuestion, (quizQuestion) => quizQuestion.quiz, {
     cascade: true,

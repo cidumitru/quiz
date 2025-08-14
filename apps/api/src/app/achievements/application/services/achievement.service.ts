@@ -40,6 +40,31 @@ export class AchievementService {
     return savedEvent;
   }
 
+  async createAchievementEventBatch(eventDtos: CreateAchievementEventDto[]): Promise<AchievementEvent[]> {
+    if (eventDtos.length === 0) return [];
+
+    try {
+      const events = eventDtos.map(eventDto => {
+        const event = new AchievementEvent();
+        event.userId = eventDto.userId;
+        event.eventType = eventDto.eventType;
+        event.eventData = eventDto.eventData;
+        event.occurredAt = new Date();
+        event.isProcessed = false;
+        return event;
+      });
+
+      const savedEvents = await this.achievementEventRepository.saveBatch(events);
+      this.logger.debug(`Created ${savedEvents.length} achievement events in batch for user: ${eventDtos[0].userId}`);
+      
+      return savedEvents;
+    } catch (error) {
+      this.logger.error(`Failed to create achievement events batch:`, error);
+      // Return empty array to allow calling code to continue
+      return [];
+    }
+  }
+
   async processEvent(eventId: string): Promise<AchievementProcessingResultDto> {
     const event = await this.achievementEventRepository.findByUserId(eventId, 1);
     if (!event || event.length === 0) {
@@ -212,6 +237,86 @@ export class AchievementService {
       
       this.logger.debug(`Reset streak for ${userId}`);
       return 0;
+    }
+  }
+
+  async updateStreakBatch(
+    userId: string, 
+    answerResults: boolean[], 
+    longestStreakInSession: number,
+    lastAnswerCorrect: boolean
+  ): Promise<number> {
+    try {
+      // Process answers sequentially to maintain proper streak logic
+      let currentGlobalStreak = await this.cacheService.getCurrentStreak(userId);
+      let newGlobalStreak = currentGlobalStreak;
+      let streakWasBroken = false;
+      
+      for (const isCorrect of answerResults) {
+        if (isCorrect) {
+          newGlobalStreak++;
+        } else {
+          // Critical fix: Reset streak immediately on wrong answer
+          newGlobalStreak = 0;
+          streakWasBroken = true;
+        }
+      }
+
+      // Update the cache with final streak value
+      await this.cacheService.setStreak(userId, newGlobalStreak);
+
+      // Emit appropriate events based on final state
+      if (streakWasBroken && currentGlobalStreak > 0) {
+        this.eventEmitter.emit('streak.broken', {
+          userId,
+          previousStreak: currentGlobalStreak,
+          message: currentGlobalStreak >= 5 ? 'Streak broken, but great effort!' : 'Keep trying!'
+        });
+      }
+
+      if (newGlobalStreak > currentGlobalStreak) {
+        // Emit streak update
+        this.eventEmitter.emit('streak.updated', {
+          userId,
+          currentStreak: newGlobalStreak,
+          longestStreak: Math.max(newGlobalStreak, currentGlobalStreak),
+          isNewRecord: newGlobalStreak > currentGlobalStreak
+        });
+
+        // Check for milestones but ONLY if streak wasn't broken
+        if (!streakWasBroken) {
+          if (newGlobalStreak === 5) {
+            this.eventEmitter.emit('streak.milestone', {
+              userId,
+              streak: newGlobalStreak,
+              message: 'Hot Streak! 🔥 5 in a row!'
+            });
+          } else if (newGlobalStreak === 10) {
+            this.eventEmitter.emit('streak.milestone', {
+              userId,
+              streak: newGlobalStreak,
+              message: 'Blazing Streak! ⚡ 10 consecutive!'
+            });
+          } else if (newGlobalStreak === 25) {
+            this.eventEmitter.emit('streak.milestone', {
+              userId,
+              streak: newGlobalStreak,
+              message: 'Unstoppable! 🌟 25 in a row!'
+            });
+          }
+        }
+      }
+
+      this.logger.debug(`Batch updated streak for ${userId}: ${currentGlobalStreak} -> ${newGlobalStreak}`);
+      return newGlobalStreak;
+    } catch (error) {
+      this.logger.error(`Failed to update streak batch for ${userId}:`, error);
+      // Return current streak from cache or 0 if that fails
+      try {
+        return await this.cacheService.getCurrentStreak(userId);
+      } catch {
+        return 0;
+      }
     }
   }
 
