@@ -15,7 +15,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatListModule } from '@angular/material/list';
@@ -55,36 +55,32 @@ export class QuestionListComponent implements OnInit {
   deleteQuestion = output<Question>();
   createQuestion = output<void>();
 
-  // Page state
-  public pageSize = signal(20);
-  public pageIndex = signal(0);
-  public pageSizeOptions = [10, 20, 50, 100];
-  
   // Filter state
   public searchText = signal('');
   public showOnlyWithoutAnswers = signal(false);
   
-  // Store selectors
+  // Store selectors - direct access to store data
   public questions = this.store.questions;
   public totalItems = this.store.totalItems;
   public isLoading = this.store.isLoading;
   
-  // Computed filtered questions for current page
+  // Computed filtered questions (no pagination here - that's handled by the store)
   public displayedQuestions = computed(() => {
-    const allQuestions = this.questions() as Question[];
-    const onlyWithoutAnswers = this.showOnlyWithoutAnswers();
-    const startIndex = this.pageIndex() * this.pageSize();
-    const endIndex = startIndex + this.pageSize();
+    const allQuestions = this.questions();
+    if (!allQuestions || allQuestions.length === 0) {
+      return [];
+    }
     
-    // Filter questions
-    let filtered = allQuestions.filter((q): q is Question => q !== null);
+    const onlyWithoutAnswers = this.showOnlyWithoutAnswers();
+    
+    // Filter questions based on client-side filters only
+    let filtered = allQuestions.filter((q): q is Question => q !== null && q !== undefined);
     
     if (onlyWithoutAnswers) {
       filtered = filtered.filter((q: Question) => !q.answers.some(a => a.correct));
     }
     
-    // Return page slice
-    return filtered.slice(startIndex, endIndex);
+    return filtered;
   });
   
   private searchSubject = new BehaviorSubject<string>('');
@@ -103,16 +99,12 @@ export class QuestionListComponent implements OnInit {
     this.createQuestion.emit();
   }
   
-  onPageChange(event: PageEvent): void {
-    this.pageIndex.set(event.pageIndex);
-    this.pageSize.set(event.pageSize);
-    
-    // Load more data if needed and store is initialized
+  loadMore(): void {
     const questionBank = this.store.questionBank();
     if (questionBank) {
-      const startIndex = event.pageIndex * event.pageSize;
-      this.store.loadQuestionsRange(startIndex, event.pageSize).catch(error => {
-        console.error('Failed to load questions:', error);
+      const currentCount = this.questions().length;
+      this.store.loadQuestionsRange(currentCount, 20).catch(error => {
+        console.error('Failed to load more questions:', error);
       });
     }
   }
@@ -136,7 +128,6 @@ export class QuestionListComponent implements OnInit {
         this.store.setSearchQuery(searchQuery).catch(error => {
           console.error('Failed to search:', error);
         });
-        this.pageIndex.set(0); // Reset to first page on search
       });
   }
 

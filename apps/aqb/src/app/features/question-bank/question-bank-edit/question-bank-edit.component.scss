@@ -1,7 +1,7 @@
 .page-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   padding: 16px;
 }
 
@@ -23,7 +23,7 @@
 
 .content-container {
   flex: 1;
-  overflow: auto;
+  width: 100%;
 }
 
 @media (max-width: 768px) {

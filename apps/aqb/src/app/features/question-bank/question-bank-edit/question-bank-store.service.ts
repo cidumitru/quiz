@@ -118,11 +118,23 @@ export class QuestionBankComponentState {
       );
 
       if (response) {
-        this.updateState((state) => ({
-          ...state,
-          questions: response.questions,
-          totalItems: response.totalItems,
-        }));
+        this.updateState((state) => {
+          // If offset is 0, replace all questions (new search or fresh load)
+          if (offset === 0) {
+            return {
+              ...state,
+              questions: response.questions,
+              totalItems: response.totalItems,
+            };
+          } else {
+            // Otherwise, append new questions to existing ones
+            return {
+              ...state,
+              questions: [...state.questions, ...response.questions],
+              totalItems: response.totalItems,
+            };
+          }
+        });
       }
     } catch (error) {
       console.error('Failed to load questions:', error);
@@ -144,13 +156,11 @@ export class QuestionBankComponentState {
       return;
     }
 
-    // Update search query without clearing existing data
+    // Update search query and clear current questions for new search
     this.updateState((state) => ({
       ...state,
       searchQuery,
-      // Mark that we need to reload, but keep existing data visible
-      loadedRanges: new Set(),
-      loadingRanges: new Set(),
+      questions: [], // Clear questions for new search
     }));
 
     // Reload first page with new search
