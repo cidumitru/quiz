@@ -14,7 +14,7 @@ import { Answer } from '../entities/answer.entity';
 import {
   ClearHistoryResponse,
   CreateQuizDto,
-  CreateQuizResponse,
+  CreateQuizResponse, QuizAnswer,
   QuizDetailResponse,
   QuizFinishResponse,
   QuizListItem,
@@ -312,7 +312,31 @@ export class QuizService {
       });
     }
 
-    return { quiz: await this.mapQuizToResponse(quiz, true) };
+    const response: QuizDetailResponse = {
+      quiz: {
+        id: quiz.id,
+        mode: quiz.mode,
+        startedAt: quiz.startedAt,
+        finishedAt: quiz.finishedAt,
+        questionBankName: quiz.questionBank.name,
+        questionBankId: quiz.questionBankId,
+        questions: quiz.quizQuestions.map(q => ({
+          id: q.id,
+          question: q.question.question,
+          answers: q.question.answers.map(a => ({
+            id: a.id,
+            text: a.text
+          } satisfies QuizAnswer)),
+          imageUrl: undefined,
+          questionId: q.questionId,
+          correctAnswerId: q.answerId,
+          userAnswerId: q.userAnswer.id,
+          orderIndex: q.orderIndex
+        }))
+      }
+    }
+
+    return response;
   }
 
   async submitAnswers(
@@ -547,41 +571,5 @@ export class QuizService {
       questionBankName: quiz.questionBank?.name || '',
       score: Math.round(score),
     };
-  }
-
-  private async mapQuizToResponse(
-    quiz: Quiz,
-    includeQuestions: boolean
-  ): Promise<Record<string, unknown>> {
-    const response: Record<string, unknown> = {
-      id: quiz.id,
-      questionBankId: quiz.questionBankId,
-      mode: quiz.mode,
-      startedAt: quiz.startedAt,
-      finishedAt: quiz.finishedAt,
-      questionBankName: quiz.questionBank?.name,
-      questions: [],
-    };
-
-    if (includeQuestions && quiz.quizQuestions) {
-      response.questions = quiz.quizQuestions
-        .sort((a, b) => a.orderIndex - b.orderIndex)
-        .map((qq) => ({
-          id: qq.id,
-          questionId: qq.questionId,
-          question: qq.question.question,
-          imageUrl: undefined, // Question entity doesn't have imageUrl yet
-          answers: qq.question.answers.map((a) => ({
-            id: a.id,
-            text: a.text,
-            correct: quiz.finishedAt ? a.isCorrect : undefined,
-          })),
-          userAnswerId: qq.answerId,
-          correctAnswerId: qq.question.answers.find((a) => a.isCorrect)?.id,
-          orderIndex: qq.orderIndex,
-        }));
-    }
-
-    return response;
   }
 }

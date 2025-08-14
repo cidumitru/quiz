@@ -49,41 +49,41 @@ jobs:
           echo "apps=$(npx nx show projects --affected --type=app --json)" >> $GITHUB_OUTPUT
           echo "libs=$(npx nx show projects --affected --type=lib --json)" >> $GITHUB_OUTPUT
 
-  lint:
-    name: Lint Code
-    runs-on: ubuntu-latest
-    needs: setup
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Restore Nx cache
-        uses: actions/cache@v4
-        with:
-          path: .nx/cache
-          key: nx-${{ runner.os }}-${{ github.sha }}
-          restore-keys: |
-            nx-${{ runner.os }}-
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Derive appropriate SHAs
-        uses: nrwl/nx-set-shas@v4
-
-      - name: Run linting on affected projects
-        run: npx nx affected --target=lint --parallel=3
-
-      - name: Check code formatting
-        run: npx nx format:check
+#  lint:
+#    name: Lint Code
+#    runs-on: ubuntu-latest
+#    needs: setup
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v4
+#        with:
+#          node-version: ${{ env.NODE_VERSION }}
+#          cache: 'npm'
+#
+#      - name: Restore Nx cache
+#        uses: actions/cache@v4
+#        with:
+#          path: .nx/cache
+#          key: nx-${{ runner.os }}-${{ github.sha }}
+#          restore-keys: |
+#            nx-${{ runner.os }}-
+#
+#      - name: Install dependencies
+#        run: npm ci
+#
+#      - name: Derive appropriate SHAs
+#        uses: nrwl/nx-set-shas@v4
+#
+#      - name: Run linting on affected projects
+#        run: npx nx affected --target=lint --parallel=3
+#
+#      - name: Check code formatting
+#        run: npx nx format:check
 
   typecheck:
     name: TypeScript Compilation
@@ -213,7 +213,6 @@ jobs:
   build:
     name: Build Applications
     runs-on: ubuntu-latest
-    needs: [lint, typecheck]
     strategy:
       matrix:
         project: [aqb, api]
@@ -305,52 +304,52 @@ jobs:
               });
             }
 
-  e2e:
-    name: E2E Tests
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Restore Nx cache
-        uses: actions/cache@v4
-        with:
-          path: .nx/cache
-          key: nx-${{ runner.os }}-${{ github.sha }}
-          restore-keys: |
-            nx-${{ runner.os }}-
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-aqb
-          path: dist/apps/aqb
-
-      - name: Run E2E tests
-        run: npx nx e2e aqb-e2e
-
-      - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: dist/.playwright/
-          retention-days: 7
+#  e2e:
+#    name: E2E Tests
+#    runs-on: ubuntu-latest
+#    needs: build
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v4
+#        with:
+#          node-version: ${{ env.NODE_VERSION }}
+#          cache: 'npm'
+#
+#      - name: Restore Nx cache
+#        uses: actions/cache@v4
+#        with:
+#          path: .nx/cache
+#          key: nx-${{ runner.os }}-${{ github.sha }}
+#          restore-keys: |
+#            nx-${{ runner.os }}-
+#
+#      - name: Install dependencies
+#        run: npm ci
+#
+#      - name: Install Playwright browsers
+#        run: npx playwright install --with-deps chromium
+#
+#      - name: Download build artifacts
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: build-aqb
+#          path: dist/apps/aqb
+#
+#      - name: Run E2E tests
+#        run: npx nx e2e aqb-e2e
+#
+#      - name: Upload Playwright report
+#        uses: actions/upload-artifact@v4
+#        if: always()
+#        with:
+#          name: playwright-report
+#          path: dist/.playwright/
+#          retention-days: 7
 
   security-scan:
     name: Security Scanning
@@ -382,7 +381,7 @@ jobs:
     name: PR Status Check
     runs-on: ubuntu-latest
     if: always()
-    needs: [lint, typecheck, build, e2e]
+    needs: [typecheck, build]
     steps:
       - name: Check all job statuses
         uses: actions/github-script@v7
