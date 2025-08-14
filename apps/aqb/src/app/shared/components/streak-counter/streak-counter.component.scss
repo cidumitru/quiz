@@ -1,0 +1,16 @@
+// Since we're using Tailwind CSS, this file only contains component-specific styles
+// that can't be easily expressed with utility classes
+
+:host {
+  @apply inline-block;
+}
+
+// Component uses Tailwind utility classes in the template:
+// - bg-gradient-to-r from-cyan-500 to-blue-500
+// - rounded-full text-white font-semibold
+// - shadow-lg hover:shadow-xl hover:scale-105
+// - transition-all duration-300
+// - animate-pulse animate-bounce
+
+// All styling is now handled through Tailwind utilities in the template
+// No custom CSS needed!

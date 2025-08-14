@@ -193,4 +193,204 @@ export class ConfettiService {
       scalar: 1
     });
   }
+
+  /**
+   * Achievement-specific celebrations based on confetti level
+   */
+  celebrateAchievement(confettiLevel: string): void {
+    switch (confettiLevel) {
+      case 'basic':
+        this.basicAchievementCelebration();
+        break;
+      case 'excellent':
+        this.excellentAchievementCelebration();
+        break;
+      case 'perfect':
+        this.perfectAchievementCelebration();
+        break;
+      case 'milestone':
+        this.milestoneAchievementCelebration();
+        break;
+      default:
+        this.basicAchievementCelebration();
+    }
+  }
+
+  /**
+   * Streak milestone celebration with flame colors
+   */
+  celebrateStreak(streakCount: number): void {
+    if (streakCount >= 25) {
+      this.legendaryStreakCelebration();
+    } else if (streakCount >= 10) {
+      this.impressiveStreakCelebration();
+    } else if (streakCount >= 5) {
+      this.goodStreakCelebration();
+    } else {
+      this.basicStreakCelebration();
+    }
+  }
+
+  /**
+   * Daily achievement celebration
+   */
+  celebrateDailyAchievement(): void {
+    this.sunburstCelebration();
+  }
+
+  // Achievement-specific celebration methods
+
+  private basicAchievementCelebration(): void {
+    confetti({
+      particleCount: 60,
+      spread: 100,
+      origin: {y: 0.5},
+      startVelocity: 25,
+      colors: ['#4ECDC4', '#45B7D1', '#96CEB4'],
+      gravity: 1,
+      scalar: 0.8
+    });
+  }
+
+  private excellentAchievementCelebration(): void {
+    // Multi-burst celebration
+    this.customBurst({
+      particleCount: 100,
+      spread: 120,
+      startVelocity: 30,
+      colors: ['#FFD700', '#FFA500', '#FF8C00'],
+      origin: {x: 0.3, y: 0.5}
+    });
+
+    setTimeout(() => {
+      this.customBurst({
+        particleCount: 100,
+        spread: 120,
+        startVelocity: 30,
+        colors: ['#FFD700', '#FFA500', '#FF8C00'],
+        origin: {x: 0.7, y: 0.5}
+      });
+    }, 200);
+  }
+
+  private perfectAchievementCelebration(): void {
+    // Epic multi-stage celebration
+    this.fireworksBurst();
+
+    setTimeout(() => {
+      this.starBurst();
+    }, 300);
+
+    setTimeout(() => {
+      this.goldRain();
+    }, 600);
+  }
+
+  private milestoneAchievementCelebration(): void {
+    // Ultimate celebration with all effects
+    this.perfectScoreCelebration();
+
+    setTimeout(() => {
+      this.customBurst({
+        particleCount: 200,
+        spread: 180,
+        startVelocity: 40,
+        colors: ['#FF6B6B', '#FFD700', '#4ECDC4', '#DDA0DD', '#96CEB4'],
+        origin: {x: 0.5, y: 0.3}
+      });
+    }, 1200);
+  }
+
+  // Streak-specific celebrations
+
+  private basicStreakCelebration(): void {
+    confetti({
+      particleCount: 40,
+      spread: 80,
+      origin: {y: 0.4},
+      startVelocity: 20,
+      colors: ['#FF4757', '#FF6B6B', '#FF8E8E'],
+      shapes: ['circle'],
+      gravity: 1,
+      scalar: 0.7
+    });
+  }
+
+  private goodStreakCelebration(): void {
+    confetti({
+      particleCount: 80,
+      spread: 100,
+      origin: {y: 0.4},
+      startVelocity: 25,
+      colors: ['#FF4757', '#FF6B6B', '#FFA500', '#FFD700'],
+      shapes: ['circle', 'square'],
+      gravity: 1,
+      scalar: 0.9
+    });
+  }
+
+  private impressiveStreakCelebration(): void {
+    // Flame-like effect
+    const duration = 2000;
+    const animationEnd = Date.now() + duration;
+
+    const interval = setInterval(() => {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        return;
+      }
+
+      confetti({
+        particleCount: 30,
+        startVelocity: 30,
+        spread: 60,
+        origin: {
+          x: 0.5,
+          y: 0.6
+        },
+        colors: ['#FF4757', '#FF6B6B', '#FFA500', '#FFD700', '#FF8C00'],
+        shapes: ['circle'],
+        gravity: 0.6,
+        scalar: 1.2
+      });
+    }, 100);
+  }
+
+  private legendaryStreakCelebration(): void {
+    // Epic flame celebration
+    this.perfectScoreCelebration();
+
+    setTimeout(() => {
+      this.customBurst({
+        particleCount: 150,
+        spread: 160,
+        startVelocity: 50,
+        colors: ['#FF4757', '#FF6B6B', '#FFA500', '#FFD700', '#FF8C00', '#FFFFFF'],
+        origin: {x: 0.5, y: 0.2}
+      });
+    }, 1000);
+  }
+
+  private sunburstCelebration(): void {
+    // Radial sunburst pattern
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * 2 * Math.PI;
+      const x = 0.5 + Math.cos(angle) * 0.3;
+      const y = 0.5 + Math.sin(angle) * 0.3;
+
+      setTimeout(() => {
+        confetti({
+          particleCount: 20,
+          spread: 45,
+          origin: {x, y},
+          startVelocity: 15,
+          colors: ['#FFD700', '#FFA500', '#FFEAA7', '#FFED4E'],
+          gravity: 0.8,
+          scalar: 0.8
+        });
+      }, i * 50);
+    }
+  }
 }

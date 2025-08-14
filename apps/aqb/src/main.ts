@@ -1,5 +1,5 @@
-import { bootstrapApplication } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
+import {bootstrapApplication} from '@angular/platform-browser';
+import {AppComponent} from './app/app.component';
 import {
   ActivatedRouteSnapshot,
   provideRouter,
@@ -8,24 +8,25 @@ import {
   withHashLocation,
   withInMemoryScrolling,
 } from '@angular/router';
-import { APP_INITIALIZER, importProvidersFrom, inject } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { QuestionBankListComponent } from './app/features/question-bank/question-bank-list.component';
-import { QuestionBankService } from './app/features/question-bank/question-bank.service';
-import { QuizService } from './app/features/quiz/quiz.service';
-import { AppConfig } from './app/core/services/app-config.service';
-import { MockDataLoader } from './app/core/mock/mock-data.loader';
-import { ThemeService } from './app/core/services/theme.service';
-import { AuthInterceptor } from './app/core/interceptors/auth.interceptor';
-import { ApiBaseInterceptor } from './app/core/interceptors/api-base.interceptor';
-import { AuthGuard } from './app/core/guards/auth.guard';
-import { AuthService } from './app/core/services/auth.service';
-import { from } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { QuizViewModel } from './app/features/quiz/quiz-practice/quiz.view-model';
+import {APP_INITIALIZER, importProvidersFrom, inject} from '@angular/core';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {QuestionBankListComponent} from './app/features/question-bank/question-bank-list.component';
+import {QuestionBankService} from './app/features/question-bank/question-bank.service';
+import {QuizService} from './app/features/quiz/quiz.service';
+import {AppConfig} from './app/core/services/app-config.service';
+import {MockDataLoader} from './app/core/mock/mock-data.loader';
+import {ThemeService} from './app/core/services/theme.service';
+import {AuthInterceptor} from './app/core/interceptors/auth.interceptor';
+import {ApiBaseInterceptor} from './app/core/interceptors/api-base.interceptor';
+import {AuthGuard} from './app/core/guards/auth.guard';
+import {AuthService} from './app/core/services/auth.service';
+import {firstValueFrom, from} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {QuizViewModel} from './app/features/quiz/quiz-practice/quiz.view-model';
+import {AchievementIntegrationService} from "./app/core/services/achievement-integration.service";
 
 export const bootstrapFactory = (appConfig: AppConfig) => async () => {
   await appConfig.init();
@@ -46,6 +47,16 @@ const routes: Route[] = [
         (m) => m.MainLayoutComponent
       ),
     canActivate: [AuthGuard],
+    resolve: {
+      achivements: async () => {
+        const achievementsIntegration = inject(AchievementIntegrationService);
+        const user = await firstValueFrom(inject(AuthService).currentUser$);
+        if (!user) {
+          return undefined;
+        }
+        achievementsIntegration.connect(user.id);
+      }
+    },
     children: [
       {
         path: '',

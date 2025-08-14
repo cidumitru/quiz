@@ -3,3 +3,4 @@ export * from './auth';
 export * from './question-bank';
 export * from './quiz';
 export * from './statistics';
+export * from './achievements';

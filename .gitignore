@@ -11,6 +11,7 @@ node_modules
 # IDEs and editors
 /.idea
 /.claude
+CLAUDE.md
 .project
 .classpath
 .c9/

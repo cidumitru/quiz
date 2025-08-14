@@ -8,6 +8,7 @@ import {QuizStatistics} from '../entities/quiz-statistics.entity';
 import {QuestionBank} from '../entities/question-bank.entity';
 import {Question} from '../entities/question.entity';
 import {Answer} from '../entities/answer.entity';
+import {AchievementModule} from '../achievements/achievement.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import {Answer} from '../entities/answer.entity';
       Question,
       Answer,
     ]),
+    AchievementModule,
   ],
   controllers: [QuizController],
   providers: [QuizService],

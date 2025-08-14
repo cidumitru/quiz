@@ -7,6 +7,8 @@ import {QuizStatistics} from '../entities/quiz-statistics.entity';
 import {QuestionBank} from '../entities/question-bank.entity';
 import {Question} from '../entities/question.entity';
 import {Answer} from '../entities/answer.entity';
+import {AchievementService} from '../achievements/application/services/achievement.service';
+import {RealtimeAchievementService} from '../achievements/application/services/realtime-achievement.service';
 import {
     ClearHistoryResponse,
     CreateQuizDto,
@@ -35,7 +37,9 @@ export class QuizService {
         @InjectRepository(Question)
         private questionRepository: Repository<Question>,
         @InjectRepository(Answer)
-        private answerRepository: Repository<Answer>
+        private answerRepository: Repository<Answer>,
+        private achievementService: AchievementService,
+        private realtimeAchievementService: RealtimeAchievementService
     ) {
     }
 
@@ -367,10 +371,14 @@ export class QuizService {
             );
         }
 
-        // Calculate score
+        // Calculate score and track streaks
         const totalQuestions = quiz.quizQuestions.length;
         let correctAnswers = 0;
+        let currentStreak = 0;
 
+        // Track individual answer correctness for streak calculation
+        const answerResults: boolean[] = [];
+        
         for (const answer of dto.answers) {
             const quizQuestion = quiz.quizQuestions.find(
                 (qq) => qq.questionId === answer.questionId
@@ -379,14 +387,38 @@ export class QuizService {
                 const submittedAnswer = quizQuestion.question.answers.find(
                     (a) => a.id === answer.answerId
                 );
-                if (submittedAnswer?.isCorrect) {
+                const isCorrect = !!submittedAnswer?.isCorrect;
+                answerResults.push(isCorrect);
+                
+                if (isCorrect) {
                     correctAnswers++;
+                    currentStreak++;
+                } else {
+                    currentStreak = 0;
                 }
+                
+                // Update streak in real-time for each answer
+                await this.achievementService.updateStreak(userId, isCorrect);
             }
         }
 
         const score =
             totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+
+        // Create achievement event for answer submission
+        await this.achievementService.createAchievementEvent({
+            userId,
+            eventType: 'answer_submitted',
+            eventData: {
+                quizId,
+                totalAnswers: totalQuestions,
+                correctAnswers,
+                accuracy: score,
+                streakInSession: currentStreak,
+                answerResults,
+                sessionId: quiz.id
+            }
+        });
 
         // Update statistics
         await this.updateStatistics(userId, quiz.questionBankId);
@@ -417,6 +449,47 @@ export class QuizService {
 
         quiz.finishedAt = new Date();
         await this.quizRepository.save(quiz);
+
+        // Get quiz details for achievement event
+        const quizDetails = await this.getQuizById(userId, quizId);
+        const quizData = quizDetails.quiz;
+        
+        // Calculate final stats
+        const totalQuestions = quizData.questions.length;
+        const answeredQuestions = quizData.questions.filter(q => q.userAnswerId).length;
+        const correctAnswers = quizData.questions.filter(q => q.userAnswerId && q.correctAnswerId === q.userAnswerId).length;
+        const finalScore = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+
+        // Create achievement event for quiz completion
+        await this.achievementService.createAchievementEvent({
+            userId,
+            eventType: 'quiz_completed',
+            eventData: {
+                quizId,
+                questionBankId: quiz.questionBankId,
+                totalQuestions,
+                answeredQuestions,
+                correctAnswers,
+                finalScore,
+                completionTime: quiz.finishedAt.getTime() - quiz.startedAt.getTime(),
+                mode: quiz.mode,
+                session: {
+                    questionsAnswered: answeredQuestions,
+                    correctAnswers,
+                    accuracy: finalScore,
+                    completionTime: quiz.finishedAt.getTime() - quiz.startedAt.getTime()
+                }
+            }
+        });
+
+        // Send real-time encouragement based on performance
+        await this.realtimeAchievementService.sendAccuracyEncouragement(userId, finalScore);
+        
+        // Check for daily champion status (90%+ accuracy)
+        if (finalScore >= 90) {
+            // Emit daily champion event (will be caught by realtime service)
+            // This is just an example - the actual achievement processing will handle this
+        }
 
         // Update statistics
         await this.updateStatistics(userId, quiz.questionBankId);

@@ -9,11 +9,12 @@ import {AuthModule} from './auth/auth.module';
 import {UserModule} from './user/user.module';
 import {HealthController} from './health/health.controller';
 import {HealthService} from './health/health.service';
-import {Answer, OtpCode, Question, QuestionBank, Quiz, QuizQuestion, QuizStatistics, User} from './entities';
+import {Answer, AchievementEvent, OtpCode, Question, QuestionBank, Quiz, QuizQuestion, QuizStatistics, User, UserAchievement} from './entities';
 import {QuestionBankModule} from './question-bank/question-bank.module';
 import {QuizModule} from './quiz/quiz.module';
 import {StatisticsModule} from './statistics/statistics.module';
 import {CacheModule} from './cache/cache.module';
+import {AchievementModule} from './achievements/achievement.module';
 import {rateLimitConfig} from './middleware/rate-limit.config';
 
 @Module({
@@ -28,7 +29,7 @@ import {rateLimitConfig} from './middleware/rate-limit.config';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get('DATABASE_URL'),
-        entities: [User, OtpCode, QuestionBank, Question, Answer, Quiz, QuizQuestion, QuizStatistics],
+        entities: [User, OtpCode, QuestionBank, Question, Answer, Quiz, QuizQuestion, QuizStatistics, UserAchievement, AchievementEvent],
         synchronize: true, // Enable for production setup - consider using migrations later
         migrations: [],
         migrationsRun: false,
@@ -42,6 +43,7 @@ import {rateLimitConfig} from './middleware/rate-limit.config';
     QuestionBankModule,
     QuizModule,
     StatisticsModule,
+    AchievementModule,
   ],
   controllers: [AppController, HealthController],
   providers: [
