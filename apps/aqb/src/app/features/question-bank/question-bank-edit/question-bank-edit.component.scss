@@ -1,15 +1,11 @@
-.row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  gap: 2rem;
-  margin-top: 2rem;
+.content-container {
+  flex: 1;
+  overflow: hidden;
 }
 
-.column {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 100%;
-  flex: 1;
+// Dialog styles
+::ng-deep .edit-bank-name-dialog {
+  .mat-mdc-dialog-container {
+    --mdc-dialog-container-color: var(--mat-app-background-color);
+  }
 }

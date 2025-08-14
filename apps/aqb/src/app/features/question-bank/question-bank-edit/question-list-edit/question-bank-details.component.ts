@@ -8,8 +8,9 @@ import {
   QuestionEditDialogComponent,
   QuestionEditDialogData
 } from './dialogs/question-edit-dialog/question-edit-dialog.component';
-import {ListRange} from '@angular/cdk/collections';
-import {QuestionBankStore} from './question-bank-store.service';
+import {QuestionBankStore} from '../question-bank-store.service';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-question-bank-details',
@@ -18,14 +19,15 @@ import {QuestionBankStore} from './question-bank-store.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
-    QuestionListComponent
+    QuestionListComponent,
+    MatButtonModule,
+    MatIconModule
   ],
-  providers: [QuestionBankStore],
   standalone: true
 })
 export class QuestionBankDetailsComponent implements OnInit {
   private readonly activatedRoute = inject(ActivatedRoute);
-  public readonly id: string = this.activatedRoute.parent?.snapshot.paramMap.get('id')!;
+  public readonly id: string = this.activatedRoute.parent?.snapshot.paramMap.get('id') ?? '';
   private readonly dialog = inject(MatDialog);
   private readonly store = inject(QuestionBankStore);
   // Expose store selectors
@@ -37,16 +39,6 @@ export class QuestionBankDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.store.initialize(this.id);
   }
-
-  onRangeChanged(range: ListRange): void {
-    console.log('QuestionBankDetailsComponent: Range changed:', range);
-    this.store.onRangeChanged(range.start, range.end);
-  }
-
-  isQuestionLoading(index: number): boolean {
-    return this.store.isQuestionLoading(index);
-  }
-
 
   onEditQuestion(question: Question): void {
     const dialogData: QuestionEditDialogData = {
@@ -62,8 +54,9 @@ export class QuestionBankDetailsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result?.question && result?.correctAnswerId) {
-        this.store.updateQuestion(result.question.id, result.correctAnswerId);
+      if (result?.question) {
+        // Update the question with the full question data
+        this.store.updateQuestion(result.question.id, result.question);
       }
     });
   }

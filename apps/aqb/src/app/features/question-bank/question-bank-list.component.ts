@@ -178,7 +178,7 @@ export class QuestionBankListComponent implements OnInit {
     await this.practiceQuiz(questionBankId);
   }
 
-  async practiceQuiz(questionBankId: string, quizSize: number = 25, questionPrioritySelection?: MatListOption[]): Promise<void> {
+  async practiceQuiz(questionBankId: string, quizSize = 25, questionPrioritySelection?: MatListOption[]): Promise<void> {
     if (isNaN(quizSize)) return;
 
     // Set loading state if not already set (for menu items)

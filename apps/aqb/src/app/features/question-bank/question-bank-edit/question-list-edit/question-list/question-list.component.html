@@ -1,4 +1,4 @@
-@if (getTotalItems() === 0) {
+@if (totalItems() === 0) {
   <div class="empty-state">
     <h2>No questions added</h2>
     <button mat-raised-button color="primary" (click)="onCreateQuestion()">
@@ -9,8 +9,8 @@
 } @else {
   <div class="list-header">
     <div class="search-filters">
-      <mat-form-field appearance="fill" class="search-field">
-        <mat-label>Search by question title</mat-label>
+        <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search questions</mat-label>
         <input [value]="searchText()" (input)="onSearchInput($event)" matInput>
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
@@ -24,10 +24,6 @@
       </mat-slide-toggle>
     </div>
 
-    <button mat-raised-button color="primary" (click)="onCreateQuestion()">
-      <mat-icon>add</mat-icon>
-      Add Question
-    </button>
   </div>
 
   <cdk-virtual-scroll-viewport
@@ -37,65 +33,56 @@
     <div *cdkVirtualFor="let item of dataSource; trackBy: trackByFn; let i = index">
       @if (item && shouldShowQuestion()(item)) {
         <!-- Loaded question that passes filters -->
-        <mat-card class="question-card">
-          <mat-card-header>
-            <mat-card-subtitle class="question-meta">
-              <div class="question-info">
-                <span class="question-index">Question {{ i + 1 }}</span>
-                <span class="question-id">ID: {{ item.id }}</span>
-                <span class="answer-status" [class.no-answer]="!hasCorrectAnswer(item)">
-                  @if (hasCorrectAnswer(item)) {
-                    <mat-icon>check_circle</mat-icon>
-                    Answer set
-                  } @else {
-                    <mat-icon>error</mat-icon>
-                    No answer set
-                  }
-                </span>
+          <div class="question-card-modern" [class.no-answer]="!hasCorrectAnswer(item)">
+              <div class="card-header">
+                  <div class="question-header">
+                      <div class="question-meta">
+                          <span class="question-number">{{ i + 1 }}</span>
+                          <div class="status-indicator" [class.answered]="hasCorrectAnswer(item)">
+                              <mat-icon>{{ hasCorrectAnswer(item) ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+                          </div>
               </div>
               <div class="question-actions">
                 <button
                   mat-icon-button
-                  color="primary"
+                  class="action-btn edit-btn"
                   (click)="onEditQuestion(item)"
-                  matTooltip="Edit Question">
+                  matTooltip="Edit question">
                   <mat-icon>edit</mat-icon>
                 </button>
                 <button
                   mat-icon-button
-                  color="warn"
+                  class="action-btn delete-btn"
                   (click)="onDeleteQuestion(item)"
-                  matTooltip="Delete Question">
-                  <mat-icon>delete</mat-icon>
+                  matTooltip="Delete question">
+                    <mat-icon>delete_outline</mat-icon>
                 </button>
               </div>
-            </mat-card-subtitle>
-            <mat-card-title class="question-text">
-              {{ item.question }}
-            </mat-card-title>
-          </mat-card-header>
+                  </div>
+                  <h3 class="question-title">{{ item.question }}</h3>
+              </div>
 
-          <mat-card-content class="answers-preview">
-            <div class="answers-list">
+              <div class="card-content">
+                  <div class="answers-grid">
               @for (answer of item.answers; track answer.id; let answerIndex = $index) {
-                <div class="answer-item" [class.correct]="answer.correct">
-                  <span class="answer-label">{{ getAnswerLabel(answerIndex) }}.</span>
-                  <span class="answer-text">{{ answer.text }}</span>
+                  <div class="answer-option" [class.is-correct]="answer.correct">
+                      <span class="option-label">{{ getAnswerLabel(answerIndex) }}</span>
+                      <span class="option-text">{{ answer.text }}</span>
                   @if (answer.correct) {
-                    <mat-icon class="correct-icon">check</mat-icon>
+                      <mat-icon class="correct-indicator">check</mat-icon>
                   }
                 </div>
               }
             </div>
 
             @if (!hasCorrectAnswer(item)) {
-              <div class="warning-message">
-                <mat-icon>warning</mat-icon>
-                No correct answer is set for this question
-              </div>
+                <div class="no-answer-badge">
+                    <mat-icon>info</mat-icon>
+                    <span>No correct answer set</span>
+                </div>
             }
-          </mat-card-content>
-        </mat-card>
+              </div>
+          </div>
       } @else if (!item) {
         <!-- Skeleton for unloaded question -->
         <mat-card class="question-card skeleton">

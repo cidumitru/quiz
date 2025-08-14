@@ -13,11 +13,9 @@ export interface AuthTokenResponse {
   };
 }
 
-export interface VerifyOtpResponse extends AuthTokenResponse {
-}
+export type VerifyOtpResponse = AuthTokenResponse;
 
-export interface RefreshTokenResponse extends AuthTokenResponse {
-}
+export type RefreshTokenResponse = AuthTokenResponse;
 
 export interface UserProfileResponse {
   id: string;

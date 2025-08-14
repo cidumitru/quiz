@@ -52,7 +52,7 @@ export class QuizViewModel {
 
     // Create question view models with initial answers
     this.questions = quiz.questions.map(q =>
-      new QuestionViewModel(q, initialAnswers[q.questionId!])
+      new QuestionViewModel(q, initialAnswers[q.questionId || ''])
     );
 
     this.questionBankName = quiz.questionBankName;
@@ -97,7 +97,7 @@ export class QuizViewModel {
       .filter(q => q.isAnswered())
       .map(q => ({
         questionId: q.id,
-        answerId: q.selectedAnswerId()!
+        answerId: q.selectedAnswerId() || ''
       }));
   }
 

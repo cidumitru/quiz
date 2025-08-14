@@ -137,7 +137,7 @@ export class AuthService {
           isVerified: user.isVerified,
         },
       };
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
   }

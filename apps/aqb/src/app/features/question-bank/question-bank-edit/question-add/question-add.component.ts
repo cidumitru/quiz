@@ -25,8 +25,8 @@ import {CommonModule} from "@angular/common";
 export class QuestionAddComponent {
     public quiz = inject(QuestionBankService);
     private activatedRoute = inject(ActivatedRoute);
-    
-    public id: string = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
+
+  public id: string = this.activatedRoute.parent?.snapshot.paramMap.get("id") ?? '';
     newQuestionForm = new FormGroup({
         question: new FormControl('', {nonNullable: true}),
         answer: new FormControl('', {nonNullable: true}),
@@ -38,10 +38,10 @@ export class QuestionAddComponent {
     addQuestion() {
         const formValue = this.newQuestionForm.value;
         this.quiz.addQuestion(this.id, [{
-            question: formValue.question!,
-            answers: [formValue.answer!, formValue.wrongAnswer!, formValue.wrongAnswer2!, formValue.wrongAnswer3!]
+          question: formValue.question || '',
+          answers: [formValue.answer, formValue.wrongAnswer, formValue.wrongAnswer2, formValue.wrongAnswer3]
                 .filter(r => !!r)
-                .map((answer, index) => ({text: answer!, correct: index === 0}))
+            .map((answer, index) => ({text: answer || '', correct: index === 0}))
         }]);
         this.newQuestionForm.reset();
     }

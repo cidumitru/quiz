@@ -4,6 +4,8 @@ export {
   CreateQuestionDto,
   CreateQuestionBankDto,
   UpdateQuestionBankDto,
+  UpdateQuestionDto,
+  UpdateAnswerDto,
   AddQuestionsDto,
   SetCorrectAnswerDto,
   ImportQuestionBankDto,
@@ -15,6 +17,8 @@ export type {
   CreateQuestionRequest,
   CreateQuestionBankRequest,
   UpdateQuestionBankRequest,
+  UpdateQuestionRequest,
+  UpdateAnswerRequest,
   AddQuestionsRequest,
   SetCorrectAnswerRequest,
   ImportQuestionBankRequest

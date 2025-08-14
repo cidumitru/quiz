@@ -7,6 +7,7 @@ import {
   QuestionBankSummary,
   QuestionsPaginatedResponse
 } from "./question-bank.models";
+import {ImportQuestionBankRequest, QuestionBankSuccessResponse, UpdateQuestionRequest} from "@aqb/data-access";
 import {QuestionBankApiService} from "@aqb/data-access/angular";
 
 
@@ -33,8 +34,12 @@ export class QuestionBankService {
     return this.api.get(id).pipe(map(r => r.questionBank))
   }
 
-  getQuestions(questionBankId: string, offset: number = 0, limit: number = 50): Observable<QuestionsPaginatedResponse> {
-    return this.api.getQuestions(questionBankId, offset, limit);
+  getQuestions(questionBankId: string, offset = 0, limit = 50, search?: string): Observable<QuestionsPaginatedResponse> {
+    return this.api.getQuestions(questionBankId, offset, limit, search);
+  }
+
+  updateQuestion(questionBankId: string, questionId: string, question: UpdateQuestionRequest): Promise<QuestionBankSuccessResponse> {
+    return firstValueFrom(this.api.updateQuestion(questionBankId, questionId, question));
   }
 
   async reload() {
@@ -101,7 +106,7 @@ export class QuestionBankService {
     }
   }
 
-  async insertQuestionBank(questionBankData: any): Promise<void> {
+  async insertQuestionBank(questionBankData: ImportQuestionBankRequest): Promise<void> {
     this._error.set(null);
 
     try {

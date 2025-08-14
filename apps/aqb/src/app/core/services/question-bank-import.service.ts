@@ -13,7 +13,7 @@ import {z} from 'zod';
 interface ValidationError {
   field: string;
   message: string;
-  value?: any;
+  value?: unknown;
 }
 
 interface QuestionValidationResult {
@@ -130,17 +130,17 @@ export class QuestionBankImportService {
   /**
    * Validates a question bank structure and its contents
    */
-  private async validateQuestionBank(data: any): Promise<ImportValidationResult> {
+  private async validateQuestionBank(data: Record<string, unknown>): Promise<ImportValidationResult> {
     const errors: ValidationError[] = [];
     const warnings: string[] = [];
 
     // Validate basic structure
     const basicStructure = {
-      id: data.id,
-      createdAt: data.createdAt,
-      editedAt: data.editedAt,
-      name: data.name,
-      isDeleted: data.isDeleted ?? false,
+      id: data['id'],
+      createdAt: data['createdAt'],
+      editedAt: data['editedAt'],
+      name: data['name'],
+      isDeleted: data['isDeleted'] ?? false,
       questions: []
     };
 
@@ -155,14 +155,14 @@ export class QuestionBankImportService {
         questionBank: null,
         validQuestions: 0,
         invalidQuestions: 0,
-        totalQuestions: Array.isArray(data.questions) ? data.questions.length : 0,
+        totalQuestions: Array.isArray(data['questions']) ? (data['questions'] as unknown[]).length : 0,
         errors,
         warnings
       };
     }
 
     // Validate questions
-    const questionsData = Array.isArray(data.questions) ? data.questions : [];
+    const questionsData = Array.isArray(data['questions']) ? data['questions'] as unknown[] : [];
     const validatedQuestions = await this.validateQuestions(questionsData);
 
     // Filter valid questions
@@ -217,11 +217,11 @@ export class QuestionBankImportService {
   /**
    * Validates an array of questions
    */
-  private async validateQuestions(questions: any[]): Promise<QuestionValidationResult[]> {
+  private async validateQuestions(questions: unknown[]): Promise<QuestionValidationResult[]> {
     const results: QuestionValidationResult[] = [];
 
     for (const questionData of questions) {
-      const result = await this.validateSingleQuestion(questionData);
+      const result = await this.validateSingleQuestion(questionData as Record<string, unknown>);
       results.push(result);
     }
 
@@ -231,15 +231,15 @@ export class QuestionBankImportService {
   /**
    * Validates a single question with its answers
    */
-  private async validateSingleQuestion(questionData: any): Promise<QuestionValidationResult> {
+  private async validateSingleQuestion(questionData: Record<string, unknown>): Promise<QuestionValidationResult> {
     const errors: ValidationError[] = [];
 
     // Check for required question text
-    if (!questionData.question || typeof questionData.question !== 'string' || questionData.question.trim() === '') {
+    if (!questionData['question'] || typeof questionData['question'] !== 'string' || (questionData['question'] as string).trim() === '') {
       errors.push({
         field: 'question',
         message: 'Question text is required and cannot be empty',
-        value: questionData.question
+        value: questionData['question']
       });
 
       return {
@@ -250,7 +250,7 @@ export class QuestionBankImportService {
     }
 
     // Validate answers
-    const answersData = Array.isArray(questionData.answers) ? questionData.answers : [];
+    const answersData = Array.isArray(questionData['answers']) ? questionData['answers'] as unknown[] : [];
     const validAnswers = await this.validateAnswers(answersData);
 
     // Check if we have at least one valid answer
@@ -270,8 +270,8 @@ export class QuestionBankImportService {
 
     // Validate the complete question
     const questionToValidate = {
-      id: questionData.id || this.generateId(),
-      question: questionData.question.trim(),
+      id: questionData['id'] as string || this.generateId(),
+      question: (questionData['question'] as string).trim(),
       answers: validAnswers
     };
 
@@ -298,19 +298,20 @@ export class QuestionBankImportService {
   /**
    * Validates an array of answers
    */
-  private async validateAnswers(answers: any[]): Promise<ParsedAnswer[]> {
+  private async validateAnswers(answers: unknown[]): Promise<ParsedAnswer[]> {
     const validAnswers: ParsedAnswer[] = [];
 
     for (const answerData of answers) {
+      const answer = answerData as Record<string, unknown>;
       // Skip answers with empty text
-      if (!answerData.text || typeof answerData.text !== 'string' || answerData.text.trim() === '') {
+      if (!answer['text'] || typeof answer['text'] !== 'string' || (answer['text'] as string).trim() === '') {
         continue;
       }
 
       const answerToValidate = {
-        id: answerData.id || this.generateId(),
-        text: answerData.text.trim(),
-        correct: answerData.correct ?? false
+        id: answer['id'] as string || this.generateId(),
+        text: (answer['text'] as string).trim(),
+        correct: answer['correct'] as boolean ?? false
       };
 
       const validation = await answerScheme.safeParseAsync(answerToValidate);
@@ -339,7 +340,7 @@ export class QuestionBankImportService {
    */
   private calculateAnswerStatistics(questions: ParsedQuestion[]): { valid: number; invalid: number } {
     let valid = 0;
-    let invalid = 0;
+    const invalid = 0;
 
     for (const question of questions) {
       valid += question.answers.length;
@@ -352,7 +353,7 @@ export class QuestionBankImportService {
   /**
    * Safely parses JSON content
    */
-  private parseJson(content: string): any | null {
+  private parseJson(content: string): Record<string, unknown> | null {
     try {
       return JSON.parse(content);
     } catch (error) {

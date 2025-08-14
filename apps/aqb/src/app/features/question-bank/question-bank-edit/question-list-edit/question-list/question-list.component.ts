@@ -1,4 +1,14 @@
-import {ChangeDetectionStrategy, Component, computed, OnDestroy, OnInit, output, signal} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  output,
+  signal
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
@@ -11,6 +21,8 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {Question} from '@aqb/data-access';
 import {QuestionDataSource} from './question-data-source';
+import {QuestionBankStore} from '../../question-bank-store.service';
+import {BehaviorSubject, debounceTime, distinctUntilChanged} from 'rxjs';
 
 @Component({
   selector: 'app-question-list',
@@ -40,12 +52,12 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   deleteQuestion = output<Question>();
   createQuestion = output<void>();
 
+  // Track total items as a computed signal from data source
+  public totalItems = computed(() => this.dataSource.totalItems());
   public searchText = signal('');
   public showOnlyWithoutAnswers = signal(false);
-
-  // Check if a question should be visible based on current filters
+  // Check if a question should be visible based on current filters (only client-side filters now)
   public shouldShowQuestion = computed(() => {
-    const search = this.searchText().toLowerCase();
     const onlyWithoutAnswers = this.showOnlyWithoutAnswers();
 
     // Return a function that can be called with a question
@@ -56,16 +68,12 @@ export class QuestionListComponent implements OnInit, OnDestroy {
         return false; // Hide questions with correct answers
       }
 
-      if (search && !question.question.toLowerCase().includes(search)) {
-        return false; // Hide questions that don't match search
-      }
-
       return true;
     };
   });
-
-  ngOnInit(): void {
-  }
+  private cdr = inject(ChangeDetectorRef);
+  private store = inject(QuestionBankStore);
+  private searchSubject = new BehaviorSubject<string>('');
 
   ngOnDestroy(): void {
     if (this.dataSource) {
@@ -100,20 +108,39 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     return String.fromCharCode(65 + index);
   }
 
+  ngOnInit(): void {
+    // Force initial change detection after data source is set up
+    setTimeout(() => {
+      this.cdr.detectChanges();
+    }, 0);
+
+    // Setup search with debouncing
+    this.searchSubject.pipe(
+      debounceTime(300), // Wait 300ms after the user stops typing
+      distinctUntilChanged() // Only emit if the value is different from the previous one
+    ).subscribe(searchQuery => {
+      this.store.setSearchQuery(searchQuery);
+    });
+  }
+
   onSearchInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    this.searchText.set(target.value);
+    const searchValue = target.value;
+    this.searchText.set(searchValue);
+
+    // Debounce search to avoid too many API calls
+    this.performSearch(searchValue);
+  }
+
+  trackByFn(index: number, item: Question | undefined): string | number {
+    return item ? item.id : index;
   }
 
   isQuestionLoading(index: number): boolean {
     return this.dataSource?.isQuestionLoading(index) ?? false;
   }
 
-  getTotalItems(): number {
-    return this.dataSource?.getTotalLength() ?? 0;
-  }
-
-  trackByFn(index: number, item: Question | undefined): any {
-    return item ? item.id : index;
+  private performSearch(searchQuery: string): void {
+    this.searchSubject.next(searchQuery);
   }
 }

@@ -12,6 +12,7 @@ import {
   QuestionsAddedResponse,
   QuestionsPaginatedResponse,
   UpdateQuestionBankRequest,
+  UpdateQuestionRequest,
 } from '../dto';
 
 @Injectable({
@@ -58,6 +59,13 @@ export class QuestionBankApiService {
     );
   }
 
+  updateQuestion(questionBankId: string, questionId: string, request: UpdateQuestionRequest): Observable<QuestionBankSuccessResponse> {
+    return this.http.put<QuestionBankSuccessResponse>(
+      `${this.baseUrl}/${questionBankId}/questions/${questionId}`,
+      request
+    );
+  }
+
   setCorrectAnswer(questionBankId: string, questionId: string, correctAnswerId: string): Observable<QuestionBankSuccessResponse> {
     return this.http.put<QuestionBankSuccessResponse>(
       `${this.baseUrl}/${questionBankId}/questions/${questionId}/correct-answer`,
@@ -65,11 +73,15 @@ export class QuestionBankApiService {
     );
   }
 
-  getQuestions(questionBankId: string, offset: number = 0, limit: number = 50): Observable<QuestionsPaginatedResponse> {
+  getQuestions(questionBankId: string, offset = 0, limit = 50, search?: string): Observable<QuestionsPaginatedResponse> {
     const params = new URLSearchParams({
       offset: offset.toString(),
       limit: limit.toString()
     });
+
+    if (search && search.trim()) {
+      params.set('search', search.trim());
+    }
 
     return this.http.get<QuestionsPaginatedResponse>(
       `${this.baseUrl}/${questionBankId}/questions?${params.toString()}`

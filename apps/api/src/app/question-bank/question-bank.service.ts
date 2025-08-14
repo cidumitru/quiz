@@ -1,6 +1,6 @@
 import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
-import {In, Repository} from 'typeorm';
+import {FindOperator, In, Like, Repository} from 'typeorm';
 import {Answer, Question, QuestionBank, QuizStatistics} from '../entities';
 import {
   AddQuestionsDto,
@@ -15,6 +15,7 @@ import {
   QuestionsPaginatedResponse,
   SetCorrectAnswerDto,
   UpdateQuestionBankDto,
+  UpdateQuestionDto,
 } from '@aqb/data-access';
 import {QuestionCountMap, QuestionCountRawResult} from '../types/common.types';
 import {CacheService} from '../cache/cache.service';
@@ -144,7 +145,7 @@ export class QuestionBankService {
     // Try to get from cache first
     const cachedData = await this.cacheService.getQuestionBankDetail(userId, id);
     if (cachedData) {
-      return cachedData;
+      return {questionBank: cachedData};
     }
 
     const questionBank = await this.questionBankRepository.findOne({
@@ -161,12 +162,12 @@ export class QuestionBankService {
     const response = {questionBank: transformed as QuestionBankDetail};
 
     // Cache the response
-    await this.cacheService.setQuestionBankDetail(userId, id, response);
+    await this.cacheService.setQuestionBankDetail(userId, id, response.questionBank);
 
     return response;
   }
 
-  async getQuestions(userId: string, questionBankId: string, offset: number, limit: number): Promise<QuestionsPaginatedResponse> {
+  async getQuestions(userId: string, questionBankId: string, offset: number, limit: number, search?: string): Promise<QuestionsPaginatedResponse> {
 
     // First verify the user owns this question bank
     const questionBank = await this.questionBankRepository.findOne({
@@ -177,14 +178,20 @@ export class QuestionBankService {
       throw new NotFoundException('Question bank not found');
     }
 
-    // Get total count of questions
+    // Build search condition
+    const whereCondition: { questionBankId: string; question?: FindOperator<string> } = {questionBankId};
+    if (search && search.trim()) {
+      whereCondition.question = Like(`%${search.trim()}%`);
+    }
+
+    // Get total count of questions (with search filter)
     const totalItems = await this.questionRepository.count({
-      where: {questionBankId}
+      where: whereCondition
     });
 
-    // Get paginated questions with answers
+    // Get paginated questions with answers (with search filter)
     const questions = await this.questionRepository.find({
-      where: {questionBankId},
+      where: whereCondition,
       relations: ['answers'],
       skip: offset,
       take: limit,
@@ -380,6 +387,95 @@ export class QuestionBankService {
     await this.cacheService.invalidateQuestionBankDetail(userId, questionBankId);
 
     return { success: true };
+  }
+
+  async updateQuestion(
+    userId: string,
+    questionBankId: string,
+    questionId: string,
+    dto: UpdateQuestionDto,
+  ): Promise<QuestionBankSuccessResponse> {
+    const questionBank = await this.questionBankRepository.findOne({
+      where: {id: questionBankId, userId, isDeleted: false},
+    });
+
+    if (!questionBank) {
+      throw new NotFoundException('Question bank not found');
+    }
+
+    const question = await this.questionRepository.findOne({
+      where: {id: questionId, questionBankId},
+      relations: ['answers'],
+    });
+
+    if (!question) {
+      throw new NotFoundException('Question not found');
+    }
+
+    // Update question text
+    question.question = dto.question;
+    await this.questionRepository.save(question);
+
+    // Handle answers update
+    if (dto.answers && dto.answers.length > 0) {
+      // Get existing answers
+      const existingAnswers = question.answers;
+      const existingAnswerIds = existingAnswers.map(a => a.id);
+
+      // Process each answer in the DTO
+      for (const answerDto of dto.answers) {
+        if (answerDto.id && existingAnswerIds.includes(answerDto.id)) {
+          // Update existing answer
+          const existingAnswer = existingAnswers.find(a => a.id === answerDto.id);
+          if (existingAnswer) {
+            existingAnswer.text = answerDto.text;
+            existingAnswer.isCorrect = answerDto.correct || false;
+            await this.answerRepository.save(existingAnswer);
+          }
+        } else {
+          // Create new answer
+          const newAnswer = this.answerRepository.create({
+            text: answerDto.text,
+            isCorrect: answerDto.correct || false,
+            questionId: questionId,
+          });
+          await this.answerRepository.save(newAnswer);
+        }
+      }
+
+      // Delete answers that are no longer in the DTO
+      const dtoAnswerIds = dto.answers
+        .filter((a) => a.id)
+        .map((a) => a.id || '');
+      const toDelete = existingAnswerIds.filter(id => !dtoAnswerIds.includes(id));
+
+      if (toDelete.length > 0) {
+        await this.answerRepository.delete({id: In(toDelete)});
+      }
+    }
+
+    // Handle correct answer setting (for backward compatibility)
+    if (dto.correctAnswerId) {
+      // Reset all answers for this question
+      const updatedQuestion = await this.questionRepository.findOne({
+        where: {id: questionId},
+        relations: ['answers'],
+      });
+
+      if (updatedQuestion) {
+        for (const answer of updatedQuestion.answers) {
+          answer.isCorrect = answer.id === dto.correctAnswerId;
+          await this.answerRepository.save(answer);
+        }
+      }
+    }
+
+    // Invalidate detail cache since question changed
+    await this.cacheService.invalidateQuestionBankDetail(userId, questionBankId);
+
+    return {
+      success: true,
+    };
   }
 
   async setCorrectAnswer(

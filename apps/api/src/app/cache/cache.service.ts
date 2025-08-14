@@ -1,6 +1,7 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {CACHE_MANAGER} from '@nestjs/cache-manager';
 import {Cache} from 'cache-manager';
+import {QuestionBankDetail, QuestionBankListResponse, QuestionBankStatistics} from '@aqb/data-access';
 
 @Injectable()
 export class CacheService {
@@ -23,37 +24,37 @@ export class CacheService {
   }
 
   // Get question bank list from cache
-  async getQuestionBankList(userId: string): Promise<any | null> {
+  async getQuestionBankList(userId: string): Promise<QuestionBankListResponse | undefined> {
     const key = this.KEYS.QUESTION_BANK_LIST(userId);
     return await this.cacheManager.get(key);
   }
 
   // Set question bank list in cache
-  async setQuestionBankList(userId: string, data: any): Promise<void> {
+  async setQuestionBankList(userId: string, data: QuestionBankListResponse): Promise<void> {
     const key = this.KEYS.QUESTION_BANK_LIST(userId);
     await this.cacheManager.set(key, data, this.TTL.QUESTION_BANK_LIST);
   }
 
   // Get question bank detail from cache
-  async getQuestionBankDetail(userId: string, qbId: string): Promise<any | null> {
+  async getQuestionBankDetail(userId: string, qbId: string): Promise<QuestionBankDetail | undefined> {
     const key = this.KEYS.QUESTION_BANK_DETAIL(userId, qbId);
     return await this.cacheManager.get(key);
   }
 
   // Set question bank detail in cache
-  async setQuestionBankDetail(userId: string, qbId: string, data: any): Promise<void> {
+  async setQuestionBankDetail(userId: string, qbId: string, data: QuestionBankDetail): Promise<void> {
     const key = this.KEYS.QUESTION_BANK_DETAIL(userId, qbId);
     await this.cacheManager.set(key, data, this.TTL.QUESTION_BANK_DETAIL);
   }
 
   // Get question bank statistics from cache
-  async getQuestionBankStats(userId: string, qbId: string): Promise<any | null> {
+  async getQuestionBankStats(userId: string, qbId: string): Promise<QuestionBankStatistics | undefined> {
     const key = this.KEYS.QUESTION_BANK_STATS(userId, qbId);
     return await this.cacheManager.get(key);
   }
 
   // Set question bank statistics in cache
-  async setQuestionBankStats(userId: string, qbId: string, data: any): Promise<void> {
+  async setQuestionBankStats(userId: string, qbId: string, data: QuestionBankStatistics): Promise<void> {
     const key = this.KEYS.QUESTION_BANK_STATS(userId, qbId);
     await this.cacheManager.set(key, data, this.TTL.QUESTION_BANK_STATS);
   }
@@ -98,7 +99,7 @@ export class CacheService {
   }
 
   // Generic set method with custom TTL
-  async set(key: string, value: any, ttl?: number): Promise<void> {
+  async set(key: string, value: unknown, ttl?: number): Promise<void> {
     await this.cacheManager.set(key, value, ttl);
   }
 

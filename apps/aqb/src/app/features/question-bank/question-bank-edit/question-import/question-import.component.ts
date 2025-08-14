@@ -33,7 +33,7 @@ export class QuestionImportComponent {
     private activatedRoute = inject(ActivatedRoute);
     private snackbar = inject(MatSnackBar);
 
-    public id: string = this.activatedRoute.parent?.snapshot.paramMap.get("id")!;
+  public id: string = this.activatedRoute.parent?.snapshot.paramMap.get("id") ?? '';
     public control = new FormControl("");
     public isImporting = signal<boolean>(false);
     private parsedQuestions: QuestionModel[] | undefined = [];

@@ -45,6 +45,35 @@ export class SetCorrectAnswerDto {
   correctAnswerId: string;
 }
 
+export class UpdateAnswerDto {
+  @IsUUID()
+  @IsOptional()
+  id?: string; // Optional for new answers
+
+  @IsString()
+  @IsNotEmpty()
+  text: string;
+
+  @IsBoolean()
+  @IsOptional()
+  correct?: boolean;
+}
+
+export class UpdateQuestionDto {
+  @IsString()
+  @IsNotEmpty()
+  question: string;
+
+  @IsArray()
+  @ValidateNested({each: true})
+  @Type(() => UpdateAnswerDto)
+  answers: UpdateAnswerDto[];
+
+  @IsUUID()
+  @IsOptional()
+  correctAnswerId?: string; // For backward compatibility
+}
+
 export class ImportQuestionBankDto {
   @IsUUID()
   id: string;
@@ -104,4 +133,6 @@ export type CreateQuestionBankRequest = CreateQuestionBankDto;
 export type UpdateQuestionBankRequest = UpdateQuestionBankDto;
 export type AddQuestionsRequest = AddQuestionsDto;
 export type SetCorrectAnswerRequest = SetCorrectAnswerDto;
+export type UpdateQuestionRequest = UpdateQuestionDto;
+export type UpdateAnswerRequest = UpdateAnswerDto;
 export type ImportQuestionBankRequest = ImportQuestionBankDto;

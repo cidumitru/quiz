@@ -16,17 +16,7 @@ export interface QuestionEditDialogData {
   mode: 'create' | 'edit';
 }
 
-interface AnswerFormValue {
-  id: string;
-  text: string;
-  correct: boolean;
-}
 
-interface QuestionFormValue {
-  question: string;
-  correctAnswerId: string;
-  answers: AnswerFormValue[];
-}
 
 type AnswerFormGroup = FormGroup<{
   id: FormControl<string>;
@@ -123,7 +113,7 @@ export class QuestionEditDialogComponent implements OnInit {
       this.dialogRef.close({newQuestion});
     } else {
       const updatedQuestion: Question = {
-        ...this.data.question!,
+        ...(this.data.question || {id: '', question: '', answers: []}),
         question: formValue.question,
         answers: formValue.answers.map(answer => ({
           id: answer.id,
@@ -155,10 +145,10 @@ export class QuestionEditDialogComponent implements OnInit {
   }
 
   private initializeEditForm(): void {
-    const correctAnswerId = this.data.question!.answers.find(a => a.correct)?.id || '';
+    const correctAnswerId = this.data.question?.answers.find(a => a.correct)?.id || '';
 
     this.form = this.fb.group({
-      question: this.fb.control(this.data.question!.question, {
+      question: this.fb.control(this.data.question?.question || '', {
         validators: [Validators.required, Validators.minLength(3)],
         nonNullable: true
       }),
@@ -167,7 +157,7 @@ export class QuestionEditDialogComponent implements OnInit {
         nonNullable: true
       }),
       answers: this.fb.array(
-        this.data.question!.answers.map(answer =>
+        (this.data.question?.answers || []).map(answer =>
           this.fb.group({
             id: this.fb.control(answer.id, {nonNullable: true}),
             text: this.fb.control(answer.text, {
@@ -198,7 +188,7 @@ export class QuestionEditDialogComponent implements OnInit {
     });
   }
 
-  private createAnswerFormGroup(text: string = '', correct: boolean = false): AnswerFormGroup {
+  private createAnswerFormGroup(text = '', correct = false): AnswerFormGroup {
     return this.fb.group({
       id: this.fb.control(`temp_${Date.now()}`, {nonNullable: true}),
       text: this.fb.control(text, {

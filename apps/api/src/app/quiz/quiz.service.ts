@@ -51,7 +51,7 @@ export class QuizService {
     }
 
     // Select questions based on mode
-    let selectedQuestions = await this.selectQuestionsByMode(
+    const selectedQuestions = await this.selectQuestionsByMode(
       userId,
       questionBank,
       dto.mode || QuizMode.All,
@@ -95,21 +95,23 @@ export class QuizService {
     let availableQuestions = questionBank.questions;
 
     switch (mode) {
-      case QuizMode.Mistakes:
+      case QuizMode.Mistakes: {
         // Get questions where user has low success rate
         const mistakeQuestions = await this.getMistakeQuestions(userId, questionBank.id);
         availableQuestions = availableQuestions.filter(q =>
           mistakeQuestions.includes(q.id)
         );
         break;
+      }
 
-      case QuizMode.Discovery:
+      case QuizMode.Discovery: {
         // Get questions user hasn't answered yet
         const answeredQuestions = await this.getAnsweredQuestions(userId, questionBank.id);
         availableQuestions = availableQuestions.filter(q =>
           !answeredQuestions.includes(q.id)
         );
         break;
+      }
 
       case QuizMode.All:
       default:
@@ -194,7 +196,9 @@ export class QuizService {
       items.forEach(quiz => {
         const stats = statsMap.get(quiz.id);
         if (stats) {
-          (quiz as Quiz & { _stats?: any })['_stats'] = {
+          (quiz as Quiz & {
+            _stats?: { totalQuestions: number; answeredQuestions: number; correctAnswers: number }
+          })['_stats'] = {
             totalQuestions: parseInt(stats.totalQuestions),
             answeredQuestions: parseInt(stats.answeredQuestions),
             correctAnswers: parseInt(stats.correctAnswers || '0')
@@ -256,7 +260,10 @@ export class QuizService {
 
       // Attach questions and answers to quiz questions
       quiz.quizQuestions.forEach(qq => {
-        qq.question = questionMap.get(qq.questionId)!;
+        const question = questionMap.get(qq.questionId);
+        if (question) {
+          qq.question = question;
+        }
         if (qq.answerId) {
           qq.userAnswer = answerMap.get(qq.answerId);
         }
@@ -427,7 +434,9 @@ export class QuizService {
     await this.quizStatisticsRepository.save(stats);
   }
 
-  private mapQuizToListItem(quiz: Quiz & { _stats?: any }): QuizListItem {
+  private mapQuizToListItem(quiz: Quiz & {
+    _stats?: { totalQuestions: number; answeredQuestions: number; correctAnswers: number }
+  }): QuizListItem {
     let score = 0;
     let answerCount = 0;
     let questionCount = 0;
@@ -461,8 +470,8 @@ export class QuizService {
     };
   }
 
-  private async mapQuizToResponse(quiz: Quiz, includeQuestions: boolean): Promise<any> {
-    const response: any = {
+  private async mapQuizToResponse(quiz: Quiz, includeQuestions: boolean): Promise<Record<string, unknown>> {
+    const response: Record<string, unknown> = {
       id: quiz.id,
       questionBankId: quiz.questionBankId,
       mode: quiz.mode,

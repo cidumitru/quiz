@@ -1,7 +1,7 @@
 import {computed, inject, Injectable, signal} from '@angular/core';
 import {firstValueFrom} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {QuestionBankService} from '../../question-bank.service';
+import {QuestionBankService} from '../question-bank.service';
 import {IQuestionCreate, Question, QuestionBankDetail, QuestionsPaginatedResponse} from '@aqb/data-access';
 
 export interface LoadingStates {
@@ -21,6 +21,7 @@ export interface QuestionBankStoreState {
   loadedRanges: Set<string>; // Track loaded page ranges (e.g., "0-50", "50-100")
   loadingRanges: Set<number>; // Track individual indices being loaded
   error: string | null;
+  searchQuery: string; // Current search query
 }
 
 @Injectable()
@@ -43,7 +44,8 @@ export class QuestionBankStore {
     },
     loadedRanges: new Set(),
     loadingRanges: new Set(),
-    error: null
+    error: null,
+    searchQuery: ''
   });
 
   // Public computed selectors
@@ -52,6 +54,7 @@ export class QuestionBankStore {
   public readonly totalItems = computed(() => this._state().totalItems);
   public readonly loadingStates = computed(() => this._state().loadingStates);
   public readonly error = computed(() => this._state().error);
+  public readonly searchQuery = computed(() => this._state().searchQuery);
 
   // Computed derived states
   public readonly isLoading = computed(() => {
@@ -106,8 +109,9 @@ export class QuestionBankStore {
         throw new Error('Question bank not loaded');
       }
 
+      const currentSearch = this._state().searchQuery;
       const response: QuestionsPaginatedResponse = await firstValueFrom(
-        this.questionBankService.getQuestions(questionBankId, offset, limit)
+        this.questionBankService.getQuestions(questionBankId, offset, limit, currentSearch || undefined)
       );
 
       if (response) {
@@ -182,6 +186,75 @@ export class QuestionBankStore {
           loadingRanges: newLoadingRanges
         };
       });
+    }
+  }
+
+  /**
+   * Set search query and refresh results
+   */
+  async setSearchQuery(searchQuery: string): Promise<void> {
+    const currentSearch = this._state().searchQuery;
+
+    // Only proceed if search query has changed
+    if (currentSearch === searchQuery) {
+      return;
+    }
+
+    // Update search query
+    this.updateState(state => ({
+      ...state,
+      searchQuery,
+      // Clear current data when search changes
+      questions: [],
+      totalItems: 0,
+      loadedRanges: new Set(),
+      loadingRanges: new Set()
+    }));
+
+    // Reload first page with new search
+    try {
+      await this.loadQuestionsRange(0, this.PAGE_SIZE);
+    } catch (error) {
+      console.error('Failed to search questions:', error);
+      this.setError('Failed to search questions');
+    }
+  }
+
+  /**
+   * Clear search and reload all questions
+   */
+  async clearSearch(): Promise<void> {
+    await this.setSearchQuery('');
+  }
+
+  /**
+   * Update question bank name
+   */
+  async updateQuestionBankName(name: string): Promise<void> {
+    const questionBankId = this._state().questionBank?.id;
+    if (!questionBankId) {
+      throw new Error('Question bank not loaded');
+    }
+
+    try {
+      await this.questionBankService.updateQuestionBank(questionBankId, name);
+
+      // Update the local state with the new name
+      this.updateState(state => ({
+        ...state,
+        questionBank: state.questionBank ? {
+          ...state.questionBank,
+          name
+        } : null
+      }));
+
+      this.snackBar.open('Question bank name updated', 'Close', {
+        duration: 3000
+      });
+    } catch (error) {
+      console.error('Failed to update question bank name:', error);
+      this.setError('Failed to update question bank name');
+      throw error;
     }
   }
 
@@ -264,7 +337,7 @@ export class QuestionBankStore {
   /**
    * Update a question with optimistic updates
    */
-  async updateQuestion(questionId: string, correctAnswerId: string): Promise<void> {
+  async updateQuestion(questionId: string, updatedQuestion: Question): Promise<void> {
     const questionBankId = this._state().questionBank?.id;
     if (!questionBankId) {
       throw new Error('Question bank not loaded');
@@ -287,18 +360,10 @@ export class QuestionBankStore {
 
     this.setLoadingState('updating', true);
 
-    // Optimistic update: update correct answer
+    // Optimistic update: update the question
     this.updateState(state => {
       const updated = [...state.questions];
-      if (updated[questionIndex]) {
-        updated[questionIndex] = {
-          ...updated[questionIndex]!,
-          answers: updated[questionIndex]!.answers.map(answer => ({
-            ...answer,
-            correct: answer.id === correctAnswerId
-          }))
-        };
-      }
+      updated[questionIndex] = updatedQuestion;
       return {
         ...state,
         questions: updated
@@ -306,8 +371,17 @@ export class QuestionBankStore {
     });
 
     try {
-      await this.questionBankService.setCorrectAnswer(questionBankId, questionId, correctAnswerId);
+      // Transform Question to UpdateQuestionRequest
+      const updateRequest = {
+        question: updatedQuestion.question,
+        answers: updatedQuestion.answers.map(answer => ({
+          id: answer.id,
+          text: answer.text,
+          correct: answer.correct
+        }))
+      };
 
+      await this.questionBankService.updateQuestion(questionBankId, questionId, updateRequest);
       this.showSuccess('Question updated successfully');
     } catch (error) {
       console.error('Failed to update question:', error);
@@ -323,6 +397,7 @@ export class QuestionBankStore {
       });
 
       this.setError('Failed to update question');
+      throw error;
     } finally {
       this.setLoadingState('updating', false);
     }

@@ -14,6 +14,7 @@ import {
   QuestionsPaginatedResponse,
   SetCorrectAnswerDto,
   UpdateQuestionBankDto,
+  UpdateQuestionDto,
 } from '@aqb/data-access';
 import {AuthenticatedRequest} from '../types/common.types';
 
@@ -76,6 +77,21 @@ export class QuestionBankController {
     return this.questionBankService.deleteQuestion(req.user.id, id, questionId);
   }
 
+  @Put(':id/questions/:questionId')
+  updateQuestion(
+    @Request() req: AuthenticatedRequest,
+    @Param('id') id: string,
+    @Param('questionId') questionId: string,
+    @Body() dto: UpdateQuestionDto,
+  ): Promise<QuestionBankSuccessResponse> {
+    return this.questionBankService.updateQuestion(
+      req.user.id,
+      id,
+      questionId,
+      dto,
+    );
+  }
+
   @Put(':id/questions/:questionId/correct-answer')
   setCorrectAnswer(
     @Request() req: AuthenticatedRequest,
@@ -97,9 +113,10 @@ export class QuestionBankController {
     @Param('id') id: string,
     @Query('offset') offset = '0',
     @Query('limit') limit = '50',
+    @Query('search') search?: string,
   ): Promise<QuestionsPaginatedResponse> {
     const offsetNum = parseInt(offset, 10);
     const limitNum = parseInt(limit, 10);
-    return this.questionBankService.getQuestions(req.user.id, id, offsetNum, limitNum);
+    return this.questionBankService.getQuestions(req.user.id, id, offsetNum, limitNum, search);
   }
 }

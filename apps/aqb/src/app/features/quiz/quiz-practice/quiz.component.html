@@ -104,7 +104,11 @@
                             <div class="answer-card"
                                  [ngClass]="question.getAnswerCssClasses(answer.id)"
                                  (click)="selectAnswer(question.id, answer.id)"
+                                 (keydown.enter)="selectAnswer(question.id, answer.id)"
+                                 (keydown.space)="selectAnswer(question.id, answer.id)"
                                  [attr.aria-disabled]="question.isAnswered()"
+                                 [attr.tabindex]="question.isAnswered() ? -1 : 0"
+                                 [attr.role]="'button'"
                                  [style.cursor]="question.isAnswered() ? 'not-allowed' : 'pointer'">
 
                               <div class="answer-content">

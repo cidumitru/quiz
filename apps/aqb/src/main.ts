@@ -27,7 +27,7 @@ import {from} from "rxjs";
 import {map} from "rxjs/operators";
 import {QuizViewModel} from "./app/features/quiz/quiz-practice/quiz.view-model";
 
-export const bootstrapFactory = (appConfig: AppConfig, questionBank: QuestionBankService, quiz: QuizService, mockDataLoader: MockDataLoader, authService: AuthService) => async () => {
+export const bootstrapFactory = (appConfig: AppConfig) => async () => {
   await appConfig.init();
 }
 

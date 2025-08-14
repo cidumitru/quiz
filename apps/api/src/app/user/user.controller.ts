@@ -12,7 +12,8 @@ export class UserController {
   @Get('profile')
   async getProfile(@Request() req: AuthenticatedRequest): Promise<UserProfileResponse> {
     const user = await this.userService.findById(req.user.id);
-    const { otpCodes, ...userProfile } = user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {otpCodes, ...userProfile} = user;
     return {
       ...userProfile,
       createdAt: userProfile.createdAt.toString(),

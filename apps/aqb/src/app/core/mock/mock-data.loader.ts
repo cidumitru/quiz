@@ -17,7 +17,7 @@ export class MockDataLoader {
               // Transform to QuestionBankDetail format
               const questionBankDetail = {
                 ...qb.data,
-                createdAt: new Date(qb.data.createdAt),
+                createdAt: new Date(qb.data.createdAt).toString(),
                 updatedAt: qb.data.editedAt ? new Date(qb.data.editedAt) : new Date(),
                 userId: '',
                 isDeleted: qb.data.isDeleted || false

@@ -48,7 +48,7 @@ export class QuizComponent implements OnInit, OnDestroy {
       const viewModel = this.quizViewModel();
       if (viewModel) {
         // Track answeredCount to react to any question state changes
-        const answeredCount = viewModel.answeredCount();
+        viewModel.answeredCount();
         const answers = viewModel.getAllAnswers();
         if (answers.length > 0) {
           this.quizService.setQuizAnswers(viewModel.id, answers);
@@ -189,7 +189,7 @@ export class QuizComponent implements OnInit, OnDestroy {
     // Observe all question cards
     const questionCards = document.querySelectorAll('[data-question-index]');
     questionCards.forEach(card => {
-      this.intersectionObserver!.observe(card);
+      this.intersectionObserver?.observe(card);
     });
   }
 

@@ -3,7 +3,7 @@ import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {inject} from '@angular/core';
 import {toObservable} from '@angular/core/rxjs-interop';
 import {Question} from '@aqb/data-access';
-import {QuestionBankStore} from '../question-bank-store.service';
+import {QuestionBankStore} from '../../question-bank-store.service';
 
 export class QuestionDataSource extends DataSource<Question | undefined> {
   private readonly store = inject(QuestionBankStore);
@@ -15,8 +15,14 @@ export class QuestionDataSource extends DataSource<Question | undefined> {
   private _cachedData: (Question | undefined)[] = [];
   private _totalLength = 0;
 
+  // Expose totalItems as a computed signal from store
+  public readonly totalItems = this.store.totalItems;
+
   constructor() {
     super();
+
+    // Initialize with empty array to trigger initial render
+    this._dataStream.next([]);
 
     // Subscribe to store changes
     this._subscription.add(
@@ -30,7 +36,7 @@ export class QuestionDataSource extends DataSource<Question | undefined> {
       toObservable(this.store.totalItems).subscribe((total: number) => {
         this._totalLength = total;
         // Resize cached data array if needed
-        if (this._cachedData.length !== total) {
+        if (this._cachedData.length !== total && total > 0) {
           const newData = new Array(total).fill(undefined);
           // Copy existing data
           for (let i = 0; i < Math.min(this._cachedData.length, total); i++) {
@@ -46,12 +52,16 @@ export class QuestionDataSource extends DataSource<Question | undefined> {
   connect(collectionViewer: CollectionViewer): Observable<(Question | undefined)[]> {
     this._subscription.add(
       collectionViewer.viewChange.subscribe(range => {
-        if (this._totalLength === 0) {
-          return; // Wait for total length to be set
+        // Don't wait for totalLength to be set, attempt to fetch if we have a range
+        if (range.start === 0 && range.end === 0) {
+          return; // No range to display
         }
 
+        // If totalLength is not set yet, use the range.end as an estimate
+        const effectiveTotal = this._totalLength > 0 ? this._totalLength : range.end;
+
         const startPage = this._getPageForIndex(range.start);
-        const endPage = this._getPageForIndex(Math.min(range.end - 1, this._totalLength - 1));
+        const endPage = this._getPageForIndex(Math.min(range.end - 1, effectiveTotal - 1));
 
         for (let i = startPage; i <= endPage; i++) {
           this._fetchPage(i);
@@ -86,13 +96,16 @@ export class QuestionDataSource extends DataSource<Question | undefined> {
   }
 
   private _fetchPage(page: number): void {
-    if (this._fetchedPages.has(page) || this._totalLength === 0) {
+    if (this._fetchedPages.has(page)) {
       return;
     }
 
     this._fetchedPages.add(page);
     const offset = page * this._pageSize;
-    const limit = Math.min(this._pageSize, this._totalLength - offset);
+    // If totalLength is not yet known, use pageSize as the limit
+    const limit = this._totalLength > 0
+      ? Math.min(this._pageSize, this._totalLength - offset)
+      : this._pageSize;
 
     // Use the store to fetch the page
     this.store.loadQuestionsRange(offset, limit).catch(error => {

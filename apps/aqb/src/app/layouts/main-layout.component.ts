@@ -149,16 +149,19 @@ import {CommonModule} from "@angular/common";
                         </a>
                         <mat-divider></mat-divider>
                         @if (authService.isLoggedIn$ | async) {
-                            <a mat-list-item (click)="onLogout(); mobileDrawer.close()">
+                          <a mat-list-item (click)="onLogout(); mobileDrawer.close()"
+                             (keydown.enter)="onLogout(); mobileDrawer.close()" tabindex="0">
                                 <mat-icon matListItemIcon>logout</mat-icon>
                                 <span matListItemTitle>Logout</span>
                             </a>
                         }
-                        <a mat-list-item (click)="themeService.toggleTheme(); mobileDrawer.close()">
+                    <a mat-list-item (click)="themeService.toggleTheme(); mobileDrawer.close()"
+                       (keydown.enter)="themeService.toggleTheme(); mobileDrawer.close()" tabindex="0">
                             <mat-icon matListItemIcon>{{themeService.getThemeIcon()}}</mat-icon>
                             <span matListItemTitle>{{themeService.getThemeLabel()}}</span>
                         </a>
-                        <a mat-list-item (click)="openGitHub(); mobileDrawer.close()">
+                    <a mat-list-item (click)="openGitHub(); mobileDrawer.close()"
+                       (keydown.enter)="openGitHub(); mobileDrawer.close()" tabindex="0">
                             <mat-icon matListItemIcon>code</mat-icon>
                             <span matListItemTitle>GitHub</span>
                         </a>

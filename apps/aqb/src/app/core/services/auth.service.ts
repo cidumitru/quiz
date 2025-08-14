@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {AuthApiService} from '@aqb/data-access/angular';
@@ -20,7 +20,9 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private authApiService: AuthApiService) {
+  private authApiService = inject(AuthApiService);
+
+  constructor() {
     this.initializeAuth();
   }
 

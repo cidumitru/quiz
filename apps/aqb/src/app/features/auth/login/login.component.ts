@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../core/services/auth.service';
+import {Component, inject} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {CommonModule} from '@angular/common';
+import {AuthService} from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -28,17 +28,17 @@ import { AuthService } from '../../../core/services/auth.service';
 export class LoginComponent {
   emailForm: FormGroup;
   otpForm: FormGroup;
-  
+
   showOtpForm = false;
   isLoading = false;
   email = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+
+  constructor() {
     this.emailForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
@@ -74,7 +74,7 @@ export class LoginComponent {
       const code = this.otpForm.value.code;
 
       this.authService.verifyOtp(this.email, code).subscribe({
-        next: (response) => {
+        next: () => {
           this.isLoading = false;
           this.snackBar.open('Login successful!', 'Close', { duration: 3000 });
           this.router.navigate(['/']);

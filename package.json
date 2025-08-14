@@ -7,6 +7,7 @@
     "test:watch": "nx test aqb --watch",
     "lint": "nx lint aqb",
     "lint:fix": "nx lint aqb --fix",
+    "lint:all": "npx nx affected --target=lint --parallel=3",
     "api:serve": "nx serve api",
     "api:build": "nx build api",
     "app:serve": "nx serve aqb",
