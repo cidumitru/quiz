@@ -1,5 +1,5 @@
 <!-- Search and Filters -->
-<div class="filters-row">
+<div class="flex flex-col md:flex-row gap-4 md:items-center mb-6">
     <mat-form-field appearance="outline">
         <mat-label>Search questions</mat-label>
         <input matInput [value]="searchText()" (input)="onSearchInput($event)">
@@ -9,14 +9,14 @@
 
 <!-- Loading Spinner -->
 @if (isLoading()) {
-    <div class="loading-container">
+    <div class="flex justify-center p-10">
         <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
     </div>
 }
 
 <!-- Questions List -->
 @if (displayedQuestions().length > 0) {
-    <div class="questions-container">
+    <div class="flex flex-col gap-6">
         @for (question of displayedQuestions(); track trackByFn($index, question)) {
             <mat-card class="question-card">
                 <mat-card-header>
