@@ -7,22 +7,22 @@ import {
   OnDestroy,
   OnInit,
   output,
-  signal
+  signal,
 } from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ReactiveFormsModule} from '@angular/forms';
-import {MatCardModule} from '@angular/material/card';
-import {MatInputModule} from '@angular/material/input';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {ScrollingModule} from '@angular/cdk/scrolling';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {Question} from '@aqb/data-access';
-import {QuestionDataSource} from './question-data-source';
-import {QuestionBankStore} from '../../question-bank-store.service';
-import {BehaviorSubject, debounceTime, distinctUntilChanged} from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Question } from '@aqb/data-access';
+import { QuestionDataSource } from './question-data-source';
+import { QuestionBankStore } from '../../question-bank-store.service';
+import { BehaviorSubject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-question-list',
@@ -37,11 +37,11 @@ import {BehaviorSubject, debounceTime, distinctUntilChanged} from 'rxjs';
     MatIconModule,
     MatTooltipModule,
     ScrollingModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './question-list.component.html',
   styleUrls: ['./question-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuestionListComponent implements OnInit, OnDestroy {
   // Data source for virtual scrolling
@@ -64,7 +64,10 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     return (question: Question | undefined): boolean => {
       if (!question) return true; // Always show skeleton for unloaded items
 
-      if (onlyWithoutAnswers && question.answers.find(a => a.correct) !== undefined) {
+      if (
+        onlyWithoutAnswers &&
+        question.answers.find((a) => a.correct) !== undefined
+      ) {
         return false; // Hide questions with correct answers
       }
 
@@ -96,12 +99,12 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   }
 
   getCorrectAnswer(question: Question): string {
-    const correctAnswer = question.answers.find(a => a.correct);
+    const correctAnswer = question.answers.find((a) => a.correct);
     return correctAnswer ? correctAnswer.text : 'No correct answer set';
   }
 
   hasCorrectAnswer(question: Question): boolean {
-    return question.answers.some(a => a.correct);
+    return question.answers.some((a) => a.correct);
   }
 
   getAnswerLabel(index: number): string {
@@ -115,12 +118,14 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     }, 0);
 
     // Setup search with debouncing
-    this.searchSubject.pipe(
-      debounceTime(300), // Wait 300ms after the user stops typing
-      distinctUntilChanged() // Only emit if the value is different from the previous one
-    ).subscribe(searchQuery => {
-      this.store.setSearchQuery(searchQuery);
-    });
+    this.searchSubject
+      .pipe(
+        debounceTime(300), // Wait 300ms after the user stops typing
+        distinctUntilChanged() // Only emit if the value is different from the previous one
+      )
+      .subscribe((searchQuery) => {
+        this.store.setSearchQuery(searchQuery);
+      });
   }
 
   onSearchInput(event: Event): void {

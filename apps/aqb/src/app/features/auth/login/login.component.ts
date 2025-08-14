@@ -1,14 +1,19 @@
-import {Component, inject} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatCardModule} from '@angular/material/card';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {CommonModule} from '@angular/common';
-import {AuthService} from '../../../core/services/auth.service';
+import { Component, inject } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -20,10 +25,10 @@ import {AuthService} from '../../../core/services/auth.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   emailForm: FormGroup;
@@ -40,11 +45,11 @@ export class LoginComponent {
 
   constructor() {
     this.emailForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
     });
 
     this.otpForm = this.fb.group({
-      code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]]
+      code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
     });
   }
 
@@ -61,9 +66,10 @@ export class LoginComponent {
         },
         error: (error) => {
           this.isLoading = false;
-          const message = error.error?.message || 'Failed to send OTP. Please try again.';
+          const message =
+            error.error?.message || 'Failed to send OTP. Please try again.';
           this.snackBar.open(message, 'Close', { duration: 5000 });
-        }
+        },
       });
     }
   }
@@ -81,10 +87,11 @@ export class LoginComponent {
         },
         error: (error) => {
           this.isLoading = false;
-          const message = error.error?.message || 'Invalid or expired OTP. Please try again.';
+          const message =
+            error.error?.message || 'Invalid or expired OTP. Please try again.';
           this.snackBar.open(message, 'Close', { duration: 5000 });
           this.otpForm.get('code')?.reset();
-        }
+        },
       });
     }
   }

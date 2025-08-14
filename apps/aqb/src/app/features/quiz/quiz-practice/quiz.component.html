@@ -1,153 +1,179 @@
 @if (loading()) {
-  <div class="loading-container">
-    <mat-card>
-      <mat-card-content>
-        <div style="text-align: center; padding: 2rem;">
-          <h3>Loading quiz...</h3>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+<div class="loading-container">
+  <mat-card>
+    <mat-card-content>
+      <div style="text-align: center; padding: 2rem">
+        <h3>Loading quiz...</h3>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
 } @else if (error()) {
-  <div class="error-container">
-    <mat-card>
-      <mat-card-content>
-        <div style="text-align: center; padding: 2rem;">
-          <mat-icon color="warn">error</mat-icon>
-          <h3>Error loading quiz</h3>
-          <p>{{ error() }}</p>
-          <button mat-raised-button color="primary" routerLink="/">Go back</button>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+<div class="error-container">
+  <mat-card>
+    <mat-card-content>
+      <div style="text-align: center; padding: 2rem">
+        <mat-icon color="warn">error</mat-icon>
+        <h3>Error loading quiz</h3>
+        <p>{{ error() }}</p>
+        <button mat-raised-button color="primary" routerLink="/">
+          Go back
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
 } @else if (quizViewModel()) {
 
-  <!-- Floating Navigation Component -->
-  <app-floating-navigation
-    [currentQuestionIndex]="currentQuestionIndex()"
-    [totalQuestions]="quizViewModel().totalQuestions || 0"
-    (navigateUp)="navigateUp()"
-    (navigateDown)="navigateDown()">
-  </app-floating-navigation>
+<!-- Floating Navigation Component -->
+<app-floating-navigation
+  [currentQuestionIndex]="currentQuestionIndex()"
+  [totalQuestions]="quizViewModel().totalQuestions || 0"
+  (navigateUp)="navigateUp()"
+  (navigateDown)="navigateDown()"
+>
+</app-floating-navigation>
 
-  <!-- Quiz Header with Progress -->
+<!-- Quiz Header with Progress -->
 <div class="quiz-header">
-    <div class="quiz-info">
-        <h1 class="quiz-title">
-          Practice Test: <span class="bank-name"
-                               routerLink="../questions">{{ quizViewModel().questionBankName || 'Quiz' }}</span>
-        </h1>
-      <p class="quiz-subtitle">Started {{ quizViewModel().startedAt | date: 'MMM d, y • h:mm a' }}</p>
-    </div>
+  <div class="quiz-info">
+    <h1 class="quiz-title">
+      Practice Test:
+      <span class="bank-name" routerLink="../questions">{{
+        quizViewModel().questionBankName || 'Quiz'
+      }}</span>
+    </h1>
+    <p class="quiz-subtitle">
+      Started {{ quizViewModel().startedAt | date : 'MMM d, y • h:mm a' }}
+    </p>
+  </div>
 
-    <!-- Progress Bar -->
-    <div class="progress-section">
-        <div class="progress-stats">
-          <span class="progress-text">{{ quizViewModel().answeredCount() }} of {{ quizViewModel().totalQuestions }}
-            answered</span>
-          <span class="accuracy-text">{{ quizViewModel().accuracyPercentage() }}% accuracy</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" [style.width.%]="quizViewModel().progressPercentage()"></div>
-        </div>
+  <!-- Progress Bar -->
+  <div class="progress-section">
+    <div class="progress-stats">
+      <span class="progress-text"
+        >{{ quizViewModel().answeredCount() }} of
+        {{ quizViewModel().totalQuestions }} answered</span
+      >
+      <span class="accuracy-text"
+        >{{ quizViewModel().accuracyPercentage() }}% accuracy</span
+      >
     </div>
+    <div class="progress-bar">
+      <div
+        class="progress-fill"
+        [style.width.%]="quizViewModel().progressPercentage()"
+      ></div>
+    </div>
+  </div>
 </div>
 
 <!-- Quiz Content -->
-  <div class="quiz-container">
-    @if (!quizViewModel().hasAnyQuestions()) {
-        <div class="no-questions-card">
-            <mat-card>
-                <mat-card-content>
-                    <div class="no-questions-content">
-                        <mat-icon>quiz</mat-icon>
-                        <h3>No questions available</h3>
-                        <p>No questions match the selected criteria</p>
-                    </div>
-                </mat-card-content>
-            </mat-card>
+<div class="quiz-container">
+  @if (!quizViewModel().hasAnyQuestions()) {
+  <div class="no-questions-card">
+    <mat-card>
+      <mat-card-content>
+        <div class="no-questions-content">
+          <mat-icon>quiz</mat-icon>
+          <h3>No questions available</h3>
+          <p>No questions match the selected criteria</p>
         </div>
-    } @else {
-        <div class="questions-list">
-          @for (question of quizViewModel()!.questions; track question.id; let i = $index) {
-                <div class="question-wrapper">
-                    <!-- Floating Question Number Badge -->
-                  <div class="floating-question-number"
-                       [ngClass]="question.getCssClasses()">
-                        {{i + 1}}
-                    </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  } @else {
+  <div class="questions-list">
+    @for (question of quizViewModel()!.questions; track question.id; let i =
+    $index) {
+    <div class="question-wrapper">
+      <!-- Floating Question Number Badge -->
+      <div
+        class="floating-question-number"
+        [ngClass]="question.getCssClasses()"
+      >
+        {{ i + 1 }}
+      </div>
 
-                  <mat-card class="question-card"
-                             [attr.data-question-index]="i"
-                            [ngClass]="question.getCssClasses()">
-
-                    <!-- Question Header -->
-                        <mat-card-header class="question-header">
-                            <div class="question-content">
-                                <mat-card-title class="question-text">
-                                    {{question.question}}
-                                </mat-card-title>
-                              @if (!question.hasCorrectAnswer) {
-                                    <mat-card-subtitle class="no-answer-warning">
-                                        <mat-icon>warning</mat-icon>
-                                        No correct answer provided
-                                    </mat-card-subtitle>
-                                }
-                            </div>
-                        </mat-card-header>
-
-                    <!-- Answer Options -->
-                    <mat-card-content class="answers-section">
-                        <div class="answers-grid">
-                          @for (answer of question.answers; track answer.id) {
-                            <div class="answer-card"
-                                 [ngClass]="question.getAnswerCssClasses(answer.id)"
-                                 (click)="selectAnswer(question.id, answer.id)"
-                                 (keydown.enter)="selectAnswer(question.id, answer.id)"
-                                 (keydown.space)="selectAnswer(question.id, answer.id)"
-                                 [attr.aria-disabled]="question.isAnswered()"
-                                 [attr.tabindex]="question.isAnswered() ? -1 : 0"
-                                 [attr.role]="'button'"
-                                 [style.cursor]="question.isAnswered() ? 'not-allowed' : 'pointer'">
-
-                              <div class="answer-content">
-                                <div class="answer-label">{{ answer.label }}</div>
-                                <div class="answer-text">{{ answer.text }}</div>
-                                    </div>
-
-                              <div class="answer-indicator">
-                                @if (question.selectedAnswerId() === answer.id) {
-                                            <mat-icon class="selected-icon">radio_button_checked</mat-icon>
-                                        } @else {
-                                            <mat-icon class="unselected-icon">radio_button_unchecked</mat-icon>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </mat-card-content>
-                </mat-card>
-                </div>
+      <mat-card
+        class="question-card"
+        [attr.data-question-index]="i"
+        [ngClass]="question.getCssClasses()"
+      >
+        <!-- Question Header -->
+        <mat-card-header class="question-header">
+          <div class="question-content">
+            <mat-card-title class="question-text">
+              {{ question.question }}
+            </mat-card-title>
+            @if (!question.hasCorrectAnswer) {
+            <mat-card-subtitle class="no-answer-warning">
+              <mat-icon>warning</mat-icon>
+              No correct answer provided
+            </mat-card-subtitle>
             }
-        </div>
+          </div>
+        </mat-card-header>
+
+        <!-- Answer Options -->
+        <mat-card-content class="answers-section">
+          <div class="answers-grid">
+            @for (answer of question.answers; track answer.id) {
+            <div
+              class="answer-card"
+              [ngClass]="question.getAnswerCssClasses(answer.id)"
+              (click)="selectAnswer(question.id, answer.id)"
+              (keydown.enter)="selectAnswer(question.id, answer.id)"
+              (keydown.space)="selectAnswer(question.id, answer.id)"
+              [attr.aria-disabled]="question.isAnswered()"
+              [attr.tabindex]="question.isAnswered() ? -1 : 0"
+              [attr.role]="'button'"
+              [style.cursor]="question.isAnswered() ? 'not-allowed' : 'pointer'"
+            >
+              <div class="answer-content">
+                <div class="answer-label">{{ answer.label }}</div>
+                <div class="answer-text">{{ answer.text }}</div>
+              </div>
+
+              <div class="answer-indicator">
+                @if (question.selectedAnswerId() === answer.id) {
+                <mat-icon class="selected-icon">radio_button_checked</mat-icon>
+                } @else {
+                <mat-icon class="unselected-icon"
+                  >radio_button_unchecked
+                </mat-icon>
+                }
+              </div>
+            </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
     }
+  </div>
+  }
 </div>
 <div class="stats">
-    <div>
-        <span style="font-size: 4rem">
-            <span>{{ quizViewModel().totalQuestions }}</span> /
-            <span class="correct">{{ quizViewModel().correctCount() }}</span> /
-            <span class="incorrect">{{ quizViewModel().incorrectCount() }}</span>
-        </span>
-    </div>
-    <div style="margin-top: 2rem">
-      <button mat-raised-button color="primary" routerLink="/">GO HOME</button>
-      @if (quizViewModel().isComplete()) {
-        <button mat-stroked-button color="accent" (click)="retry()" style="margin-left: 1rem">
-                GENERATE NEW
-            </button>
-        }
-    </div>
+  <div>
+    <span style="font-size: 4rem">
+      <span>{{ quizViewModel().totalQuestions }}</span> /
+      <span class="correct">{{ quizViewModel().correctCount() }}</span> /
+      <span class="incorrect">{{ quizViewModel().incorrectCount() }}</span>
+    </span>
+  </div>
+  <div style="margin-top: 2rem">
+    <button mat-raised-button color="primary" routerLink="/">GO HOME</button>
+    @if (quizViewModel().isComplete()) {
+    <button
+      mat-stroked-button
+      color="accent"
+      (click)="retry()"
+      style="margin-left: 1rem"
+    >
+      GENERATE NEW
+    </button>
+    }
+  </div>
 </div>
 }

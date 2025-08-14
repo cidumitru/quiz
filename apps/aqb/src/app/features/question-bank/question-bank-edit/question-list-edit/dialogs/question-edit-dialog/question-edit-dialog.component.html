@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>{{ data.mode === 'create' ? 'Create New Question' : 'Edit Question' }}</h2>
+<h2 mat-dialog-title>
+  {{ data.mode === 'create' ? 'Create New Question' : 'Edit Question' }}
+</h2>
 
 <mat-dialog-content>
   <form [formGroup]="form" class="question-form">
@@ -11,17 +13,15 @@
         formControlName="question"
         matInput
         placeholder="Enter your question here..."
-        rows="3">
+        rows="3"
+      >
       </textarea>
       @if (form.controls.question.invalid && form.controls.question.touched) {
-        <mat-error>
-          @if (form.controls.question.errors?.['required']) {
-            Question is required
-          }
-          @if (form.controls.question.errors?.['minlength']) {
-            Question must be at least 3 characters long
-          }
-        </mat-error>
+      <mat-error>
+        @if (form.controls.question.errors?.['required']) { Question is required
+        } @if (form.controls.question.errors?.['minlength']) { Question must be
+        at least 3 characters long }
+      </mat-error>
       }
     </mat-form-field>
 
@@ -34,48 +34,54 @@
           color="primary"
           mat-mini-fab
           matTooltip="Add Answer"
-          type="button">
+          type="button"
+        >
           <mat-icon>add</mat-icon>
         </button>
       </div>
 
       <mat-radio-group class="answers-list" formControlName="correctAnswerId">
-        @for (answer of answers.controls; track answer.value.id; let i = $index) {
-          <div class="answer-item" [formGroup]="answer">
-            <mat-radio-button [value]="data.mode === 'create' ? i.toString() : answer.controls.id.value"
-                              class="correct-radio">
-            </mat-radio-button>
+        @for (answer of answers.controls; track answer.value.id; let i = $index)
+        {
+        <div class="answer-item" [formGroup]="answer">
+          <mat-radio-button
+            [value]="
+              data.mode === 'create' ? i.toString() : answer.controls.id.value
+            "
+            class="correct-radio"
+          >
+          </mat-radio-button>
 
-            <mat-form-field appearance="fill" class="answer-input">
-              <mat-label>Answer {{ i + 1 }}</mat-label>
-              <input
-                matInput
-                formControlName="text"
-                placeholder="Enter answer text...">
-              @if (answer.controls.text.invalid && answer.controls.text.touched) {
-                <mat-error>
-                  Answer text is required
-                </mat-error>
-              }
-            </mat-form-field>
+          <mat-form-field appearance="fill" class="answer-input">
+            <mat-label>Answer {{ i + 1 }}</mat-label>
+            <input
+              matInput
+              formControlName="text"
+              placeholder="Enter answer text..."
+            />
+            @if (answer.controls.text.invalid && answer.controls.text.touched) {
+            <mat-error> Answer text is required</mat-error>
+            }
+          </mat-form-field>
 
-            <button
-              mat-icon-button
-              color="warn"
-              type="button"
-              (click)="removeAnswer(i)"
-              [disabled]="answers.length <= 2"
-              matTooltip="Remove Answer">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
+          <button
+            mat-icon-button
+            color="warn"
+            type="button"
+            (click)="removeAnswer(i)"
+            [disabled]="answers.length <= 2"
+            matTooltip="Remove Answer"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
         }
       </mat-radio-group>
 
       @if (!form.controls.correctAnswerId.value && form.touched) {
-        <mat-error class="correct-answer-error">
-          Please select the correct answer
-        </mat-error>
+      <mat-error class="correct-answer-error">
+        Please select the correct answer
+      </mat-error>
       }
     </div>
   </form>
@@ -87,11 +93,12 @@
     (click)="onSubmit()"
     [disabled]="form.invalid || isLoading"
     color="primary"
-    mat-raised-button>
+    mat-raised-button
+  >
     @if (isLoading) {
-      <mat-spinner diameter="20"></mat-spinner>
+    <mat-spinner diameter="20"></mat-spinner>
     } @else {
-      {{ data.mode === 'create' ? 'Create Question' : 'Save Changes' }}
+    {{ data.mode === 'create' ? 'Create Question' : 'Save Changes' }}
     }
   </button>
 </mat-dialog-actions>

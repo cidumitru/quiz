@@ -1,16 +1,21 @@
-import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ActivatedRoute} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
-import {Question} from '@aqb/data-access';
-import {QuestionListComponent} from './question-list/question-list.component';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { Question } from '@aqb/data-access';
+import { QuestionListComponent } from './question-list/question-list.component';
 import {
   QuestionEditDialogComponent,
-  QuestionEditDialogData
+  QuestionEditDialogData,
 } from './dialogs/question-edit-dialog/question-edit-dialog.component';
-import {QuestionBankStore} from '../question-bank-store.service';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
+import { QuestionBankStore } from '../question-bank-store.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-question-bank-details',
@@ -21,13 +26,14 @@ import {MatIconModule} from '@angular/material/icon';
     CommonModule,
     QuestionListComponent,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
-  standalone: true
+  standalone: true,
 })
 export class QuestionBankDetailsComponent implements OnInit {
   private readonly activatedRoute = inject(ActivatedRoute);
-  public readonly id: string = this.activatedRoute.parent?.snapshot.paramMap.get('id') ?? '';
+  public readonly id: string =
+    this.activatedRoute.parent?.snapshot.paramMap.get('id') ?? '';
   private readonly dialog = inject(MatDialog);
   private readonly store = inject(QuestionBankStore);
   // Expose store selectors
@@ -44,16 +50,16 @@ export class QuestionBankDetailsComponent implements OnInit {
     const dialogData: QuestionEditDialogData = {
       question,
       questionBankId: this.id,
-      mode: 'edit'
+      mode: 'edit',
     };
 
     const dialogRef = this.dialog.open(QuestionEditDialogComponent, {
       data: dialogData,
       width: '600px',
-      maxHeight: '80vh'
+      maxHeight: '80vh',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.question) {
         // Update the question with the full question data
         this.store.updateQuestion(result.question.id, result.question);
@@ -64,16 +70,16 @@ export class QuestionBankDetailsComponent implements OnInit {
   onCreateQuestion(): void {
     const dialogData: QuestionEditDialogData = {
       questionBankId: this.id,
-      mode: 'create'
+      mode: 'create',
     };
 
     const dialogRef = this.dialog.open(QuestionEditDialogComponent, {
       data: dialogData,
       width: '600px',
-      maxHeight: '80vh'
+      maxHeight: '80vh',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.newQuestion) {
         this.store.createQuestion(result.newQuestion);
       }
@@ -85,5 +91,4 @@ export class QuestionBankDetailsComponent implements OnInit {
       this.store.deleteQuestion(question.id);
     }
   }
-
 }

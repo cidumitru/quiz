@@ -21,7 +21,7 @@ export type {
   UpdateAnswerRequest,
   AddQuestionsRequest,
   SetCorrectAnswerRequest,
-  ImportQuestionBankRequest
+  ImportQuestionBankRequest,
 } from './question-bank-request.dto';
 
 // Response interfaces and schemas
@@ -50,5 +50,5 @@ export type {
   CreateQuestionBankResponse,
   QuestionBankSuccessResponse,
   QuestionsAddedResponse,
-  QuestionsPaginatedResponse
+  QuestionsPaginatedResponse,
 } from './question-bank-response.dto';

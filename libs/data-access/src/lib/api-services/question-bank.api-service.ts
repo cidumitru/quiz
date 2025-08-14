@@ -1,6 +1,6 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import {
   AddQuestionsRequest,
   CreateQuestionBankRequest,
@@ -16,18 +16,29 @@ import {
 } from '../dto';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class QuestionBankApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = '/api/question-banks';
 
-  create(request?: CreateQuestionBankRequest): Observable<CreateQuestionBankResponse> {
-    return this.http.post<CreateQuestionBankResponse>(this.baseUrl, request || {});
+  create(
+    request?: CreateQuestionBankRequest
+  ): Observable<CreateQuestionBankResponse> {
+    return this.http.post<CreateQuestionBankResponse>(
+      this.baseUrl,
+      request || {}
+    );
   }
 
-  update(id: string, request: UpdateQuestionBankRequest): Observable<QuestionBankSuccessResponse> {
-    return this.http.put<QuestionBankSuccessResponse>(`${this.baseUrl}/${id}`, request);
+  update(
+    id: string,
+    request: UpdateQuestionBankRequest
+  ): Observable<QuestionBankSuccessResponse> {
+    return this.http.put<QuestionBankSuccessResponse>(
+      `${this.baseUrl}/${id}`,
+      request
+    );
   }
 
   list(): Observable<QuestionBankListResponse> {
@@ -39,44 +50,70 @@ export class QuestionBankApiService {
   }
 
   delete(id: string): Observable<QuestionBankSuccessResponse> {
-    return this.http.delete<QuestionBankSuccessResponse>(`${this.baseUrl}/${id}`);
+    return this.http.delete<QuestionBankSuccessResponse>(
+      `${this.baseUrl}/${id}`
+    );
   }
 
-  insert(questionBank: ImportQuestionBankRequest): Observable<CreateQuestionBankResponse> {
-    return this.http.post<CreateQuestionBankResponse>(`${this.baseUrl}/import`, questionBank);
+  insert(
+    questionBank: ImportQuestionBankRequest
+  ): Observable<CreateQuestionBankResponse> {
+    return this.http.post<CreateQuestionBankResponse>(
+      `${this.baseUrl}/import`,
+      questionBank
+    );
   }
 
-  addQuestion(questionBankId: string, questions: AddQuestionsRequest): Observable<QuestionsAddedResponse> {
+  addQuestion(
+    questionBankId: string,
+    questions: AddQuestionsRequest
+  ): Observable<QuestionsAddedResponse> {
     return this.http.post<QuestionsAddedResponse>(
       `${this.baseUrl}/${questionBankId}/questions`,
       questions
     );
   }
 
-  deleteQuestion(questionBankId: string, questionId: string): Observable<QuestionBankSuccessResponse> {
+  deleteQuestion(
+    questionBankId: string,
+    questionId: string
+  ): Observable<QuestionBankSuccessResponse> {
     return this.http.delete<QuestionBankSuccessResponse>(
       `${this.baseUrl}/${questionBankId}/questions/${questionId}`
     );
   }
 
-  updateQuestion(questionBankId: string, questionId: string, request: UpdateQuestionRequest): Observable<QuestionBankSuccessResponse> {
+  updateQuestion(
+    questionBankId: string,
+    questionId: string,
+    request: UpdateQuestionRequest
+  ): Observable<QuestionBankSuccessResponse> {
     return this.http.put<QuestionBankSuccessResponse>(
       `${this.baseUrl}/${questionBankId}/questions/${questionId}`,
       request
     );
   }
 
-  setCorrectAnswer(questionBankId: string, questionId: string, correctAnswerId: string): Observable<QuestionBankSuccessResponse> {
+  setCorrectAnswer(
+    questionBankId: string,
+    questionId: string,
+    correctAnswerId: string
+  ): Observable<QuestionBankSuccessResponse> {
     return this.http.put<QuestionBankSuccessResponse>(
       `${this.baseUrl}/${questionBankId}/questions/${questionId}/correct-answer`,
       { correctAnswerId }
     );
   }
 
-  getQuestions(questionBankId: string, offset = 0, limit = 50, search?: string): Observable<QuestionsPaginatedResponse> {
+  getQuestions(
+    questionBankId: string,
+    offset = 0,
+    limit = 50,
+    search?: string
+  ): Observable<QuestionsPaginatedResponse> {
     const params = new URLSearchParams({
       offset: offset.toString(),
-      limit: limit.toString()
+      limit: limit.toString(),
     });
 
     if (search && search.trim()) {

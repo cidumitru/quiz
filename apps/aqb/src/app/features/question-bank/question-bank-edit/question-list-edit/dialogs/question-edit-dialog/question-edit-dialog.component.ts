@@ -1,22 +1,31 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatIconModule} from '@angular/material/icon';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {Question} from '@aqb/data-access';
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Question } from '@aqb/data-access';
 
 export interface QuestionEditDialogData {
   question?: Question; // Optional for create mode
   questionBankId: string;
   mode: 'create' | 'edit';
 }
-
-
 
 type AnswerFormGroup = FormGroup<{
   id: FormControl<string>;
@@ -42,10 +51,10 @@ type QuestionFormGroup = FormGroup<{
     MatButtonModule,
     MatRadioModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './question-edit-dialog.component.html',
-  styleUrls: ['./question-edit-dialog.component.scss']
+  styleUrls: ['./question-edit-dialog.component.scss'],
 })
 export class QuestionEditDialogComponent implements OnInit {
   public data = inject<QuestionEditDialogData>(MAT_DIALOG_DATA);
@@ -87,9 +96,13 @@ export class QuestionEditDialogComponent implements OnInit {
       } else {
         this.form.controls.correctAnswerId.setValue('0');
       }
-    } else if (this.data.mode === 'create' && parseInt(this.form.controls.correctAnswerId.value) > index) {
+    } else if (
+      this.data.mode === 'create' &&
+      parseInt(this.form.controls.correctAnswerId.value) > index
+    ) {
       // If we removed an answer before the correct one, adjust the correct answer index
-      const newCorrectIndex = parseInt(this.form.controls.correctAnswerId.value) - 1;
+      const newCorrectIndex =
+        parseInt(this.form.controls.correctAnswerId.value) - 1;
       this.form.controls.correctAnswerId.setValue(newCorrectIndex.toString());
     }
   }
@@ -105,25 +118,25 @@ export class QuestionEditDialogComponent implements OnInit {
     if (this.data.mode === 'create') {
       const newQuestion = {
         question: formValue.question,
-        answers: formValue.answers.map(answer => ({
+        answers: formValue.answers.map((answer) => ({
           text: answer.text,
-          correct: answer.correct
-        }))
+          correct: answer.correct,
+        })),
       };
-      this.dialogRef.close({newQuestion});
+      this.dialogRef.close({ newQuestion });
     } else {
       const updatedQuestion: Question = {
-        ...(this.data.question || {id: '', question: '', answers: []}),
+        ...(this.data.question || { id: '', question: '', answers: [] }),
         question: formValue.question,
-        answers: formValue.answers.map(answer => ({
+        answers: formValue.answers.map((answer) => ({
           id: answer.id,
           text: answer.text,
-          correct: answer.correct
-        }))
+          correct: answer.correct,
+        })),
       };
       this.dialogRef.close({
         question: updatedQuestion,
-        correctAnswerId: formValue.correctAnswerId
+        correctAnswerId: formValue.correctAnswerId,
       });
     }
   }
@@ -139,35 +152,38 @@ export class QuestionEditDialogComponent implements OnInit {
       this.initializeCreateForm();
     }
 
-    this.form.controls.correctAnswerId.valueChanges.subscribe(correctId => {
+    this.form.controls.correctAnswerId.valueChanges.subscribe((correctId) => {
       this.updateCorrectAnswer(correctId);
     });
   }
 
   private initializeEditForm(): void {
-    const correctAnswerId = this.data.question?.answers.find(a => a.correct)?.id || '';
+    const correctAnswerId =
+      this.data.question?.answers.find((a) => a.correct)?.id || '';
 
     this.form = this.fb.group({
       question: this.fb.control(this.data.question?.question || '', {
         validators: [Validators.required, Validators.minLength(3)],
-        nonNullable: true
+        nonNullable: true,
       }),
       correctAnswerId: this.fb.control(correctAnswerId, {
         validators: [Validators.required],
-        nonNullable: true
+        nonNullable: true,
       }),
       answers: this.fb.array(
-        (this.data.question?.answers || []).map(answer =>
+        (this.data.question?.answers || []).map((answer) =>
           this.fb.group({
-            id: this.fb.control(answer.id, {nonNullable: true}),
+            id: this.fb.control(answer.id, { nonNullable: true }),
             text: this.fb.control(answer.text, {
               validators: [Validators.required, Validators.minLength(1)],
-              nonNullable: true
+              nonNullable: true,
             }),
-            correct: this.fb.control(answer.correct || false, {nonNullable: true})
+            correct: this.fb.control(answer.correct || false, {
+              nonNullable: true,
+            }),
           })
         )
-      )
+      ),
     });
   }
 
@@ -175,41 +191,45 @@ export class QuestionEditDialogComponent implements OnInit {
     this.form = this.fb.group({
       question: this.fb.control('', {
         validators: [Validators.required, Validators.minLength(3)],
-        nonNullable: true
+        nonNullable: true,
       }),
       correctAnswerId: this.fb.control('0', {
         validators: [Validators.required],
-        nonNullable: true
+        nonNullable: true,
       }),
       answers: this.fb.array([
-        this.createAnswerFormGroup('', true),  // First answer is correct by default
-        this.createAnswerFormGroup('', false)
-      ])
+        this.createAnswerFormGroup('', true), // First answer is correct by default
+        this.createAnswerFormGroup('', false),
+      ]),
     });
   }
 
   private createAnswerFormGroup(text = '', correct = false): AnswerFormGroup {
     return this.fb.group({
-      id: this.fb.control(`temp_${Date.now()}`, {nonNullable: true}),
+      id: this.fb.control(`temp_${Date.now()}`, { nonNullable: true }),
       text: this.fb.control(text, {
         validators: [Validators.required, Validators.minLength(1)],
-        nonNullable: true
+        nonNullable: true,
       }),
-      correct: this.fb.control(correct, {nonNullable: true})
+      correct: this.fb.control(correct, { nonNullable: true }),
     });
   }
 
   private updateCorrectAnswer(correctId: string): void {
     if (this.data.mode === 'edit') {
-      this.answers.controls.forEach(control => {
+      this.answers.controls.forEach((control) => {
         const answerId = control.controls.id.value;
-        control.controls.correct.setValue(answerId === correctId, {emitEvent: false});
+        control.controls.correct.setValue(answerId === correctId, {
+          emitEvent: false,
+        });
       });
     } else {
       // For create mode, correctId is an index
       const correctIndex = parseInt(correctId);
       this.answers.controls.forEach((control, index) => {
-        control.controls.correct.setValue(index === correctIndex, {emitEvent: false});
+        control.controls.correct.setValue(index === correctIndex, {
+          emitEvent: false,
+        });
       });
     }
   }

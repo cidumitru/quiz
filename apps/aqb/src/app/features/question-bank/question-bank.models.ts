@@ -1,13 +1,17 @@
 // Re-export shared types from data-access library
 export type {
-    QuestionType,
+  QuestionType,
   Answer,
   Question,
   QuestionBankDetail,
   QuestionBankSummary,
   IQuestionCreate,
-  QuestionsPaginatedResponse
+  QuestionsPaginatedResponse,
 } from '@aqb/data-access';
 
 // Keep schemas only for validation during import
-export {answerScheme, questionScheme, questionBankScheme} from '@aqb/data-access';
+export {
+  answerScheme,
+  questionScheme,
+  questionBankScheme,
+} from '@aqb/data-access';

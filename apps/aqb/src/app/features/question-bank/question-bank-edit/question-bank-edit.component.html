@@ -2,7 +2,12 @@
   <div class="page-header">
     <h1>{{ questionBankName() || 'Loading...' }}</h1>
     <div class="header-actions">
-      <button (click)="createQuestion()" appearance="filled" color="primary" mat-button>
+      <button
+        (click)="createQuestion()"
+        appearance="filled"
+        color="primary"
+        mat-button
+      >
         <mat-icon>add</mat-icon>
         Add Question
       </button>

@@ -1,6 +1,6 @@
-import {computed} from '@angular/core';
-import {QuestionViewModel} from "./question.view-model";
-import {Quiz} from "@aqb/data-access";
+import { computed } from '@angular/core';
+import { QuestionViewModel } from './question.view-model';
+import { Quiz } from '@aqb/data-access';
 
 export class QuizViewModel {
   readonly id: string;
@@ -14,15 +14,15 @@ export class QuizViewModel {
 
   // Computed global state from individual question states
   readonly answeredCount = computed(() => {
-    return this.questions.filter(q => q.isAnswered()).length;
+    return this.questions.filter((q) => q.isAnswered()).length;
   });
 
   readonly correctCount = computed(() => {
-    return this.questions.filter(q => q.isCorrect()).length;
+    return this.questions.filter((q) => q.isCorrect()).length;
   });
 
   readonly incorrectCount = computed(() => {
-    return this.questions.filter(q => q.isIncorrect()).length;
+    return this.questions.filter((q) => q.isIncorrect()).length;
   });
 
   readonly progressPercentage = computed(() => {
@@ -47,12 +47,19 @@ export class QuizViewModel {
   constructor(quiz: Quiz, initialAnswers: Record<string, string> = {}) {
     this.id = quiz.id;
     this.questionBankId = quiz.questionBankId;
-    this.startedAt = typeof quiz.startedAt === 'string' ? new Date(quiz.startedAt) : quiz.startedAt;
-    this.finishedAt = quiz.finishedAt ? (typeof quiz.finishedAt === 'string' ? new Date(quiz.finishedAt) : quiz.finishedAt) : undefined;
+    this.startedAt =
+      typeof quiz.startedAt === 'string'
+        ? new Date(quiz.startedAt)
+        : quiz.startedAt;
+    this.finishedAt = quiz.finishedAt
+      ? typeof quiz.finishedAt === 'string'
+        ? new Date(quiz.finishedAt)
+        : quiz.finishedAt
+      : undefined;
 
     // Create question view models with initial answers
-    this.questions = quiz.questions.map(q =>
-      new QuestionViewModel(q, initialAnswers[q.questionId || ''])
+    this.questions = quiz.questions.map(
+      (q) => new QuestionViewModel(q, initialAnswers[q.questionId || ''])
     );
 
     this.questionBankName = quiz.questionBankName;
@@ -92,12 +99,12 @@ export class QuizViewModel {
   }
 
   // Get all current answers for saving to backend
-  getAllAnswers(): Array<{ questionId: string, answerId: string }> {
+  getAllAnswers(): Array<{ questionId: string; answerId: string }> {
     return this.questions
-      .filter(q => q.isAnswered())
-      .map(q => ({
+      .filter((q) => q.isAnswered())
+      .map((q) => ({
         questionId: q.id,
-        answerId: q.selectedAnswerId() || ''
+        answerId: q.selectedAnswerId() || '',
       }));
   }
 
@@ -106,7 +113,10 @@ export class QuizViewModel {
     return this.questionMap[questionId]?.getCssClasses() || {};
   }
 
-  getAnswerCssClasses(questionId: string, answerId: string): Record<string, boolean> {
+  getAnswerCssClasses(
+    questionId: string,
+    answerId: string
+  ): Record<string, boolean> {
     return this.questionMap[questionId]?.getAnswerCssClasses(answerId) || {};
   }
 }

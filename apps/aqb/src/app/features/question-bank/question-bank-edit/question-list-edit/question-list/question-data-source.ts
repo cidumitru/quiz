@@ -1,15 +1,17 @@
-import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
-import {inject} from '@angular/core';
-import {toObservable} from '@angular/core/rxjs-interop';
-import {Question} from '@aqb/data-access';
-import {QuestionBankStore} from '../../question-bank-store.service';
+import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { inject } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { Question } from '@aqb/data-access';
+import { QuestionBankStore } from '../../question-bank-store.service';
 
 export class QuestionDataSource extends DataSource<Question | undefined> {
   private readonly store = inject(QuestionBankStore);
   private readonly _pageSize = 50;
   private readonly _fetchedPages = new Set<number>();
-  private readonly _dataStream = new BehaviorSubject<(Question | undefined)[]>([]);
+  private readonly _dataStream = new BehaviorSubject<(Question | undefined)[]>(
+    []
+  );
   private readonly _subscription = new Subscription();
 
   private _cachedData: (Question | undefined)[] = [];
@@ -26,10 +28,12 @@ export class QuestionDataSource extends DataSource<Question | undefined> {
 
     // Subscribe to store changes
     this._subscription.add(
-      toObservable(this.store.questions).subscribe((questions: (Question | null)[]) => {
-        this._cachedData = [...questions] as (Question | undefined)[];
-        this._dataStream.next(this._cachedData);
-      })
+      toObservable(this.store.questions).subscribe(
+        (questions: (Question | null)[]) => {
+          this._cachedData = [...questions] as (Question | undefined)[];
+          this._dataStream.next(this._cachedData);
+        }
+      )
     );
 
     this._subscription.add(
@@ -49,19 +53,24 @@ export class QuestionDataSource extends DataSource<Question | undefined> {
     );
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<(Question | undefined)[]> {
+  connect(
+    collectionViewer: CollectionViewer
+  ): Observable<(Question | undefined)[]> {
     this._subscription.add(
-      collectionViewer.viewChange.subscribe(range => {
+      collectionViewer.viewChange.subscribe((range) => {
         // Don't wait for totalLength to be set, attempt to fetch if we have a range
         if (range.start === 0 && range.end === 0) {
           return; // No range to display
         }
 
         // If totalLength is not set yet, use the range.end as an estimate
-        const effectiveTotal = this._totalLength > 0 ? this._totalLength : range.end;
+        const effectiveTotal =
+          this._totalLength > 0 ? this._totalLength : range.end;
 
         const startPage = this._getPageForIndex(range.start);
-        const endPage = this._getPageForIndex(Math.min(range.end - 1, effectiveTotal - 1));
+        const endPage = this._getPageForIndex(
+          Math.min(range.end - 1, effectiveTotal - 1)
+        );
 
         for (let i = startPage; i <= endPage; i++) {
           this._fetchPage(i);
@@ -103,12 +112,13 @@ export class QuestionDataSource extends DataSource<Question | undefined> {
     this._fetchedPages.add(page);
     const offset = page * this._pageSize;
     // If totalLength is not yet known, use pageSize as the limit
-    const limit = this._totalLength > 0
-      ? Math.min(this._pageSize, this._totalLength - offset)
-      : this._pageSize;
+    const limit =
+      this._totalLength > 0
+        ? Math.min(this._pageSize, this._totalLength - offset)
+        : this._pageSize;
 
     // Use the store to fetch the page
-    this.store.loadQuestionsRange(offset, limit).catch(error => {
+    this.store.loadQuestionsRange(offset, limit).catch((error) => {
       console.error('Failed to load questions page:', error);
       // Remove from fetched pages so we can retry
       this._fetchedPages.delete(page);

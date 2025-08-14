@@ -1,5 +1,13 @@
-import {IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, IsUUID, ValidateNested} from 'class-validator';
-import {Type} from 'class-transformer';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateAnswerDto {
   @IsString()
@@ -17,7 +25,7 @@ export class CreateQuestionDto {
   question: string;
 
   @IsArray()
-  @ValidateNested({each: true})
+  @ValidateNested({ each: true })
   @Type(() => CreateAnswerDto)
   answers: CreateAnswerDto[];
 }
@@ -35,7 +43,7 @@ export class UpdateQuestionBankDto {
 }
 
 export class AddQuestionsDto {
-  @ValidateNested({each: true})
+  @ValidateNested({ each: true })
   @Type(() => CreateQuestionDto)
   questions: CreateQuestionDto | CreateQuestionDto[];
 }
@@ -65,7 +73,7 @@ export class UpdateQuestionDto {
   question: string;
 
   @IsArray()
-  @ValidateNested({each: true})
+  @ValidateNested({ each: true })
   @Type(() => UpdateAnswerDto)
   answers: UpdateAnswerDto[];
 
@@ -94,7 +102,7 @@ export class ImportQuestionBankDto {
   isDeleted?: boolean;
 
   @IsArray()
-  @ValidateNested({each: true})
+  @ValidateNested({ each: true })
   @Type(() => QuestionDto)
   questions: QuestionDto[];
 }
@@ -121,7 +129,7 @@ class QuestionDto {
   question: string;
 
   @IsArray()
-  @ValidateNested({each: true})
+  @ValidateNested({ each: true })
   @Type(() => AnswerDto)
   answers: AnswerDto[];
 }

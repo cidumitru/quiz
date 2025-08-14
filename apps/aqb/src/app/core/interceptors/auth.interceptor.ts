@@ -1,8 +1,14 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {catchError, filter, switchMap, take} from 'rxjs/operators';
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
-import {AuthService} from '../services/auth.service';
+import { inject, Injectable } from '@angular/core';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -11,7 +17,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private authService = inject(AuthService);
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     if (this.isAuthRequest(request.url)) {
       return next.handle(request);
     }
@@ -23,7 +32,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401 && token && !this.isRefreshTokenRequest(request.url)) {
+        if (
+          error.status === 401 &&
+          token &&
+          !this.isRefreshTokenRequest(request.url)
+        ) {
           return this.handle401Error(request, next);
         }
         return throwError(() => error);
@@ -31,13 +44,19 @@ export class AuthInterceptor implements HttpInterceptor {
     );
   }
 
-  private addTokenHeader(request: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
+  private addTokenHeader(
+    request: HttpRequest<unknown>,
+    token: string
+  ): HttpRequest<unknown> {
     return request.clone({
-      headers: request.headers.set('Authorization', `Bearer ${token}`)
+      headers: request.headers.set('Authorization', `Bearer ${token}`),
     });
   }
 
-  private handle401Error(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  private handle401Error(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
@@ -48,7 +67,9 @@ export class AuthInterceptor implements HttpInterceptor {
           switchMap((response: { accessToken: string }) => {
             this.isRefreshing = false;
             this.refreshTokenSubject.next(response.accessToken);
-            return next.handle(this.addTokenHeader(request, response.accessToken));
+            return next.handle(
+              this.addTokenHeader(request, response.accessToken)
+            );
           }),
           catchError((error) => {
             this.isRefreshing = false;
@@ -63,7 +84,7 @@ export class AuthInterceptor implements HttpInterceptor {
       }
     } else {
       return this.refreshTokenSubject.pipe(
-        filter(token => token !== null),
+        filter((token) => token !== null),
         take(1),
         switchMap((token) => next.handle(this.addTokenHeader(request, token)))
       );
@@ -71,7 +92,9 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private isAuthRequest(url: string): boolean {
-    return url.includes('/auth/request-otp') || url.includes('/auth/verify-otp');
+    return (
+      url.includes('/auth/request-otp') || url.includes('/auth/verify-otp')
+    );
   }
 
   private isRefreshTokenRequest(url: string): boolean {

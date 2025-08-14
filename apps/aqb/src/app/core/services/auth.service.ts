@@ -1,8 +1,13 @@
-import {inject, Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
-import {AuthApiService} from '@aqb/data-access/angular';
-import {RequestOtpRequest, UserProfileResponse, VerifyOtpRequest, VerifyOtpResponse} from '@aqb/data-access';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { AuthApiService } from '@aqb/data-access/angular';
+import {
+  RequestOtpRequest,
+  UserProfileResponse,
+  VerifyOtpRequest,
+  VerifyOtpResponse,
+} from '@aqb/data-access';
 
 export interface User {
   id: string;
@@ -11,7 +16,7 @@ export interface User {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
@@ -27,9 +32,9 @@ export class AuthService {
   }
 
   requestOtp(email: string): Observable<{ message: string }> {
-    const request: RequestOtpRequest = {email};
+    const request: RequestOtpRequest = { email };
     return this.authApiService.requestOtp(request).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Request OTP failed:', error);
         return throwError(() => error);
       })
@@ -37,12 +42,12 @@ export class AuthService {
   }
 
   verifyOtp(email: string, code: string): Observable<VerifyOtpResponse> {
-    const request: VerifyOtpRequest = {email, code};
+    const request: VerifyOtpRequest = { email, code };
     return this.authApiService.verifyOtp(request).pipe(
-      tap(response => {
+      tap((response) => {
         this.setAuthData(response);
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('Verify OTP failed:', error);
         return throwError(() => error);
       })
@@ -56,10 +61,10 @@ export class AuthService {
     }
 
     return this.authApiService.refreshToken({ refreshToken }).pipe(
-      tap(response => {
+      tap((response) => {
         this.setAuthData(response);
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('Refresh token failed:', error);
         this.logout();
         return throwError(() => error);
@@ -69,7 +74,7 @@ export class AuthService {
 
   getUserProfile(): Observable<UserProfileResponse> {
     return this.authApiService.getUserProfile().pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Get user profile failed:', error);
         if (error.status === 401) {
           this.logout();
@@ -102,7 +107,7 @@ export class AuthService {
       tap(() => {
         this.logout();
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('Delete account failed:', error);
         return throwError(() => error);
       })

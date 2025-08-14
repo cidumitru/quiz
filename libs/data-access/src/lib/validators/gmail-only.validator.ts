@@ -5,12 +5,15 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-@ValidatorConstraint({async: false})
+@ValidatorConstraint({ async: false })
 export class IsGmailOnlyConstraint implements ValidatorConstraintInterface {
   validate(email: string): boolean {
     if (!email) return false;
     const emailLower = email.toLowerCase().trim();
-    return emailLower.endsWith('@gmail.com') || emailLower.endsWith('@googlemail.com');
+    return (
+      emailLower.endsWith('@gmail.com') ||
+      emailLower.endsWith('@googlemail.com')
+    );
   }
 
   defaultMessage(): string {

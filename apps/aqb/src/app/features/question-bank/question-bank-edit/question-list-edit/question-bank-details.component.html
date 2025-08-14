@@ -1,19 +1,21 @@
 @if (questionBank(); as questionBank) {
-  <div class="questions-container">
-    <app-question-list
-      (editQuestion)="onEditQuestion($event)"
-      (deleteQuestion)="onDeleteQuestion($event)"
-      (createQuestion)="onCreateQuestion()">
-    </app-question-list>
+<div class="questions-container">
+  <app-question-list
+    (editQuestion)="onEditQuestion($event)"
+    (deleteQuestion)="onDeleteQuestion($event)"
+    (createQuestion)="onCreateQuestion()"
+  >
+  </app-question-list>
 
-    <!-- Floating Action Button -->
-    <button
-      mat-fab
-      color="primary"
-      class="add-question-fab"
-      (click)="onCreateQuestion()"
-      aria-label="Add question">
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
+  <!-- Floating Action Button -->
+  <button
+    mat-fab
+    color="primary"
+    class="add-question-fab"
+    (click)="onCreateQuestion()"
+    aria-label="Add question"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
 }

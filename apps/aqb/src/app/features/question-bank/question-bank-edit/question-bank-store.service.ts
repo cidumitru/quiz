@@ -1,8 +1,13 @@
-import {computed, inject, Injectable, signal} from '@angular/core';
-import {firstValueFrom} from 'rxjs';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {QuestionBankService} from '../question-bank.service';
-import {IQuestionCreate, Question, QuestionBankDetail, QuestionsPaginatedResponse} from '@aqb/data-access';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { QuestionBankService } from '../question-bank.service';
+import {
+  IQuestionCreate,
+  Question,
+  QuestionBankDetail,
+  QuestionsPaginatedResponse,
+} from '@aqb/data-access';
 
 export interface LoadingStates {
   initial: boolean;
@@ -40,12 +45,12 @@ export class QuestionBankStore {
       questions: false,
       creating: false,
       updating: false,
-      deleting: false
+      deleting: false,
     },
     loadedRanges: new Set(),
     loadingRanges: new Set(),
     error: null,
-    searchQuery: ''
+    searchQuery: '',
   });
 
   // Public computed selectors
@@ -59,11 +64,11 @@ export class QuestionBankStore {
   // Computed derived states
   public readonly isLoading = computed(() => {
     const states = this._state().loadingStates;
-    return Object.values(states).some(loading => loading);
+    return Object.values(states).some((loading) => loading);
   });
 
-  public readonly isInitialLoading = computed(() =>
-    this._state().loadingStates.initial
+  public readonly isInitialLoading = computed(
+    () => this._state().loadingStates.initial
   );
 
   private readonly BUFFER_SIZE = 10;
@@ -111,11 +116,16 @@ export class QuestionBankStore {
 
       const currentSearch = this._state().searchQuery;
       const response: QuestionsPaginatedResponse = await firstValueFrom(
-        this.questionBankService.getQuestions(questionBankId, offset, limit, currentSearch || undefined)
+        this.questionBankService.getQuestions(
+          questionBankId,
+          offset,
+          limit,
+          currentSearch || undefined
+        )
       );
 
       if (response) {
-        this.updateState(state => {
+        this.updateState((state) => {
           // Initialize sparse array if needed
           let questions = state.questions;
           if (questions.length === 0) {
@@ -136,7 +146,7 @@ export class QuestionBankStore {
             ...state,
             questions: updated,
             totalItems: response.totalItems,
-            loadedRanges: newLoadedRanges
+            loadedRanges: newLoadedRanges,
           };
         });
       }
@@ -154,9 +164,8 @@ export class QuestionBankStore {
   async loadQuestionsForIndices(indices: number[]): Promise<void> {
     // Filter out indices that are already loaded or loading
     const currentState = this._state();
-    const toLoad = indices.filter(i =>
-      !currentState.questions[i] &&
-      !currentState.loadingRanges.has(i)
+    const toLoad = indices.filter(
+      (i) => !currentState.questions[i] && !currentState.loadingRanges.has(i)
     );
 
     if (toLoad.length === 0) {
@@ -164,9 +173,9 @@ export class QuestionBankStore {
     }
 
     // Mark indices as loading
-    this.updateState(state => ({
+    this.updateState((state) => ({
       ...state,
-      loadingRanges: new Set([...state.loadingRanges, ...toLoad])
+      loadingRanges: new Set([...state.loadingRanges, ...toLoad]),
     }));
 
     try {
@@ -178,12 +187,12 @@ export class QuestionBankStore {
       }
     } finally {
       // Remove indices from loading set
-      this.updateState(state => {
+      this.updateState((state) => {
         const newLoadingRanges = new Set(state.loadingRanges);
-        toLoad.forEach(i => newLoadingRanges.delete(i));
+        toLoad.forEach((i) => newLoadingRanges.delete(i));
         return {
           ...state,
-          loadingRanges: newLoadingRanges
+          loadingRanges: newLoadingRanges,
         };
       });
     }
@@ -201,14 +210,14 @@ export class QuestionBankStore {
     }
 
     // Update search query
-    this.updateState(state => ({
+    this.updateState((state) => ({
       ...state,
       searchQuery,
       // Clear current data when search changes
       questions: [],
       totalItems: 0,
       loadedRanges: new Set(),
-      loadingRanges: new Set()
+      loadingRanges: new Set(),
     }));
 
     // Reload first page with new search
@@ -240,16 +249,18 @@ export class QuestionBankStore {
       await this.questionBankService.updateQuestionBank(questionBankId, name);
 
       // Update the local state with the new name
-      this.updateState(state => ({
+      this.updateState((state) => ({
         ...state,
-        questionBank: state.questionBank ? {
-          ...state.questionBank,
-          name
-        } : null
+        questionBank: state.questionBank
+          ? {
+              ...state.questionBank,
+              name,
+            }
+          : null,
       }));
 
       this.snackBar.open('Question bank name updated', 'Close', {
-        duration: 3000
+        duration: 3000,
       });
     } catch (error) {
       console.error('Failed to update question bank name:', error);
@@ -298,17 +309,17 @@ export class QuestionBankStore {
       answers: question.answers.map((answer, index) => ({
         id: `temp_answer_${index}`,
         text: answer.text,
-        correct: answer.correct
-      }))
+        correct: answer.correct,
+      })),
     };
 
     this.setLoadingState('creating', true);
 
     // Optimistic update: add question to the end
-    this.updateState(state => ({
+    this.updateState((state) => ({
       ...state,
       questions: [...state.questions, tempQuestion],
-      totalItems: state.totalItems + 1
+      totalItems: state.totalItems + 1,
     }));
 
     try {
@@ -322,10 +333,10 @@ export class QuestionBankStore {
       console.error('Failed to create question:', error);
 
       // Rollback optimistic update
-      this.updateState(state => ({
+      this.updateState((state) => ({
         ...state,
-        questions: state.questions.filter(q => q?.id !== tempId),
-        totalItems: state.totalItems - 1
+        questions: state.questions.filter((q) => q?.id !== tempId),
+        totalItems: state.totalItems - 1,
       }));
 
       this.setError('Failed to create question');
@@ -337,7 +348,10 @@ export class QuestionBankStore {
   /**
    * Update a question with optimistic updates
    */
-  async updateQuestion(questionId: string, updatedQuestion: Question): Promise<void> {
+  async updateQuestion(
+    questionId: string,
+    updatedQuestion: Question
+  ): Promise<void> {
     const questionBankId = this._state().questionBank?.id;
     if (!questionBankId) {
       throw new Error('Question bank not loaded');
@@ -345,7 +359,9 @@ export class QuestionBankStore {
 
     // Find the question in our sparse array
     const currentState = this._state();
-    const questionIndex = currentState.questions.findIndex(q => q?.id === questionId);
+    const questionIndex = currentState.questions.findIndex(
+      (q) => q?.id === questionId
+    );
 
     if (questionIndex === -1) {
       this.setError('Question not found');
@@ -361,12 +377,12 @@ export class QuestionBankStore {
     this.setLoadingState('updating', true);
 
     // Optimistic update: update the question
-    this.updateState(state => {
+    this.updateState((state) => {
       const updated = [...state.questions];
       updated[questionIndex] = updatedQuestion;
       return {
         ...state,
-        questions: updated
+        questions: updated,
       };
     });
 
@@ -374,25 +390,29 @@ export class QuestionBankStore {
       // Transform Question to UpdateQuestionRequest
       const updateRequest = {
         question: updatedQuestion.question,
-        answers: updatedQuestion.answers.map(answer => ({
+        answers: updatedQuestion.answers.map((answer) => ({
           id: answer.id,
           text: answer.text,
-          correct: answer.correct
-        }))
+          correct: answer.correct,
+        })),
       };
 
-      await this.questionBankService.updateQuestion(questionBankId, questionId, updateRequest);
+      await this.questionBankService.updateQuestion(
+        questionBankId,
+        questionId,
+        updateRequest
+      );
       this.showSuccess('Question updated successfully');
     } catch (error) {
       console.error('Failed to update question:', error);
 
       // Rollback optimistic update
-      this.updateState(state => {
+      this.updateState((state) => {
         const updated = [...state.questions];
         updated[questionIndex] = originalQuestion;
         return {
           ...state,
-          questions: updated
+          questions: updated,
         };
       });
 
@@ -413,7 +433,9 @@ export class QuestionBankStore {
     }
 
     const currentState = this._state();
-    const questionIndex = currentState.questions.findIndex(q => q?.id === questionId);
+    const questionIndex = currentState.questions.findIndex(
+      (q) => q?.id === questionId
+    );
 
     if (questionIndex === -1) {
       this.setError('Question not found');
@@ -424,12 +446,12 @@ export class QuestionBankStore {
     this.setLoadingState('deleting', true);
 
     // Optimistic update: mark as null but keep index for sparse array
-    this.updateState(state => {
+    this.updateState((state) => {
       const updated = [...state.questions];
       updated[questionIndex] = null;
       return {
         ...state,
-        questions: updated
+        questions: updated,
       };
     });
 
@@ -439,21 +461,23 @@ export class QuestionBankStore {
       this.showSuccess('Question deleted successfully');
 
       // Actually remove the question and update total count
-      this.updateState(state => ({
+      this.updateState((state) => ({
         ...state,
-        questions: state.questions.filter((_, index) => index !== questionIndex),
-        totalItems: state.totalItems - 1
+        questions: state.questions.filter(
+          (_, index) => index !== questionIndex
+        ),
+        totalItems: state.totalItems - 1,
       }));
     } catch (error) {
       console.error('Failed to delete question:', error);
 
       // Rollback optimistic update
-      this.updateState(state => {
+      this.updateState((state) => {
         const updated = [...state.questions];
         updated[questionIndex] = deletedQuestion;
         return {
           ...state,
-          questions: updated
+          questions: updated,
         };
       });
 
@@ -468,7 +492,7 @@ export class QuestionBankStore {
    */
   getQuestionById(questionId: string): Question | null {
     const questions = this._state().questions;
-    return questions.find(q => q?.id === questionId) || null;
+    return questions.find((q) => q?.id === questionId) || null;
   }
 
   /**
@@ -482,12 +506,12 @@ export class QuestionBankStore {
    * Clear all cached data
    */
   invalidateCache(): void {
-    this.updateState(state => ({
+    this.updateState((state) => ({
       ...state,
       questions: [],
       totalItems: 0,
       loadedRanges: new Set(),
-      loadingRanges: new Set()
+      loadingRanges: new Set(),
     }));
   }
 
@@ -504,10 +528,10 @@ export class QuestionBankStore {
 
       if (response) {
         // Store the bank details but clear questions - we'll load them on demand
-        const bankWithoutQuestions = {...response, questions: []};
-        this.updateState(state => ({
+        const bankWithoutQuestions = { ...response, questions: [] };
+        this.updateState((state) => ({
           ...state,
-          questionBank: bankWithoutQuestions
+          questionBank: bankWithoutQuestions,
         }));
       }
     } finally {
@@ -526,7 +550,9 @@ export class QuestionBankStore {
   /**
    * Group consecutive indices into batches for efficient loading
    */
-  private groupIntoBatches(indices: number[]): { start: number; length: number }[] {
+  private groupIntoBatches(
+    indices: number[]
+  ): { start: number; length: number }[] {
     if (indices.length === 0) return [];
 
     const sorted = [...indices].sort((a, b) => a - b);
@@ -538,13 +564,19 @@ export class QuestionBankStore {
       if (sorted[i] === currentEnd + 1) {
         currentEnd = sorted[i];
       } else {
-        batches.push({start: currentStart, length: currentEnd - currentStart + 1});
+        batches.push({
+          start: currentStart,
+          length: currentEnd - currentStart + 1,
+        });
         currentStart = sorted[i];
         currentEnd = sorted[i];
       }
     }
 
-    batches.push({start: currentStart, length: currentEnd - currentStart + 1});
+    batches.push({
+      start: currentStart,
+      length: currentEnd - currentStart + 1,
+    });
     return batches;
   }
 
@@ -552,12 +584,12 @@ export class QuestionBankStore {
    * Update a specific loading state
    */
   private setLoadingState(key: keyof LoadingStates, value: boolean): void {
-    this.updateState(state => ({
+    this.updateState((state) => ({
       ...state,
       loadingStates: {
         ...state.loadingStates,
-        [key]: value
-      }
+        [key]: value,
+      },
     }));
   }
 
@@ -565,28 +597,30 @@ export class QuestionBankStore {
    * Set error state
    */
   private setError(error: string): void {
-    this.updateState(state => ({...state, error}));
-    this.snackBar.open(error, 'Close', {duration: 5000});
+    this.updateState((state) => ({ ...state, error }));
+    this.snackBar.open(error, 'Close', { duration: 5000 });
   }
 
   /**
    * Clear error state
    */
   private clearError(): void {
-    this.updateState(state => ({...state, error: null}));
+    this.updateState((state) => ({ ...state, error: null }));
   }
 
   /**
    * Show success message
    */
   private showSuccess(message: string): void {
-    this.snackBar.open(message, 'Close', {duration: 3000});
+    this.snackBar.open(message, 'Close', { duration: 3000 });
   }
 
   /**
    * Update state immutably
    */
-  private updateState(updater: (state: QuestionBankStoreState) => QuestionBankStoreState): void {
+  private updateState(
+    updater: (state: QuestionBankStoreState) => QuestionBankStoreState
+  ): void {
     this._state.update(updater);
   }
 }

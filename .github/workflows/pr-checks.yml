@@ -2,8 +2,8 @@ name: PR Quality Checks
 
 on:
   pull_request:
-    branches: [ main, develop ]
-    types: [ opened, synchronize, reopened ]
+    branches: [main, develop]
+    types: [opened, synchronize, reopened]
 
 env:
   NODE_VERSION: '20'
@@ -213,10 +213,10 @@ jobs:
   build:
     name: Build Applications
     runs-on: ubuntu-latest
-    needs: [ lint, typecheck ]
+    needs: [lint, typecheck]
     strategy:
       matrix:
-        project: [ aqb, api ]
+        project: [aqb, api]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -382,7 +382,7 @@ jobs:
     name: PR Status Check
     runs-on: ubuntu-latest
     if: always()
-    needs: [ lint, typecheck, build, e2e ]
+    needs: [lint, typecheck, build, e2e]
     steps:
       - name: Check all job statuses
         uses: actions/github-script@v7

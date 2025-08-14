@@ -5,13 +5,13 @@ import * as z from 'zod';
 export const answerScheme = z.object({
   id: z.string(),
   text: z.string(),
-  correct: z.optional(z.boolean())
+  correct: z.optional(z.boolean()),
 });
 
 export const questionScheme = z.object({
   id: z.string(),
   question: z.string(),
-  answers: z.array(answerScheme)
+  answers: z.array(answerScheme),
 });
 
 export const questionBankScheme = z.object({
@@ -20,7 +20,7 @@ export const questionBankScheme = z.object({
   editedAt: z.optional(z.string()),
   name: z.string(),
   isDeleted: z.optional(z.boolean()),
-  questions: z.array(questionScheme)
+  questions: z.array(questionScheme),
 });
 
 export type ParsedAnswer = z.infer<typeof answerScheme>;
@@ -28,7 +28,7 @@ export type ParsedQuestion = z.infer<typeof questionScheme>;
 export type ParsedQuestionBank = z.infer<typeof questionBankScheme>;
 
 export enum QuestionType {
-  MultipleChoice = "MultipleChoice"
+  MultipleChoice = 'MultipleChoice',
 }
 
 // Request/Response DTOs for API endpoints
