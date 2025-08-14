@@ -15,14 +15,14 @@
         <mat-icon>edit</mat-icon>
         Edit Name
       </button>
-      <button appearance="outlined" mat-button routerLink="import">
-        <mat-icon>upload_file</mat-icon>
-        Import
-      </button>
     </div>
   </div>
 
   <div class="content-container">
-    <router-outlet></router-outlet>
+    <app-question-list
+      (editQuestion)="onEditQuestion($event)"
+      (deleteQuestion)="onDeleteQuestion($event)"
+      (createQuestion)="createQuestion()">
+    </app-question-list>
   </div>
 </div>

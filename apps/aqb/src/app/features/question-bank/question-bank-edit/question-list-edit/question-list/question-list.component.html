@@ -1,140 +1,101 @@
-@if (totalItems() === 0) {
-<div class="empty-state">
-  <h2>No questions added</h2>
-  <button mat-raised-button color="primary" (click)="onCreateQuestion()">
-    <mat-icon>add</mat-icon>
-    Add First Question
-  </button>
-</div>
+@if (totalItems() === 0 && !isLoading()) {
+  <div class="empty-state">
+    <mat-icon>help_outline</mat-icon>
+    <h2>No questions added</h2>
+    <button mat-raised-button color="primary" (click)="onCreateQuestion()">
+      <mat-icon>add</mat-icon>
+      Add First Question
+    </button>
+  </div>
 } @else {
-<div class="list-header">
-  <div class="search-filters">
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>Search questions</mat-label>
-      <input [value]="searchText()" (input)="onSearchInput($event)" matInput />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-
-    <mat-slide-toggle
-      labelPosition="before"
-      [checked]="showOnlyWithoutAnswers()"
-      (change)="showOnlyWithoutAnswers.set($event.checked)"
-      class="filter-toggle"
-    >
-      Only questions without answers
-    </mat-slide-toggle>
-  </div>
-</div>
-
-<cdk-virtual-scroll-viewport itemSize="160" class="question-viewport">
-  <div
-    *cdkVirtualFor="let item of dataSource; trackBy: trackByFn; let i = index"
-  >
-    @if (item && shouldShowQuestion()(item)) {
-    <!-- Loaded question that passes filters -->
-    <div
-      class="question-card-modern"
-      [class.no-answer]="!hasCorrectAnswer(item)"
-    >
-      <div class="card-header">
-        <div class="question-header">
-          <div class="question-meta">
-            <span class="question-number">{{ i + 1 }}</span>
-            <div
-              class="status-indicator"
-              [class.answered]="hasCorrectAnswer(item)"
-            >
-              <mat-icon
-                >{{
-                  hasCorrectAnswer(item)
-                    ? 'check_circle'
-                    : 'radio_button_unchecked'
-                }}
-              </mat-icon>
-            </div>
-          </div>
-          <div class="question-actions">
-            <button
-              mat-icon-button
-              class="action-btn edit-btn"
-              (click)="onEditQuestion(item)"
-              matTooltip="Edit question"
-            >
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              class="action-btn delete-btn"
-              (click)="onDeleteQuestion(item)"
-              matTooltip="Delete question"
-            >
-              <mat-icon>delete_outline</mat-icon>
-            </button>
-          </div>
-        </div>
-        <h3 class="question-title">{{ item.question }}</h3>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Questions</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <!-- Search and Filters -->
+      <div class="filters-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Search questions</mat-label>
+          <input matInput [value]="searchText()" (input)="onSearchInput($event)">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        
+        <mat-slide-toggle
+          [checked]="showOnlyWithoutAnswers()"
+          (change)="showOnlyWithoutAnswers.set($event.checked)">
+          Only questions without answers
+        </mat-slide-toggle>
       </div>
 
-      <div class="card-content">
-        <div class="answers-grid">
-          @for (answer of item.answers; track answer.id; let answerIndex =
-          $index) {
-          <div class="answer-option" [class.is-correct]="answer.correct">
-            <span class="option-label">{{ getAnswerLabel(answerIndex) }}</span>
-            <span class="option-text">{{ answer.text }}</span>
-            @if (answer.correct) {
-            <mat-icon class="correct-indicator">check</mat-icon>
-            }
-          </div>
-          }
+      <!-- Loading Spinner -->
+      @if (isLoading()) {
+        <div class="loading-container">
+          <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
         </div>
+      }
 
-        @if (!hasCorrectAnswer(item)) {
-        <div class="no-answer-badge">
-          <mat-icon>info</mat-icon>
-          <span>No correct answer set</span>
-        </div>
+      <!-- Questions List -->
+      <mat-list>
+        @for (question of displayedQuestions(); track trackByFn($index, question)) {
+          <mat-list-item>
+            <mat-card class="question-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <div class="question-header">
+                    <span class="question-text">{{ question.question }}</span>
+                    <div class="question-actions">
+                      <button mat-icon-button (click)="onEditQuestion(question)" matTooltip="Edit">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="onDeleteQuestion(question)" matTooltip="Delete">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </mat-card-title>
+              </mat-card-header>
+              
+              <mat-card-content>
+                <mat-list class="answers-list">
+                  @for (answer of question.answers; track answer.id; let i = $index) {
+                    <mat-list-item>
+                      <mat-chip-set>
+                        <mat-chip [highlighted]="answer.correct">
+                          <strong>{{ getAnswerLabel(i) }}.</strong> {{ answer.text }}
+                          @if (answer.correct) {
+                            <mat-icon matChipTrailingIcon>check_circle</mat-icon>
+                          }
+                        </mat-chip>
+                      </mat-chip-set>
+                    </mat-list-item>
+                  }
+                </mat-list>
+                
+                @if (!hasCorrectAnswer(question)) {
+                  <mat-chip-set>
+                    <mat-chip color="warn">
+                      <mat-icon>warning</mat-icon>
+                      No correct answer set
+                    </mat-chip>
+                  </mat-chip-set>
+                }
+              </mat-card-content>
+            </mat-card>
+          </mat-list-item>
         }
-      </div>
-    </div>
-    } @else if (!item) {
-    <!-- Skeleton for unloaded question -->
-    <mat-card class="question-card skeleton">
-      <mat-card-header>
-        <mat-card-subtitle class="question-meta">
-          <div class="question-info">
-            <div class="skeleton-text skeleton-short"></div>
-            <div class="skeleton-text skeleton-tiny"></div>
-          </div>
-          <div class="question-actions">
-            <div class="skeleton-button"></div>
-            <div class="skeleton-button"></div>
-          </div>
-        </mat-card-subtitle>
-        <mat-card-title class="question-text">
-          <div class="skeleton-text skeleton-medium"></div>
-          <div class="skeleton-text skeleton-long"></div>
-        </mat-card-title>
-      </mat-card-header>
+      </mat-list>
 
-      <mat-card-content class="answers-preview">
-        <div class="answers-list">
-          @for (skeletonAnswer of [1, 2, 3, 4]; track skeletonAnswer) {
-          <div class="answer-item skeleton-answer">
-            <div class="skeleton-text skeleton-tiny"></div>
-            <div class="skeleton-text skeleton-medium"></div>
-          </div>
-          }
-        </div>
-      </mat-card-content>
-    </mat-card>
-    } @else if (item && !shouldShowQuestion()(item)) {
-    <!-- Question is loaded but filtered out - show minimal placeholder -->
-    <div
-      class="question-card filtered-out"
-      style="height: 160px; visibility: hidden"
-    ></div>
-    }
-  </div>
-</cdk-virtual-scroll-viewport>
+      <!-- Paginator -->
+      <mat-paginator
+        [length]="totalItems()"
+        [pageSize]="pageSize()"
+        [pageIndex]="pageIndex()"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
 }

@@ -30,7 +30,7 @@ export interface QuestionBankStoreState {
 }
 
 @Injectable()
-export class QuestionBankStore {
+export class QuestionBankComponentState {
   private readonly questionBankService = inject(QuestionBankService);
   private readonly snackBar = inject(MatSnackBar);
 
@@ -99,13 +99,6 @@ export class QuestionBankStore {
    * Load questions for a specific range with caching
    */
   async loadQuestionsRange(offset: number, limit: number): Promise<void> {
-    const rangeKey = `${offset}-${offset + limit}`;
-
-    // Check if this range is already loaded or currently loading
-    if (this.isRangeLoaded(offset, limit)) {
-      return;
-    }
-
     this.setLoadingState('questions', true);
 
     try {
@@ -125,30 +118,11 @@ export class QuestionBankStore {
       );
 
       if (response) {
-        this.updateState((state) => {
-          // Initialize sparse array if needed
-          let questions = state.questions;
-          if (questions.length === 0) {
-            questions = new Array(response.totalItems).fill(null);
-          }
-
-          // Insert questions at their correct positions
-          const updated = [...questions];
-          response.questions.forEach((question, index) => {
-            updated[offset + index] = question;
-          });
-
-          // Mark this range as loaded
-          const newLoadedRanges = new Set(state.loadedRanges);
-          newLoadedRanges.add(rangeKey);
-
-          return {
-            ...state,
-            questions: updated,
-            totalItems: response.totalItems,
-            loadedRanges: newLoadedRanges,
-          };
-        });
+        this.updateState((state) => ({
+          ...state,
+          questions: response.questions,
+          totalItems: response.totalItems,
+        }));
       }
     } catch (error) {
       console.error('Failed to load questions:', error);
@@ -158,45 +132,6 @@ export class QuestionBankStore {
     }
   }
 
-  /**
-   * Load questions for specific indices (used by virtual scrolling)
-   */
-  async loadQuestionsForIndices(indices: number[]): Promise<void> {
-    // Filter out indices that are already loaded or loading
-    const currentState = this._state();
-    const toLoad = indices.filter(
-      (i) => !currentState.questions[i] && !currentState.loadingRanges.has(i)
-    );
-
-    if (toLoad.length === 0) {
-      return;
-    }
-
-    // Mark indices as loading
-    this.updateState((state) => ({
-      ...state,
-      loadingRanges: new Set([...state.loadingRanges, ...toLoad]),
-    }));
-
-    try {
-      // Group consecutive indices into batches for efficient loading
-      const batches = this.groupIntoBatches(toLoad);
-
-      for (const batch of batches) {
-        await this.loadQuestionsRange(batch.start, batch.length);
-      }
-    } finally {
-      // Remove indices from loading set
-      this.updateState((state) => {
-        const newLoadingRanges = new Set(state.loadingRanges);
-        toLoad.forEach((i) => newLoadingRanges.delete(i));
-        return {
-          ...state,
-          loadingRanges: newLoadingRanges,
-        };
-      });
-    }
-  }
 
   /**
    * Set search query and refresh results
@@ -209,13 +144,11 @@ export class QuestionBankStore {
       return;
     }
 
-    // Update search query
+    // Update search query without clearing existing data
     this.updateState((state) => ({
       ...state,
       searchQuery,
-      // Clear current data when search changes
-      questions: [],
-      totalItems: 0,
+      // Mark that we need to reload, but keep existing data visible
       loadedRanges: new Set(),
       loadingRanges: new Set(),
     }));
@@ -269,28 +202,6 @@ export class QuestionBankStore {
     }
   }
 
-  /**
-   * Handle range changes from virtual scroll
-   */
-  async onRangeChanged(start: number, end: number): Promise<void> {
-    const bufferedStart = Math.max(0, start - this.BUFFER_SIZE);
-    const bufferedEnd = Math.min(this.totalItems(), end + this.BUFFER_SIZE);
-
-    // Find missing questions in buffered range
-    const toLoad: number[] = [];
-    const currentQuestions = this._state().questions;
-    const currentLoadingRanges = this._state().loadingRanges;
-
-    for (let i = bufferedStart; i < bufferedEnd; i++) {
-      if (!currentQuestions[i] && !currentLoadingRanges.has(i)) {
-        toLoad.push(i);
-      }
-    }
-
-    if (toLoad.length > 0) {
-      await this.loadQuestionsForIndices(toLoad);
-    }
-  }
 
   /**
    * Create a new question with optimistic updates
@@ -495,12 +406,6 @@ export class QuestionBankStore {
     return questions.find((q) => q?.id === questionId) || null;
   }
 
-  /**
-   * Check if a question at index is currently loading
-   */
-  isQuestionLoading(index: number): boolean {
-    return this._state().loadingRanges.has(index);
-  }
 
   /**
    * Clear all cached data
@@ -539,46 +444,6 @@ export class QuestionBankStore {
     }
   }
 
-  /**
-   * Check if a range is already loaded
-   */
-  private isRangeLoaded(offset: number, limit: number): boolean {
-    const rangeKey = `${offset}-${offset + limit}`;
-    return this._state().loadedRanges.has(rangeKey);
-  }
-
-  /**
-   * Group consecutive indices into batches for efficient loading
-   */
-  private groupIntoBatches(
-    indices: number[]
-  ): { start: number; length: number }[] {
-    if (indices.length === 0) return [];
-
-    const sorted = [...indices].sort((a, b) => a - b);
-    const batches: { start: number; length: number }[] = [];
-    let currentStart = sorted[0];
-    let currentEnd = sorted[0];
-
-    for (let i = 1; i < sorted.length; i++) {
-      if (sorted[i] === currentEnd + 1) {
-        currentEnd = sorted[i];
-      } else {
-        batches.push({
-          start: currentStart,
-          length: currentEnd - currentStart + 1,
-        });
-        currentStart = sorted[i];
-        currentEnd = sorted[i];
-      }
-    }
-
-    batches.push({
-      start: currentStart,
-      length: currentEnd - currentStart + 1,
-    });
-    return batches;
-  }
 
   /**
    * Update a specific loading state

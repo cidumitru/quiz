@@ -1,10 +1,8 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   computed,
   inject,
-  OnDestroy,
   OnInit,
   output,
   signal,
@@ -17,11 +15,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatListModule } from '@angular/material/list';
+import { MatChipsModule } from '@angular/material/chips';
 import { Question } from '@aqb/data-access';
-import { QuestionDataSource } from './question-data-source';
-import { QuestionBankStore } from '../../question-bank-store.service';
+import { QuestionBankComponentState } from '../../question-bank-store.service';
 import { BehaviorSubject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
@@ -36,53 +36,58 @@ import { BehaviorSubject, debounceTime, distinctUntilChanged } from 'rxjs';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    ScrollingModule,
+    MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatListModule,
+    MatChipsModule,
   ],
   templateUrl: './question-list.component.html',
   styleUrls: ['./question-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class QuestionListComponent implements OnInit, OnDestroy {
-  // Data source for virtual scrolling
-  public dataSource = new QuestionDataSource();
-
+export class QuestionListComponent implements OnInit {
+  // Store injection
+  private store = inject(QuestionBankComponentState);
+  
   // Outputs for parent communication
   editQuestion = output<Question>();
   deleteQuestion = output<Question>();
   createQuestion = output<void>();
 
-  // Track total items as a computed signal from data source
-  public totalItems = computed(() => this.dataSource.totalItems());
+  // Page state
+  public pageSize = signal(20);
+  public pageIndex = signal(0);
+  public pageSizeOptions = [10, 20, 50, 100];
+  
+  // Filter state
   public searchText = signal('');
   public showOnlyWithoutAnswers = signal(false);
-  // Check if a question should be visible based on current filters (only client-side filters now)
-  public shouldShowQuestion = computed(() => {
+  
+  // Store selectors
+  public questions = this.store.questions;
+  public totalItems = this.store.totalItems;
+  public isLoading = this.store.isLoading;
+  
+  // Computed filtered questions for current page
+  public displayedQuestions = computed(() => {
+    const allQuestions = this.questions() as Question[];
     const onlyWithoutAnswers = this.showOnlyWithoutAnswers();
-
-    // Return a function that can be called with a question
-    return (question: Question | undefined): boolean => {
-      if (!question) return true; // Always show skeleton for unloaded items
-
-      if (
-        onlyWithoutAnswers &&
-        question.answers.find((a) => a.correct) !== undefined
-      ) {
-        return false; // Hide questions with correct answers
-      }
-
-      return true;
-    };
-  });
-  private cdr = inject(ChangeDetectorRef);
-  private store = inject(QuestionBankStore);
-  private searchSubject = new BehaviorSubject<string>('');
-
-  ngOnDestroy(): void {
-    if (this.dataSource) {
-      this.dataSource.disconnect();
+    const startIndex = this.pageIndex() * this.pageSize();
+    const endIndex = startIndex + this.pageSize();
+    
+    // Filter questions
+    let filtered = allQuestions.filter((q): q is Question => q !== null);
+    
+    if (onlyWithoutAnswers) {
+      filtered = filtered.filter((q: Question) => !q.answers.some(a => a.correct));
     }
-  }
+    
+    // Return page slice
+    return filtered.slice(startIndex, endIndex);
+  });
+  
+  private searchSubject = new BehaviorSubject<string>('');
 
   onEditQuestion(question: Question): void {
     this.editQuestion.emit(question);
@@ -97,10 +102,19 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   onCreateQuestion(): void {
     this.createQuestion.emit();
   }
-
-  getCorrectAnswer(question: Question): string {
-    const correctAnswer = question.answers.find((a) => a.correct);
-    return correctAnswer ? correctAnswer.text : 'No correct answer set';
+  
+  onPageChange(event: PageEvent): void {
+    this.pageIndex.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
+    
+    // Load more data if needed and store is initialized
+    const questionBank = this.store.questionBank();
+    if (questionBank) {
+      const startIndex = event.pageIndex * event.pageSize;
+      this.store.loadQuestionsRange(startIndex, event.pageSize).catch(error => {
+        console.error('Failed to load questions:', error);
+      });
+    }
   }
 
   hasCorrectAnswer(question: Question): boolean {
@@ -112,11 +126,6 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Force initial change detection after data source is set up
-    setTimeout(() => {
-      this.cdr.detectChanges();
-    }, 0);
-
     // Setup search with debouncing
     this.searchSubject
       .pipe(
@@ -124,7 +133,10 @@ export class QuestionListComponent implements OnInit, OnDestroy {
         distinctUntilChanged() // Only emit if the value is different from the previous one
       )
       .subscribe((searchQuery) => {
-        this.store.setSearchQuery(searchQuery);
+        this.store.setSearchQuery(searchQuery).catch(error => {
+          console.error('Failed to search:', error);
+        });
+        this.pageIndex.set(0); // Reset to first page on search
       });
   }
 
@@ -132,20 +144,10 @@ export class QuestionListComponent implements OnInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     const searchValue = target.value;
     this.searchText.set(searchValue);
-
-    // Debounce search to avoid too many API calls
-    this.performSearch(searchValue);
+    this.searchSubject.next(searchValue);
   }
 
-  trackByFn(index: number, item: Question | undefined): string | number {
-    return item ? item.id : index;
-  }
-
-  isQuestionLoading(index: number): boolean {
-    return this.dataSource?.isQuestionLoading(index) ?? false;
-  }
-
-  private performSearch(searchQuery: string): void {
-    this.searchSubject.next(searchQuery);
+  trackByFn(_index: number, item: Question): string {
+    return item.id;
   }
 }

@@ -77,34 +77,6 @@ const routes: Route[] = [
           import(
             './app/features/question-bank/question-bank-edit/question-bank-edit.component'
           ).then((m) => m.QuestionBankEditComponent),
-        children: [
-          {
-            path: 'questions',
-            loadComponent: () =>
-              import(
-                './app/features/question-bank/question-bank-edit/question-list-edit/question-bank-details.component'
-              ).then((m) => m.QuestionBankDetailsComponent),
-          },
-          {
-            path: 'add',
-            loadComponent: () =>
-              import(
-                './app/features/question-bank/question-bank-edit/question-add/question-add.component'
-              ).then((m) => m.QuestionAddComponent),
-          },
-          {
-            path: 'import',
-            loadComponent: () =>
-              import(
-                './app/features/question-bank/question-bank-edit/question-import/question-import.component'
-              ).then((m) => m.QuestionImportComponent),
-          },
-          {
-            path: '',
-            redirectTo: 'questions',
-            pathMatch: 'full' as const,
-          },
-        ],
       },
     ],
   },
