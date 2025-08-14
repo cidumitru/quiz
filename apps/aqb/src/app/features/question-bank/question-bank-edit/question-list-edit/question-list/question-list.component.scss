@@ -1,11 +1,6 @@
+// Empty state - use Tailwind utilities in template
+// Replace .empty-state with: flex flex-col items-center justify-center min-h-[300px] text-center gap-4
 .empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 300px;
-  text-align: center;
-  gap: 16px;
   
   mat-icon {
     font-size: 48px;
@@ -15,28 +10,15 @@
   }
 }
 
-.filters-row {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  margin-bottom: 24px;
-  
-  mat-form-field {
-    min-width: 300px;
-  }
-}
+// Filters row - use Tailwind utilities in template  
+// Replace .filters-row with: flex flex-col md:flex-row gap-4 md:items-center mb-6
+// mat-form-field min-width handled in responsive media queries below
 
-.loading-container {
-  display: flex;
-  justify-content: center;
-  padding: 40px;
-}
+// Loading container - use Tailwind utilities in template
+// Replace .loading-container with: flex justify-center p-10
 
-.questions-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+// Questions container - use Tailwind utilities in template
+// Replace .questions-container with: flex flex-col gap-6 (increased spacing to prevent overlap)
 
 .question-card {
   mat-card-header {
@@ -167,15 +149,16 @@
   }
 }
 
-@media (max-width: 768px) {
-  .filters-row {
-    flex-direction: column;
-    align-items: stretch;
-    
-    mat-form-field {
-      min-width: unset;
-    }
+// Form field styling for consistent width on desktop
+mat-form-field {
+  min-width: 300px;
+  
+  @media (max-width: 768px) {
+    min-width: unset;
   }
+}
+
+@media (max-width: 768px) {
   
   .question-card mat-card-header {
     flex-direction: column;

@@ -1,12 +1,12 @@
-<div class="login-container">
-  <div class="logo-section">
-    <img src="logo-light.svg" alt="AQB Logo" class="login-logo logo-light">
-    <img src="logo-dark.svg" alt="AQB Logo" class="login-logo logo-dark">
-    <h1 class="app-title">AQB</h1>
-    <p class="app-subtitle">Aly's Question Bank</p>
+<div class="h-screen flex flex-col items-center justify-center gap-6 p-4 md:gap-8 md:p-5">
+  <div class="text-center">
+    <img src="logo-light.svg" alt="AQB Logo" class="w-24 h-24 mb-3 md:w-30 md:h-30 md:mb-4 login-logo logo-light">
+    <img src="logo-dark.svg" alt="AQB Logo" class="w-24 h-24 mb-3 md:w-30 md:h-30 md:mb-4 login-logo logo-dark">
+    <h1 class="m-0 mb-1 text-2xl md:text-4xl font-semibold tracking-wider" style="color: var(--mat-sys-on-background)">AQB</h1>
+    <p class="m-0 text-xs md:text-sm font-normal" style="color: var(--mat-sys-on-surface-variant)">Aly's Question Bank</p>
   </div>
 
-  <mat-card class="login-card">
+  <mat-card class="w-full max-w-md p-4 md:p-5">
     <mat-card-header>
       <mat-card-title>
         {{ showOtpForm ? 'Enter Verification Code' : 'Sign In' }}
@@ -19,7 +19,7 @@
     <mat-card-content>
       <!-- Email Form -->
       <form *ngIf="!showOtpForm" [formGroup]="emailForm" (ngSubmit)="onRequestOtp()">
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="w-full" appearance="outline">
           <mat-label>Email</mat-label>
           <input matInput type="email" formControlName="email" placeholder="your@email.com" />
           <mat-error *ngIf="emailForm.get('email')?.hasError('required')">
@@ -34,7 +34,7 @@
           mat-raised-button
           color="primary"
           type="submit"
-          class="full-width submit-button"
+          class="w-full mt-5 h-12"
           [disabled]="!emailForm.valid || isLoading">
           <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
           {{ isLoading ? 'Sending...' : 'Send Verification Code' }}
@@ -43,7 +43,7 @@
 
       <!-- OTP Form -->
       <form *ngIf="showOtpForm" [formGroup]="otpForm" (ngSubmit)="onVerifyOtp()">
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="w-full" appearance="outline">
           <mat-label>Verification Code</mat-label>
           <input
             matInput
@@ -64,19 +64,19 @@
           mat-raised-button
           color="primary"
           type="submit"
-          class="full-width submit-button"
+          class="w-full mt-5 h-12"
           [disabled]="!otpForm.valid || isLoading">
           <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
           {{ isLoading ? 'Verifying...' : 'Verify & Sign In' }}
         </button>
 
-        <div class="otp-actions">
-          <button mat-button type="button" (click)="onBackToEmail()">
+        <div class="flex justify-between mt-4">
+          <button mat-button type="button" (click)="onBackToEmail()" class="flex items-center gap-1">
             <mat-icon>arrow_back</mat-icon>
             Back to Email
           </button>
 
-          <button mat-button type="button" (click)="onResendOtp()" [disabled]="isLoading">
+          <button mat-button type="button" (click)="onResendOtp()" [disabled]="isLoading" class="flex items-center gap-1">
             <mat-icon>refresh</mat-icon>
             Resend Code
           </button>

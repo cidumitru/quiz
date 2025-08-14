@@ -1,39 +1,10 @@
-.page-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  padding: 16px;
-}
+// Page container - use Tailwind utilities in template
+// Replace .page-container with: flex flex-col min-h-screen p-4
 
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  
-  h1 {
-    margin: 0;
-  }
-  
-  .header-actions {
-    display: flex;
-    gap: 8px;
-  }
-}
+// Page header - use Tailwind utilities in template  
+// Replace .page-header with: flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6
+// h1 should use: m-0
+// Replace .header-actions with: flex gap-2 justify-center md:justify-start
 
-.content-container {
-  flex: 1;
-  width: 100%;
-}
-
-@media (max-width: 768px) {
-  .page-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
-    
-    .header-actions {
-      justify-content: center;
-    }
-  }
-}
+// Content container - use Tailwind utilities in template
+// Replace .content-container with: flex-1 w-full

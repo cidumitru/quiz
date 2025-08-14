@@ -1,5 +1,7 @@
 
 // Filter section styling
+// Replace .filter-section with: mb-6
+// Replace .filter-field with: min-w-[300px] md:w-full md:min-w-0
 .filter-section {
   margin-bottom: 24px;
 
@@ -14,14 +16,15 @@
 }
 
 // Quiz timeline container - responsive grid layout
+// Replace .quiz-timeline with: grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 mb-8 md:gap-4 md:mb-4
 .quiz-timeline {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-bottom: 32px;
 
   @media (max-width: 1200px) {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
 

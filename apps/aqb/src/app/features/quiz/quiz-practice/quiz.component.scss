@@ -1,190 +1,7 @@
-// Quiz Header Styling
-.quiz-header {
-  background: linear-gradient(145deg, var(--mat-sys-surface-container-lowest), var(--mat-sys-surface-container));
-  border-radius: 24px;
-  padding: 32px;
-  margin-bottom: 32px;
-  border: 1px solid var(--mat-sys-outline-variant);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  
-  .quiz-info {
-    margin-bottom: 24px;
-    
-    .quiz-title {
-      font-size: 28px;
-      font-weight: 600;
-      color: var(--mat-sys-on-surface);
-      margin: 0 0 8px 0;
-      line-height: 1.2;
-      
-      .bank-name {
-        color: var(--mat-sys-primary);
-        cursor: pointer;
-        text-decoration: none;
-        transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
-        
-        &:hover {
-          color: var(--mat-sys-tertiary);
-          text-decoration: underline;
-        }
-      }
-    }
-    
-    .quiz-subtitle {
-      font-size: 14px;
-      color: var(--mat-sys-on-surface-variant);
-      margin: 0;
-      opacity: 0.8;
-    }
-  }
-  
-  .progress-section {
-    .progress-stats {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      
-      .progress-text {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--mat-sys-on-surface);
-      }
-      
-      .accuracy-text {
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--mat-sys-tertiary);
-        padding: 4px 12px;
-        background: var(--mat-sys-tertiary-container);
-        border-radius: 16px;
-      }
-    }
-    
-    .progress-bar {
-      height: 12px;
-      background: var(--mat-sys-surface-container-high);
-      border-radius: 6px;
-      overflow: hidden;
-      border: 1px solid var(--mat-sys-outline-variant);
-      
-      .progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, var(--mat-sys-primary), var(--mat-sys-tertiary));
-        border-radius: 6px;
-        transition: width 500ms cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          width: 2px;
-          background: rgba(255, 255, 255, 0.6);
-          animation: progress-shine 2s infinite;
-        }
-      }
-    }
-  }
-  
-  @media (max-width: 768px) {
-    padding: 24px;
-    margin-bottom: 24px;
-    
-    .quiz-info .quiz-title {
-      font-size: 24px;
-    }
-    
-    .progress-stats {
-      flex-direction: column;
-      gap: 8px;
-      align-items: stretch;
-      
-      .accuracy-text {
-        text-align: center;
-      }
-    }
-  }
-}
-
+// Essential animations for quiz interactions
 @keyframes progress-shine {
   0%, 100% { opacity: 0; }
   50% { opacity: 1; }
-}
-
-// Quiz Container - simple scrolling
-.quiz-container {
-  .questions-list {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-}
-
-// Question Wrapper with Floating Badge
-.question-wrapper {
-  position: relative;
-  
-  .floating-question-number {
-    position: absolute;
-    top: -8px;
-    left: -8px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--mat-sys-primary);
-    color: var(--mat-sys-on-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 14px;
-    z-index: 10;
-    border: 2px solid var(--mat-sys-surface);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-    
-    // State-based styling for the floating badge
-    &.unanswered {
-      background: var(--mat-sys-outline);
-      color: var(--mat-sys-surface);
-      animation: badge-pulse 2s infinite;
-    }
-    
-    &.answered {
-      background: var(--mat-sys-primary);
-      color: var(--mat-sys-on-primary);
-      transform: scale(1.1);
-    }
-    
-    &.correct {
-      background: var(--mat-sys-tertiary);
-      color: var(--mat-sys-on-tertiary);
-      transform: scale(1.15);
-      animation: badge-success 0.6s ease-out;
-    }
-    
-    &.incorrect {
-      background: var(--mat-sys-error);
-      color: var(--mat-sys-on-error);
-      transform: scale(1.1);
-      animation: badge-shake 0.6s ease-out;
-    }
-  }
-  
-  // Mobile responsive adjustments
-  @media (max-width: 768px) {
-    .floating-question-number {
-      width: 28px;
-      height: 28px;
-      font-size: 12px;
-      top: -6px;
-      left: -6px;
-      border-width: 2px;
-    }
-  }
 }
 
 @keyframes badge-pulse {
@@ -208,28 +25,115 @@
   75% { transform: scale(1.1) translateX(3px); }
 }
 
-// Apply smooth scrolling behavior
+@keyframes unanswered-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+// Essential custom styles that can't be replicated with Tailwind
 :host {
   display: block;
 }
 
-// Ensure smooth scrolling for the page
-:host ::ng-deep html {
-  scroll-behavior: smooth;
+// Quiz header styling
+.quiz-header {
+  background: linear-gradient(145deg, var(--mat-sys-surface-container-lowest), var(--mat-sys-surface-container));
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  
+  .quiz-title {
+    color: var(--mat-sys-on-surface);
+    
+    .bank-name {
+      color: var(--mat-sys-primary);
+      
+      &:hover {
+        color: var(--mat-sys-tertiary);
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  .quiz-subtitle {
+    color: var(--mat-sys-on-surface-variant);
+  }
+  
+  .progress-text {
+    color: var(--mat-sys-on-surface);
+  }
+  
+  .accuracy-text {
+    color: var(--mat-sys-tertiary);
+    background: var(--mat-sys-tertiary-container);
+  }
+  
+  .progress-bar {
+    background: var(--mat-sys-surface-container-high);
+    border-color: var(--mat-sys-outline-variant);
+    
+    .progress-fill {
+      background: linear-gradient(90deg, var(--mat-sys-primary), var(--mat-sys-tertiary));
+    }
+  }
 }
 
-// Question Card Styling
-.question-card {
-  border-radius: 20px !important;
-  border: 2px solid var(--mat-sys-outline-variant);
-  background: var(--mat-sys-surface);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
-  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: visible;
-  // Remove scroll-snap properties since we're using custom JavaScript control
+// Progress bar shine effect
+.progress-fill {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.6);
+    animation: progress-shine 2s infinite;
+  }
+}
+
+// Floating question number badge states
+.floating-question-number {
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  border-color: var(--mat-sys-surface);
   
-  // Question state styling
+  &.unanswered {
+    background: var(--mat-sys-outline);
+    color: var(--mat-sys-surface);
+    animation: badge-pulse 2s infinite;
+  }
+  
+  &.answered {
+    background: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+    transform: scale(1.1);
+  }
+  
+  &.correct {
+    background: var(--mat-sys-tertiary);
+    color: var(--mat-sys-on-tertiary);
+    transform: scale(1.15);
+    animation: badge-success 0.6s ease-out;
+  }
+  
+  &.incorrect {
+    background: var(--mat-sys-error);
+    color: var(--mat-sys-on-error);
+    transform: scale(1.1);
+    animation: badge-shake 0.6s ease-out;
+  }
+}
+
+// Question card states
+.question-card {
+  .question-text {
+    color: var(--mat-sys-on-surface);
+  }
+  
+  .no-answer-warning {
+    color: var(--mat-sys-error);
+  }
+  
   &.unanswered {
     border-color: var(--mat-sys-outline-variant);
     
@@ -249,7 +153,7 @@
   &.answered {
     border-color: var(--mat-sys-primary);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   }
   
   &.correct {
@@ -264,267 +168,183 @@
   
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Answer card states
+.answer-card {
+  border-color: var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface-container-lowest);
+  
+  .answer-label {
+    background: var(--mat-sys-outline);
+    color: var(--mat-sys-surface);
   }
   
-  // Question Header
-  .question-header {
-    padding: 24px 24px 16px !important;
+  .answer-text {
+    color: var(--mat-sys-on-surface);
+  }
+  
+  .selected-icon {
+    color: var(--mat-sys-primary);
+  }
+  
+  .unselected-icon {
+    color: var(--mat-sys-outline);
+  }
+  
+  &:hover {
+    border-color: var(--mat-sys-primary);
+    background: var(--mat-sys-primary-container);
+    transform: translateX(4px);
+  }
+  
+  &.selected {
+    border-color: var(--mat-sys-primary);
+    background: var(--mat-sys-primary-container);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  &.correct-answer {
+    border-color: var(--mat-sys-tertiary);
+    background: var(--mat-sys-tertiary-container);
+    color: var(--mat-sys-on-tertiary-container);
     
-    .question-content {
-      flex: 1;
-      
-      .question-text {
-        font-size: 22px !important;
-        font-weight: 500 !important;
-        line-height: 1.5 !important;
-        color: var(--mat-sys-on-surface) !important;
-        margin: 0 !important;
-        letter-spacing: -0.1px !important;
-        word-spacing: 1px !important;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-      }
-      
-      .no-answer-warning {
-        display: flex !important;
-        align-items: center !important;
-        gap: 8px !important;
-        color: var(--mat-sys-error) !important;
-        font-size: 14px !important;
-        margin: 8px 0 0 0 !important;
-        
-        mat-icon {
-          font-size: 18px;
-          width: 18px;
-          height: 18px;
-        }
-      }
+    .answer-label {
+      background: var(--mat-sys-tertiary);
+      color: var(--mat-sys-on-tertiary);
     }
   }
   
-  // Answers Section
-  .answers-section {
-    padding: 0 24px 24px !important;
+  &.user-incorrect {
+    border-color: var(--mat-sys-error);
+    background: var(--mat-sys-error-container);
+    color: var(--mat-sys-on-error-container);
     
-    .answers-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      
-      .answer-card {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px 20px;
-        border-radius: 16px;
-        border: 2px solid var(--mat-sys-outline-variant);
-        background: var(--mat-sys-surface-container-lowest);
-        cursor: pointer;
-        transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-        min-height: 60px;
-        
-        &:hover {
-          border-color: var(--mat-sys-primary);
-          background: var(--mat-sys-primary-container);
-          transform: translateX(4px);
-        }
-        
-        &.selected {
-          border-color: var(--mat-sys-primary);
-          background: var(--mat-sys-primary-container);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        &.correct-answer {
-          border-color: var(--mat-sys-tertiary);
-          background: var(--mat-sys-tertiary-container);
-          color: var(--mat-sys-on-tertiary-container);
-          
-          .answer-label {
-            background: var(--mat-sys-tertiary);
-            color: var(--mat-sys-on-tertiary);
-          }
-        }
-        
-        &.user-incorrect {
-          border-color: var(--mat-sys-error);
-          background: var(--mat-sys-error-container);
-          color: var(--mat-sys-on-error-container);
-          
-          .answer-label {
-            background: var(--mat-sys-error);
-            color: var(--mat-sys-on-error);
-          }
-        }
-        
-        &.disabled {
-          cursor: not-allowed !important;
-          pointer-events: none;
-          
-          &:not(.selected):not(.correct-answer):not(.user-incorrect) {
-            opacity: 0.6;
-            background: var(--mat-sys-surface-container-lowest);
-            border-color: var(--mat-sys-outline-variant);
-            
-            .answer-label {
-              opacity: 0.7;
-            }
-            
-            .answer-text {
-              opacity: 0.7;
-            }
-          }
-          
-          &:hover {
-            transform: none;
-            border-color: inherit;
-            background: inherit;
-          }
-        }
-        
-        .answer-content {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          flex: 1;
-          
-          .answer-label {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--mat-sys-outline);
-            color: var(--mat-sys-surface);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
-            flex-shrink: 0;
-            transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-          }
-          
-          .answer-text {
-            font-size: 17px;
-            font-weight: 400;
-            line-height: 1.4;
-            color: var(--mat-sys-on-surface);
-            letter-spacing: 0.1px;
-          }
-        }
-        
-        .answer-indicator {
-          display: flex;
-          align-items: center;
-          
-          .selected-icon {
-            color: var(--mat-sys-primary);
-            font-size: 24px;
-            width: 24px;
-            height: 24px;
-          }
-          
-          .unselected-icon {
-            color: var(--mat-sys-outline);
-            font-size: 24px;
-            width: 24px;
-            height: 24px;
-            opacity: 0.6;
-          }
-        }
-      }
+    .answer-label {
+      background: var(--mat-sys-error);
+      color: var(--mat-sys-on-error);
     }
   }
   
-  @media (max-width: 768px) {
-    .question-header {
-      padding: 20px 20px 12px !important;
+  &.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    
+    &:not(.selected):not(.correct-answer):not(.user-incorrect) {
+      opacity: 0.6;
+      background: var(--mat-sys-surface-container-lowest);
+      border-color: var(--mat-sys-outline-variant);
       
-      .question-content .question-text {
-        font-size: 20px !important;
-        line-height: 1.4 !important;
+      .answer-label {
+        opacity: 0.7;
+      }
+      
+      .answer-text {
+        opacity: 0.7;
       }
     }
     
-    .answers-section {
-      padding: 0 20px 20px !important;
-      
-      .answers-grid .answer-card {
-        padding: 14px 16px;
-        min-height: 56px;
-        
-        .answer-content {
-          gap: 12px;
-          
-          .answer-label {
-            width: 28px;
-            height: 28px;
-            font-size: 12px;
-          }
-          
-          .answer-text {
-            font-size: 15px;
-          }
-        }
-      }
+    &:hover {
+      border-color: inherit;
+      background: inherit;
+      transform: none;
     }
   }
 }
 
-@keyframes unanswered-pulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.8; }
-}
-
-// No Questions State
-.no-questions-card {
-  mat-card {
-    text-align: center;
-    padding: 64px 32px !important;
-    border-radius: 24px !important;
-    border: 2px dashed var(--mat-sys-outline-variant);
-    background: linear-gradient(145deg, var(--mat-sys-surface-container-lowest), var(--mat-sys-surface-container));
-    
-    .no-questions-content {
-      mat-icon {
-        font-size: 64px;
-        width: 64px;
-        height: 64px;
-        color: var(--mat-sys-on-surface-variant);
-        margin-bottom: 24px;
-        opacity: 0.6;
-      }
-      
-      h3 {
-        margin: 0 0 12px 0;
-        color: var(--mat-sys-on-surface);
-        font-weight: 600;
-        font-size: 24px;
-      }
-      
-      p {
-        margin: 0;
-        color: var(--mat-sys-on-surface-variant);
-        font-size: 16px;
-        opacity: 0.8;
-      }
-    }
+// No questions content styling
+.no-questions-content {
+  mat-icon {
+    color: var(--mat-sys-on-surface-variant);
+  }
+  
+  h3 {
+    color: var(--mat-sys-on-surface);
+  }
+  
+  p {
+    color: var(--mat-sys-on-surface-variant);
   }
 }
 
-// Legacy Stats Section (kept for compatibility)
+// Stats section styling
 .stats {
-  text-align: center;
-  margin-top: 5rem;
-  padding: 32px;
   background: var(--mat-sys-surface-container);
-  border-radius: 24px;
-  border: 1px solid var(--mat-sys-outline-variant);
-
+  border-color: var(--mat-sys-outline-variant);
+  
   .correct {
     color: var(--mat-sys-tertiary);
   }
-
+  
   .incorrect {
     color: var(--mat-sys-error);
+  }
+}
+
+// Light theme specific overrides for correct answers
+:host {
+  html.light-theme & {
+    --mat-sys-tertiary: #10b981;
+    --mat-sys-on-tertiary: #ffffff;
+    --mat-sys-tertiary-container: #10b98125;
+    --mat-sys-on-tertiary-container: #065f46;
+  }
+  
+  body.light-theme & {
+    --mat-sys-tertiary: #10b981;
+    --mat-sys-on-tertiary: #ffffff;
+    --mat-sys-tertiary-container: #10b98125;
+    --mat-sys-on-tertiary-container: #065f46;
+  }
+}
+
+// Additional light theme overrides for elements that need explicit colors
+.question-card.correct {
+  html.light-theme & {
+    border-color: #10b981 !important;
+    background: linear-gradient(145deg, var(--mat-sys-surface), #10b98115) !important;
+  }
+  
+  body.light-theme & {
+    border-color: #10b981 !important;
+    background: linear-gradient(145deg, var(--mat-sys-surface), #10b98115) !important;
+  }
+}
+
+.answer-card.correct-answer {
+  html.light-theme & {
+    border-color: #10b981 !important;
+    background: #10b98125 !important;
+    color: #065f46 !important;
+    
+    .answer-label {
+      background: #10b981 !important;
+      color: white !important;
+    }
+  }
+  
+  body.light-theme & {
+    border-color: #10b981 !important;
+    background: #10b98125 !important;
+    color: #065f46 !important;
+    
+    .answer-label {
+      background: #10b981 !important;
+      color: white !important;
+    }
+  }
+}
+
+.floating-question-number.correct {
+  html.light-theme & {
+    background: #10b981 !important;
+    color: white !important;
+  }
+  
+  body.light-theme & {
+    background: #10b981 !important;
+    color: white !important;
   }
 }

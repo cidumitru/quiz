@@ -1,6 +1,6 @@
-<div class="page-container">
+<div class="flex flex-col min-h-screen p-4">
   <div class="page-header">
-    <h1>{{ questionBankName() || 'Loading...' }}</h1>
+    <h1 class="m-0">{{ questionBankName() || 'Loading...' }}</h1>
     <div class="header-actions">
       <button
         (click)="createQuestion()"
@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <div class="content-container">
+  <div class="flex-1 w-full">
     <app-question-list
       (editQuestion)="onEditQuestion($event)"
       (deleteQuestion)="onDeleteQuestion($event)"

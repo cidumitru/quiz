@@ -1,84 +1,73 @@
-@if (totalItems() === 0 && !isLoading()) {
-  <div class="empty-state">
-    <mat-icon>help_outline</mat-icon>
-    <h2>No questions added</h2>
-    <button mat-raised-button color="primary" (click)="onCreateQuestion()">
-      <mat-icon>add</mat-icon>
-      Add First Question
-    </button>
-  </div>
-} @else {
-  <!-- Search and Filters -->
-  <div class="filters-row">
+<!-- Search and Filters -->
+<div class="flex flex-col md:flex-row gap-4 md:items-center mb-6">
     <mat-form-field appearance="outline">
-      <mat-label>Search questions</mat-label>
-      <input matInput [value]="searchText()" (input)="onSearchInput($event)">
-      <mat-icon matSuffix>search</mat-icon>
+        <mat-label>Search questions</mat-label>
+        <input matInput [value]="searchText()" (input)="onSearchInput($event)">
+        <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
-  </div>
+</div>
 
-  <!-- Loading Spinner -->
-  @if (isLoading()) {
-    <div class="loading-container">
-      <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+<!-- Loading Spinner -->
+@if (isLoading()) {
+    <div class="flex justify-center p-10">
+        <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
     </div>
-  }
+}
 
-  <!-- Questions List -->
-  @if (displayedQuestions().length > 0) {
-    <div class="questions-container">
-      @for (question of displayedQuestions(); track trackByFn($index, question)) {
-        <mat-card class="question-card">
-          <mat-card-header>
-            <mat-card-title class="question-title">
-              {{ question.question }}
-            </mat-card-title>
-            <div class="question-actions">
-              <button mat-icon-button (click)="onEditQuestion(question)" matTooltip="Edit">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button (click)="onDeleteQuestion(question)" matTooltip="Delete">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </mat-card-header>
-          
-          <mat-card-content>
-            <div class="answers-container">
-              @for (answer of question.answers; track answer.id; let i = $index) {
-                <div class="answer-item" [class.correct]="answer.correct">
-                  <span class="answer-label">{{ getAnswerLabel(i) }}.</span>
-                  <span class="answer-text">{{ answer.text }}</span>
-                  @if (answer.correct) {
-                    <mat-icon class="correct-icon">check_circle</mat-icon>
-                  }
-                </div>
-              }
-            </div>
-            
-            @if (!hasCorrectAnswer(question)) {
-              <div class="no-answer-warning">
-                <mat-icon>warning</mat-icon>
-                <span>No correct answer set</span>
-              </div>
-            }
-          </mat-card-content>
-        </mat-card>
-      }
+<!-- Questions List -->
+@if (displayedQuestions().length > 0) {
+    <div class="flex flex-col gap-6">
+        @for (question of displayedQuestions(); track trackByFn($index, question)) {
+            <mat-card class="question-card">
+                <mat-card-header>
+                    <mat-card-title class="question-title">
+                        {{ question.question }}
+                    </mat-card-title>
+                    <div class="question-actions">
+                        <button mat-icon-button (click)="onEditQuestion(question)" matTooltip="Edit">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="onDeleteQuestion(question)" matTooltip="Delete">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div class="answers-container">
+                        @for (answer of question.answers; track answer.id; let i = $index) {
+                            <div class="answer-item" [class.correct]="answer.correct">
+                                <span class="answer-label">{{ getAnswerLabel(i) }}.</span>
+                                <span class="answer-text">{{ answer.text }}</span>
+                                @if (answer.correct) {
+                                    <mat-icon class="correct-icon">check_circle</mat-icon>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    @if (!hasCorrectAnswer(question)) {
+                        <div class="no-answer-warning">
+                            <mat-icon>warning</mat-icon>
+                            <span>No correct answer set</span>
+                        </div>
+                    }
+                </mat-card-content>
+            </mat-card>
+        }
     </div>
 
     <!-- Simple load more for now -->
     @if (displayedQuestions().length < totalItems()) {
-      <div class="load-more-container">
-        <button mat-button (click)="loadMore()" [disabled]="isLoading()">
-          Load More Questions ({{ displayedQuestions().length }} / {{ totalItems() }})
-        </button>
-      </div>
+        <div class="load-more-container">
+            <button mat-button (click)="loadMore()" [disabled]="isLoading()">
+                Load More Questions ({{ displayedQuestions().length }} / {{ totalItems() }})
+            </button>
+        </div>
     }
-  } @else if (!isLoading()) {
+} @else if (!isLoading()) {
     <div class="no-results">
-      <mat-icon>search_off</mat-icon>
-      <p>No questions match your search criteria</p>
+        <mat-icon>search_off</mat-icon>
+        <p>No questions match your search criteria</p>
     </div>
-  }
 }

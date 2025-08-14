@@ -1,58 +1,95 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 
-html {
-  color-scheme: light dark;
-}
+@import "tailwindcss";
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-// Prevent layout shift from scrollbar
-html {
-  scrollbar-gutter: stable;
-  overflow-y: scroll; // Always show vertical scrollbar space
-}
-
-// Global scrollbar styling
-* {
-  // Firefox scrollbar styling
-  scrollbar-width: thin;
-  scrollbar-color: var(--mat-sys-outline-variant) transparent;
-}
-
-// Webkit scrollbar styling
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--mat-sys-outline-variant);
-  border-radius: 4px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-  
-  &:hover {
-    background-color: var(--mat-sys-outline);
+@layer base {
+  html {
+    color-scheme: light dark;
+    background: var(--mat-sys-background);
+    color: var(--mat-sys-on-background);
   }
-}
 
-::-webkit-scrollbar-corner {
-  background: transparent;
-}
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
 
-body {
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
-  background: var(--mat-sys-background);
-  color: var(--mat-sys-on-background);
-  padding: 0;
-  margin: 0;
+  body {
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+    background: var(--mat-sys-background);
+    color: var(--mat-sys-on-background);
+    padding: 0;
+    margin: 0;
+  }
+
+  // Prevent layout shift from scrollbar
+  html {
+    scrollbar-gutter: stable;
+    overflow-y: scroll; // Always show vertical scrollbar space
+  }
+
+  // Global scrollbar styling
+  * {
+    // Firefox scrollbar styling
+    scrollbar-width: thin;
+    scrollbar-color: var(--mat-sys-outline-variant) transparent;
+  }
+
+  // Webkit scrollbar styling
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--mat-sys-outline-variant);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+    
+    &:hover {
+      background-color: var(--mat-sys-outline);
+    }
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  // ----------------------------------
+  // Make Angular Material and Tailwind play nice
+
+  .mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
+    .mdc-notched-outline__notch {
+    border-right-style: hidden;
+  }
+
+  [type="text"],
+  [type="email"],
+  [type="url"],
+  [type="password"],
+  [type="number"],
+  [type="date"],
+  [type="datetime-local"],
+  [type="month"],
+  [type="search"],
+  [type="tel"],
+  [type="time"],
+  [type="week"],
+  [multiple],
+  textarea,
+  select {
+    padding: 0;
+    border: none;
+  }
+
+  // ----------------------------------
 }
 
 // Light theme (default)

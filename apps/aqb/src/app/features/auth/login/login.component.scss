@@ -1,117 +1,42 @@
-.login-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
-  gap: 32px;
+// Layout using Tailwind utilities - apply to template
+// .login-container will use: h-screen flex flex-col items-center justify-center p-5 gap-8
+
+// Logo section using Tailwind utilities - apply to template  
+// .logo-section will use: text-center
+// .login-logo will use: w-30 h-30 mb-4
+// .app-title will use: m-0 mb-1 text-4xl font-semibold text-mat-on-background tracking-wider
+// .app-subtitle will use: m-0 text-sm text-mat-on-surface-variant font-normal
+
+// Default: show light logo, hide dark logo
+.login-logo.logo-dark {
+  display: none !important;
 }
 
-.logo-section {
-  text-align: center;
-  
-  .login-logo {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 16px;
-    
-    &.logo-dark {
-      display: none;
-    }
-    
-    &.logo-light {
-      display: block;
-    }
-  }
-  
-  .app-title {
-    margin: 0 0 4px;
-    font-size: 2rem;
-    font-weight: 600;
-    color: #1f2937;
-    letter-spacing: 2px;
-  }
-  
-  .app-subtitle {
-    margin: 0;
-    font-size: 0.875rem;
-    color: #6b7280;
-    font-weight: 400;
-  }
+.login-logo.logo-light {
+  display: block !important;
 }
 
-.login-card {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
-}
+// Card and form styling using Tailwind utilities - apply to template
+// .login-card will use: w-full max-w-md p-5
+// .full-width will use: w-full  
+// .submit-button will use: mt-5 h-12
+// .otp-actions will use: flex justify-between mt-4
+// .otp-actions button will use: flex items-center gap-1
 
-.full-width {
-  width: 100%;
-}
-
-.submit-button {
-  margin-top: 20px;
-  height: 48px;
-  
-  mat-icon {
-    margin-right: 8px;
-  }
-}
-
-.otp-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-  
-  button {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-}
-
-// Mobile responsive
-@media (max-width: 768px) {
-  .login-container {
-    gap: 24px;
-    padding: 16px;
-  }
-  
-  .logo-section {
-    .login-logo {
-      width: 96px;
-      height: 96px;
-      margin-bottom: 12px;
-    }
-    
-    .app-title {
-      font-size: 1.5rem;
-    }
-    
-    .app-subtitle {
-      font-size: 0.8rem;
-    }
-  }
-  
-  .login-card {
-    padding: 16px;
-  }
-}
+// Mobile responsive using Tailwind utilities - apply to template
+// Use responsive prefixes: md:gap-8 md:p-5 -> gap-6 p-4 on mobile
+// .login-logo will use: md:w-30 md:h-30 md:mb-4 -> w-24 h-24 mb-3 on mobile  
+// .app-title will use: md:text-4xl -> text-2xl on mobile
+// .app-subtitle will use: md:text-sm -> text-xs on mobile
+// .login-card will use: md:p-5 -> p-4 on mobile
 
 // Dark theme support
 @media (prefers-color-scheme: dark) {
-  .logo-section {
-    .login-logo {
-      &.logo-light {
-        display: none;
-      }
-      
-      &.logo-dark {
-        display: block;
-      }
-    }
+  .login-logo.logo-light {
+    display: none !important;
+  }
+  
+  .login-logo.logo-dark {
+    display: block !important;
   }
 }
