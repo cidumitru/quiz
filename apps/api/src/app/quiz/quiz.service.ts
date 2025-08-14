@@ -326,10 +326,11 @@ export class QuizService {
                         imageUrl: undefined, // Question entity doesn't have imageUrl yet
                         answers: qq.question.answers.map(a => ({
                             id: a.id,
-                            text: a.text
+                            text: a.text,
+                            correct: quiz.finishedAt ? a.isCorrect : undefined,
                         })),
                         userAnswerId: qq.answerId,
-                        correctAnswerId: qq.answerId,
+                        correctAnswerId: qq.question.answers.find(a => a.isCorrect)?.id,
                         orderIndex: qq.orderIndex,
                     }))
             }

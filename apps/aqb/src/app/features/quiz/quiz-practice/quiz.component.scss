@@ -511,6 +511,73 @@
   }
 }
 
+// Light theme specific overrides for correct answers
+:host {
+  // Override the tertiary colors for this component in light theme
+  html.light-theme & {
+    --mat-sys-tertiary: #10b981;
+    --mat-sys-on-tertiary: #ffffff;
+    --mat-sys-tertiary-container: #10b98125;
+    --mat-sys-on-tertiary-container: #065f46;
+  }
+  
+  body.light-theme & {
+    --mat-sys-tertiary: #10b981;
+    --mat-sys-on-tertiary: #ffffff;
+    --mat-sys-tertiary-container: #10b98125;
+    --mat-sys-on-tertiary-container: #065f46;
+  }
+}
+
+// Additional specific overrides for light theme
+.question-card.correct {
+  html.light-theme & {
+    border-color: #10b981 !important;
+    background: linear-gradient(145deg, var(--mat-sys-surface), #10b98115) !important;
+  }
+  
+  body.light-theme & {
+    border-color: #10b981 !important;
+    background: linear-gradient(145deg, var(--mat-sys-surface), #10b98115) !important;
+  }
+}
+
+.answer-card.correct-answer {
+  html.light-theme & {
+    border-color: #10b981 !important;
+    background: #10b98125 !important;
+    color: #065f46 !important;
+    
+    .answer-label {
+      background: #10b981 !important;
+      color: white !important;
+    }
+  }
+  
+  body.light-theme & {
+    border-color: #10b981 !important;
+    background: #10b98125 !important;
+    color: #065f46 !important;
+    
+    .answer-label {
+      background: #10b981 !important;
+      color: white !important;
+    }
+  }
+}
+
+.floating-question-number.correct {
+  html.light-theme & {
+    background: #10b981 !important;
+    color: white !important;
+  }
+  
+  body.light-theme & {
+    background: #10b981 !important;
+    color: white !important;
+  }
+}
+
 // Legacy Stats Section (kept for compatibility)
 .stats {
   text-align: center;
