@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { QuizService } from '../quiz.service';
+import {QuizMode, QuizService} from '../quiz.service';
 import { QuizViewModel } from './quiz.view-model';
 import { FloatingNavigationComponent } from './floating-navigation/floating-navigation.component';
 import { ConfettiService } from '../../../core/services/confetti.service';
@@ -64,22 +64,9 @@ export class QuizComponent implements OnInit, OnDestroy {
         // Track answeredCount to react to any question state changes
         viewModel.answeredCount();
         const answers = viewModel.getAllAnswers();
-        if (answers.length > 0) {
+        if (answers.length > 0 && !viewModel.finishedAt) {
           this.quizService.setQuizAnswers(viewModel.id, answers);
         }
-      }
-    });
-
-    // Auto-finish quiz when all questions are answered
-    effect(() => {
-      const viewModel = this.quizViewModel();
-      if (!viewModel.finishedAt && viewModel?.isComplete()) {
-        this.quizService.markQuizAsFinished(viewModel.id);
-
-        // Show stats dialog after a short delay
-        setTimeout(() => {
-          this.showQuizStatsDialog(viewModel);
-        }, 500);
       }
     });
   }
@@ -185,15 +172,19 @@ export class QuizComponent implements OnInit, OnDestroy {
     }
   }
 
-  retry(): void {
+  async retry(): Promise<void> {
     const viewModel = this.quizViewModel();
     if (!viewModel) return;
 
-    this.router.navigate(['quizzes', 'practice'], {
-      queryParams: {
-        size: viewModel.totalQuestions,
-        questionBankId: viewModel.questionBankId,
-      },
+    // Create a new quiz with the same question bank
+    const newQuiz = await this.quizService.startQuiz({
+      questionsCount: viewModel.totalQuestions,
+      questionBankId: viewModel.questionBankId,
+      mode: QuizMode.All,
+    });
+
+    this.router.navigate(['quizzes', 'practice', newQuiz.id]).then(() => {
+      window.scrollTo({ top: 0 } );
     });
   }
 
@@ -224,9 +215,15 @@ export class QuizComponent implements OnInit, OnDestroy {
     // Update answer in view model (which triggers reactive updates)
     viewModel.selectAnswer(questionId, answerId);
 
-    // Auto-scroll to next question if answer is correct using new navigation
-    setTimeout(() => {
-      if (viewModel.isQuestionCorrect(questionId)) {
+    // Check if this was the final question and trigger completion immediately
+    setTimeout(async () => {
+      if (viewModel.isComplete() && !viewModel.finishedAt) {
+        // Show completion celebration immediately
+        setTimeout(() => {
+          this.showQuizStatsDialog(viewModel);
+        }, 300);
+      } else if (viewModel.isQuestionCorrect(questionId)) {
+        // Auto-scroll to next question if answer is correct
         this.navigateDown();
       }
     }, 500);

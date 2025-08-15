@@ -230,6 +230,6 @@ export class QuizStatsDialogComponent implements OnInit {
   }
 
   protected onClose(): void {
-    this.dialogRef.close('home');
+    this.dialogRef.close();
   }
 }

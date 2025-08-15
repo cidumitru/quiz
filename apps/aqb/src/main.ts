@@ -8,7 +8,7 @@ import {
   withHashLocation,
   withInMemoryScrolling,
 } from '@angular/router';
-import {APP_INITIALIZER, importProvidersFrom, inject} from '@angular/core';
+import {APP_INITIALIZER, importProvidersFrom, inject, provideZonelessChangeDetection} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -120,6 +120,7 @@ bootstrapApplication(AppComponent, {
       }),
       withComponentInputBinding()
     ),
+    provideZonelessChangeDetection(),
     importProvidersFrom(
       BrowserAnimationsModule,
       HttpClientModule,
