@@ -49,6 +49,10 @@ export class AchievementProcessor {
       
       if (relevantAchievements.length === 0) {
         this.logger.debug(`No relevant achievements found for event type: ${event.eventType}`);
+        
+        // Mark event as processed even when no achievements are found
+        await this.markEventAsProcessed(event, []);
+        
         return {
           success: true,
           processedAchievements: [],
