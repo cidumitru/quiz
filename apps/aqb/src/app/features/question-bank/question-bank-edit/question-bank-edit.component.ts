@@ -22,6 +22,11 @@ import {
   QuestionEditDialogComponent,
   QuestionEditDialogData,
 } from './question-list-edit/dialogs/question-edit-dialog/question-edit-dialog.component';
+import {
+  QuestionImportDialogComponent,
+  QuestionImportDialogData,
+  QuestionImportResult,
+} from './dialogs/question-import-dialog/question-import-dialog.component';
 import { QuestionBankComponentState } from './question-bank-store.service';
 import { Question } from '@aqb/data-access';
 import { QuestionListComponent } from './question-list-edit/question-list/question-list.component';
@@ -100,6 +105,29 @@ export class QuestionBankEditComponent implements OnInit {
           await this.store.createQuestion(result.newQuestion);
         } catch (error) {
           console.error('Failed to create question:', error);
+        }
+      }
+    });
+  }
+
+  importQuestions(): void {
+    const dialogData: QuestionImportDialogData = {
+      questionBankId: this.id,
+      questionBankName: this.store.questionBank()?.name || 'Question Bank',
+    };
+
+    const dialogRef = this.dialog.open(QuestionImportDialogComponent, {
+      data: dialogData,
+      width: '700px',
+      maxHeight: '90vh',
+    });
+
+    dialogRef.afterClosed().subscribe(async (result: QuestionImportResult | undefined) => {
+      if (result?.success && result.questions.length > 0) {
+        try {
+          await this.store.importQuestions(result.questions);
+        } catch (error) {
+          console.error('Failed to import questions:', error);
         }
       }
     });

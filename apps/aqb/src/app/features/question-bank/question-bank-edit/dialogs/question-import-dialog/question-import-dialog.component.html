@@ -1,0 +1,147 @@
+<div class="import-dialog-container">
+  <h2 mat-dialog-title>Import Questions</h2>
+  
+  <mat-dialog-content class="dialog-content">
+    <!-- File Upload Section -->
+    @if (!state().selectedFile) {
+      <div 
+        class="file-drop-zone"
+        [class.drag-over]="state().dragOver"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+      >
+        <div class="drop-zone-content">
+          <mat-icon class="upload-icon">cloud_upload</mat-icon>
+          <h3>Import Questions to "{{ data.questionBankName }}"</h3>
+          <p class="text-muted">
+            Drag and drop a JSON file here, or 
+            <button type="button" class="file-select-btn" (click)="fileInput.click()">
+              browse files
+            </button>
+          </p>
+          <small class="file-requirements">
+            Accepts JSON files with a "questions" array containing question objects
+          </small>
+        </div>
+        <input
+          #fileInput
+          type="file"
+          accept=".json"
+          style="display: none"
+          (change)="onFileSelected($event)"
+        >
+      </div>
+    }
+
+    <!-- File Selected Section -->
+    @if (state().selectedFile && !state().previewData && !state().isImporting) {
+      <div class="selected-file">
+        <mat-icon>description</mat-icon>
+        <span class="file-name">{{ state().selectedFile!.name }}</span>
+        <button mat-icon-button (click)="clearFile()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
+
+    <!-- Loading State -->
+    @if (state().isImporting) {
+      <div class="loading-state">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <p class="text-center">Processing file...</p>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (state().error) {
+      <div class="error-state">
+        <mat-icon class="error-icon">error</mat-icon>
+        <div class="error-content">
+          <h4>Import Error</h4>
+          <p>{{ state().error }}</p>
+          <button mat-raised-button color="primary" (click)="clearFile()">
+            Try Another File
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Preview Section -->
+    @if (hasValidData()) {
+      <div class="preview-section">
+        <div class="file-info">
+          <mat-icon>description</mat-icon>
+          <span class="file-name">{{ state().selectedFile!.name }}</span>
+          <button mat-icon-button (click)="clearFile()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <div class="import-summary">
+          <h4>Import Preview</h4>
+          <div class="summary-stats">
+            <div class="stat-item success">
+              <mat-icon>check_circle</mat-icon>
+              <span>{{ state().previewData!.validQuestions }} valid questions</span>
+            </div>
+            @if (state().previewData!.invalidQuestions > 0) {
+              <div class="stat-item warning">
+                <mat-icon>warning</mat-icon>
+                <span>{{ state().previewData!.invalidQuestions }} invalid questions (will be skipped)</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Question Preview (show first few) -->
+        <div class="question-preview">
+          <h5>Sample Questions</h5>
+          <div class="questions-list">
+            @for (question of state().previewData!.questions.slice(0, 3); track question.id) {
+              <div class="question-item">
+                <div class="question-text">{{ question.question }}</div>
+                <div class="answers-count">{{ question.answers.length }} answers</div>
+              </div>
+            }
+            @if (state().previewData!.questions.length > 3) {
+              <div class="more-questions">
+                <span>+ {{ state().previewData!.questions.length - 3 }} more questions</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- JSON Schema Help -->
+    @if (!state().selectedFile && !state().isImporting) {
+      <div class="help-section">
+        <h4>Expected JSON Format</h4>
+        <div class="code-example">
+          <pre><code>{{ exampleJson }}</code></pre>
+        </div>
+        <p class="help-note">
+          The service will automatically generate IDs for questions and answers if not provided.
+          Questions without valid answers will be skipped during import.
+        </p>
+      </div>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      [disabled]="!canImport()"
+      (click)="confirmImport()"
+    >
+      @if (state().isImporting) {
+        Importing...
+      } @else {
+        Import {{ state().previewData?.validQuestions || 0 }} Questions
+      }
+    </button>
+  </mat-dialog-actions>
+</div>

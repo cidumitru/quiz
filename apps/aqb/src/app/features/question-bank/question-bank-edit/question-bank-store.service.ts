@@ -7,6 +7,7 @@ import {
   Question,
   QuestionBankDetail,
   QuestionsPaginatedResponse,
+  ParsedQuestion,
 } from '@aqb/data-access';
 
 export interface LoadingStates {
@@ -16,6 +17,7 @@ export interface LoadingStates {
   creating: boolean;
   updating: boolean;
   deleting: boolean;
+  importing: boolean;
 }
 
 export interface QuestionBankStoreState {
@@ -46,6 +48,7 @@ export class QuestionBankComponentState {
       creating: false,
       updating: false,
       deleting: false,
+      importing: false,
     },
     loadedRanges: new Set(),
     loadingRanges: new Set(),
@@ -405,6 +408,49 @@ export class QuestionBankComponentState {
       this.setError('Failed to delete question');
     } finally {
       this.setLoadingState('deleting', false);
+    }
+  }
+
+  /**
+   * Import multiple questions in bulk
+   */
+  async importQuestions(questions: ParsedQuestion[]): Promise<void> {
+    const questionBankId = this._state().questionBank?.id;
+    if (!questionBankId) {
+      throw new Error('Question bank not loaded');
+    }
+
+    this.setLoadingState('importing', true);
+
+    try {
+      // Convert ParsedQuestion to IQuestionCreate format
+      const questionsToImport: IQuestionCreate[] = questions.map(q => ({
+        question: q.question,
+        answers: q.answers.map(a => ({
+          text: a.text,
+          correct: a.correct || false,
+        })),
+      }));
+
+      // Send the bulk import request
+      await this.questionBankService.addQuestion(questionBankId, questionsToImport);
+
+      // Update total count
+      this.updateState((state) => ({
+        ...state,
+        totalItems: state.totalItems + questionsToImport.length,
+      }));
+
+      // Refresh the current view to show new questions
+      await this.loadQuestionsRange(0, this.PAGE_SIZE);
+
+      this.showSuccess(`Successfully imported ${questionsToImport.length} questions`);
+    } catch (error) {
+      console.error('Failed to import questions:', error);
+      this.setError(error instanceof Error ? error.message : 'Failed to import questions');
+      throw error;
+    } finally {
+      this.setLoadingState('importing', false);
     }
   }
 
