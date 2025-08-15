@@ -65,13 +65,52 @@ export class AchievementService {
     }
   }
 
-  async processEvent(eventId: string): Promise<AchievementProcessingResultDto> {
-    const event = await this.achievementEventRepository.findByUserId(eventId, 1);
-    if (!event || event.length === 0) {
-      throw new Error(`Achievement event not found: ${eventId}`);
-    }
+  async processEventById(eventId: string): Promise<AchievementProcessingResultDto> {
+    try {
+      const event = await this.achievementEventRepository.findById(eventId);
+      if (!event) {
+        this.logger.error(`Achievement event not found: ${eventId}`);
+        throw new Error(`Achievement event not found: ${eventId}`);
+      }
 
-    return this.achievementProcessor.processAchievementEvent(event[0]);
+      return await this.achievementProcessor.processAchievementEvent(event);
+    } catch (error) {
+      this.logger.error(`Failed to process event ${eventId}: ${error instanceof Error ? error.message : String(error)}`);
+      
+      // Emit failure event for monitoring
+      this.eventEmitter.emit('achievement.processing.failed', {
+        eventId,
+        error: error instanceof Error ? error.message : String(error),
+        timestamp: new Date()
+      });
+      
+      throw error;
+    }
+  }
+
+  async processUserEvents(userId: string, limit: number = 10): Promise<AchievementProcessingResultDto[]> {
+    try {
+      const events = await this.achievementEventRepository.findByUserId(userId, limit);
+      if (!events || events.length === 0) {
+        return [];
+      }
+
+      const results: AchievementProcessingResultDto[] = [];
+      for (const event of events) {
+        try {
+          const result = await this.achievementProcessor.processAchievementEvent(event);
+          results.push(result);
+        } catch (error) {
+          this.logger.error(`Failed to process event ${event.id} for user ${userId}: ${error instanceof Error ? error.message : String(error)}`);
+          // Continue processing other events
+        }
+      }
+      
+      return results;
+    } catch (error) {
+      this.logger.error(`Failed to process events for user ${userId}: ${error instanceof Error ? error.message : String(error)}`);
+      return [];
+    }
   }
 
   async getUserAchievements(userId: string): Promise<UserAchievementProgressDto> {
@@ -157,6 +196,15 @@ export class AchievementService {
     }).filter(achievement => achievement !== null) as AchievementDto[];
   }
 
+  async getCurrentStreak(userId: string): Promise<number> {
+    try {
+      return await this.cacheService.getCurrentStreak(userId);
+    } catch (error) {
+      this.logger.error(`Failed to get current streak for user ${userId}: ${error instanceof Error ? error.message : String(error)}`);
+      return 0;
+    }
+  }
+
   async getAchievementLeaderboard(achievementId: string, limit: number = 10): Promise<Array<{ userId: string; earnedAt: Date }>> {
     // Try cache first
     let leaderboard = await this.cacheService.getLeaderboard(achievementId);
@@ -174,17 +222,6 @@ export class AchievementService {
     return leaderboard;
   }
 
-  async getCurrentStreak(userId: string): Promise<number> {
-    // Try cache first
-    const cachedStreak = await this.cacheService.getCurrentStreak(userId);
-    if (cachedStreak > 0) {
-      return cachedStreak;
-    }
-
-    // TODO: Load from database if not in cache
-    // For now, return 0
-    return 0;
-  }
 
   async updateStreak(userId: string, isCorrect: boolean): Promise<number> {
     if (isCorrect) {

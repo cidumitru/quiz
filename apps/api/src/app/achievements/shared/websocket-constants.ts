@@ -11,6 +11,7 @@ export const WEBSOCKET_EVENTS = {
     AUTHENTICATION_ERROR: 'authentication-error',
     SUBSCRIBE_TO_ACHIEVEMENTS: 'subscribe-to-achievements',
     SUBSCRIPTION_SUCCESS: 'subscription-success',
+    INITIAL_STATE: 'initial-state',
     ERROR: 'error',
 
     // Achievement Events

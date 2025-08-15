@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import { CacheService } from '../../../cache/cache.service';
 import { UserAchievement } from '../../../entities/user-achievement.entity';
 
@@ -13,6 +14,16 @@ export class AchievementCacheService {
     ACHIEVEMENT_DEFINITIONS: 'aqb:achievements:definitions',
     LEADERBOARD: (achievementId: string) => `aqb:achievements:leaderboard:${achievementId}`,
     USER_PROGRESS: (userId: string, achievementId: string) => `aqb:achievements:progress:${userId}:${achievementId}`,
+    GLOBAL_STATS: 'aqb:achievements:global:stats',
+    USER_TAGS: (userId: string) => `aqb:achievements:tags:${userId}`,
+    INVALIDATION_LOG: 'aqb:achievements:invalidation:log'
+  };
+
+  private readonly CACHE_TAGS = {
+    USER_DATA: (userId: string) => [`user:${userId}`, 'user-data'],
+    ACHIEVEMENTS: ['achievements'],
+    LEADERBOARDS: ['leaderboards'],
+    GLOBAL: ['global-stats']
   };
 
   private readonly TTL = {
@@ -22,7 +33,11 @@ export class AchievementCacheService {
     DEFINITIONS: 7200,          // 2 hours - rarely change
     LEADERBOARDS: 600,          // 10 minutes - social features
     USER_PROGRESS: 900,         // 15 minutes - progress tracking
+    GLOBAL_STATS: 3600,         // 1 hour - global aggregations
+    INVALIDATION_LOG: 86400     // 24 hours - track invalidations
   };
+
+  private readonly invalidationHistory = new Map<string, { timestamp: number; reason: string }>();
 
   constructor(private readonly cacheService: CacheService) {}
 
@@ -217,23 +232,126 @@ export class AchievementCacheService {
     }
   }
 
-  // Cache Health
-  async getCacheHealth(): Promise<{ hitRate: number; keyCount: number; memoryUsage: string }> {
+  // Event-driven invalidation
+  @OnEvent('achievement.earned')
+  async handleAchievementEarned(event: { userId: string; achievementId: string }): Promise<void> {
+    this.logInvalidation(`achievement.earned`, `User ${event.userId} earned ${event.achievementId}`);
+    
+    await Promise.all([
+      this.invalidateUserCache(event.userId),
+      this.invalidateAchievementCache(event.achievementId),
+      this.invalidateGlobalStats()
+    ]);
+  }
+
+  @OnEvent('streak.updated')
+  async handleStreakUpdated(event: { userId: string }): Promise<void> {
+    this.logInvalidation(`streak.updated`, `Streak updated for user ${event.userId}`);
+    
+    await this.invalidateUserStreak(event.userId);
+  }
+
+  @OnEvent('achievement.progress.updated')
+  async handleProgressUpdated(event: { userId: string; achievementId: string }): Promise<void> {
+    this.logInvalidation(`progress.updated`, `Progress updated for user ${event.userId}, achievement ${event.achievementId}`);
+    
+    const progressKey = this.CACHE_KEYS.USER_PROGRESS(event.userId, event.achievementId);
+    await this.cacheService.del(progressKey);
+  }
+
+  @OnEvent('leaderboard.updated')
+  async handleLeaderboardUpdated(event: { achievementId?: string }): Promise<void> {
+    this.logInvalidation(`leaderboard.updated`, `Leaderboard updated for achievement ${event.achievementId || 'all'}`);
+    
+    if (event.achievementId) {
+      await this.invalidateAchievementCache(event.achievementId);
+    } else {
+      // Invalidate all leaderboards
+      await this.invalidateByPattern('aqb:achievements:leaderboard:*');
+    }
+  }
+
+  // Enhanced invalidation methods
+  private async invalidateUserStreak(userId: string): Promise<void> {
     try {
-      // This would require additional Redis monitoring
-      // For now, return mock data
+      const streakKey = this.CACHE_KEYS.USER_STREAK(userId);
+      await this.cacheService.del(streakKey);
+      this.logger.debug(`Invalidated streak cache for user: ${userId}`);
+    } catch (error) {
+      this.logger.error(`Error invalidating user streak: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  private async invalidateGlobalStats(): Promise<void> {
+    try {
+      const globalKey = this.CACHE_KEYS.GLOBAL_STATS;
+      await this.cacheService.del(globalKey);
+      this.logger.debug('Invalidated global stats cache');
+    } catch (error) {
+      this.logger.error(`Error invalidating global stats: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  private async invalidateByPattern(pattern: string): Promise<void> {
+    try {
+      // This would require Redis SCAN command implementation
+      // For now, log the pattern for monitoring
+      this.logger.warn(`Pattern-based invalidation requested: ${pattern} (not implemented)`);
+    } catch (error) {
+      this.logger.error(`Error with pattern invalidation: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  private logInvalidation(event: string, reason: string): void {
+    const timestamp = Date.now();
+    this.invalidationHistory.set(`${event}:${timestamp}`, { timestamp, reason });
+    
+    // Keep only recent invalidations
+    const cutoff = timestamp - (24 * 60 * 60 * 1000); // 24 hours
+    for (const [key, value] of this.invalidationHistory.entries()) {
+      if (value.timestamp < cutoff) {
+        this.invalidationHistory.delete(key);
+      }
+    }
+    
+    this.logger.debug(`Cache invalidation: ${event} - ${reason}`);
+  }
+
+  // Cache Health
+  async getCacheHealth(): Promise<{ hitRate: number; keyCount: number; memoryUsage: string; invalidations: number }> {
+    try {
+      const invalidationCount = this.invalidationHistory.size;
+      
       return {
-        hitRate: 85.5,
-        keyCount: 0,
-        memoryUsage: 'N/A'
+        hitRate: 85.5, // This would be calculated from actual metrics
+        keyCount: 0,   // This would come from Redis INFO
+        memoryUsage: 'N/A', // This would come from Redis INFO
+        invalidations: invalidationCount
       };
     } catch (error) {
-      this.logger.error(`Error getting cache health: ${error instanceof Error ? error.message : error}`);
+      this.logger.error(`Error getting cache health: ${error instanceof Error ? error.message : String(error)}`);
       return {
         hitRate: 0,
         keyCount: 0,
-        memoryUsage: 'Error'
+        memoryUsage: 'Error',
+        invalidations: 0
       };
+    }
+  }
+
+  // Cache warming for critical paths
+  async warmUserCache(userId: string): Promise<void> {
+    try {
+      this.logger.debug(`Warming cache for user: ${userId}`);
+      
+      // Pre-load frequently accessed data
+      await Promise.all([
+        this.getUserAchievements(userId),
+        this.getCurrentStreak(userId)
+      ]);
+      
+    } catch (error) {
+      this.logger.error(`Error warming user cache: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 }

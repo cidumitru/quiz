@@ -359,7 +359,7 @@ export class AchievementProcessor {
   }
 
   private async markEventAsProcessed(event: AchievementEvent, processedAchievements: string[]): Promise<void> {
-    await this.achievementEventRepository.markAsProcessed(event.id, processedAchievements);
+    await this.achievementEventRepository.markAsProcessed([event.id]);
   }
 
   private createAchievementNotifications(results: ProcessingResult[]): AchievementNotificationDto[] {

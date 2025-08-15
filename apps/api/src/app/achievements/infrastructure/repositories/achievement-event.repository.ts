@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, MoreThan, LessThan } from 'typeorm';
+import { Repository, MoreThan, LessThan, Between } from 'typeorm';
 import { AchievementEvent } from '../../../entities/achievement-event.entity';
 import { IAchievementEventRepository } from '../../domain/repositories/achievement-event.repository.interface';
 
@@ -24,6 +24,12 @@ export class AchievementEventRepository implements IAchievementEventRepository {
       where: { isProcessed: false },
       order: { occurredAt: 'ASC' },
       take: limit
+    });
+  }
+
+  async findById(id: string): Promise<AchievementEvent | null> {
+    return this.repository.findOne({
+      where: { id }
     });
   }
 
@@ -54,11 +60,10 @@ export class AchievementEventRepository implements IAchievementEventRepository {
     });
   }
 
-  async markAsProcessed(eventId: string, processedBy: string[]): Promise<void> {
-    await this.repository.update(eventId, {
+  async markAsProcessed(eventIds: string[]): Promise<void> {
+    await this.repository.update(eventIds, {
       isProcessed: true,
-      processedAt: new Date(),
-      processedBy
+      processedAt: new Date()
     });
   }
 
@@ -70,11 +75,37 @@ export class AchievementEventRepository implements IAchievementEventRepository {
     });
   }
 
-  async deleteOldEvents(olderThan: Date): Promise<number> {
+  async deleteOldEvents(before: Date): Promise<number> {
     const result = await this.repository.delete({
-      occurredAt: LessThan(olderThan)
+      occurredAt: LessThan(before)
     });
     
     return result.affected || 0;
+  }
+
+  async getEventCountByUser(userId: string, eventType?: string): Promise<number> {
+    const whereConditions: any = { userId };
+    if (eventType) {
+      whereConditions.eventType = eventType;
+    }
+
+    return this.repository.count({
+      where: whereConditions
+    });
+  }
+
+  async getEventCountInPeriod(userId: string, startDate: Date, endDate: Date, eventType?: string): Promise<number> {
+    const whereConditions: any = {
+      userId,
+      occurredAt: Between(startDate, endDate)
+    };
+    
+    if (eventType) {
+      whereConditions.eventType = eventType;
+    }
+
+    return this.repository.count({
+      where: whereConditions
+    });
   }
 }
