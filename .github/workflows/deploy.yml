@@ -51,7 +51,8 @@ jobs:
                     return;
                   }
 
-                  const result = data.replace("$BUILD_DATE$", new Date().toISOString());
+                  const result = data.replace("$BUILD_DATE$", new Date().toISOString())
+                                     .replace("http://localhost:3000", "https://aqb-api.onrender.com");
 
                   fs.writeFile(configPath, result, 'utf8', function (err) {
                       if (err) return console.log(err);

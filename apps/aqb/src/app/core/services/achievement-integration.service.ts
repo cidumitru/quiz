@@ -1,8 +1,9 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {distinctUntilChanged, map, takeUntil, tap} from 'rxjs/operators';
-import {Achievement, AchievementWebSocketService, CONFETTI_LEVELS, WebSocketConnectionState} from '@aqb/data-access';
+import {Achievement, CONFETTI_LEVELS, WebSocketConnectionState} from '@aqb/data-access';
 import {ConfettiService} from './confetti.service';
+import {AchievementWebSocketService} from "@aqb/data-access/angular";
 
 interface AchievementNotificationData {
     id: string;

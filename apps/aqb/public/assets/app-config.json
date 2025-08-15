@@ -1,4 +1,4 @@
 {
   "build_date": "$BUILD_DATE$",
-  "serverUrl": "https://aqb-api.onrender.com"
+  "serverUrl": "http://localhost:3000"
 }

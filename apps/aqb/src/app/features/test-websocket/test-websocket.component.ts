@@ -3,7 +3,8 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {AchievementWebSocketService, WebSocketConnectionState, WebSocketService} from '@aqb/data-access';
+import {WebSocketConnectionState} from '@aqb/data-access';
+import {AchievementWebSocketService, WebSocketService} from "@aqb/data-access/angular";
 
 @Component({
     selector: 'app-test-websocket',

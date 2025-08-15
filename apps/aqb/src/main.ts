@@ -50,24 +50,18 @@ const routes: Route[] = [
     canActivate: [AuthGuard],
     resolve: {
       achivements: async () => {
-        try {
           const authService = inject(AuthService);
           const achievementsIntegration = inject(AchievementIntegrationService);
           const user = await firstValueFrom(inject(AuthService).currentUser$);
           if (!user) {
             return undefined;
           }
-          
-          // Connect with error handling - don't block app loading if achievements fail
-          const token = authService.getToken();
-          await firstValueFrom(achievementsIntegration.connect(user.id, token || undefined)).catch(error => {
+
+          // fire and forget
+          firstValueFrom(achievementsIntegration.connect(user.id, authService.getToken() || undefined)).catch(error => {
             console.warn('Achievement system connection failed, continuing without achievements:', error);
             return null; // Continue without achievements
           });
-        } catch (error) {
-          console.warn('Achievement system initialization failed, continuing without achievements:', error);
-          return undefined;
-        }
       }
     },
     children: [
