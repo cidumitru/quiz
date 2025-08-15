@@ -75,10 +75,10 @@ const routes: Route[] = [
         path: '',
         component: QuestionBankListComponent,
       },
-      {
-        path: 'statistics',
-        component: QuizStatsTestComponent
-      },
+      // {
+      //   path: 'statistics',
+      //   component: QuizStatsTestComponent
+      // },
       {
         path: 'quizzes',
         loadComponent: () =>
