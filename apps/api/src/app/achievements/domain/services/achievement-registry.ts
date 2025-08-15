@@ -4,6 +4,8 @@ import { AchievementId } from '../value-objects/achievement-id.vo';
 import { StreakAchievementRule } from './streak-achievement-rule';
 import { AccuracyAchievementRule } from './accuracy-achievement-rule';
 import { MilestoneAchievementRule } from './milestone-achievement-rule';
+import { ComparativeAchievementRule } from './comparative-achievement-rule';
+import { ComparativeStatisticsService } from './comparative-statistics.service';
 import { IAchievementRule } from './achievement-rule.interface';
 
 @Injectable()
@@ -11,7 +13,9 @@ export class AchievementRegistry {
   private readonly achievements: Map<string, AchievementDefinition> = new Map();
   private readonly rules: Map<string, IAchievementRule> = new Map();
 
-  constructor() {
+  constructor(
+    private readonly comparativeStatistics: ComparativeStatisticsService
+  ) {
     this.initializeAchievements();
     this.initializeRules();
   }
@@ -174,6 +178,128 @@ export class AchievementRegistry {
           isRepeatable: false,
           sortOrder: 32
         }
+      ),
+
+      // Comparative Achievements
+      new AchievementDefinition(
+        new AchievementId('comparative_above_global_average'),
+        AchievementType.INSTANT,
+        AchievementCategory.COMPARATIVE,
+        { targetValue: 0, comparativeType: 'above_global_average' },
+        {
+          title: 'Above Average!',
+          description: 'Score above the global average',
+          badgeIcon: 'trending-up',
+          confettiLevel: 'basic',
+          points: 75,
+          isRepeatable: true,
+          sortOrder: 40
+        }
+      ),
+      new AchievementDefinition(
+        new AchievementId('comparative_above_daily_average'),
+        AchievementType.DAILY,
+        AchievementCategory.COMPARATIVE,
+        { targetValue: 0, comparativeType: 'above_daily_average' },
+        {
+          title: 'Daily Star!',
+          description: 'Score above today\'s average',
+          badgeIcon: 'star-today',
+          confettiLevel: 'basic',
+          points: 50,
+          isRepeatable: true,
+          sortOrder: 41
+        }
+      ),
+      new AchievementDefinition(
+        new AchievementId('comparative_best_of_today'),
+        AchievementType.DAILY,
+        AchievementCategory.COMPARATIVE,
+        { targetValue: 0, comparativeType: 'best_of_today' },
+        {
+          title: 'Best of Today!',
+          description: 'Highest score of the day',
+          badgeIcon: 'crown-today',
+          confettiLevel: 'excellent',
+          points: 200,
+          isRepeatable: true,
+          sortOrder: 42
+        }
+      ),
+      new AchievementDefinition(
+        new AchievementId('comparative_best_of_week'),
+        AchievementType.WEEKLY,
+        AchievementCategory.COMPARATIVE,
+        { targetValue: 0, comparativeType: 'best_of_week' },
+        {
+          title: 'Weekly Champion!',
+          description: 'Highest score of the week',
+          badgeIcon: 'trophy-week',
+          confettiLevel: 'perfect',
+          points: 500,
+          isRepeatable: true,
+          sortOrder: 43
+        }
+      ),
+      new AchievementDefinition(
+        new AchievementId('comparative_top_10_percentile'),
+        AchievementType.INSTANT,
+        AchievementCategory.COMPARATIVE,
+        { targetValue: 90, comparativeType: 'top_percentile' },
+        {
+          title: 'Elite Performer!',
+          description: 'Score in the top 10% globally',
+          badgeIcon: 'diamond',
+          confettiLevel: 'excellent',
+          points: 300,
+          isRepeatable: true,
+          sortOrder: 44
+        }
+      ),
+      new AchievementDefinition(
+        new AchievementId('comparative_daily_podium'),
+        AchievementType.DAILY,
+        AchievementCategory.COMPARATIVE,
+        { targetValue: 3, comparativeType: 'daily_rank_top_3' },
+        {
+          title: 'Daily Podium!',
+          description: 'Finish in top 3 today',
+          badgeIcon: 'podium',
+          confettiLevel: 'excellent',
+          points: 150,
+          isRepeatable: true,
+          sortOrder: 45
+        }
+      ),
+      new AchievementDefinition(
+        new AchievementId('comparative_weekly_podium'),
+        AchievementType.WEEKLY,
+        AchievementCategory.COMPARATIVE,
+        { targetValue: 3, comparativeType: 'weekly_rank_top_3' },
+        {
+          title: 'Weekly Podium!',
+          description: 'Finish in top 3 this week',
+          badgeIcon: 'podium-gold',
+          confettiLevel: 'perfect',
+          points: 400,
+          isRepeatable: true,
+          sortOrder: 46
+        }
+      ),
+      new AchievementDefinition(
+        new AchievementId('comparative_above_weekly_average'),
+        AchievementType.WEEKLY,
+        AchievementCategory.COMPARATIVE,
+        { targetValue: 0, comparativeType: 'above_weekly_average' },
+        {
+          title: 'Weekly Standout!',
+          description: 'Score above this week\'s average',
+          badgeIcon: 'star-week',
+          confettiLevel: 'basic',
+          points: 100,
+          isRepeatable: true,
+          sortOrder: 47
+        }
       )
     ];
 
@@ -219,6 +345,17 @@ export class AchievementRegistry {
             achievement.id.value,
             achievement.ruleConfig.targetValue,
             milestoneType
+          );
+          break;
+
+        case AchievementCategory.COMPARATIVE:
+          if (!achievement.ruleConfig.comparativeType) {
+            throw new Error(`Comparative achievement ${achievement.id.value} missing comparativeType`);
+          }
+          rule = new ComparativeAchievementRule(
+            achievement.id.value,
+            achievement.ruleConfig.comparativeType,
+            achievement.ruleConfig.targetValue
           );
           break;
 

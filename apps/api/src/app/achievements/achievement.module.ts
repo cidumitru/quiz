@@ -11,6 +11,7 @@ import {QuizStatistics} from '../entities/quiz-statistics.entity';
 
 // Domain Services
 import {AchievementRegistry} from './domain/services/achievement-registry';
+import {ComparativeStatisticsService} from './domain/services/comparative-statistics.service';
 
 // Application Services
 import {AchievementService} from './application/services/achievement.service';
@@ -32,6 +33,7 @@ import {AchievementGateway} from './infrastructure/gateways/achievement.gateway'
   ],
   providers: [
     // Domain Services
+    ComparativeStatisticsService,
     AchievementRegistry,
     
     // Application Services
@@ -54,7 +56,8 @@ import {AchievementGateway} from './infrastructure/gateways/achievement.gateway'
     AchievementRegistry,
     AchievementProcessor,
     UserAchievementRepository,
-    AchievementEventRepository
+    AchievementEventRepository,
+    ComparativeStatisticsService
   ]
 })
 export class AchievementModule {}

@@ -12,7 +12,8 @@ export enum AchievementCategory {
   ACCURACY = 'accuracy',
   CONSISTENCY = 'consistency',
   MILESTONE = 'milestone',
-  SPEED = 'speed'
+  SPEED = 'speed',
+  COMPARATIVE = 'comparative'
 }
 
 export interface AchievementMetadata {
@@ -31,6 +32,8 @@ export interface AchievementRuleConfig {
   minimumQuestions?: number;
   streakType?: 'correct_answers' | 'study_days';
   accuracyThreshold?: number;
+  comparativeType?: 'above_global_average' | 'above_daily_average' | 'above_weekly_average' 
+    | 'best_of_today' | 'best_of_week' | 'top_percentile' | 'daily_rank_top_3' | 'weekly_rank_top_3';
 }
 
 export class AchievementDefinition {
