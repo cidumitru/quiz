@@ -19,6 +19,9 @@ import { QuizService } from '../quiz.service';
 import { QuizViewModel } from './quiz.view-model';
 import { FloatingNavigationComponent } from './floating-navigation/floating-navigation.component';
 import { ConfettiService } from '../../../core/services/confetti.service';
+import { PositiveMetricsService, QuizResult } from '../../../core/services/positive-metrics.service';
+import { QuizStatsDialogComponent } from '../../../shared/components/quiz-stats-dialog/quiz-stats-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-quiz-practice',
@@ -50,6 +53,8 @@ export class QuizComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private quizService = inject(QuizService);
   private confettiService = inject(ConfettiService);
+  private positiveMetrics = inject(PositiveMetricsService);
+  private dialog = inject(MatDialog);
 
   constructor() {
     // Auto-save answers when they change
@@ -71,9 +76,9 @@ export class QuizComponent implements OnInit, OnDestroy {
       if (!viewModel.finishedAt && viewModel?.isComplete()) {
         this.quizService.markQuizAsFinished(viewModel.id);
 
-        // Trigger confetti celebration after a short delay
+        // Show stats dialog after a short delay
         setTimeout(() => {
-          this.celebrateQuizCompletion(viewModel);
+          this.showQuizStatsDialog(viewModel);
         }, 500);
       }
     });
@@ -271,13 +276,43 @@ export class QuizComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Celebrate quiz completion with confetti if score is 80% or higher
+   * Show quiz completion stats dialog with positive metrics
    */
-  private celebrateQuizCompletion(viewModel: QuizViewModel): void {
-    const accuracyPercentage = viewModel.accuracyPercentage();
+  private showQuizStatsDialog(viewModel: QuizViewModel): void {
+    const quizResult: QuizResult = {
+      correctCount: viewModel.correctCount(),
+      totalQuestions: viewModel.totalQuestions,
+      timeTaken: this.calculateTimeTaken(viewModel),
+      accuracyPercentage: viewModel.accuracyPercentage(),
+      currentStreak: 0, // TODO: Get from achievement service
+      totalQuizzesCompleted: 1, // TODO: Get from user stats
+      questionsAnsweredToday: viewModel.totalQuestions, // TODO: Get from daily stats
+      previousBestScore: undefined // TODO: Get from historical data
+    };
 
-    if (accuracyPercentage >= 80) {
-      this.confettiService.celebrateQuizCompletion(accuracyPercentage);
+    const dialogRef = this.dialog.open(QuizStatsDialogComponent, {
+      data: { 
+        quizResult,
+        questionBankId: viewModel.questionBankId 
+      },
+      width: '90vw',
+      maxWidth: '400px',
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'retry') {
+        this.retry();
+      } else if (result === 'home') {
+        this.router.navigate(['/']);
+      }
+    });
+  }
+
+  private calculateTimeTaken(viewModel: QuizViewModel): number {
+    if (viewModel.finishedAt && viewModel.startedAt) {
+      return Math.floor((viewModel.finishedAt.getTime() - viewModel.startedAt.getTime()) / 1000);
     }
+    return 0;
   }
 }

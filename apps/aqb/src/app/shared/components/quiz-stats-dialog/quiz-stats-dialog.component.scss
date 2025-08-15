@@ -1,0 +1,54 @@
+// Enhanced celebration animations
+.celebration-icon {
+  animation: celebrationBounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+@keyframes celebrationBounce {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg); 
+  }
+  25% { 
+    transform: scale(1.08) rotate(2deg); 
+  }
+  50% { 
+    transform: scale(1.12) rotate(0deg); 
+  }
+  75% { 
+    transform: scale(1.08) rotate(-2deg); 
+  }
+}
+
+// Smooth transitions for content
+h2, div, p {
+  animation: fadeInUp 0.6s ease-out forwards;
+  animation-delay: 0.2s;
+  transform: translateY(20px);
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Stagger animations for sequential appearance
+h2 { animation-delay: 0.1s; }
+div { animation-delay: 0.2s; }
+p { animation-delay: 0.3s; }
+.flex { animation-delay: 0.4s; }
+
+// Respect accessibility
+@media (prefers-reduced-motion: reduce) {
+  .celebration-icon {
+    animation: none;
+    filter: none;
+  }
+  
+  h2, div, p, .flex {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

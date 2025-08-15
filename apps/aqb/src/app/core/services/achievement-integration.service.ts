@@ -146,6 +146,7 @@ export class AchievementIntegrationService implements OnDestroy {
 
     /**
      * Manual confetti trigger (for testing or manual celebrations)
+     * Note: WebSocket auto-confetti has been disabled for better UX
      */
     triggerCelebration(type: 'achievement' | 'streak' | 'daily', level?: string, streakCount?: number): void {
         switch (type) {
@@ -196,8 +197,8 @@ export class AchievementIntegrationService implements OnDestroy {
         const currentNotifications = this.achievementNotificationsSubject.value;
         this.achievementNotificationsSubject.next([...currentNotifications, notification]);
 
-        // Trigger confetti celebration
-        this.confettiService.celebrateAchievement(achievement.confettiLevel);
+        // Note: Automatic confetti disabled for better UX - celebrations now happen in quiz completion dialog
+        // this.confettiService.celebrateAchievement(achievement.confettiLevel);
 
         // Auto-dismiss after delay (unless it's a milestone achievement)
         if (achievement.confettiLevel !== CONFETTI_LEVELS.MILESTONE) {
@@ -215,10 +216,10 @@ export class AchievementIntegrationService implements OnDestroy {
     private handleStreakUpdate(update: StreakUpdateData): void {
         console.log('Streak update received:', update);
 
-        // Trigger streak-specific celebration for significant streaks
-        if (update.currentStreak > 0 && (update.currentStreak % 5 === 0 || update.isNewRecord)) {
-            this.confettiService.celebrateStreak(update.currentStreak);
-        }
+        // Note: Automatic streak confetti disabled for better UX
+        // if (update.currentStreak > 0 && (update.currentStreak % 5 === 0 || update.isNewRecord)) {
+        //     this.confettiService.celebrateStreak(update.currentStreak);
+        // }
 
         // Show encouragement for new records
         if (update.isNewRecord && update.currentStreak >= 5) {
@@ -239,17 +240,17 @@ export class AchievementIntegrationService implements OnDestroy {
             timestamp: new Date()
         });
 
-        // Trigger appropriate celebration based on type
-        switch (encouragement.type) {
-            case 'milestone':
-                this.confettiService.celebrateAchievement('milestone');
-                break;
-            case 'streak':
-                this.confettiService.celebrateAchievement('excellent');
-                break;
-            case 'accuracy':
-                this.confettiService.celebrateAchievement('perfect');
-                break;
-        }
+        // Note: Automatic encouragement confetti disabled for better UX
+        // switch (encouragement.type) {
+        //     case 'milestone':
+        //         this.confettiService.celebrateAchievement('milestone');
+        //         break;
+        //     case 'streak':
+        //         this.confettiService.celebrateAchievement('excellent');
+        //         break;
+        //     case 'accuracy':
+        //         this.confettiService.celebrateAchievement('perfect');
+        //         break;
+        // }
     }
 }
