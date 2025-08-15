@@ -45,7 +45,7 @@ export class WebSocketService {
     /**
      * Connect to WebSocket with automatic reconnection
      */
-    connect(userId?: string): Observable<any> {
+    connect(userId?: string, token?: string): Observable<any> {
         if (this.socket && this.socket.connected) {
             return this.events$;
         }
@@ -62,6 +62,15 @@ export class WebSocketService {
             console.log('Connecting to Socket.IO server:', namespaceUrl);
         }
 
+        // Prepare authentication data for handshake
+        const authData: any = {};
+        if (token) {
+            authData.token = token;
+        }
+        if (userId) {
+            authData.userId = userId;
+        }
+
         this.socket = io(namespaceUrl, {
             path: '/socket.io',
             transports: ['websocket', 'polling'],
@@ -69,7 +78,11 @@ export class WebSocketService {
             reconnection: this.config.autoReconnect,
             reconnectionAttempts: this.config.maxReconnectAttempts,
             reconnectionDelay: this.config.reconnectInterval,
-            timeout: this.config.timeout
+            timeout: this.config.timeout,
+            auth: authData, // Pass authentication data in handshake
+            extraHeaders: token ? {
+                'Authorization': `Bearer ${token}`
+            } : {}
         });
 
         this.setupSocketEventListeners();

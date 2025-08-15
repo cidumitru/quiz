@@ -50,6 +50,7 @@ const routes: Route[] = [
     resolve: {
       achivements: async () => {
         try {
+          const authService = inject(AuthService);
           const achievementsIntegration = inject(AchievementIntegrationService);
           const user = await firstValueFrom(inject(AuthService).currentUser$);
           if (!user) {
@@ -57,7 +58,8 @@ const routes: Route[] = [
           }
           
           // Connect with error handling - don't block app loading if achievements fail
-          await firstValueFrom(achievementsIntegration.connect(user.id)).catch(error => {
+          const token = authService.getToken();
+          await firstValueFrom(achievementsIntegration.connect(user.id, token || undefined)).catch(error => {
             console.warn('Achievement system connection failed, continuing without achievements:', error);
             return null; // Continue without achievements
           });

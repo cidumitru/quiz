@@ -66,7 +66,7 @@ export class AchievementGateway implements OnGatewayConnection, OnGatewayDisconn
 
   constructor(
     private readonly achievementService: AchievementService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
   ) {}
 
   async handleConnection(client: AuthenticatedSocket) {
@@ -157,7 +157,7 @@ export class AchievementGateway implements OnGatewayConnection, OnGatewayDisconn
       const token = this.extractTokenFromHandshake(client);
       
       if (!token) {
-        this.logger.warn(`No token provided for socket ${client.id}`);
+        this.logger.debug(`No token provided for socket ${client.id}`);
         return false;
       }
 

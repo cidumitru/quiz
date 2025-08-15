@@ -58,8 +58,8 @@ export class AchievementWebSocketService implements OnDestroy {
         this.isConnecting = true;
         this.currentUserId = userId;
 
-        // Connect to WebSocket
-        const connection$ = this.webSocketService.connect(userId);
+        // Connect to WebSocket with token
+        const connection$ = this.webSocketService.connect(userId, token);
 
         // Use a single subscription with proper state management to prevent duplicates
         this.webSocketService.connectionState$.pipe(
