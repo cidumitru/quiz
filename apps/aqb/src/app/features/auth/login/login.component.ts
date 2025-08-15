@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import {ChangeDetectorRef, Component, inject} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -42,6 +42,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
 
   constructor() {
     this.emailForm = this.fb.group({
@@ -63,6 +64,7 @@ export class LoginComponent {
           this.isLoading = false;
           this.showOtpForm = true;
           this.snackBar.open(response.message, 'Close', { duration: 5000 });
+          this.cdr.detectChanges();
         },
         error: (error) => {
           this.isLoading = false;

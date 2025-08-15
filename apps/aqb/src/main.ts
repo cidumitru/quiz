@@ -114,7 +114,6 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(
       routes,
-      withHashLocation(),
       withInMemoryScrolling({
         scrollPositionRestoration: 'top',
       }),
