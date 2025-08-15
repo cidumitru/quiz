@@ -6,3 +6,5 @@ export { Answer } from './answer.entity';
 export {Quiz} from './quiz.entity';
 export {QuizQuestion} from './quiz-question.entity';
 export {QuizStatistics} from './quiz-statistics.entity';
+export {UserAchievement} from './user-achievement.entity';
+export {AchievementEvent} from './achievement-event.entity';

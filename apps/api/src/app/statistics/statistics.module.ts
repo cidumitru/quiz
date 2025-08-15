@@ -6,6 +6,7 @@ import {QuizStatistics} from '../entities/quiz-statistics.entity';
 import {Quiz} from '../entities/quiz.entity';
 import {QuizQuestion} from '../entities/quiz-question.entity';
 import {QuestionBank} from '../entities/question-bank.entity';
+import {AchievementModule} from '../achievements/achievement.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import {QuestionBank} from '../entities/question-bank.entity';
       QuizQuestion,
       QuestionBank,
     ]),
+    AchievementModule,
   ],
   controllers: [StatisticsController],
   providers: [StatisticsService],

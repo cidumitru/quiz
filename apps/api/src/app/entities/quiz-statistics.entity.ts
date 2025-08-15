@@ -13,6 +13,8 @@ import {QuestionBank} from './question-bank.entity';
 
 @Entity('quiz_statistics')
 @Index(['userId', 'questionBankId'], {unique: true})
+@Index(['userId']) // For user-wide statistics queries
+@Index(['lastActivityDate']) // For activity-based queries
 export class QuizStatistics {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -57,6 +59,21 @@ export class QuizStatistics {
 
   @Column({type: 'timestamp', nullable: true})
   lastQuizDate: Date;
+
+  @Column({type: 'int', default: 0})
+  currentStreak: number;
+
+  @Column({type: 'int', default: 0})
+  longestStreak: number;
+
+  @Column({type: 'int', default: 0})
+  consecutiveStudyDays: number;
+
+  @Column({type: 'timestamp', nullable: true})
+  lastActivityDate: Date;
+
+  @Column({type: 'jsonb', default: () => "'{}'"})
+  dailyStats: Record<string, any>;
 
   @CreateDateColumn()
   createdAt: Date;
