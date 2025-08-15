@@ -207,31 +207,97 @@ export class QuestionBankService {
       throw new NotFoundException('Question bank not found');
     }
 
-    // Build search condition
-    const whereCondition: {
-      questionBankId: string;
-      question?: FindOperator<string>;
-    } = { questionBankId };
-    if (search && search.trim()) {
-      whereCondition.question = Like(`%${search.trim()}%`);
+    // If no search term, use the simpler query
+    if (!search || !search.trim()) {
+      const totalItems = await this.questionRepository.count({
+        where: { questionBankId },
+      });
+
+      const questions = await this.questionRepository.find({
+        where: { questionBankId },
+        relations: ['answers'],
+        skip: offset,
+        take: limit,
+        order: { createdAt: 'ASC' },
+      });
+
+      const transformedQuestions = questions.map((question) => ({
+        id: question.id,
+        question: question.question,
+        answers: question.answers.map((answer) => ({
+          id: answer.id,
+          text: answer.text,
+          correct: answer.isCorrect,
+        })),
+      }));
+
+      return {
+        questions: transformedQuestions,
+        totalItems,
+        offset,
+        limit,
+      };
     }
 
-    // Get total count of questions (with search filter)
-    const totalItems = await this.questionRepository.count({
-      where: whereCondition,
+    // Enhanced search: search in both question text and answer text
+    const searchTerm = `%${search.trim()}%`;
+    
+    // First, get the IDs of questions that match the search criteria
+    const matchingQuestionIds = await this.questionRepository
+      .createQueryBuilder('question')
+      .leftJoin('question.answers', 'answer')
+      .select(['question.id', 'question.createdAt'])
+      .distinct(true)
+      .where('question.questionBankId = :questionBankId', { questionBankId })
+      .andWhere(
+        '(question.question ILIKE :searchTerm OR answer.text ILIKE :searchTerm)',
+        { searchTerm }
+      )
+      .orderBy('question.createdAt', 'ASC')
+      .addOrderBy('question.id', 'ASC') // Add secondary ordering for consistency
+      .offset(offset)
+      .limit(limit)
+      .getRawMany();
+
+    // Get total count of distinct questions that match the search
+    const totalCountResult = await this.questionRepository
+      .createQueryBuilder('question')
+      .leftJoin('question.answers', 'answer')
+      .select('COUNT(DISTINCT question.id)', 'count')
+      .where('question.questionBankId = :questionBankId', { questionBankId })
+      .andWhere(
+        '(question.question ILIKE :searchTerm OR answer.text ILIKE :searchTerm)',
+        { searchTerm }
+      )
+      .getRawOne();
+
+    const totalItems = parseInt(totalCountResult.count, 10);
+
+    // If no matching questions, return empty result
+    if (matchingQuestionIds.length === 0) {
+      return {
+        questions: [],
+        totalItems,
+        offset,
+        limit,
+      };
+    }
+
+    // Get the full question data with answers for the matching IDs
+    const questionIds = matchingQuestionIds.map(row => row.question_id);
+    
+    // Preserve the original ordering from the search query
+    const questions = await this.questionRepository.find({
+      where: { id: In(questionIds) },
+      relations: ['answers'],
     });
 
-    // Get paginated questions with answers (with search filter)
-    const questions = await this.questionRepository.find({
-      where: whereCondition,
-      relations: ['answers'],
-      skip: offset,
-      take: limit,
-      order: { createdAt: 'ASC' }, // Consistent ordering
-    });
+    // Sort questions to match the order from the search query
+    const questionMap = new Map(questions.map(q => [q.id, q]));
+    const sortedQuestions = questionIds.map(id => questionMap.get(id)).filter((q): q is NonNullable<typeof q> => q !== undefined);
 
     // Transform questions to match frontend interface
-    const transformedQuestions = questions.map((question) => ({
+    const transformedQuestions = sortedQuestions.map((question) => ({
       id: question.id,
       question: question.question,
       answers: question.answers.map((answer) => ({
