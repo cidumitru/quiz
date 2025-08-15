@@ -197,13 +197,15 @@ export class WebSocketService {
 
     private getApiUrl(): string {
         // In production, this would come from environment config
-        if (typeof window !== 'undefined') {
-            const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-            const host = window.location.hostname;
-            const port = window.location.hostname === 'localhost' ? '3000' : window.location.port;
-            return `${protocol}//${host}:${port}`;
-        }
-        return 'http://localhost:3000';
+        // if (typeof window !== 'undefined') {
+        //     const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+        //     const host = window.location.hostname;
+        //     const port = window.location.hostname === 'localhost' ? '3000' : window.location.port;
+        //     return `${protocol}//${host}:${port}`;
+        // }
+        // TODO Use server url from app config, ideally move be to the same domain
+        return 'https://aqb-api.onrender.com';
+        // return 'http://localhost:3000';
     }
 
     private setupSocketEventListeners(): void {

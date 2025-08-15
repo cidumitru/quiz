@@ -4,6 +4,7 @@ import {firstValueFrom} from "rxjs";
 
 export interface IAppConfig {
     build_date: string;
+    serverUrl: string;
 }
 
 @Injectable({
@@ -16,7 +17,11 @@ export class AppConfig {
 
   get build_date() {
     return this._config.build_date ?? 'unknown';
-    }
+  }
+
+  get serverUrl() {
+      return this._config.serverUrl;
+  }
 
   async init(): Promise<void> {
     try {
