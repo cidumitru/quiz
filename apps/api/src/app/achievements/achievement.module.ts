@@ -3,6 +3,7 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import {EventEmitterModule} from '@nestjs/event-emitter';
 import {ScheduleModule} from '@nestjs/schedule';
 import {JwtModule} from '@nestjs/jwt';
+import {ConfigModule, ConfigService} from '@nestjs/config';
 
 // Entities
 import {UserAchievement} from '../entities/user-achievement.entity';
@@ -42,9 +43,20 @@ import {RateLimitGuard} from './infrastructure/guards/rate-limit.guard';
     TypeOrmModule.forFeature([UserAchievement, AchievementEvent, Quiz, QuizStatistics]),
     EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'your-secret-key',
-      signOptions: { expiresIn: '24h' },
+    ConfigModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const jwtSecret = configService.get<string>('JWT_SECRET');
+        if (!jwtSecret) {
+          throw new Error('JWT_SECRET is not configured');
+        }
+        return {
+          secret: jwtSecret,
+          signOptions: { expiresIn: '24h' },
+        };
+      },
+      inject: [ConfigService],
     })
   ],
   providers: [
