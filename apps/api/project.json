@@ -46,6 +46,16 @@
       "options": {
         "command": "echo \"Health check endpoint\""
       }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{projectRoot}/coverage"],
+      "options": {
+        "jestConfig": "apps/api/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": []
