@@ -1,10 +1,14 @@
-import { ExecutionContext, CallHandler } from '@nestjs/common';
+import { ExecutionContext, CallHandler, Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { of } from 'rxjs';
+import { of, Observable } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { LoggingInterceptor } from './logging.interceptor';
 
 describe('LoggingInterceptor', () => {
   let interceptor: LoggingInterceptor;
+  let loggerSpy: jest.SpyInstance;
+  let loggerErrorSpy: jest.SpyInstance;
+  let loggerDebugSpy: jest.SpyInstance;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -12,12 +16,11 @@ describe('LoggingInterceptor', () => {
     }).compile();
 
     interceptor = module.get<LoggingInterceptor>(LoggingInterceptor);
-  });
-
-  beforeEach(() => {
-    // Mock console methods to avoid cluttering test output
-    jest.spyOn(console, 'log').mockImplementation();
-    jest.spyOn(console, 'error').mockImplementation();
+    
+    // Mock Logger methods
+    loggerSpy = jest.spyOn(Logger.prototype, 'log').mockImplementation();
+    loggerErrorSpy = jest.spyOn(Logger.prototype, 'error').mockImplementation();
+    loggerDebugSpy = jest.spyOn(Logger.prototype, 'debug').mockImplementation();
   });
 
   afterEach(() => {
@@ -37,9 +40,16 @@ describe('LoggingInterceptor', () => {
       },
     };
 
+    const response = {
+      statusCode: 200,
+      end: jest.fn(),
+      setHeader: jest.fn(),
+    };
+
     return {
       switchToHttp: () => ({
         getRequest: () => request,
+        getResponse: () => response,
       }),
       getClass: () => ({ name: 'TestController' }),
       getHandler: () => ({ name: 'testMethod' }),
@@ -54,7 +64,6 @@ describe('LoggingInterceptor', () => {
     it('should log request and response for successful requests', async () => {
       const context = createMockContext('GET', '/api/users', 'Mozilla/5.0');
       const callHandler = createMockCallHandler({ id: 1, name: 'John' });
-      const consoleSpy = jest.spyOn(console, 'log');
 
       const result$ = interceptor.intercept(context, callHandler);
       
@@ -67,22 +76,15 @@ describe('LoggingInterceptor', () => {
         });
       });
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[Request] GET /api/users - TestController.testMethod')
-      );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[Response] GET /api/users')
+      expect(loggerSpy).toHaveBeenCalledWith('→ GET /api/users');
+      expect(loggerSpy).toHaveBeenCalledWith(
+        expect.stringMatching(/← GET \/api\/users 200 \(\d+ms\)/)
       );
     });
 
     it('should measure and log execution time', async () => {
       const context = createMockContext('POST', '/api/auth/login');
       const callHandler = createMockCallHandler({ token: 'jwt-token' });
-      const consoleSpy = jest.spyOn(console, 'log');
-
-      // Mock performance.now to control timing
-      const mockNow = jest.spyOn(performance, 'now');
-      mockNow.mockReturnValueOnce(1000).mockReturnValueOnce(1150); // 150ms difference
 
       const result$ = interceptor.intercept(context, callHandler);
       
@@ -92,22 +94,25 @@ describe('LoggingInterceptor', () => {
         });
       });
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('150ms')
+      expect(loggerSpy).toHaveBeenCalledWith('→ POST /api/auth/login');
+      expect(loggerSpy).toHaveBeenCalledWith(
+        expect.stringMatching(/← POST \/api\/auth\/login 200 \(\d+ms\)/)
       );
-
-      mockNow.mockRestore();
     });
 
     it('should handle errors and log them', async () => {
       const context = createMockContext('DELETE', '/api/users/123');
       const error = new Error('User not found');
+      (error as any).status = 404;
+      
       const callHandler: CallHandler = {
         handle: () => {
-          throw error;
+          // Return an observable that emits an error
+          return new Observable(subscriber => {
+            subscriber.error(error);
+          });
         },
       };
-      const consoleErrorSpy = jest.spyOn(console, 'error');
 
       try {
         const result$ = interceptor.intercept(context, callHandler);
@@ -121,15 +126,14 @@ describe('LoggingInterceptor', () => {
         expect(thrownError).toBe(error);
       }
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[Error] DELETE /api/users/123'),
-        error
+      expect(loggerSpy).toHaveBeenCalledWith('→ DELETE /api/users/123');
+      expect(loggerErrorSpy).toHaveBeenCalledWith(
+        expect.stringMatching(/← DELETE \/api\/users\/123 404 \(\d+ms\) - User not found/)
       );
     });
 
     it('should log different HTTP methods correctly', async () => {
       const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
-      const consoleSpy = jest.spyOn(console, 'log');
 
       for (const method of methods) {
         const context = createMockContext(method, '/api/test');
@@ -143,8 +147,9 @@ describe('LoggingInterceptor', () => {
           });
         });
 
-        expect(consoleSpy).toHaveBeenCalledWith(
-          expect.stringContaining(`[Request] ${method} /api/test`)
+        expect(loggerSpy).toHaveBeenCalledWith(`→ ${method} /api/test`);
+        expect(loggerSpy).toHaveBeenCalledWith(
+          expect.stringMatching(new RegExp(`← ${method} \\/api\\/test 200 \\(\\d+ms\\)`))
         );
       }
     });
@@ -156,16 +161,22 @@ describe('LoggingInterceptor', () => {
         headers: {}, // No user-agent
       };
 
+      const response = {
+        statusCode: 200,
+        end: jest.fn(),
+        setHeader: jest.fn(),
+      };
+
       const context = {
         switchToHttp: () => ({
           getRequest: () => request,
+          getResponse: () => response,
         }),
         getClass: () => ({ name: 'TestController' }),
         getHandler: () => ({ name: 'testMethod' }),
       } as any;
 
       const callHandler = createMockCallHandler({});
-      const consoleSpy = jest.spyOn(console, 'log');
 
       const result$ = interceptor.intercept(context, callHandler);
       
@@ -175,8 +186,9 @@ describe('LoggingInterceptor', () => {
         });
       });
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[Request] GET /api/test - TestController.testMethod')
+      expect(loggerSpy).toHaveBeenCalledWith('→ GET /api/test');
+      expect(loggerSpy).toHaveBeenCalledWith(
+        expect.stringMatching(/← GET \/api\/test 200 \(\d+ms\)/)
       );
     });
 
@@ -184,7 +196,6 @@ describe('LoggingInterceptor', () => {
       const longUrl = '/api/users/search?query=' + 'a'.repeat(100) + '&filter=active&sort=name&page=1';
       const context = createMockContext('GET', longUrl);
       const callHandler = createMockCallHandler({ users: [] });
-      const consoleSpy = jest.spyOn(console, 'log');
 
       const result$ = interceptor.intercept(context, callHandler);
       
@@ -194,8 +205,9 @@ describe('LoggingInterceptor', () => {
         });
       });
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining(`[Request] GET ${longUrl}`)
+      expect(loggerSpy).toHaveBeenCalledWith(`→ GET ${longUrl}`);
+      expect(loggerSpy).toHaveBeenCalledWith(
+        expect.stringMatching(new RegExp(`← GET ${longUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} 200 \\(\\d+ms\\)`))
       );
     });
 
@@ -220,7 +232,6 @@ describe('LoggingInterceptor', () => {
 
       const context = createMockContext('GET', '/api/users');
       const callHandler = createMockCallHandler(complexResponse);
-      const consoleSpy = jest.spyOn(console, 'log');
 
       const result$ = interceptor.intercept(context, callHandler);
       
@@ -230,8 +241,12 @@ describe('LoggingInterceptor', () => {
         });
       });
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[Response] GET /api/users')
+      expect(loggerSpy).toHaveBeenCalledWith('→ GET /api/users');
+      expect(loggerSpy).toHaveBeenCalledWith(
+        expect.stringMatching(/← GET \/api\/users 200 \(\d+ms\)/)
+      );
+      expect(loggerDebugSpy).toHaveBeenCalledWith(
+        `Response: ${JSON.stringify(complexResponse)}`
       );
     });
   });
@@ -241,13 +256,12 @@ describe('LoggingInterceptor', () => {
       const context = createMockContext('POST', '/api/slow-endpoint');
       const callHandler: CallHandler = {
         handle: () => {
-          // Simulate async operation
-          return new Promise((resolve) => {
-            setTimeout(() => resolve({ result: 'success' }), 100);
-          }).then((result) => of(result));
+          // Return an observable that emits after a delay
+          return of({ result: 'success' }).pipe(
+            delay(100)
+          );
         },
       };
-      const consoleSpy = jest.spyOn(console, 'log');
 
       const start = performance.now();
       const result$ = interceptor.intercept(context, callHandler);
@@ -260,10 +274,15 @@ describe('LoggingInterceptor', () => {
       const end = performance.now();
       const actualDuration = end - start;
 
-      // The logged duration should be close to the actual duration
-      const logCalls = consoleSpy.mock.calls;
+      expect(loggerSpy).toHaveBeenCalledWith('→ POST /api/slow-endpoint');
+      expect(loggerSpy).toHaveBeenCalledWith(
+        expect.stringMatching(/← POST \/api\/slow-endpoint 200 \(\d+ms\)/)
+      );
+      
+      // Verify that timing was measured
+      const logCalls = loggerSpy.mock.calls;
       const responseLog = logCalls.find((call: any) => 
-        call[0].includes('[Response]') && call[0].includes('ms')
+        typeof call[0] === 'string' && call[0].includes('←') && call[0].includes('ms')
       );
       
       expect(responseLog).toBeDefined();
