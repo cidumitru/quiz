@@ -1,11 +1,21 @@
-import { Repository } from 'typeorm';
+import { Repository, ObjectLiteral } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { AchievementEvent } from '../app/entities/achievement-event.entity';
+import { User } from '../app/entities/user.entity';
+import { OtpCode } from '../app/entities/otp-code.entity';
+import { Quiz } from '../app/entities/quiz.entity';
+import { QuestionBank } from '../app/entities/question-bank.entity';
+import { Question } from '../app/entities/question.entity';
+import { Answer } from '../app/entities/answer.entity';
+import { QuizMode } from '@aqb/data-access';
 
 /**
  * Mock repository factory for TypeORM entities
  */
-export function createMockRepository<T = any>(): jest.Mocked<Repository<T>> {
+export function createMockRepository<T extends ObjectLiteral = ObjectLiteral>(): Partial<jest.Mocked<Repository<T>>> {
+  const mockQueryBuilder = createMockQueryBuilder<T>();
+
   return {
     find: jest.fn(),
     findOne: jest.fn(),
@@ -15,7 +25,7 @@ export function createMockRepository<T = any>(): jest.Mocked<Repository<T>> {
     update: jest.fn(),
     delete: jest.fn(),
     count: jest.fn(),
-    createQueryBuilder: jest.fn(),
+    createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
     manager: {} as any,
     metadata: {} as any,
     target: {} as any,
@@ -45,34 +55,34 @@ export function createMockRepository<T = any>(): jest.Mocked<Repository<T>> {
     merge: jest.fn(),
     getId: jest.fn(),
     hasId: jest.fn(),
-    reload: jest.fn(),
     extend: jest.fn(),
-  } as jest.Mocked<Repository<T>>;
+  };
 }
 
 /**
  * Mock JWT service for testing authentication
  */
-export function createMockJwtService(): jest.Mocked<JwtService> {
+export function createMockJwtService(): Partial<jest.Mocked<JwtService>> {
   return {
     sign: jest.fn(),
     signAsync: jest.fn(),
     verify: jest.fn(),
     verifyAsync: jest.fn(),
     decode: jest.fn(),
-  } as jest.Mocked<JwtService>;
+  };
 }
 
 /**
  * Create test user data
  */
-export function createTestUser(overrides: Partial<any> = {}) {
+export function createTestUser(overrides: Partial<User> = {}): User {
   return {
     id: 'test-user-id',
     email: 'test@gmail.com',
     isVerified: false,
     createdAt: new Date(),
     updatedAt: new Date(),
+    otpCodes: [],
     ...overrides,
   };
 }
@@ -80,7 +90,7 @@ export function createTestUser(overrides: Partial<any> = {}) {
 /**
  * Create test OTP code data
  */
-export function createTestOtpCode(overrides: Partial<any> = {}) {
+export function createTestOtpCode(overrides: Partial<OtpCode> = {}): OtpCode {
   return {
     id: 'test-otp-id',
     userId: 'test-user-id',
@@ -88,6 +98,7 @@ export function createTestOtpCode(overrides: Partial<any> = {}) {
     expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     isUsed: false,
     createdAt: new Date(),
+    user: overrides.user || createTestUser({ otpCodes: [] }),
     ...overrides,
   };
 }
@@ -95,15 +106,20 @@ export function createTestOtpCode(overrides: Partial<any> = {}) {
 /**
  * Create test quiz data
  */
-export function createTestQuiz(overrides: Partial<any> = {}) {
+export function createTestQuiz(overrides: Partial<Quiz> = {}): Quiz {
   return {
     id: 'test-quiz-id',
     userId: 'test-user-id',
     questionBankId: 'test-qb-id',
-    mode: 'All',
+    mode: QuizMode.All,
     startedAt: new Date(),
-    finishedAt: null,
-    score: null,
+    finishedAt: overrides.finishedAt || new Date(),
+    score: overrides.score || 85.5,
+    user: overrides.user || createTestUser({ otpCodes: [] }),
+    questionBank: overrides.questionBank || createTestQuestionBank({ questions: [] }),
+    quizQuestions: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
     ...overrides,
   };
 }
@@ -111,14 +127,14 @@ export function createTestQuiz(overrides: Partial<any> = {}) {
 /**
  * Create test question bank data
  */
-export function createTestQuestionBank(overrides: Partial<any> = {}) {
+export function createTestQuestionBank(overrides: Partial<QuestionBank> = {}): QuestionBank {
   return {
     id: 'test-qb-id',
     userId: 'test-user-id',
     name: 'Test Question Bank',
-    description: 'A test question bank',
     isDeleted: false,
     questions: [],
+    user: overrides.user || createTestUser({ otpCodes: [] }),
     createdAt: new Date(),
     updatedAt: new Date(),
     ...overrides,
@@ -128,12 +144,13 @@ export function createTestQuestionBank(overrides: Partial<any> = {}) {
 /**
  * Create test question data
  */
-export function createTestQuestion(overrides: Partial<any> = {}) {
+export function createTestQuestion(overrides: Partial<Question> = {}): Question {
   return {
     id: 'test-question-id',
     questionBankId: 'test-qb-id',
     question: 'What is the capital of France?',
     answers: [],
+    questionBank: overrides.questionBank || createTestQuestionBank({ questions: [] }),
     createdAt: new Date(),
     updatedAt: new Date(),
     ...overrides,
@@ -143,14 +160,14 @@ export function createTestQuestion(overrides: Partial<any> = {}) {
 /**
  * Create test answer data
  */
-export function createTestAnswer(overrides: Partial<any> = {}) {
+export function createTestAnswer(overrides: Partial<Answer> = {}): Answer {
   return {
     id: 'test-answer-id',
     questionId: 'test-question-id',
     text: 'Paris',
     isCorrect: true,
+    question: overrides.question || createTestQuestion({ answers: [] }),
     createdAt: new Date(),
-    updatedAt: new Date(),
     ...overrides,
   };
 }
@@ -189,7 +206,7 @@ export const getRepositoryMockToken = (entity: any) => getRepositoryToken(entity
 /**
  * Create mock query builder for complex queries
  */
-export function createMockQueryBuilder<T = any>() {
+export function createMockQueryBuilder<T extends ObjectLiteral = ObjectLiteral>() {
   const queryBuilder = {
     select: jest.fn().mockReturnThis(),
     addSelect: jest.fn().mockReturnThis(),
@@ -215,7 +232,7 @@ export function createMockQueryBuilder<T = any>() {
     createQueryBuilder: jest.fn().mockReturnThis(),
   };
 
-  return queryBuilder as any;
+  return queryBuilder;
 }
 
 /**
@@ -239,4 +256,50 @@ export function generateRandomString(length = 6): string {
 
 export function generateRandomOtpCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+/**
+ * Create test achievement processing result data
+ */
+export function createTestProcessingResult(overrides: Partial<any> = {}): any {
+  return {
+    success: true,
+    processedAchievements: [{
+      achievementId: 'test-achievement-id',
+      wasNewlyEarned: true,
+      previousProgress: 0,
+      newProgress: 100,
+    }],
+    newlyEarnedAchievements: [{
+      achievementId: 'test-achievement-id',
+      title: 'Test Achievement',
+      description: 'A test achievement',
+      badgeIcon: 'test-badge',
+      confettiLevel: 'medium',
+      points: 100,
+      earnedAt: new Date(),
+      isNewlyEarned: true,
+    }],
+    processingTimeMs: 150,
+    eventId: 'test-event-id',
+    ...overrides,
+  };
+}
+
+/**
+ * Create test achievement event data
+ */
+export function createTestAchievementEvent(overrides: Partial<AchievementEvent> = {}): AchievementEvent {
+  return {
+    id: 'test-event-id',
+    userId: 'test-user-id',
+    eventType: 'quiz_completed',
+    eventData: { score: 85, questionsAnswered: 20 },
+    occurredAt: new Date(),
+    processedBy: null,
+    processedAt: null,
+    isProcessed: false,
+    createdAt: new Date(),
+    ...overrides,
+  };
 }
