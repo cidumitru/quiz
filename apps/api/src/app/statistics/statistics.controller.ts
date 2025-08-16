@@ -63,7 +63,7 @@ export class StatisticsController {
   @Get('achievements/:id/leaderboard')
   getAchievementLeaderboard(
     @Param('id') achievementId: string,
-    @Query('limit') limit: string = '10'
+    @Query('limit') limit = '10'
   ): Promise<Array<{ userId: string; earnedAt: Date }>> {
     return this.achievementService.getAchievementLeaderboard(achievementId, parseInt(limit));
   }
@@ -89,7 +89,7 @@ export class StatisticsController {
   @Get('leaderboard/daily')
   getDailyLeaderboard(
     @Query('questionBankId') questionBankId?: string,
-    @Query('limit') limit: string = '10'
+    @Query('limit') limit = '10'
   ): Promise<TimeBasedPerformance[]> {
     return this.comparativeStatistics.getDailyLeaderboard(
       questionBankId,
@@ -100,7 +100,7 @@ export class StatisticsController {
   @Get('leaderboard/weekly')
   getWeeklyLeaderboard(
     @Query('questionBankId') questionBankId?: string,
-    @Query('limit') limit: string = '10'
+    @Query('limit') limit = '10'
   ): Promise<TimeBasedPerformance[]> {
     return this.comparativeStatistics.getWeeklyLeaderboard(
       questionBankId,

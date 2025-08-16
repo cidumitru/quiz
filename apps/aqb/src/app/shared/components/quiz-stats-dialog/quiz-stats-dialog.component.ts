@@ -1,4 +1,4 @@
-import { Component, computed, inject, Inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -56,8 +56,7 @@ export class QuizStatsDialogComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<QuizStatsDialogComponent>);
   private router = inject(Router);
   private quizService = inject(QuizService);
-
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { quizResult: QuizResult; questionBankId?: string }) {}
+  public data = inject<{ quizResult: QuizResult; questionBankId?: string }>(MAT_DIALOG_DATA);
 
   // Computed properties
   protected readonly primaryMetric = computed(() => 

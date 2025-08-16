@@ -27,7 +27,6 @@ import {firstValueFrom, from} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {QuizViewModel} from './app/features/quiz/quiz-practice/quiz.view-model';
 import {AchievementIntegrationService} from "./app/core/services/achievement-integration.service";
-import {QuizStatsTestComponent} from "./app/shared/components/quiz-stats-dialog/quiz-stats-test.component";
 
 export const bootstrapFactory = (appConfig: AppConfig) => async () => {
   await appConfig.init();

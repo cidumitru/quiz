@@ -19,7 +19,7 @@ export class AchievementEventRepository implements IAchievementEventRepository {
     return this.repository.save(events);
   }
 
-  async findUnprocessed(limit: number = 100): Promise<AchievementEvent[]> {
+  async findUnprocessed(limit = 100): Promise<AchievementEvent[]> {
     return this.repository.find({
       where: { isProcessed: false },
       order: { occurredAt: 'ASC' },
@@ -33,7 +33,7 @@ export class AchievementEventRepository implements IAchievementEventRepository {
     });
   }
 
-  async findByUserId(userId: string, limit: number = 100): Promise<AchievementEvent[]> {
+  async findByUserId(userId: string, limit = 100): Promise<AchievementEvent[]> {
     return this.repository.find({
       where: { userId },
       order: { occurredAt: 'DESC' },
@@ -41,7 +41,7 @@ export class AchievementEventRepository implements IAchievementEventRepository {
     });
   }
 
-  async findByUserIdAndEventType(userId: string, eventType: string, limit: number = 100): Promise<AchievementEvent[]> {
+  async findByUserIdAndEventType(userId: string, eventType: string, limit = 100): Promise<AchievementEvent[]> {
     return this.repository.find({
       where: { userId, eventType },
       order: { occurredAt: 'DESC' },
@@ -49,7 +49,7 @@ export class AchievementEventRepository implements IAchievementEventRepository {
     });
   }
 
-  async findRecentByUserId(userId: string, since: Date, limit: number = 100): Promise<AchievementEvent[]> {
+  async findRecentByUserId(userId: string, since: Date, limit = 100): Promise<AchievementEvent[]> {
     return this.repository.find({
       where: { 
         userId, 
