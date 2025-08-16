@@ -262,7 +262,7 @@ export class RetryService {
   async retryBatch<T>(
     operations: Array<() => Promise<T>>,
     options: Partial<RetryOptions> = {},
-    concurrency: number = 5
+    concurrency = 5
   ): Promise<Array<RetryResult<T>>> {
     const results: Array<RetryResult<T>> = [];
     

@@ -120,7 +120,7 @@ export class ComparativeStatisticsService {
    */
   async getDailyLeaderboard(
     questionBankId?: string, 
-    limit: number = 10
+    limit = 10
   ): Promise<TimeBasedPerformance[]> {
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
@@ -161,7 +161,7 @@ export class ComparativeStatisticsService {
    */
   async getWeeklyLeaderboard(
     questionBankId?: string, 
-    limit: number = 10
+    limit = 10
   ): Promise<TimeBasedPerformance[]> {
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - 7);

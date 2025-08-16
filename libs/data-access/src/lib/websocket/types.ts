@@ -62,7 +62,7 @@ export interface WebSocketEventMap {
     // Global Updates
     'global-update': {
         timestamp: Date;
-        [key: string]: any;
+        [key: string]: unknown;
     };
 }
 

@@ -9,7 +9,7 @@ export interface AchievementDto {
   progress: number;
   targetProgress: number;
   earnedAt?: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface UserAchievementProgressDto {
@@ -34,7 +34,7 @@ export interface AchievementNotificationDto {
 export interface CreateAchievementEventDto {
   userId: string;
   eventType: string;
-  eventData: Record<string, any>;
+  eventData: Record<string, unknown>;
   sessionId?: string;
 }
 

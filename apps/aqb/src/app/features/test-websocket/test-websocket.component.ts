@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Subject} from 'rxjs';
@@ -419,16 +419,12 @@ export class TestWebSocketComponent implements OnInit, OnDestroy {
         timestamp: Date;
         type: 'info' | 'success' | 'error' | 'warning';
         message: string;
-        data?: any;
+        data?: unknown;
     }> = [];
 
     private destroy$ = new Subject<void>();
-
-    constructor(
-        private webSocketService: WebSocketService,
-        private achievementWebSocketService: AchievementWebSocketService
-    ) {
-    }
+    private webSocketService = inject(WebSocketService);
+    private achievementWebSocketService = inject(AchievementWebSocketService);
 
     ngOnInit(): void {
         this.setupConnectionMonitoring();
@@ -511,7 +507,7 @@ export class TestWebSocketComponent implements OnInit, OnDestroy {
         return window.location.protocol;
     }
 
-    trackLog(index: number, log: any): string {
+    trackLog(index: number, log: { timestamp: Date }): string {
         return log.timestamp.getTime().toString();
     }
 
@@ -552,7 +548,7 @@ export class TestWebSocketComponent implements OnInit, OnDestroy {
         });
     }
 
-    private addLog(type: 'info' | 'success' | 'error' | 'warning', message: string, data?: any): void {
+    private addLog(type: 'info' | 'success' | 'error' | 'warning', message: string, data?: unknown): void {
         this.eventLog.unshift({
             timestamp: new Date(),
             type,

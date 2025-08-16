@@ -7,7 +7,7 @@ export class AccuracyAchievementRule implements IAchievementRule {
     public readonly id: string,
     private readonly targetAccuracy: number,
     private readonly timeframe: 'session' | 'daily' | 'weekly' | 'all_time',
-    private readonly minimumQuestions: number = 5
+    private readonly minimumQuestions = 5
   ) {}
 
   evaluate(

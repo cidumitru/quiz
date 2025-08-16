@@ -88,7 +88,7 @@ export class AchievementService {
     }
   }
 
-  async processUserEvents(userId: string, limit: number = 10): Promise<AchievementProcessingResultDto[]> {
+  async processUserEvents(userId: string, limit = 10): Promise<AchievementProcessingResultDto[]> {
     try {
       const events = await this.achievementEventRepository.findByUserId(userId, limit);
       if (!events || events.length === 0) {
@@ -205,7 +205,7 @@ export class AchievementService {
     }
   }
 
-  async getAchievementLeaderboard(achievementId: string, limit: number = 10): Promise<Array<{ userId: string; earnedAt: Date }>> {
+  async getAchievementLeaderboard(achievementId: string, limit = 10): Promise<Array<{ userId: string; earnedAt: Date }>> {
     // Try cache first
     let leaderboard = await this.cacheService.getLeaderboard(achievementId);
     
@@ -285,7 +285,7 @@ export class AchievementService {
   ): Promise<number> {
     try {
       // Process answers sequentially to maintain proper streak logic
-      let currentGlobalStreak = await this.cacheService.getCurrentStreak(userId);
+      const currentGlobalStreak = await this.cacheService.getCurrentStreak(userId);
       let newGlobalStreak = currentGlobalStreak;
       let streakWasBroken = false;
       
@@ -377,7 +377,7 @@ export class AchievementService {
     }));
   }
 
-  async processUnprocessedEvents(limit: number = 100): Promise<AchievementProcessingResultDto[]> {
+  async processUnprocessedEvents(limit = 100): Promise<AchievementProcessingResultDto[]> {
     const unprocessedEvents = await this.achievementEventRepository.findUnprocessed(limit);
     this.logger.debug(`Processing ${unprocessedEvents.length} unprocessed events`);
 

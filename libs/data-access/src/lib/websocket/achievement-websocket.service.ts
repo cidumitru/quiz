@@ -1,6 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {distinctUntilChanged, filter, take, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {WebSocketService} from './websocket.service';
 import {Achievement, ConfettiLevel, WebSocketConnectionState} from './types';
 
@@ -39,7 +39,7 @@ export class AchievementWebSocketService implements OnDestroy {
     /**
      * Connect and authenticate for achievement events
      */
-    connect(userId: string, token?: string): Observable<any> {
+    connect(userId: string, token?: string): Observable<WebSocketConnectionState> {
         // Prevent duplicate connections for the same user
         if (this.isConnecting && this.currentUserId === userId) {
             if (this.DEBUG_MODE) {
@@ -59,7 +59,7 @@ export class AchievementWebSocketService implements OnDestroy {
         this.currentUserId = userId;
 
         // Connect to WebSocket with token
-        const connection$ = this.webSocketService.connect(userId, token);
+        this.webSocketService.connect(userId, token);
 
         // Use a single subscription with proper state management to prevent duplicates
         this.webSocketService.connectionState$.pipe(
@@ -86,7 +86,7 @@ export class AchievementWebSocketService implements OnDestroy {
             }
         });
 
-        return connection$;
+        return this.webSocketService.connectionState$;
     }
 
     /**

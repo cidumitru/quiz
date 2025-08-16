@@ -62,7 +62,7 @@ export class AchievementEvaluationContext {
     return this.userStats.totalQuizzes || 0;
   }
 
-  getRecentEventsByType(eventType: string, limit: number = 10): AchievementEventData[] {
+  getRecentEventsByType(eventType: string, limit = 10): AchievementEventData[] {
     return this.recentEvents
       .filter(event => event.eventType === eventType)
       .slice(0, limit);

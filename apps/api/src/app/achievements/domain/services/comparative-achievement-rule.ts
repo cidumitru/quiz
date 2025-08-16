@@ -18,7 +18,7 @@ export class ComparativeAchievementRule implements IAchievementRule {
   constructor(
     achievementId: string,
     private readonly comparativeType: ComparativeType,
-    private readonly targetValue: number = 0 // For percentile-based achievements
+    private readonly targetValue = 0 // For percentile-based achievements
   ) {
     this.id = achievementId;
   }
