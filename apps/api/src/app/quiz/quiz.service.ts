@@ -421,6 +421,10 @@ export class QuizService {
         const score =
             totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
 
+        // Update quiz with current score (even if not finished)
+        quiz.score = score;
+        await this.quizRepository.save(quiz);
+
         // Create batched achievement events for better performance
         const achievementEvents = [];
 
@@ -493,10 +497,7 @@ export class QuizService {
             throw new BadRequestException('Quiz is already finished');
         }
 
-        quiz.finishedAt = new Date();
-        await this.quizRepository.save(quiz);
-
-        // Get quiz details for achievement event
+        // Get quiz details for score calculation BEFORE marking as finished
         const quizDetails = await this.getQuizById(userId, quizId);
         const quizData = quizDetails.quiz;
         
@@ -505,6 +506,11 @@ export class QuizService {
         const answeredQuestions = quizData.questions.filter(q => q.userAnswerId).length;
         const correctAnswers = quizData.questions.filter(q => q.userAnswerId && q.correctAnswerId === q.userAnswerId).length;
         const finalScore = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+
+        // Update quiz with finishedAt date and score
+        quiz.finishedAt = new Date();
+        quiz.score = finalScore;
+        await this.quizRepository.save(quiz);
 
         // Create achievement event for quiz completion
         await this.achievementService.createAchievementEvent({
@@ -659,18 +665,25 @@ export class QuizService {
         let answerCount = 0;
         let questionCount = 0;
 
+        // First, check if score is saved in the database
+        if (quiz.score !== null && quiz.score !== undefined) {
+            score = Number(quiz.score);
+        }
+        
         // Use pre-calculated stats if available (from optimized query)
         if (quiz._stats) {
             questionCount = quiz._stats.totalQuestions;
             answerCount = quiz._stats.answeredQuestions;
-            if (quiz.finishedAt && quiz._stats.totalQuestions > 0) {
+            // Only recalculate if score wasn't already in database
+            if (score === 0 && quiz.finishedAt && quiz._stats.totalQuestions > 0) {
                 score = (quiz._stats.correctAnswers / quiz._stats.totalQuestions) * 100;
             }
         } else if (quiz.quizQuestions) {
             // Fallback to direct calculation if stats not available
             questionCount = quiz.quizQuestions.length;
             answerCount = quiz.quizQuestions.filter((qq) => qq.answerId).length;
-            if (quiz.finishedAt) {
+            // Only recalculate if score wasn't already in database
+            if (score === 0 && quiz.finishedAt) {
                 const correctAnswers = quiz.quizQuestions.filter(
                     (qq) => qq.userAnswer?.isCorrect
                 ).length;
