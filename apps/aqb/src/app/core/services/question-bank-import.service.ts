@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   answerScheme,
   type ParsedAnswer,
@@ -6,8 +6,12 @@ import {
   type ParsedQuestionBank,
   questionBankScheme,
   questionScheme,
+  type CreateQuestionRequest,
+  type QuestionsAddedResponse,
 } from '@aqb/data-access';
+import { QuestionBankApiService } from '@aqb/data-access/angular';
 import { z } from 'zod';
+import { Observable } from 'rxjs';
 
 // Internal interfaces for import results - not exposed outside service
 interface ValidationError {
@@ -47,10 +51,12 @@ interface ImportResult {
   warnings: string[];
 }
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class QuestionBankImportService {
+  private readonly questionBankApiService = inject(QuestionBankApiService);
   /**
    * Imports and validates a question bank from a JSON file
    * @param fileContent The raw file content
@@ -133,7 +139,76 @@ export class QuestionBankImportService {
   }
 
   /**
+   * Validates and imports questions to an existing question bank
+   * @param fileContent The raw file content  
+   * @param questionBankId The ID of the existing question bank
+   * @returns Observable<QuestionsAddedResponse> if valid, null otherwise
+   */
+  async importQuestionsToBank(
+    fileContent: string,
+    questionBankId: string
+  ): Promise<{ questions: CreateQuestionRequest[]; apiCall?: Observable<QuestionsAddedResponse> }> {
+    const rawData = this.parseJson(fileContent);
+    if (!rawData || !Array.isArray(rawData['questions'])) {
+      throw new Error('Invalid JSON format: expected "questions" array');
+    }
+
+    const questions = this.parseQuestionsOnly(rawData['questions']);
+    if (questions.length === 0) {
+      throw new Error('No valid questions found');
+    }
+
+    const apiCall = this.questionBankApiService.addQuestion(questionBankId, { questions });
+    return { questions, apiCall };
+  }
+
+  /**
+   * Parses questions-only format into CreateQuestionRequest[]
+   */
+  private parseQuestionsOnly(questionsData: unknown[]): CreateQuestionRequest[] {
+    const validQuestions: CreateQuestionRequest[] = [];
+
+    for (const questionData of questionsData) {
+      const question = questionData as Record<string, unknown>;
+
+      // Validate question text
+      if (!question['question'] || typeof question['question'] !== 'string' || 
+          (question['question'] as string).trim() === '') {
+        continue;
+      }
+
+      // Validate answers
+      if (!Array.isArray(question['answers'])) {
+        continue;
+      }
+
+      const answers: { text: string; correct?: boolean }[] = [];
+      for (const answerData of question['answers'] as unknown[]) {
+        const answer = answerData as Record<string, unknown>;
+        
+        if (answer['text'] && typeof answer['text'] === 'string' && 
+            (answer['text'] as string).trim() !== '') {
+          answers.push({
+            text: (answer['text'] as string).trim(),
+            correct: Boolean(answer['correct']),
+          });
+        }
+      }
+
+      if (answers.length > 0) {
+        validQuestions.push({
+          question: (question['question'] as string).trim(),
+          answers,
+        });
+      }
+    }
+
+    return validQuestions;
+  }
+
+  /**
    * Validates a question bank structure and its contents
+   * Supports both full question bank format and simple questions-only format
    */
   private async validateQuestionBank(
     data: Record<string, unknown>
@@ -141,35 +216,53 @@ export class QuestionBankImportService {
     const errors: ValidationError[] = [];
     const warnings: string[] = [];
 
-    // Validate basic structure
-    const basicStructure = {
-      id: data['id'],
-      createdAt: data['createdAt'],
-      editedAt: data['editedAt'],
-      name: data['name'],
-      isDeleted: data['isDeleted'] ?? false,
-      questions: [],
-    };
+    // Check if this is a simple questions-only format (just has "questions" array)
+    const isQuestionsOnlyFormat = this.isQuestionsOnlyFormat(data);
 
-    // Validate bank structure without questions
-    const bankValidation = await questionBankScheme.safeParseAsync(
-      basicStructure
-    );
-    if (!bankValidation.success) {
-      const zodErrors = this.parseZodErrors(bankValidation.error);
-      errors.push(...zodErrors);
+    let basicStructure: any;
 
-      return {
-        isValid: false,
-        questionBank: null,
-        validQuestions: 0,
-        invalidQuestions: 0,
-        totalQuestions: Array.isArray(data['questions'])
-          ? (data['questions'] as unknown[]).length
-          : 0,
-        errors,
-        warnings,
+    if (isQuestionsOnlyFormat) {
+      // Create a minimal question bank structure for questions-only format
+      basicStructure = {
+        id: this.generateId(),
+        createdAt: new Date().toISOString(),
+        editedAt: new Date().toISOString(),
+        name: 'Imported Questions',
+        isDeleted: false,
+        questions: [],
       };
+      warnings.push('Detected questions-only format. Creating temporary question bank structure.');
+    } else {
+      // Use the existing full question bank validation
+      basicStructure = {
+        id: data['id'],
+        createdAt: data['createdAt'],
+        editedAt: data['editedAt'],
+        name: data['name'],
+        isDeleted: data['isDeleted'] ?? false,
+        questions: [],
+      };
+
+      // Validate bank structure without questions
+      const bankValidation = await questionBankScheme.safeParseAsync(
+        basicStructure
+      );
+      if (!bankValidation.success) {
+        const zodErrors = this.parseZodErrors(bankValidation.error);
+        errors.push(...zodErrors);
+
+        return {
+          isValid: false,
+          questionBank: null,
+          validQuestions: 0,
+          invalidQuestions: 0,
+          totalQuestions: Array.isArray(data['questions'])
+            ? (data['questions'] as unknown[]).length
+            : 0,
+          errors,
+          warnings,
+        };
+      }
     }
 
     // Validate questions
@@ -214,7 +307,7 @@ export class QuestionBankImportService {
 
     // Create the validated question bank
     const validatedBank: ParsedQuestionBank = {
-      ...bankValidation.data,
+      ...basicStructure,
       questions: validQuestions,
     };
 
@@ -414,6 +507,21 @@ export class QuestionBankImportService {
       errors: [message],
       warnings: [],
     };
+  }
+
+
+  /**
+   * Detects if the input data is in questions-only format (simple format from example)
+   */
+  private isQuestionsOnlyFormat(data: Record<string, unknown>): boolean {
+    // Check if it only has "questions" property and lacks question bank metadata
+    const hasQuestions = Array.isArray(data['questions']);
+    const lacksId = !data['id'];
+    const lacksName = !data['name'];
+    const lacksCreatedAt = !data['createdAt'];
+    
+    // It's questions-only format if it has questions but lacks the basic question bank fields
+    return hasQuestions && (lacksId || lacksName || lacksCreatedAt);
   }
 
   /**

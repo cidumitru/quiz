@@ -1,387 +1,164 @@
-.import-dialog-container {
-  width: 100%;
-  min-width: 500px;
-  max-width: 600px;
-
-  .dialog-content {
-    padding: 1.5rem 0;
-    min-height: 200px;
+:host {
+  .mdc-dialog__surface {
+    min-width: 600px !important;
+    max-width: 700px !important;
   }
 }
 
-// File Drop Zone
+.dialog-content {
+  padding: 1.5rem;
+  min-height: 200px;
+}
+
 .file-drop-zone {
-  border: 2px dashed #d1d5db;
-  border-radius: 0.5rem;
+  border: 2px dashed var(--mdc-outlined-text-field-outline-color);
+  border-radius: 8px;
   padding: 2rem;
   text-align: center;
-  transition: colors 0.2s;
   min-height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
+  background: var(--mdc-filled-text-field-container-color);
 
   &:hover,
   &.drag-over {
-    border-color: #3b82f6;
-    background-color: #eff6ff;
+    border-color: var(--mdc-theme-primary);
+    background: var(--mdc-theme-primary-container, rgba(98, 0, 238, 0.08));
   }
 
-  .drop-zone-content {
-    .upload-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      color: #9ca3af;
-      margin-bottom: 1rem;
-    }
+  .upload-icon {
+    width: 4rem;
+    height: 4rem;
+    font-size: 4rem !important;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
 
-    h3 {
-      font-size: 1.125rem;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-      color: #1f2937;
-    }
+  h3 {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
 
-    .text-muted {
-      color: #4b5563;
-      margin-bottom: 1rem;
+  .file-select-btn {
+    color: var(--mdc-theme-primary);
+    text-decoration: underline;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    
+    &:hover {
+      opacity: 0.8;
     }
+  }
 
-    .file-select-btn {
-      color: #2563eb;
-      text-decoration: underline;
-      background: transparent;
-      border: 0;
-      cursor: pointer;
-      font-weight: 500;
-
-      &:hover {
-        color: #1d4ed8;
-      }
-    }
-
-    .file-requirements {
-      color: #6b7280;
-      display: block;
-      margin-top: 1rem;
-    }
+  .file-requirements {
+    font-size: 0.875rem;
+    opacity: 0.7;
+    margin-top: 1rem;
   }
 }
 
-// Selected File Display
+.selected-files-section {
+  margin-bottom: 1.5rem;
+
+  h4 {
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+}
+
 .selected-file {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  background-color: #f9fafb;
-  border-radius: 0.5rem;
-
-  mat-icon {
-    color: #4b5563;
-  }
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  background: var(--mdc-filled-text-field-container-color);
 
   .file-name {
     flex: 1;
     font-weight: 500;
-    color: #1f2937;
-  }
-}
-
-// Loading State
-.loading-state {
-  text-align: center;
-  padding: 2rem 0;
-
-  mat-progress-bar {
-    margin-bottom: 1rem;
   }
 
-  p {
-    color: #4b5563;
-  }
-}
-
-// Error State
-.error-state {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1.5rem;
-  background-color: #fef2f2;
-  border-radius: 0.5rem;
-  border: 1px solid #fecaca;
-
-  .error-icon {
-    color: #ef4444;
-    flex-shrink: 0;
-    margin-top: 0.25rem;
-  }
-
-  .error-content {
-    flex: 1;
-
-    h4 {
-      color: #991b1b;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-    }
-
-    p {
-      color: #b91c1c;
-      margin-bottom: 1rem;
-    }
-  }
-}
-
-// Preview Section
-.preview-section {
-  .file-info {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
-    background-color: #f0fdf4;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
+  &.error {
+    background: var(--mdc-theme-error-container, rgba(255, 0, 0, 0.1));
+    border: 1px solid var(--mdc-theme-error);
 
     mat-icon {
-      color: #16a34a;
+      color: var(--mdc-theme-error);
     }
 
-    .file-name {
-      flex: 1;
-      font-weight: 500;
-      color: #14532d;
+    .error-text {
+      color: var(--mdc-theme-error);
+      font-size: 0.75rem;
     }
   }
+}
 
-  .import-summary {
-    margin-bottom: 1.5rem;
+.files-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background: var(--mdc-theme-primary-container, rgba(98, 0, 238, 0.08));
 
-    h4 {
-      font-size: 1.125rem;
-      font-weight: 500;
-      margin-bottom: 0.75rem;
-      color: #1f2937;
-    }
+  .summary-text {
+    flex: 1;
+    font-weight: 500;
+  }
+}
 
-    .summary-stats {
+.import-summary {
+  margin-bottom: 1.5rem;
+
+  .summary-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .stat-item {
       display: flex;
-      flex-direction: column;
+      align-items: center;
       gap: 0.5rem;
 
-      .stat-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-
-        mat-icon {
-          width: 1.25rem;
-          height: 1.25rem;
-        }
-
-        &.success {
-          color: #15803d;
-
-          mat-icon {
-            color: #22c55e;
-          }
-        }
-
-        &.warning {
-          color: #a16207;
-
-          mat-icon {
-            color: #f59e0b;
-          }
-        }
-      }
-    }
-  }
-
-  .question-preview {
-    h5 {
-      font-size: 1rem;
-      font-weight: 500;
-      margin-bottom: 0.75rem;
-      color: #374151;
-    }
-
-    .questions-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-
-      .question-item {
-        padding: 0.75rem;
-        background-color: #f9fafb;
-        border-radius: 0.5rem;
-
-        .question-text {
-          font-weight: 500;
-          color: #1f2937;
-          margin-bottom: 0.25rem;
-        }
-
-        .answers-count {
-          font-size: 0.875rem;
-          color: #4b5563;
-        }
-      }
-
-      .more-questions {
-        text-align: center;
-        padding: 0.5rem;
-        color: #6b7280;
-        font-size: 0.875rem;
-        font-weight: 500;
+      &.warning mat-icon {
+        color: var(--mdc-theme-error);
       }
     }
   }
 }
 
-// Help Section
-.help-section {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
-
-  h4 {
-    font-size: 1.125rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
-    color: #1f2937;
-  }
-
-  .code-example {
-    margin-bottom: 1rem;
-
-    pre {
-      background-color: #111827;
-      color: white;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      overflow-x: auto;
-      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-
-      code {
-        font-size: 0.875rem;
-        line-height: 1.6;
-      }
-    }
-  }
-
-  .help-note {
-    font-size: 0.875rem;
-    color: #4b5563;
-    line-height: 1.6;
-  }
-}
-
-// Dialog Actions
-mat-dialog-actions {
+.question-preview .questions-list {
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
 
-  button[mat-raised-button] {
-    min-width: 140px;
-  }
-}
+  .question-item {
+    padding: 0.75rem;
+    border-radius: 6px;
+    background: var(--mdc-filled-text-field-container-color);
 
-// Utility Classes
-.text-center {
-  text-align: center;
-}
-
-// Dark Theme Support
-@media (prefers-color-scheme: dark) {
-  .file-drop-zone {
-    border-color: #4b5563;
-    background-color: #1f2937;
-
-    &:hover,
-    &.drag-over {
-      border-color: #60a5fa;
-      background-color: rgba(37, 99, 235, 0.1);
+    .question-text {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
     }
 
-    .drop-zone-content {
-      .upload-icon {
-        color: #6b7280;
-      }
-
-      h3 {
-        color: #e5e7eb;
-      }
-
-      .text-muted {
-        color: #9ca3af;
-      }
-
-      .file-select-btn {
-        color: #60a5fa;
-
-        &:hover {
-          color: #93c5fd;
-        }
-      }
-
-      .file-requirements {
-        color: #6b7280;
-      }
+    .answers-count {
+      font-size: 0.875rem;
+      opacity: 0.7;
     }
   }
 
-  .selected-file {
-    background-color: #1f2937;
-
-    .file-name {
-      color: #e5e7eb;
-    }
-  }
-
-  .preview-section {
-    .file-info {
-      background-color: rgba(34, 197, 94, 0.1);
-
-      .file-name {
-        color: #bbf7d0;
-      }
-    }
-
-    .import-summary h4 {
-      color: #e5e7eb;
-    }
-
-    .question-preview {
-      h5 {
-        color: #d1d5db;
-      }
-
-      .questions-list .question-item {
-        background-color: #1f2937;
-
-        .question-text {
-          color: #e5e7eb;
-        }
-
-        .answers-count {
-          color: #9ca3af;
-        }
-      }
-    }
-  }
-
-  .help-section {
-    border-color: #374151;
-
-    h4 {
-      color: #e5e7eb;
-    }
-
-    .help-note {
-      color: #9ca3af;
-    }
+  .more-questions {
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    opacity: 0.7;
   }
 }

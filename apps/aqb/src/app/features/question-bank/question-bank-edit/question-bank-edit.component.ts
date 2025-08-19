@@ -123,12 +123,11 @@ export class QuestionBankEditComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(async (result: QuestionImportResult | undefined) => {
-      if (result?.success && result.questions.length > 0) {
-        try {
-          await this.store.importQuestions(result.questions);
-        } catch (error) {
-          console.error('Failed to import questions:', error);
-        }
+      if (result?.success && result.questionsAdded > 0) {
+        // Questions have already been imported to the database
+        // Just refresh the current question bank data
+        await this.store.initialize(this.id);
+        await this.store.loadQuestionsRange(0, 20);
       }
     });
   }

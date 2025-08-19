@@ -451,20 +451,50 @@ export class QuestionBankService {
     const questionsToAdd = Array.isArray(dto.questions)
       ? dto.questions
       : [dto.questions];
+
+    // Get existing questions for deduplication (case-insensitive)
+    const existingQuestions = await this.questionRepository.find({
+      where: { questionBankId },
+      select: ['question'],
+    });
+
+    const existingQuestionTexts = new Set(
+      existingQuestions.map(q => q.question.toLowerCase().trim())
+    );
+
     let questionsAdded = 0;
+    let duplicatesSkipped = 0;
 
     for (const questionDto of questionsToAdd) {
+      const normalizedQuestion = questionDto.question.toLowerCase().trim();
+      
+      // Skip if question already exists (case-insensitive)
+      if (existingQuestionTexts.has(normalizedQuestion)) {
+        duplicatesSkipped++;
+        continue;
+      }
+
       const question = this.questionRepository.create({
-        question: questionDto.question,
+        question: questionDto.question.trim(),
         questionBankId,
         answers: [],
       });
 
       const savedQuestion = await this.questionRepository.save(question);
 
+      // Deduplicate answers within the question
+      const seenAnswers = new Set<string>();
       for (const answerDto of questionDto.answers) {
+        const normalizedAnswer = answerDto.text.toLowerCase().trim();
+        
+        // Skip duplicate answers within the same question
+        if (seenAnswers.has(normalizedAnswer)) {
+          continue;
+        }
+        seenAnswers.add(normalizedAnswer);
+
         const answer = this.answerRepository.create({
-          text: answerDto.text,
+          text: answerDto.text.trim(),
           isCorrect: answerDto.correct || false,
           questionId: savedQuestion.id,
         });
@@ -472,6 +502,8 @@ export class QuestionBankService {
         await this.answerRepository.save(answer);
       }
 
+      // Add to our tracking set to avoid duplicates within this batch
+      existingQuestionTexts.add(normalizedQuestion);
       questionsAdded++;
     }
 
@@ -481,7 +513,11 @@ export class QuestionBankService {
       questionBankId
     );
 
-    return { success: true, questionsAdded };
+    return { 
+      success: true, 
+      questionsAdded,
+      ...(duplicatesSkipped > 0 && { duplicatesSkipped })
+    };
   }
 
   async deleteQuestion(

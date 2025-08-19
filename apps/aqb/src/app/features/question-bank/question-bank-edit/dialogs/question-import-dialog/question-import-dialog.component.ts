@@ -12,7 +12,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { QuestionBankImportService } from '../../../../../core/services/question-bank-import.service';
-import { ParsedQuestion } from '@aqb/data-access';
+import { ParsedQuestion, CreateQuestionRequest } from '@aqb/data-access';
+import { firstValueFrom } from 'rxjs';
+import {QuestionBankApiService} from "@aqb/data-access/angular";
 
 export interface QuestionImportDialogData {
   questionBankId: string;
@@ -21,19 +23,28 @@ export interface QuestionImportDialogData {
 
 export interface QuestionImportResult {
   success: boolean;
-  questions: ParsedQuestion[];
+  questionsAdded: number;
   importSummary: string;
+}
+
+interface FileProcessResult {
+  file: File;
+  questions: CreateQuestionRequest[];
+  error?: string;
 }
 
 interface ImportState {
   isImporting: boolean;
   dragOver: boolean;
-  selectedFile: File | null;
-  previewData: {
+  selectedFiles: File[];
+  processedFiles: FileProcessResult[];
+  combinedPreviewData: {
     totalQuestions: number;
     validQuestions: number;
     invalidQuestions: number;
-    questions: ParsedQuestion[];
+    totalFiles: number;
+    validFiles: number;
+    invalidFiles: number;
   } | null;
   error: string | null;
 }
@@ -52,6 +63,7 @@ interface ImportState {
   ],
 })
 export class QuestionImportDialogComponent {
+  private readonly questionBankApiService = inject(QuestionBankApiService);
   private readonly dialogRef = inject(MatDialogRef<QuestionImportDialogComponent, QuestionImportResult>);
   private readonly snackBar = inject(MatSnackBar);
   private readonly importService = inject(QuestionBankImportService);
@@ -60,22 +72,34 @@ export class QuestionImportDialogComponent {
   protected readonly state = signal<ImportState>({
     isImporting: false,
     dragOver: false,
-    selectedFile: null,
-    previewData: null,
+    selectedFiles: [],
+    processedFiles: [],
+    combinedPreviewData: null,
     error: null,
   });
 
   protected readonly canImport = computed(() => {
     const currentState = this.state();
-    return currentState.previewData && 
-           currentState.previewData.validQuestions > 0 && 
+    return currentState.combinedPreviewData && 
+           currentState.combinedPreviewData.validQuestions > 0 && 
            !currentState.isImporting;
   });
 
   protected readonly hasValidData = computed(() => {
     const currentState = this.state();
-    return currentState.previewData && currentState.previewData.validQuestions > 0;
+    return currentState.combinedPreviewData && currentState.combinedPreviewData.validQuestions > 0;
   });
+
+  protected readonly hasSelectedFiles = computed(() => {
+    const currentState = this.state();
+    return currentState.selectedFiles.length > 0;
+  });
+
+  protected getAllValidQuestions(): CreateQuestionRequest[] {
+    return this.state().processedFiles
+      .filter(f => !f.error && f.questions.length > 0)
+      .flatMap(f => f.questions);
+  }
 
   protected readonly exampleJson = `{
   "questions": [
@@ -92,8 +116,8 @@ export class QuestionImportDialogComponent {
 
   protected onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      this.processFile(input.files[0]);
+    if (input.files && input.files.length > 0) {
+      this.processFiles(Array.from(input.files));
     }
   }
 
@@ -115,65 +139,104 @@ export class QuestionImportDialogComponent {
     this.state.update(state => ({ ...state, dragOver: false }));
 
     const files = event.dataTransfer?.files;
-    if (files && files[0]) {
-      this.processFile(files[0]);
+    if (files && files.length > 0) {
+      this.processFiles(Array.from(files));
     }
   }
 
-  protected async processFile(file: File): Promise<void> {
-    if (!file.name.toLowerCase().endsWith('.json')) {
+  protected async processFiles(files: File[]): Promise<void> {
+    // Filter only JSON files
+    const jsonFiles = files.filter(file => file.name.toLowerCase().endsWith('.json'));
+    
+    if (jsonFiles.length === 0) {
       this.state.update(state => ({
         ...state,
-        error: 'Please select a valid JSON file',
-        selectedFile: null,
-        previewData: null,
+        error: 'Please select only JSON files',
+        selectedFiles: [],
+        processedFiles: [],
+        combinedPreviewData: null,
       }));
       return;
     }
 
+    if (jsonFiles.length !== files.length) {
+      this.snackBar.open(`${files.length - jsonFiles.length} non-JSON files were ignored`, 'Close', {
+        duration: 3000,
+        panelClass: 'warning-snackbar',
+      });
+    }
+
     this.state.update(state => ({
       ...state,
-      selectedFile: file,
+      selectedFiles: jsonFiles,
       error: null,
       isImporting: true,
+      processedFiles: [],
+      combinedPreviewData: null,
     }));
 
     try {
-      const fileContent = await this.readFile(file);
-      const result = await this.importService.importFromFile(fileContent);
-
-      if (result.success && result.questionBank) {
-        this.state.update(state => ({
-          ...state,
-          previewData: {
-            totalQuestions: result.statistics.totalQuestions,
-            validQuestions: result.statistics.validQuestions,
-            invalidQuestions: result.statistics.invalidQuestions,
-            questions: result.questionBank?.questions ?? [],
-          },
-          error: null,
-          isImporting: false,
-        }));
-
-        if (result.warnings.length > 0) {
-          this.snackBar.open(result.warnings.join('; '), 'Close', {
-            duration: 5000,
-            panelClass: 'warning-snackbar',
+      const processedFiles: FileProcessResult[] = [];
+      
+      for (const file of jsonFiles) {
+        try {
+          const fileContent = await this.readFile(file);
+          const { questions } = await this.importService.importQuestionsToBank(
+            fileContent,
+            this.data.questionBankId
+          );
+          
+          processedFiles.push({
+            file,
+            questions,
+          });
+        } catch (error) {
+          processedFiles.push({
+            file,
+            questions: [],
+            error: error instanceof Error ? error.message : 'Processing failed',
           });
         }
-      } else {
-        this.state.update(state => ({
-          ...state,
-          error: result.errors.join('; ') || 'Failed to parse the file',
-          previewData: null,
-          isImporting: false,
-        }));
       }
+
+      // Calculate combined statistics
+      const validFiles = processedFiles.filter(f => !f.error).length;
+      const invalidFiles = processedFiles.filter(f => f.error).length;
+      const totalQuestions = processedFiles.reduce((sum, f) => sum + f.questions.length, 0);
+
+      this.state.update(state => ({
+        ...state,
+        processedFiles,
+        combinedPreviewData: {
+          totalQuestions,
+          validQuestions: totalQuestions,
+          invalidQuestions: 0,
+          totalFiles: jsonFiles.length,
+          validFiles,
+          invalidFiles,
+        },
+        error: null,
+        isImporting: false,
+      }));
+
+      if (invalidFiles > 0) {
+        const errorMessages = processedFiles
+          .filter(f => f.error)
+          .map(f => `${f.file.name}: ${f.error}`)
+          .join('; ');
+        
+        this.snackBar.open(`${invalidFiles} files had errors: ${errorMessages}`, 'Close', {
+          duration: 8000,
+          panelClass: 'warning-snackbar',
+        });
+      }
+
     } catch (error) {
       this.state.update(state => ({
         ...state,
-        error: error instanceof Error ? error.message : 'An error occurred while processing the file',
-        previewData: null,
+        error: error instanceof Error ? error.message : 'An error occurred while processing files',
+        processedFiles: [],
+        combinedPreviewData: null,
         isImporting: false,
       }));
     }
@@ -181,18 +244,45 @@ export class QuestionImportDialogComponent {
 
   protected async confirmImport(): Promise<void> {
     const currentState = this.state();
-    if (!currentState.previewData || currentState.previewData.validQuestions === 0) {
+    if (!currentState.combinedPreviewData || currentState.combinedPreviewData.validQuestions === 0) {
       return;
     }
 
     this.state.update(state => ({ ...state, isImporting: true }));
 
     try {
+      // Combine all questions from valid files
+      const allQuestions = currentState.processedFiles
+        .filter(f => !f.error && f.questions.length > 0)
+        .flatMap(f => f.questions);
+
+      if (allQuestions.length === 0) {
+        throw new Error('No valid questions found in any file');
+      }
+
+      // Create the API call with all questions
+      // TODO: move the api call
+      const apiCall = this.questionBankApiService.addQuestion(this.data.questionBankId, {
+        questions: allQuestions,
+      });
+
+      const response = await firstValueFrom(apiCall);
+      
+      let importMessage = `Successfully imported ${response.questionsAdded} questions from ${currentState.combinedPreviewData.validFiles} files to ${this.data.questionBankName}`;
+      if (response.duplicatesSkipped) {
+        importMessage += ` (${response.duplicatesSkipped} duplicates skipped)`;
+      }
+      
       const result: QuestionImportResult = {
-        success: true,
-        questions: currentState.previewData.questions,
-        importSummary: `Successfully prepared ${currentState.previewData.validQuestions} questions for import`,
+        success: response.success,
+        questionsAdded: response.questionsAdded,
+        importSummary: importMessage,
       };
+
+      this.snackBar.open(result.importSummary, 'Close', {
+        duration: 4000,
+        panelClass: 'success-snackbar',
+      });
 
       this.dialogRef.close(result);
     } catch (error) {
@@ -208,13 +298,50 @@ export class QuestionImportDialogComponent {
     this.dialogRef.close();
   }
 
-  protected clearFile(): void {
+  protected clearFiles(): void {
     this.state.update(state => ({
       ...state,
-      selectedFile: null,
-      previewData: null,
+      selectedFiles: [],
+      processedFiles: [],
+      combinedPreviewData: null,
       error: null,
     }));
+  }
+
+  protected removeFile(fileToRemove: File): void {
+    this.state.update(state => {
+      const updatedFiles = state.selectedFiles.filter(f => f !== fileToRemove);
+      const updatedProcessed = state.processedFiles.filter(f => f.file !== fileToRemove);
+      
+      if (updatedFiles.length === 0) {
+        return {
+          ...state,
+          selectedFiles: [],
+          processedFiles: [],
+          combinedPreviewData: null,
+          error: null,
+        };
+      }
+
+      // Recalculate combined statistics
+      const validFiles = updatedProcessed.filter(f => !f.error).length;
+      const invalidFiles = updatedProcessed.filter(f => f.error).length;
+      const totalQuestions = updatedProcessed.reduce((sum, f) => sum + f.questions.length, 0);
+
+      return {
+        ...state,
+        selectedFiles: updatedFiles,
+        processedFiles: updatedProcessed,
+        combinedPreviewData: {
+          totalQuestions,
+          validQuestions: totalQuestions,
+          invalidQuestions: 0,
+          totalFiles: updatedFiles.length,
+          validFiles,
+          invalidFiles,
+        },
+      };
+    });
   }
 
   private readFile(file: File): Promise<string> {

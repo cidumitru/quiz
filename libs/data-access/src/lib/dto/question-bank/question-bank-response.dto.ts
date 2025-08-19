@@ -103,6 +103,7 @@ export interface QuestionBankSuccessResponse {
 export interface QuestionsAddedResponse {
   success: boolean;
   questionsAdded: number;
+  duplicatesSkipped?: number;
 }
 
 export interface QuestionsPaginatedResponse {

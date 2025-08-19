@@ -3,7 +3,7 @@
   
   <mat-dialog-content class="dialog-content">
     <!-- File Upload Section -->
-    @if (!state().selectedFile) {
+    @if (!hasSelectedFiles()) {
       <div 
         class="file-drop-zone"
         [class.drag-over]="state().dragOver"
@@ -15,33 +15,39 @@
           <mat-icon class="upload-icon">cloud_upload</mat-icon>
           <h3>Import Questions to "{{ data.questionBankName }}"</h3>
           <p class="text-muted">
-            Drag and drop a JSON file here, or 
+            Drag and drop JSON files here, or 
             <button type="button" class="file-select-btn" (click)="fileInput.click()">
               browse files
             </button>
           </p>
           <small class="file-requirements">
-            Accepts JSON files with a "questions" array containing question objects
+            Accepts multiple JSON files with a "questions" array containing question objects
           </small>
         </div>
         <input
           #fileInput
           type="file"
           accept=".json"
+          multiple
           style="display: none"
           (change)="onFileSelected($event)"
         >
       </div>
     }
 
-    <!-- File Selected Section -->
-    @if (state().selectedFile && !state().previewData && !state().isImporting) {
-      <div class="selected-file">
-        <mat-icon>description</mat-icon>
-        <span class="file-name">{{ state().selectedFile!.name }}</span>
-        <button mat-icon-button (click)="clearFile()">
-          <mat-icon>close</mat-icon>
-        </button>
+    <!-- Files Selected Section (during processing) -->
+    @if (hasSelectedFiles() && !state().combinedPreviewData && !state().isImporting) {
+      <div class="selected-files-section">
+        <h4>Processing Files...</h4>
+        @for (file of state().selectedFiles; track file.name) {
+          <div class="selected-file">
+            <mat-icon>description</mat-icon>
+            <span class="file-name">{{ file.name }}</span>
+            <button mat-icon-button (click)="removeFile(file)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
       </div>
     }
 
@@ -60,8 +66,8 @@
         <div class="error-content">
           <h4>Import Error</h4>
           <p>{{ state().error }}</p>
-          <button mat-raised-button color="primary" (click)="clearFile()">
-            Try Another File
+          <button mat-raised-button color="primary" (click)="clearFiles()">
+            Try Other Files
           </button>
         </div>
       </div>
@@ -70,43 +76,63 @@
     <!-- Preview Section -->
     @if (hasValidData()) {
       <div class="preview-section">
-        <div class="file-info">
-          <mat-icon>description</mat-icon>
-          <span class="file-name">{{ state().selectedFile!.name }}</span>
-          <button mat-icon-button (click)="clearFile()">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
+        <div class="files-info">
+          <div class="files-summary">
+            <mat-icon>folder_open</mat-icon>
+            <span class="summary-text">{{ state().combinedPreviewData!.validFiles }} files ready for import</span>
+            <button mat-icon-button (click)="clearFiles()" [attr.aria-label]="'Clear all files'">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
 
-        <div class="import-summary">
-          <h4>Import Preview</h4>
-          <div class="summary-stats">
-            <div class="stat-item success">
-              <mat-icon>check_circle</mat-icon>
-              <span>{{ state().previewData!.validQuestions }} valid questions</span>
-            </div>
-            @if (state().previewData!.invalidQuestions > 0) {
-              <div class="stat-item warning">
-                <mat-icon>warning</mat-icon>
-                <span>{{ state().previewData!.invalidQuestions }} invalid questions (will be skipped)</span>
+          <div class="file-list">
+            @for (processedFile of state().processedFiles; track processedFile.file.name) {
+              <div class="selected-file" [class.error]="processedFile.error">
+                <mat-icon>{{ processedFile.error ? 'error' : 'description' }}</mat-icon>
+                <span class="file-name">{{ processedFile.file.name }}</span>
+                @if (!processedFile.error) {
+                  <span class="text-sm">{{ processedFile.questions.length }} questions</span>
+                }
+                @if (processedFile.error) {
+                  <span class="text-sm error-text">{{ processedFile.error }}</span>
+                }
+                <button mat-icon-button (click)="removeFile(processedFile.file)" [attr.aria-label]="'Remove ' + processedFile.file.name">
+                  <mat-icon>close</mat-icon>
+                </button>
               </div>
             }
           </div>
         </div>
 
-        <!-- Question Preview (show first few) -->
+        <div class="import-summary">
+          <h4>Import Summary</h4>
+          <div class="summary-stats">
+            <div class="stat-item success">
+              <mat-icon>check_circle</mat-icon>
+              <span>{{ state().combinedPreviewData!.validQuestions }} questions from {{ state().combinedPreviewData!.validFiles }} files</span>
+            </div>
+            @if (state().combinedPreviewData!.invalidFiles > 0) {
+              <div class="stat-item warning">
+                <mat-icon>warning</mat-icon>
+                <span>{{ state().combinedPreviewData!.invalidFiles }} files had errors</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Question Preview (show first few from all files) -->
         <div class="question-preview">
           <h5>Sample Questions</h5>
           <div class="questions-list">
-            @for (question of state().previewData!.questions.slice(0, 3); track question.id) {
+            @for (question of getAllValidQuestions().slice(0, 5); track question.question) {
               <div class="question-item">
                 <div class="question-text">{{ question.question }}</div>
                 <div class="answers-count">{{ question.answers.length }} answers</div>
               </div>
             }
-            @if (state().previewData!.questions.length > 3) {
+            @if (getAllValidQuestions().length > 5) {
               <div class="more-questions">
-                <span>+ {{ state().previewData!.questions.length - 3 }} more questions</span>
+                <span>+ {{ getAllValidQuestions().length - 5 }} more questions</span>
               </div>
             }
           </div>
@@ -115,15 +141,15 @@
     }
 
     <!-- JSON Schema Help -->
-    @if (!state().selectedFile && !state().isImporting) {
+    @if (!hasSelectedFiles() && !state().isImporting) {
       <div class="help-section">
         <h4>Expected JSON Format</h4>
         <div class="code-example">
           <pre><code>{{ exampleJson }}</code></pre>
         </div>
         <p class="help-note">
-          The service will automatically generate IDs for questions and answers if not provided.
-          Questions without valid answers will be skipped during import.
+          You can select multiple JSON files at once. The service will automatically generate IDs for questions and answers if not provided.
+          Questions without valid answers will be skipped during import, and duplicates will be automatically detected and skipped.
         </p>
       </div>
     }
@@ -140,7 +166,7 @@
       @if (state().isImporting) {
         Importing...
       } @else {
-        Import {{ state().previewData?.validQuestions || 0 }} Questions
+        Import {{ state().combinedPreviewData?.validQuestions || 0 }} Questions
       }
     </button>
   </mat-dialog-actions>
