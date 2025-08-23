@@ -52,7 +52,7 @@ jobs:
                   }
 
                   const result = data.replace("$BUILD_DATE$", new Date().toISOString())
-                                     .replace("http://localhost:3000", "https://aqb-api.onrender.com");
+                                     .replace("http://localhost:3000", "https://yanki-production.up.railway.app");
 
                   fs.writeFile(configPath, result, 'utf8', function (err) {
                       if (err) return console.log(err);
