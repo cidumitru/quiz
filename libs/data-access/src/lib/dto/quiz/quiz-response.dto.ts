@@ -56,12 +56,7 @@ export interface QuizFinishResponse {
   quiz: Quiz;
 }
 
-export interface SubmitAnswersResponse {
-  success: boolean;
-  correctAnswers: number;
-  totalQuestions: number;
-  score: number;
-}
+export interface SubmitAnswersResponse {}
 
 export interface ClearHistoryResponse {
   success: boolean;
