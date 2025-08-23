@@ -57,7 +57,7 @@ export class QuizComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog);
 
   constructor() {
-    // Auto-save answers when they change
+    // Auto-save answers when they change - but use single-request pattern
     effect(() => {
       const viewModel = this.quizViewModel();
       if (viewModel) {
@@ -65,6 +65,7 @@ export class QuizComponent implements OnInit, OnDestroy {
         viewModel.answeredCount();
         const answers = viewModel.getAllAnswers();
         if (answers.length > 0 && !viewModel.finishedAt) {
+          // The QuizService now handles request queuing and deduplication internally
           this.quizService.setQuizAnswers(viewModel.id, answers);
         }
       }
@@ -202,6 +203,7 @@ export class QuizComponent implements OnInit, OnDestroy {
     );
   }
 
+
   // Simple helper methods
   selectAnswer(questionId: string, answerId: string): void {
     const viewModel = this.quizViewModel();
@@ -216,12 +218,25 @@ export class QuizComponent implements OnInit, OnDestroy {
     viewModel.selectAnswer(questionId, answerId);
 
     // Check if this was the final question and trigger completion immediately
+    // Small delay to allow the Angular effect to trigger answer submission first
     setTimeout(async () => {
       if (viewModel.isComplete() && !viewModel.finishedAt) {
-        // Show completion celebration immediately
-        setTimeout(() => {
-          this.showQuizStatsDialog(viewModel);
-        }, 300);
+        // Finalize quiz in backend first, then show celebration
+        try {
+          await this.quizService.markQuizAsFinished(viewModel.id);
+          console.log('Quiz finalized successfully');
+          
+          // Show completion celebration after successful finalization
+          setTimeout(() => {
+            this.showQuizStatsDialog(viewModel);
+          }, 300);
+        } catch (error) {
+          console.error('Failed to finalize quiz:', error);
+          // Still show dialog even if finalization fails
+          setTimeout(() => {
+            this.showQuizStatsDialog(viewModel);
+          }, 300);
+        }
       } else if (viewModel.isQuestionCorrect(questionId)) {
         // Auto-scroll to next question if answer is correct
         this.navigateDown();
