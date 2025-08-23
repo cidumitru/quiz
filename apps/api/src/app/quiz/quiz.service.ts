@@ -1,6 +1,6 @@
 import {BadRequestException, Injectable, NotFoundException,} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
+import {DataSource, Repository} from 'typeorm';
 import {Quiz} from '../entities/quiz.entity';
 import {QuizQuestion} from '../entities/quiz-question.entity';
 import {QuizStatistics} from '../entities/quiz-statistics.entity';
@@ -39,7 +39,8 @@ export class QuizService {
         @InjectRepository(Answer)
         private answerRepository: Repository<Answer>,
         private achievementService: AchievementService,
-        private realtimeAchievementService: RealtimeAchievementService
+        private realtimeAchievementService: RealtimeAchievementService,
+        private dataSource: DataSource
     ) {
     }
 
@@ -346,139 +347,138 @@ export class QuizService {
         quizId: string,
         dto: SubmitAnswersDto
     ): Promise<SubmitAnswersResponse> {
-        const quiz = await this.quizRepository.findOne({
-            where: {id: quizId, userId},
-            relations: [
-                'quizQuestions',
-                'quizQuestions.question',
-                'quizQuestions.question.answers',
-            ],
-        });
-
-        if (!quiz) {
-            throw new NotFoundException('Quiz not found');
-        }
-
-        if (quiz.finishedAt) {
-            throw new BadRequestException('Quiz is already finished');
-        }
-
-        // Update answers
-        for (const answer of dto.answers) {
-            await this.quizQuestionRepository.update(
-                {quizId, questionId: answer.questionId},
-                {answerId: answer.answerId}
-            );
-        }
-
-        // Calculate score and track streaks
-        const totalQuestions = quiz.quizQuestions.length;
-        let correctAnswers = 0;
-        let longestStreakInSession = 0;
-        let currentStreak = 0;
-
-        // Track individual answer correctness for streak calculation
-        const answerResults: boolean[] = [];
-        
-        for (const answer of dto.answers) {
-            const quizQuestion = quiz.quizQuestions.find(
-                (qq) => qq.questionId === answer.questionId
-            );
-            if (quizQuestion) {
-                const submittedAnswer = quizQuestion.question.answers.find(
-                    (a) => a.id === answer.answerId
-                );
-                const isCorrect = !!submittedAnswer?.isCorrect;
-                answerResults.push(isCorrect);
-                
-                if (isCorrect) {
-                    correctAnswers++;
-                    currentStreak++;
-                    longestStreakInSession = Math.max(longestStreakInSession, currentStreak);
-                } else {
-                    currentStreak = 0;
-                }
-            }
-        }
-
-        // Update streak ONCE after processing all answers - this fixes the N+1 emissions
-        // Pass the FINAL result to properly reset streak on wrong answers
-        const lastAnswerCorrect = answerResults.length > 0 ? answerResults[answerResults.length - 1] : false;
-        let finalStreakUpdate = 0;
-        
-        try {
-            finalStreakUpdate = await this.achievementService.updateStreakBatch(
-                userId, 
-                answerResults, 
-                longestStreakInSession,
-                lastAnswerCorrect
-            );
-        } catch (error) {
-            console.error('Achievement streak update failed, continuing with quiz submission:', error);
-            // Continue with quiz submission even if achievement update fails
-        }
-
-        const score =
-            totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
-
-        // Update quiz with current score (even if not finished)
-        quiz.score = score;
-        await this.quizRepository.save(quiz);
-
-        // Create batched achievement events for better performance
-        const achievementEvents = [];
-
-        // Main answer submission event
-        achievementEvents.push({
-            userId,
-            eventType: 'answer_submitted',
-            eventData: {
-                quizId,
-                totalAnswers: totalQuestions,
-                correctAnswers,
-                accuracy: score,
-                streakInSession: longestStreakInSession,
-                currentStreak: finalStreakUpdate,
-                answerResults,
-                sessionId: quiz.id
-            }
-        });
-
-        // Add session completion event if this is a partial or full completion
-        if (correctAnswers > 0) {
-            achievementEvents.push({
-                userId,
-                eventType: 'session_progress',
-                eventData: {
-                    quizId,
-                    totalQuestions,
-                    correctAnswers,
-                    accuracy: score,
-                    streakAchieved: longestStreakInSession,
-                    currentGlobalStreak: finalStreakUpdate,
-                    sessionId: quiz.id,
-                    timestamp: new Date()
-                }
+        return await this.dataSource.transaction(async (transactionManager) => {
+            // 1. Basic validation
+            const quiz = await transactionManager.findOne(Quiz, {
+                where: {id: quizId, userId},
             });
-        }
 
-        // Batch create events for better performance - with error handling
+            if (!quiz) {
+                throw new NotFoundException('Quiz not found');
+            }
+
+            if (quiz.finishedAt) {
+                throw new BadRequestException('Quiz is already finished');
+            }
+
+            // 2. Bulk update answers - single query instead of N+1
+            if (dto.answers.length > 0) {
+                const questionIds = dto.answers.map(a => a.questionId);
+                const parameters: any = { quizId };
+                
+                let caseStatement = 'CASE ';
+                dto.answers.forEach((answer, index) => {
+                    const questionParam = `questionId_${index}`;
+                    const answerParam = `answerId_${index}`;
+                    caseStatement += `WHEN "questionId" = :${questionParam} THEN :${answerParam} `;
+                    parameters[questionParam] = answer.questionId;
+                    parameters[answerParam] = answer.answerId;
+                });
+                caseStatement += 'ELSE "answerId" END';
+                
+                await transactionManager
+                    .createQueryBuilder()
+                    .update(QuizQuestion)
+                    .set({
+                        answerId: () => caseStatement,
+                    })
+                    .where('quizId = :quizId', { quizId })
+                    .andWhere('questionId IN (:...questionIds)', { questionIds })
+                    .setParameters(parameters)
+                    .execute();
+            }
+
+            // 3. Calculate score efficiently
+            const [totalQuestions, correctCount] = await Promise.all([
+                transactionManager.count(QuizQuestion, { where: { quizId } }),
+                transactionManager
+                    .createQueryBuilder(Answer, 'answer')
+                    .where('answer.id IN (:...answerIds)', { 
+                        answerIds: dto.answers.map(a => a.answerId) 
+                    })
+                    .andWhere('answer.isCorrect = true')
+                    .getCount()
+            ]);
+
+            const score = totalQuestions > 0 ? (correctCount / totalQuestions) * 100 : 0;
+
+            // 4. Update quiz score
+            await transactionManager.update(Quiz, { id: quizId }, { score });
+
+            // 5. Log achievement data for future analysis (non-blocking)
+            setImmediate(() => {
+                this.logAnswerSubmission(userId, quizId, dto.answers, correctCount, totalQuestions, score)
+                    .catch(error => {
+                        console.warn('Achievement logging failed (non-critical):', error);
+                    });
+            });
+
+            return {
+                success: true,
+                correctAnswers: correctCount,
+                totalQuestions,
+                score,
+            };
+        });
+    }
+
+    /**
+     * Simple achievement logging for future analysis
+     * Logs answer submissions with correctness data in a non-blocking way
+     */
+    private async logAnswerSubmission(
+        userId: string,
+        quizId: string,
+        answers: { questionId: string; answerId: string }[],
+        correctCount: number,
+        totalQuestions: number,
+        score: number
+    ): Promise<void> {
         try {
-            await this.achievementService.createAchievementEventBatch(achievementEvents);
+            // Get which answers were correct for detailed logging
+            const answerIds = answers.map(a => a.answerId);
+            const correctAnswerIds = await this.answerRepository
+                .createQueryBuilder('answer')
+                .select('answer.id')
+                .where('answer.id IN (:...answerIds)', { answerIds })
+                .andWhere('answer.isCorrect = true')
+                .getMany()
+                .then(answers => answers.map(a => a.id));
+
+            // Create simple log entry
+            const logEntry = {
+                timestamp: new Date().toISOString(),
+                userId,
+                quizId,
+                submissionData: {
+                    answersSubmitted: answers.length,
+                    correctAnswers: correctCount,
+                    totalQuestions,
+                    score: Math.round(score),
+                    accuracy: totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0
+                },
+                answerDetails: answers.map(answer => ({
+                    questionId: answer.questionId,
+                    answerId: answer.answerId,
+                    isCorrect: correctAnswerIds.includes(answer.answerId)
+                }))
+            };
+
+            // Log for future achievement system integration
+            console.log('[ACHIEVEMENT_LOG]', JSON.stringify(logEntry));
+
+            // Optional: Store in database for persistence (commented out for now)
+            /*
+            await this.dataSource.query(`
+                INSERT INTO achievement_logs (user_id, quiz_id, log_data, created_at)
+                VALUES ($1, $2, $3, NOW())
+            `, [userId, quizId, JSON.stringify(logEntry)]);
+            */
+
         } catch (error) {
-            console.error('Achievement event creation failed, continuing with quiz submission:', error);
-            // Continue with quiz submission even if achievement events fail
+            // Silently fail - this is non-critical logging
+            console.debug('Achievement logging error:', error);
         }
-
-        // Update statistics
-        await this.updateStatistics(userId, quiz.questionBankId);
-
-        return {
-            success: true,
-            correctAnswers,
-            totalQuestions,
-            score,
-        };
     }
 
     async finishQuiz(
@@ -701,33 +701,5 @@ export class QuizService {
             questionBankName: quiz.questionBank?.name || '',
             score: Math.round(score),
         };
-    }
-
-    private async mapQuizToResponse(quiz: Quiz, includeQuestions: boolean): Promise<any> {
-        const response = {
-            id: quiz.id,
-            questionBankId: quiz.questionBankId,
-            mode: quiz.mode,
-            startedAt: quiz.startedAt,
-            finishedAt: quiz.finishedAt,
-            questionBankName: quiz.questionBank?.name,
-            questions: quiz.quizQuestions
-                .sort((a, b) => a.orderIndex - b.orderIndex)
-                .map(qq => ({
-                    id: qq.id,
-                    questionId: qq.questionId,
-                    question: qq.question.question,
-                    imageUrl: undefined, // Question entity doesn't have imageUrl yet
-                    answers: qq.question.answers.map(a => ({
-                        id: a.id,
-                        text: a.text,
-                        correct: quiz.finishedAt ? a.isCorrect : undefined,
-                    })),
-                    userAnswerId: qq.answerId,
-                    correctAnswerId: qq.question.answers.find(a => a.isCorrect)?.id,
-                    orderIndex: qq.orderIndex,
-                }))
-        };
-        return response;
     }
 }
