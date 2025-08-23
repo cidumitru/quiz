@@ -354,14 +354,9 @@ describe('QuizService', () => {
         .mockReturnValueOnce(mockScoreQueryBuilder); // For score calculation
       mockTransactionManager.update.mockResolvedValue({ affected: 1 });
 
-      const result = await service.submitAnswers(userId, quizId, submitDto);
+      await service.submitAnswers(userId, quizId, submitDto);
 
-      expect(result).toEqual({
-        success: true,
-        correctAnswers: 1,
-        totalQuestions: 2,
-        score: 50, // 1 correct out of 2 = 50%
-      });
+      // Verify the method completed successfully (no return value expected)
 
       // Verify transaction was used
       expect(mockDataSource.transaction).toHaveBeenCalledTimes(1);
@@ -375,19 +370,6 @@ describe('QuizService', () => {
       expect(mockBulkUpdateQueryBuilder.update).toHaveBeenCalled();
       expect(mockBulkUpdateQueryBuilder.set).toHaveBeenCalled();
       expect(mockBulkUpdateQueryBuilder.execute).toHaveBeenCalled();
-
-      // Verify score calculation queries
-      expect(mockTransactionManager.count).toHaveBeenCalledWith(QuizQuestion, {
-        where: { quizId },
-      });
-      expect(mockScoreQueryBuilder.getCount).toHaveBeenCalled();
-
-      // Verify quiz score update
-      expect(mockTransactionManager.update).toHaveBeenCalledWith(
-        Quiz,
-        { id: quizId },
-        { score: 50 }
-      );
     });
 
     it('should handle empty answers array gracefully', async () => {
@@ -412,18 +394,11 @@ describe('QuizService', () => {
       mockTransactionManager.createQueryBuilder.mockReturnValue(mockQueryBuilder);
       mockTransactionManager.update.mockResolvedValue({ affected: 1 });
 
-      const result = await service.submitAnswers(userId, quizId, emptySubmitDto);
+      await service.submitAnswers(userId, quizId, emptySubmitDto);
 
-      expect(result).toEqual({
-        success: true,
-        correctAnswers: 0,
-        totalQuestions: 5,
-        score: 0,
-      });
-
-      // Verify score calculation query was called even with empty answers
-      expect(mockTransactionManager.createQueryBuilder).toHaveBeenCalledWith(Answer, 'answer');
-      expect(mockQueryBuilder.where).toHaveBeenCalledWith('answer.id IN (:...answerIds)', { answerIds: [] });
+      // Verify the method completed successfully with empty answers
+      // No bulk update should be called when answers array is empty
+      expect(mockTransactionManager.createQueryBuilder).not.toHaveBeenCalled();
     });
 
     it('should throw NotFoundException for non-existent quiz', async () => {
@@ -476,11 +451,16 @@ describe('QuizService', () => {
       mockTransactionManager.createQueryBuilder.mockReturnValue(mockQueryBuilder);
       mockTransactionManager.update.mockResolvedValue({ affected: 1 });
 
-      const result = await service.submitAnswers(userId, quizId, perfectSubmitDto);
+      await service.submitAnswers(userId, quizId, perfectSubmitDto);
 
-      expect(result.score).toBe(100);
-      expect(result.correctAnswers).toBe(1);
-      expect(result.totalQuestions).toBe(1);
+      // Verify the bulk update was called with correct parameters
+      expect(mockQueryBuilder.setParameters).toHaveBeenCalledWith(
+        expect.objectContaining({
+          quizId,
+          questionId_0: 'q1',
+          answerId_0: 'a1',
+        })
+      );
     });
 
     it('should handle zero score correctly', async () => {
@@ -505,11 +485,18 @@ describe('QuizService', () => {
       mockTransactionManager.createQueryBuilder.mockReturnValue(mockQueryBuilder);
       mockTransactionManager.update.mockResolvedValue({ affected: 1 });
 
-      const result = await service.submitAnswers(userId, quizId, submitDto);
+      await service.submitAnswers(userId, quizId, submitDto);
 
-      expect(result.score).toBe(0);
-      expect(result.correctAnswers).toBe(0);
-      expect(result.totalQuestions).toBe(2);
+      // Verify the bulk update was called with correct parameters
+      expect(mockQueryBuilder.setParameters).toHaveBeenCalledWith(
+        expect.objectContaining({
+          quizId,
+          questionId_0: 'q1',
+          answerId_0: 'a1',
+          questionId_1: 'q2',
+          answerId_1: 'a3',
+        })
+      );
     });
 
     it('should use parameterized queries for SQL injection protection', async () => {
@@ -541,9 +528,7 @@ describe('QuizService', () => {
       mockTransactionManager.createQueryBuilder.mockReturnValue(mockQueryBuilder);
       mockTransactionManager.update.mockResolvedValue({ affected: 1 });
 
-      const result = await service.submitAnswers(userId, quizId, maliciousSubmitDto);
-
-      expect(result.success).toBe(true);
+      await service.submitAnswers(userId, quizId, maliciousSubmitDto);
       
       // Verify parameterized queries were used
       expect(mockQueryBuilder.setParameters).toHaveBeenCalledWith(

@@ -365,19 +365,12 @@ describe('QuizController', () => {
           { questionId: 'q-2', answerId: 'a-2' },
         ],
       };
-      const expectedResponse: SubmitAnswersResponse = {
-        success: true,
-        correctAnswers: 1,
-        totalQuestions: 2,
-        score: 50,
-      };
-
-      mockQuizService.submitAnswers.mockResolvedValue(expectedResponse);
+      mockQuizService.submitAnswers.mockResolvedValue(undefined);
 
       const result = await controller.submitAnswers(mockAuthenticatedRequest, quizId, dto);
 
       expect(mockQuizService.submitAnswers).toHaveBeenCalledWith('user-123', quizId, dto);
-      expect(result).toEqual(expectedResponse);
+      expect(result).toBeUndefined();
     });
 
     it('should handle empty answers array', async () => {

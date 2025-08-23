@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, Query, Request, UseGuards,} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query, Request, UseGuards,} from '@nestjs/common';
 import {JwtAuthGuard} from '../auth/jwt-auth.guard';
 import {QuizService} from './quiz.service';
 import {
@@ -10,7 +10,6 @@ import {
   QuizListQueryDto,
   QuizListResponse,
   SubmitAnswersDto,
-  SubmitAnswersResponse,
 } from '@aqb/data-access';
 import {AuthenticatedRequest} from '../types/common.types';
 
@@ -36,12 +35,13 @@ export class QuizController {
   }
 
   @Put(':id/answers')
-  submitAnswers(
+  @HttpCode(200)
+  async submitAnswers(
     @Request() req: AuthenticatedRequest,
     @Param('id') id: string,
     @Body() dto: SubmitAnswersDto,
-  ): Promise<SubmitAnswersResponse> {
-    return this.quizService.submitAnswers(req.user.id, id, dto);
+  ): Promise<void> {
+    await this.quizService.submitAnswers(req.user.id, id, dto);
   }
 
   @Put(':id/finish')
