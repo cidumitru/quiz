@@ -4,7 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'router-outlet',
+  selector: 'app-router-outlet',
   template: '',
 })
 class MockRouterOutlet {}
@@ -31,6 +31,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('router-outlet')).toBeTruthy();
+    expect(compiled.querySelector('app-router-outlet')).toBeTruthy();
   });
 });

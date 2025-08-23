@@ -11,7 +11,7 @@ export interface AchievementDto {
   progress: number;
   targetProgress: number;
   earnedAt?: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface UserAchievementProgressDto {

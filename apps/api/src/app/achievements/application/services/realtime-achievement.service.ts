@@ -160,7 +160,7 @@ export class RealtimeAchievementService {
     }
   }
 
-  async sendDailyGoalProgress(userId: string, questionsAnsweredToday: number, targetQuestions: number = 20) {
+  async sendDailyGoalProgress(userId: string, questionsAnsweredToday: number, targetQuestions = 20) {
     if (this.achievementGateway.isUserConnected(userId)) {
       const progress = Math.round((questionsAnsweredToday / targetQuestions) * 100);
       

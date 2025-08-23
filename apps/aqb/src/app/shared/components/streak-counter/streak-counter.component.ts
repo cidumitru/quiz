@@ -98,7 +98,6 @@ export class StreakCounterComponent implements OnChanges {
     const startStreak = this.displayStreak();
     const endStreak = this.streak;
     const steps = 20;
-    const stepValue = (endStreak - startStreak) / steps;
 
     interval(30)
         .pipe(

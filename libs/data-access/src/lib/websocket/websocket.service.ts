@@ -35,7 +35,7 @@ export class WebSocketService {
     public connectionState$ = this.connectionStateSubject.asObservable();
 
     // Event streams
-    private eventSubject = new Subject<{ event: string; data: any }>();
+    private eventSubject = new Subject<{ event: string; data: unknown }>();
     public events$ = this.eventSubject.asObservable();
 
     constructor() {
@@ -45,7 +45,7 @@ export class WebSocketService {
     /**
      * Connect to WebSocket with automatic reconnection
      */
-    connect(userId?: string, token?: string): Observable<any> {
+    connect(userId?: string, token?: string): Observable<{ event: string; data: unknown }> {
         if (this.socket && this.socket.connected) {
             return this.events$;
         }
@@ -63,12 +63,12 @@ export class WebSocketService {
         }
 
         // Prepare authentication data for handshake
-        const authData: any = {};
+        const authData: Record<string, string> = {};
         if (token) {
-            authData.token = token;
+            authData['token'] = token;
         }
         if (userId) {
-            authData.userId = userId;
+            authData['userId'] = userId;
         }
 
         this.socket = io(namespaceUrl, {
@@ -267,7 +267,7 @@ export class WebSocketService {
         });
 
         // Listen for all events and forward them (excluding internal Socket.IO events)
-        this.socket.onAny((eventName: string, data: any) => {
+        this.socket.onAny((eventName: string, data: unknown) => {
             // Filter out internal Socket.IO events to prevent flooding
             if (!this.INTERNAL_EVENTS.includes(eventName)) {
                 if (this.DEBUG_MODE) {
