@@ -405,6 +405,14 @@ export class QuizService {
             // 4. Update quiz score
             await transactionManager.update(Quiz, { id: quizId }, { score });
 
+            // 5. Log achievement data for future analysis (non-blocking)
+            setImmediate(() => {
+                this.logAnswerSubmission(userId, quizId, dto.answers, correctCount, totalQuestions, score)
+                    .catch(error => {
+                        console.warn('Achievement logging failed (non-critical):', error);
+                    });
+            });
+
             return {
                 success: true,
                 correctAnswers: correctCount,
@@ -412,6 +420,65 @@ export class QuizService {
                 score,
             };
         });
+    }
+
+    /**
+     * Simple achievement logging for future analysis
+     * Logs answer submissions with correctness data in a non-blocking way
+     */
+    private async logAnswerSubmission(
+        userId: string,
+        quizId: string,
+        answers: { questionId: string; answerId: string }[],
+        correctCount: number,
+        totalQuestions: number,
+        score: number
+    ): Promise<void> {
+        try {
+            // Get which answers were correct for detailed logging
+            const answerIds = answers.map(a => a.answerId);
+            const correctAnswerIds = await this.answerRepository
+                .createQueryBuilder('answer')
+                .select('answer.id')
+                .where('answer.id IN (:...answerIds)', { answerIds })
+                .andWhere('answer.isCorrect = true')
+                .getMany()
+                .then(answers => answers.map(a => a.id));
+
+            // Create simple log entry
+            const logEntry = {
+                timestamp: new Date().toISOString(),
+                userId,
+                quizId,
+                submissionData: {
+                    answersSubmitted: answers.length,
+                    correctAnswers: correctCount,
+                    totalQuestions,
+                    score: Math.round(score),
+                    accuracy: totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0
+                },
+                answerDetails: answers.map(answer => ({
+                    questionId: answer.questionId,
+                    answerId: answer.answerId,
+                    isCorrect: correctAnswerIds.includes(answer.answerId)
+                }))
+            };
+
+            // Log for future achievement system integration
+            console.log('[ACHIEVEMENT_LOG]', JSON.stringify(logEntry));
+
+            // Optional: Store in database for persistence (commented out for now)
+            /*
+            await this.dataSource.query(`
+                INSERT INTO achievement_logs (user_id, quiz_id, log_data, created_at)
+                VALUES ($1, $2, $3, NOW())
+            `, [userId, quizId, JSON.stringify(logEntry)]);
+            */
+
+        } catch (error) {
+            // Silently fail - this is non-critical logging
+            console.debug('Achievement logging error:', error);
+        }
     }
 
     async finishQuiz(

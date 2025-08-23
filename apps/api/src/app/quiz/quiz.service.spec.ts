@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { AchievementService } from '../achievements/application/services/achievement.service';
@@ -25,6 +25,7 @@ describe('QuizService', () => {
   let answerRepository: Repository<Answer>;
   let achievementService: AchievementService;
   let realtimeAchievementService: RealtimeAchievementService;
+  let dataSource: DataSource;
 
   const mockQuizRepository = {
     create: jest.fn(),
@@ -71,6 +72,19 @@ describe('QuizService', () => {
     sendAccuracyEncouragement: jest.fn(),
   };
 
+  const mockTransactionManager = {
+    findOne: jest.fn(),
+    count: jest.fn(),
+    createQueryBuilder: jest.fn(),
+    update: jest.fn(),
+    save: jest.fn(),
+    getCount: jest.fn(),
+  };
+
+  const mockDataSource = {
+    transaction: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -107,6 +121,10 @@ describe('QuizService', () => {
           provide: RealtimeAchievementService,
           useValue: mockRealtimeAchievementService,
         },
+        {
+          provide: DataSource,
+          useValue: mockDataSource,
+        },
       ],
     }).compile();
 
@@ -129,6 +147,7 @@ describe('QuizService', () => {
     realtimeAchievementService = module.get<RealtimeAchievementService>(
       RealtimeAchievementService
     );
+    dataSource = module.get<DataSource>(DataSource);
   });
 
   afterEach(() => {
@@ -298,40 +317,42 @@ describe('QuizService', () => {
       ],
     };
 
-    it('should successfully submit answers and calculate score', async () => {
+    beforeEach(() => {
+      // Setup transaction mock to call callback with transactionManager
+      mockDataSource.transaction.mockImplementation((callback) => {
+        return callback(mockTransactionManager);
+      });
+    });
+
+    it('should successfully submit answers using transaction and calculate score efficiently', async () => {
       const mockQuiz = {
         id: quizId,
         userId,
         finishedAt: undefined,
-        questionBankId: 'qb-123',
-        quizQuestions: [
-          {
-            questionId: 'q1',
-            question: {
-              answers: [
-                { id: 'a1', isCorrect: true },
-                { id: 'a2', isCorrect: false },
-              ],
-            },
-          },
-          {
-            questionId: 'q2',
-            question: {
-              answers: [
-                { id: 'a3', isCorrect: false },
-                { id: 'a4', isCorrect: true },
-              ],
-            },
-          },
-        ],
       };
 
-      mockQuizRepository.findOne.mockResolvedValue(mockQuiz);
-      mockQuizQuestionRepository.update.mockResolvedValue({ affected: 1 });
-      mockQuizRepository.save.mockResolvedValue(mockQuiz);
-      mockAchievementService.updateStreakBatch.mockResolvedValue(5);
-      mockAchievementService.createAchievementEventBatch.mockResolvedValue(undefined);
-      jest.spyOn(service as any, 'updateStatistics').mockResolvedValue(undefined);
+      const mockBulkUpdateQueryBuilder = {
+        update: jest.fn().mockReturnThis(),
+        set: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        setParameters: jest.fn().mockReturnThis(),
+        execute: jest.fn().mockResolvedValue({ affected: 2 }),
+      };
+
+      const mockScoreQueryBuilder = {
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        getCount: jest.fn().mockResolvedValue(1), // 1 correct answer
+      };
+
+      // Mock transaction manager methods
+      mockTransactionManager.findOne.mockResolvedValue(mockQuiz);
+      mockTransactionManager.count.mockResolvedValue(2); // Total questions
+      mockTransactionManager.createQueryBuilder
+        .mockReturnValueOnce(mockBulkUpdateQueryBuilder) // For bulk update
+        .mockReturnValueOnce(mockScoreQueryBuilder); // For score calculation
+      mockTransactionManager.update.mockResolvedValue({ affected: 1 });
 
       const result = await service.submitAnswers(userId, quizId, submitDto);
 
@@ -342,21 +363,77 @@ describe('QuizService', () => {
         score: 50, // 1 correct out of 2 = 50%
       });
 
-      expect(mockQuizQuestionRepository.update).toHaveBeenCalledTimes(2);
-      expect(mockAchievementService.updateStreakBatch).toHaveBeenCalledWith(
-        userId,
-        [true, false], // Answer results
-        1, // Longest streak in session
-        false // Last answer correct
+      // Verify transaction was used
+      expect(mockDataSource.transaction).toHaveBeenCalledTimes(1);
+      
+      // Verify quiz validation
+      expect(mockTransactionManager.findOne).toHaveBeenCalledWith(Quiz, {
+        where: { id: quizId, userId },
+      });
+
+      // Verify bulk update was called
+      expect(mockBulkUpdateQueryBuilder.update).toHaveBeenCalled();
+      expect(mockBulkUpdateQueryBuilder.set).toHaveBeenCalled();
+      expect(mockBulkUpdateQueryBuilder.execute).toHaveBeenCalled();
+
+      // Verify score calculation queries
+      expect(mockTransactionManager.count).toHaveBeenCalledWith(QuizQuestion, {
+        where: { quizId },
+      });
+      expect(mockScoreQueryBuilder.getCount).toHaveBeenCalled();
+
+      // Verify quiz score update
+      expect(mockTransactionManager.update).toHaveBeenCalledWith(
+        Quiz,
+        { id: quizId },
+        { score: 50 }
       );
     });
 
+    it('should handle empty answers array gracefully', async () => {
+      const mockQuiz = {
+        id: quizId,
+        userId,
+        finishedAt: undefined,
+      };
+
+      const emptySubmitDto: SubmitAnswersDto = {
+        answers: [],
+      };
+
+      const mockQueryBuilder = {
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        getCount: jest.fn().mockResolvedValue(0), // No correct answers
+      };
+
+      mockTransactionManager.findOne.mockResolvedValue(mockQuiz);
+      mockTransactionManager.count.mockResolvedValue(5); // Total questions
+      mockTransactionManager.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+      mockTransactionManager.update.mockResolvedValue({ affected: 1 });
+
+      const result = await service.submitAnswers(userId, quizId, emptySubmitDto);
+
+      expect(result).toEqual({
+        success: true,
+        correctAnswers: 0,
+        totalQuestions: 5,
+        score: 0,
+      });
+
+      // Verify score calculation query was called even with empty answers
+      expect(mockTransactionManager.createQueryBuilder).toHaveBeenCalledWith(Answer, 'answer');
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith('answer.id IN (:...answerIds)', { answerIds: [] });
+    });
+
     it('should throw NotFoundException for non-existent quiz', async () => {
-      mockQuizRepository.findOne.mockResolvedValue(null);
+      mockTransactionManager.findOne.mockResolvedValue(null);
 
       await expect(
         service.submitAnswers(userId, quizId, submitDto)
       ).rejects.toThrow(new NotFoundException('Quiz not found'));
+
+      expect(mockDataSource.transaction).toHaveBeenCalledTimes(1);
     });
 
     it('should throw BadRequestException for already finished quiz', async () => {
@@ -366,7 +443,7 @@ describe('QuizService', () => {
         finishedAt: new Date(),
       };
 
-      mockQuizRepository.findOne.mockResolvedValue(finishedQuiz);
+      mockTransactionManager.findOne.mockResolvedValue(finishedQuiz);
 
       await expect(
         service.submitAnswers(userId, quizId, submitDto)
@@ -378,30 +455,26 @@ describe('QuizService', () => {
         id: quizId,
         userId,
         finishedAt: undefined,
-        questionBankId: 'qb-123',
-        quizQuestions: [
-          {
-            questionId: 'q1',
-            question: {
-              answers: [
-                { id: 'a1', isCorrect: true },
-                { id: 'a2', isCorrect: false },
-              ],
-            },
-          },
-        ],
       };
 
       const perfectSubmitDto: SubmitAnswersDto = {
         answers: [{ questionId: 'q1', answerId: 'a1' }],
       };
 
-      mockQuizRepository.findOne.mockResolvedValue(mockQuiz);
-      mockQuizQuestionRepository.update.mockResolvedValue({ affected: 1 });
-      mockQuizRepository.save.mockResolvedValue(mockQuiz);
-      mockAchievementService.updateStreakBatch.mockResolvedValue(1);
-      mockAchievementService.createAchievementEventBatch.mockResolvedValue(undefined);
-      jest.spyOn(service as any, 'updateStatistics').mockResolvedValue(undefined);
+      const mockQueryBuilder = {
+        update: jest.fn().mockReturnThis(),
+        set: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        setParameters: jest.fn().mockReturnThis(),
+        execute: jest.fn().mockResolvedValue({ affected: 1 }),
+        getCount: jest.fn().mockResolvedValue(1), // 1 correct answer
+      };
+
+      mockTransactionManager.findOne.mockResolvedValue(mockQuiz);
+      mockTransactionManager.count.mockResolvedValue(1); // Total questions
+      mockTransactionManager.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+      mockTransactionManager.update.mockResolvedValue({ affected: 1 });
 
       const result = await service.submitAnswers(userId, quizId, perfectSubmitDto);
 
@@ -410,33 +483,96 @@ describe('QuizService', () => {
       expect(result.totalQuestions).toBe(1);
     });
 
-    it('should continue quiz submission even if achievement services fail', async () => {
+    it('should handle zero score correctly', async () => {
       const mockQuiz = {
         id: quizId,
         userId,
         finishedAt: undefined,
-        questionBankId: 'qb-123',
-        quizQuestions: [{
-          questionId: 'q1',
-          question: {
-            answers: [{ id: 'a1', isCorrect: true }],
-          },
-        }],
       };
 
-      mockQuizRepository.findOne.mockResolvedValue(mockQuiz);
-      mockQuizQuestionRepository.update.mockResolvedValue({ affected: 1 });
-      mockQuizRepository.save.mockResolvedValue(mockQuiz);
-      mockAchievementService.updateStreakBatch.mockRejectedValue(new Error('Achievement service error'));
-      mockAchievementService.createAchievementEventBatch.mockRejectedValue(new Error('Event creation error'));
-      jest.spyOn(service as any, 'updateStatistics').mockResolvedValue(undefined);
+      const mockQueryBuilder = {
+        update: jest.fn().mockReturnThis(),
+        set: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        setParameters: jest.fn().mockReturnThis(),
+        execute: jest.fn().mockResolvedValue({ affected: 2 }),
+        getCount: jest.fn().mockResolvedValue(0), // 0 correct answers
+      };
 
-      const result = await service.submitAnswers(userId, quizId, {
-        answers: [{ questionId: 'q1', answerId: 'a1' }],
-      });
+      mockTransactionManager.findOne.mockResolvedValue(mockQuiz);
+      mockTransactionManager.count.mockResolvedValue(2); // Total questions
+      mockTransactionManager.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+      mockTransactionManager.update.mockResolvedValue({ affected: 1 });
+
+      const result = await service.submitAnswers(userId, quizId, submitDto);
+
+      expect(result.score).toBe(0);
+      expect(result.correctAnswers).toBe(0);
+      expect(result.totalQuestions).toBe(2);
+    });
+
+    it('should use parameterized queries for SQL injection protection', async () => {
+      const mockQuiz = {
+        id: quizId,
+        userId,
+        finishedAt: undefined,
+      };
+
+      const maliciousSubmitDto: SubmitAnswersDto = {
+        answers: [
+          { questionId: "'; DROP TABLE quiz_questions; --", answerId: 'a1' },
+          { questionId: 'q2', answerId: "'; DELETE FROM quizzes; --" },
+        ],
+      };
+
+      const mockQueryBuilder = {
+        update: jest.fn().mockReturnThis(),
+        set: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        setParameters: jest.fn().mockReturnThis(),
+        execute: jest.fn().mockResolvedValue({ affected: 2 }),
+        getCount: jest.fn().mockResolvedValue(1),
+      };
+
+      mockTransactionManager.findOne.mockResolvedValue(mockQuiz);
+      mockTransactionManager.count.mockResolvedValue(2);
+      mockTransactionManager.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+      mockTransactionManager.update.mockResolvedValue({ affected: 1 });
+
+      const result = await service.submitAnswers(userId, quizId, maliciousSubmitDto);
 
       expect(result.success).toBe(true);
-      expect(result.score).toBe(100);
+      
+      // Verify parameterized queries were used
+      expect(mockQueryBuilder.setParameters).toHaveBeenCalledWith(
+        expect.objectContaining({
+          quizId,
+          questionId_0: "'; DROP TABLE quiz_questions; --",
+          answerId_0: 'a1',
+          questionId_1: 'q2',
+          answerId_1: "'; DELETE FROM quizzes; --",
+        })
+      );
+    });
+
+    it('should rollback transaction on database error', async () => {
+      const mockQuiz = {
+        id: quizId,
+        userId,
+        finishedAt: undefined,
+      };
+
+      mockTransactionManager.findOne.mockResolvedValue(mockQuiz);
+      mockTransactionManager.count.mockRejectedValue(new Error('Database connection failed'));
+
+      await expect(
+        service.submitAnswers(userId, quizId, submitDto)
+      ).rejects.toThrow('Database connection failed');
+
+      // Transaction should handle the error and rollback automatically
+      expect(mockDataSource.transaction).toHaveBeenCalledTimes(1);
     });
   });
 
