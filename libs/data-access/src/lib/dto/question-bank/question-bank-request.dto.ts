@@ -28,6 +28,11 @@ export class CreateQuestionDto {
   @ValidateNested({ each: true })
   @Type(() => CreateAnswerDto)
   answers: CreateAnswerDto[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  tags?: string[];
 }
 
 export class CreateQuestionBankDto {
@@ -76,6 +81,11 @@ export class UpdateQuestionDto {
   @ValidateNested({ each: true })
   @Type(() => UpdateAnswerDto)
   answers: UpdateAnswerDto[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  tags?: string[];
 
   @IsUUID()
   @IsOptional()
@@ -132,6 +142,11 @@ class QuestionDto {
   @ValidateNested({ each: true })
   @Type(() => AnswerDto)
   answers: AnswerDto[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  tags?: string[];
 }
 
 // Type exports for frontend usage

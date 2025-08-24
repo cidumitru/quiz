@@ -24,6 +24,11 @@
                         {{ question.question }}
                     </mat-card-title>
                     <div class="question-actions">
+                        @if (question.tags && question.tags.length > 0) {
+                            <button mat-icon-button [matTooltip]="getTagsTooltip(question.tags)" matTooltipPosition="left">
+                                <mat-icon>info</mat-icon>
+                            </button>
+                        }
                         <button mat-icon-button (click)="onEditQuestion(question)" matTooltip="Edit">
                             <mat-icon>edit</mat-icon>
                         </button>

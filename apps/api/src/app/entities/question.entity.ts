@@ -28,6 +28,9 @@ export class Question {
   @Column('uuid')
   questionBankId: string;
 
+  @Column('simple-array', { default: '' })
+  tags: string[];
+
   @CreateDateColumn()
   createdAt: Date;
 

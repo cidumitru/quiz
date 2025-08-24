@@ -224,6 +224,7 @@ export class QuestionBankService {
       const transformedQuestions = questions.map((question) => ({
         id: question.id,
         question: question.question,
+        tags: question.tags,
         answers: question.answers.map((answer) => ({
           id: answer.id,
           text: answer.text,
@@ -241,7 +242,7 @@ export class QuestionBankService {
 
     // Enhanced search: search in both question text and answer text
     const searchTerm = `%${search.trim()}%`;
-    
+
     // First, get the IDs of questions that match the search criteria
     const matchingQuestionIds = await this.questionRepository
       .createQueryBuilder('question')
@@ -285,7 +286,7 @@ export class QuestionBankService {
 
     // Get the full question data with answers for the matching IDs
     const questionIds = matchingQuestionIds.map(row => row.question_id);
-    
+
     // Preserve the original ordering from the search query
     const questions = await this.questionRepository.find({
       where: { id: In(questionIds) },
@@ -467,7 +468,7 @@ export class QuestionBankService {
 
     for (const questionDto of questionsToAdd) {
       const normalizedQuestion = questionDto.question.toLowerCase().trim();
-      
+
       // Skip if question already exists (case-insensitive)
       if (existingQuestionTexts.has(normalizedQuestion)) {
         duplicatesSkipped++;
@@ -478,6 +479,7 @@ export class QuestionBankService {
         question: questionDto.question.trim(),
         questionBankId,
         answers: [],
+        tags: questionDto.tags,
       });
 
       const savedQuestion = await this.questionRepository.save(question);
@@ -486,7 +488,7 @@ export class QuestionBankService {
       const seenAnswers = new Set<string>();
       for (const answerDto of questionDto.answers) {
         const normalizedAnswer = answerDto.text.toLowerCase().trim();
-        
+
         // Skip duplicate answers within the same question
         if (seenAnswers.has(normalizedAnswer)) {
           continue;
@@ -513,8 +515,8 @@ export class QuestionBankService {
       questionBankId
     );
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       questionsAdded,
       ...(duplicatesSkipped > 0 && { duplicatesSkipped })
     };

@@ -153,6 +153,7 @@ export function createTestQuestion(overrides: Partial<Question> = {}): Question 
     questionBank: overrides.questionBank || createTestQuestionBank({ questions: [] }),
     createdAt: new Date(),
     updatedAt: new Date(),
+    tags: [],
     ...overrides,
   };
 }

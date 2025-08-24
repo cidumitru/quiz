@@ -196,10 +196,25 @@ export class QuestionBankImportService {
       }
 
       if (answers.length > 0) {
-        validQuestions.push({
+        const questionRequest: CreateQuestionRequest = {
           question: (question['question'] as string).trim(),
           answers,
-        });
+        };
+
+        // Parse tags if present
+        if (question['tags'] && Array.isArray(question['tags'])) {
+          const tags: string[] = [];
+          for (const tag of question['tags']) {
+            if (typeof tag === 'string' && tag.trim() !== '') {
+              tags.push(tag.trim());
+            }
+          }
+          if (tags.length > 0) {
+            questionRequest.tags = tags;
+          }
+        }
+
+        validQuestions.push(questionRequest);
       }
     }
 

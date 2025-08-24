@@ -117,6 +117,10 @@ export class QuestionListComponent implements OnInit {
     return String.fromCharCode(65 + index);
   }
 
+  getTagsTooltip(tags: string[]): string {
+    return 'Tags: ' + tags.join(', ');
+  }
+
   ngOnInit(): void {
     // Setup search with debouncing
     this.searchSubject

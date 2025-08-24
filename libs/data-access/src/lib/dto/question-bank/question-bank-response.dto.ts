@@ -12,6 +12,7 @@ export const questionScheme = z.object({
   id: z.string(),
   question: z.string(),
   answers: z.array(answerScheme),
+  tags: z.array(z.string()).optional().default([]),
 });
 
 export const questionBankScheme = z.object({
@@ -35,6 +36,7 @@ export enum QuestionType {
 export interface IQuestionCreate {
   question: string;
   answers: Pick<ParsedAnswer, 'text' | 'correct'>[];
+  tags?: string[];
 }
 
 export interface QuestionCountResult {
@@ -75,6 +77,7 @@ export interface Question {
   id: string;
   question: string;
   answers: Answer[];
+  tags?: string[];
 }
 
 export interface QuestionBankDetail {
