@@ -49,28 +49,11 @@ export class QuizComponent implements OnInit, OnDestroy {
   // The reactive view model - contains all state and computations
   quizViewModel = input.required<QuizViewModel>();
 
-  private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
   private quizService = inject(QuizService);
   private confettiService = inject(ConfettiService);
   private positiveMetrics = inject(PositiveMetricsService);
   private dialog = inject(MatDialog);
-
-  constructor() {
-    // Auto-save answers when they change - but use single-request pattern
-    effect(() => {
-      const viewModel = this.quizViewModel();
-      if (viewModel) {
-        // Track answeredCount to react to any question state changes
-        viewModel.answeredCount();
-        const answers = viewModel.getAllAnswers();
-        if (answers.length > 0 && !viewModel.finishedAt) {
-          // The QuizService now handles request queuing and deduplication internally
-          this.quizService.setQuizAnswers(viewModel.id, answers);
-        }
-      }
-    });
-  }
   // Touch gesture support for mobile
   private touchStartY = 0;
   private touchStartTime = 0;
@@ -205,7 +188,7 @@ export class QuizComponent implements OnInit, OnDestroy {
 
 
   // Simple helper methods
-  selectAnswer(questionId: string, answerId: string): void {
+  async selectAnswer(questionId: string, answerId: string): Promise<void> {
     const viewModel = this.quizViewModel();
     if (!viewModel) return;
 
@@ -216,6 +199,8 @@ export class QuizComponent implements OnInit, OnDestroy {
 
     // Update answer in view model (which triggers reactive updates)
     viewModel.selectAnswer(questionId, answerId);
+
+    await this.quizService.setQuizAnswers(viewModel.id, [ { questionId, answerId }]);
 
     // Check if this was the final question and trigger completion immediately
     // Small delay to allow the Angular effect to trigger answer submission first
