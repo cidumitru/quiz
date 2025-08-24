@@ -168,8 +168,8 @@ describe('QuizService', () => {
         userId,
         name: 'Test Bank',
         questions: [
-          { id: 'q1', question: 'Question 1', answers: [] },
-          { id: 'q2', question: 'Question 2', answers: [] },
+          { id: 'q1', question: 'Question 1', answers: [{ id: 'a1', text: 'Answer 1', isCorrect: true }] },
+          { id: 'q2', question: 'Question 2', answers: [{ id: 'a2', text: 'Answer 2', isCorrect: true }] },
         ],
       };
 
@@ -241,11 +241,11 @@ describe('QuizService', () => {
     const mockQuestionBank = {
       id: questionBankId,
       questions: [
-        { id: 'q1', question: 'Question 1' },
-        { id: 'q2', question: 'Question 2' },
-        { id: 'q3', question: 'Question 3' },
-        { id: 'q4', question: 'Question 4' },
-        { id: 'q5', question: 'Question 5' },
+        { id: 'q1', question: 'Question 1', answers: [{ id: 'a1', text: 'Answer 1', isCorrect: true }] },
+        { id: 'q2', question: 'Question 2', answers: [{ id: 'a2', text: 'Answer 2', isCorrect: true }] },
+        { id: 'q3', question: 'Question 3', answers: [{ id: 'a3', text: 'Answer 3', isCorrect: true }] },
+        { id: 'q4', question: 'Question 4', answers: [{ id: 'a4', text: 'Answer 4', isCorrect: true }] },
+        { id: 'q5', question: 'Question 5', answers: [{ id: 'a5', text: 'Answer 5', isCorrect: true }] },
       ],
     };
 
@@ -303,6 +303,32 @@ describe('QuizService', () => {
       expect(result).toHaveLength(3);
       expect(result.map(q => q.id)).toEqual(
         expect.arrayContaining(['q1', 'q3', 'q5'])
+      );
+    });
+
+    it('should filter out questions with no answers or no correct answer', async () => {
+      const mockQuestionBankWithInvalid = {
+        id: questionBankId,
+        questions: [
+          { id: 'q1', question: 'Valid Question 1', answers: [{ id: 'a1', text: 'Answer 1', isCorrect: true }] },
+          { id: 'q2', question: 'Invalid Question - No Answers', answers: [] },
+          { id: 'q3', question: 'Invalid Question - No Correct Answer', answers: [{ id: 'a3', text: 'Answer 3', isCorrect: false }] },
+          { id: 'q4', question: 'Valid Question 2', answers: [{ id: 'a4', text: 'Answer 4', isCorrect: true }] },
+          { id: 'q5', question: 'Invalid Question - Undefined Answers', answers: undefined },
+        ],
+      };
+
+      const result = await service.selectQuestionsByMode(
+        userId,
+        mockQuestionBankWithInvalid as any,
+        QuizMode.All,
+        10
+      );
+
+      // Should only return the valid questions (q1 and q4)
+      expect(result).toHaveLength(2);
+      expect(result.map(q => q.id)).toEqual(
+        expect.arrayContaining(['q1', 'q4'])
       );
     });
   });

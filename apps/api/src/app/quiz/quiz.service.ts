@@ -103,6 +103,11 @@ export class QuizService {
     ): Promise<Question[]> {
         let availableQuestions = questionBank.questions;
 
+        // Filter out invalid questions (no answers or no correct answer)
+        availableQuestions = availableQuestions.filter(q => 
+            q.answers && q.answers.length > 0 && q.answers.some(a => a.isCorrect)
+        );
+
         switch (mode) {
             case QuizMode.Mistakes: {
                 // Get questions where user has low success rate
