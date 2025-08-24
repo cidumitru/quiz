@@ -10,6 +10,7 @@ export interface QuizQuestion {
   questionId: string;
   question: string;
   imageUrl?: string;
+  tags?: string[];
   answers: QuizAnswer[];
   userAnswerId?: string;
   correctAnswerId?: string;

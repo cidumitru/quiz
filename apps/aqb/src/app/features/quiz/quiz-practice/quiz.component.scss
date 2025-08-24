@@ -130,6 +130,20 @@
     color: var(--mat-sys-on-surface);
   }
   
+  .info-button {
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    align-self: flex-start;
+    
+    &:hover {
+      opacity: 1;
+    }
+    
+    mat-icon {
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+  
   .no-answer-warning {
     color: var(--mat-sys-error);
   }
@@ -280,6 +294,21 @@
   
   .incorrect {
     color: var(--mat-sys-error);
+  }
+}
+
+// Tooltip styling for tags
+::ng-deep .mat-mdc-tooltip {
+  &.cdk-overlay-pane {
+    .mdc-tooltip__surface {
+      background-color: var(--mat-sys-inverse-surface);
+      color: var(--mat-sys-inverse-on-surface);
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      max-width: 300px;
+      word-wrap: break-word;
+    }
   }
 }
 

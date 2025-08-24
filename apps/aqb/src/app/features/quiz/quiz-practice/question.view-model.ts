@@ -4,9 +4,11 @@ import {QuizAnswer, QuizQuestion} from "@aqb/data-access";
 export class QuestionViewModel {
   readonly id: string;
   readonly question: string;
+  readonly tags: string[];
   readonly answers: AnswerViewModel[];
   readonly correctAnswer?: AnswerViewModel;
   readonly hasCorrectAnswer: boolean;
+  readonly hasTags: boolean;
   // Reactive state for this question
   private _selectedAnswerId = signal<string | null>(null);
   // Computed properties based on selection state
@@ -26,6 +28,7 @@ export class QuestionViewModel {
   constructor(question: QuizQuestion) {
     this.id = question.questionId;
     this.question = question.question;
+    this.tags = question.tags || [];
 
     // Create answer view models
     this.answers = question.answers.map((answer, index) =>
@@ -34,6 +37,7 @@ export class QuestionViewModel {
 
     this.correctAnswer = this.answers.find(a => a.isCorrect);
     this.hasCorrectAnswer = !!this.correctAnswer;
+    this.hasTags = this.tags.length > 0;
 
     // Initialize selection state
     if (question.userAnswerId) {

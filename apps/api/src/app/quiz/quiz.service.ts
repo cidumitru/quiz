@@ -333,6 +333,7 @@ export class QuizService {
                         questionId: qq.questionId,
                         question: qq.question.question,
                         imageUrl: undefined, // Question entity doesn't have imageUrl yet
+                        tags: qq.question.tags || [],
                         answers: qq.question.answers.map(a => ({
                             id: a.id,
                             text: a.text,

@@ -217,8 +217,8 @@ html:not(.light-theme):not(.dark-theme) {
   // Icon buttons
   &.mat-mdc-icon-button {
     border-radius: 50% !important;
-    width: 48px !important;
-    height: 48px !important;
+    //width: 48px !important;
+    //height: 48px !important;
     
     &:hover {
       background-color: var(--mat-sys-secondary-container) !important;

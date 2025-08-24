@@ -103,9 +103,22 @@
         <!-- Question Header -->
         <mat-card-header class="p-6 pb-4">
           <div class="flex-1">
-            <mat-card-title class="question-text text-xl font-medium leading-6 m-0 -tracking-wide">
-              {{ question.question }}
-            </mat-card-title>
+            <div class="flex items-start gap-3">
+              <mat-card-title class="question-text text-xl font-medium leading-6 m-0 -tracking-wide flex-1">
+                {{ question.question }}
+              </mat-card-title>
+              @if (question.hasTags) {
+              <button 
+                mat-icon-button 
+                class="info-button flex-shrink-0"
+                [matTooltip]="question.tags.join(', ')"
+                matTooltipPosition="left"
+                aria-label="View question tags"
+              >
+                <mat-icon>info</mat-icon>
+              </button>
+              }
+            </div>
             @if (!question.hasCorrectAnswer) {
             <mat-card-subtitle class="no-answer-warning flex items-center gap-2 text-sm mt-2 m-0">
               <mat-icon class="text-lg w-4.5 h-4.5">warning</mat-icon>
